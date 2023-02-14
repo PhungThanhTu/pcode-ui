@@ -1,1 +1,1 @@
-export type { AuthState, User } from './auth.type';
+export type { AuthState, AuthenticationTokens, UserCredentials } from './auth.type';
