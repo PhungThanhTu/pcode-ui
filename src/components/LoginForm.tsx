@@ -1,20 +1,26 @@
 import { Box, CircularProgress, Divider, Link, TextField, Typography } from '@mui/material';
 import AuthFormLayout from '../layouts/AuthFormLayout';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuth } from '../selectors/auth.selector';
 import { login } from '../slices/auth.slice';
 import { CustomButton } from './CustomButton';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 export const LoginForm = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
-	const { loading, error }: any = useSelector(getAuth);
+	const { loading, error, profile }: any = useSelector(getAuth);
 
 	const [userCred, setUserCred] = useState({
 		username: '',
 		password: ''
 	});
+
+	useEffect(() => {
+		if (profile) navigate('/', { replace: true });
+	}, [navigate, profile]);
 
 	const onLogin = async (e: ChangeEvent<HTMLButtonElement>) => {
 		const credentials = {
@@ -73,7 +79,7 @@ export const LoginForm = () => {
 				}}
 			>
 				<Typography fontSize={16}>Don't have account</Typography>
-				<Link href="/register" underline="none" variant="h4" fontSize={16}>
+				<Link component={RouterLink} to="/register" replace underline="none" variant="h4" fontSize={16}>
 					Create one
 				</Link>
 			</Box>

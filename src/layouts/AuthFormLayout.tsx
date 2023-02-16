@@ -13,7 +13,7 @@ const AuthFormLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: P
 		borderWidth: '0px',
 		borderRadius: '12px',
 		width: '30%',
-		height: '70%',
+		height: '90%',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
