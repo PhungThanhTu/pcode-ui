@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
-import { AuthenticationTokens, RegisterRequest, UserCredentials, UserProfile } from '../types/auth.type';
+import { RegisterRequest } from '../types/register.type';
+import { AuthenticationTokens, UserCredentials, UserProfile } from '../types/auth.type';
 import { TokenService } from '../utils/tokenService';
 import protectedApi from './protectedApi';
 import publicApi from './publicApi';

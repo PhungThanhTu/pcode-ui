@@ -15,13 +15,6 @@ export interface UserCredentials {
 	password: string;
 }
 
-export interface RegisterRequest {
-	username: string;
-	password: string;
-	email: string;
-	fullName: string;
-}
-
 export interface UserProfile {
 	username: string;
 	fullName: string;

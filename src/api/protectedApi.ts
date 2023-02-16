@@ -24,7 +24,7 @@ const onResponseError = async (error: AxiosError) => {
 		const errMessage = error.response?.data || error?.response || error;
 		return Promise.reject(errMessage);
 	}
-	return refreshToken(error, authApi.logout);
+	return refreshToken(error, () => console.log('log out'));
 };
 
 const refreshToken = async (error: AxiosError, logout: Function) => {
@@ -32,7 +32,7 @@ const refreshToken = async (error: AxiosError, logout: Function) => {
 	const storedRefreshToken = TokenService.getRefreshToken();
 	const storedAccessToken = TokenService.getToken();
 	if (!storedRefreshToken || !storedAccessToken) {
-		logout();
+		console.log('refresh failed');
 		return Promise.reject(error);
 	}
 	try {
@@ -40,13 +40,13 @@ const refreshToken = async (error: AxiosError, logout: Function) => {
 			refreshToken: storedRefreshToken,
 			token: storedAccessToken
 		});
-
+		console.log('Refreshing tokens');
+		console.log(result.data);
 		TokenService.setRefreshToken(result.data.refreshToken);
 		TokenService.setToken(result.data.token);
 
 		return protectedApi(originalConfig);
 	} catch {
-		logout();
 		return Promise.reject(error);
 	}
 };

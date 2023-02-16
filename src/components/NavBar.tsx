@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Slide, useScrollTrigger } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { logout } from '../slices/auth.slice';
 
 function HideOnScroll(props: any) {
 	const { children, window } = props;
@@ -22,6 +24,12 @@ function HideOnScroll(props: any) {
 }
 
 export default function NavBar() {
+	const dispatch = useDispatch();
+
+	const returnToLogin = () => {
+		dispatch(logout());
+	};
+
 	return (
 		<Box>
 			<HideOnScroll>
@@ -30,7 +38,10 @@ export default function NavBar() {
 						<IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
 							<MenuIcon />
 						</IconButton>
-						<Button color="inherit">Login</Button>
+						<Button onClick={() => returnToLogin()} color="inherit">
+							{' '}
+							Login{' '}
+						</Button>
 					</Toolbar>
 				</AppBar>
 			</HideOnScroll>

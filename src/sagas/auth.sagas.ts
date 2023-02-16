@@ -4,7 +4,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import authApi from '../api/authApi';
 import { UserCredentials } from 'types';
 import { AxiosError, AxiosResponse } from 'axios';
-import { UserProfile } from 'types/auth.type';
+import { UserProfile } from '../types/auth.type';
 
 function* loginSaga(action: PayloadAction<UserCredentials>) {
 	console.log('Saga is login');
@@ -22,7 +22,7 @@ function* loginSaga(action: PayloadAction<UserCredentials>) {
 }
 
 function* logoutSaga() {
-	console.log('saga is log out');
+	//console.log('saga is log out');
 	try {
 		yield call(authApi.logout);
 		yield put(logoutSuccess());
@@ -37,10 +37,8 @@ function* fetchProfileSaga() {
 		console.log('saga fetching profile');
 		const profile: AxiosResponse<UserProfile> = yield call(authApi.getProfile);
 		yield put(loginSuccess(profile.data));
-		console.log('saga fetch profile success');
 	} catch (error: any) {
 		console.log('saga fetch profile failed');
-		yield call(authApi.logout);
 		yield put(logout());
 	}
 }

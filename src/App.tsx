@@ -1,15 +1,14 @@
 import './App.css';
 import { LoginPage } from './pages/LoginPage';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RegisterPage } from './pages/RegisterPage';
 import { InDevelopment } from './pages/InDevelopment';
-import { getAuth } from './selectors/auth.selector';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useCallback, useLayoutEffect } from 'react';
 import { fetchProfile } from './slices/auth.slice';
+import ProtectedRoute from './router/ProtectedRoute';
 
 function App() {
-	const { profile } = useSelector(getAuth);
 	const dispatch = useDispatch();
 
 	const fetchProfileAtStart = useCallback(() => {
@@ -22,8 +21,16 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<InDevelopment />} />
-				<Route path="/login" element={!profile ? <LoginPage /> : <Navigate to="/" replace />} />
+				<Route
+					path="/"
+					element={
+						<ProtectedRoute>
+							<InDevelopment />
+						</ProtectedRoute>
+					}
+				/>
+
+				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
 			</Routes>
 		</BrowserRouter>
