@@ -34,6 +34,10 @@ export const RegisterForm = () => {
 		}
 	}, [success, error]);
 
+	function isValidEmail(email: string) {
+		return /\S+@\S+\.\S+/.test(email);
+	}
+
 	const [registerState, setRegisterState] = useState(initialRegisterState);
 	const [registerError, setRegisterError] = useState({
 		username: 'Username is required',
@@ -128,18 +132,23 @@ export const RegisterForm = () => {
 		const email = e.target.value;
 		const tempRegisterState = { ...registerState };
 		tempRegisterState.email = email;
+		setRegisterState(tempRegisterState);
 
 		if (!email) {
 			const tempRegisterError = { ...registerError };
 			tempRegisterError.email = 'Email is required';
 			setRegisterError(tempRegisterError);
-		} else {
-			const tempRegisterError = { ...registerError };
-			tempRegisterError.email = '';
-			setRegisterError(tempRegisterError);
+			return;
 		}
-
-		setRegisterState(tempRegisterState);
+		if (!isValidEmail(email)) {
+			const tempRegisterError = { ...registerError };
+			tempRegisterError.email = 'Email must be valid';
+			setRegisterError(tempRegisterError);
+			return;
+		}
+		const tempRegisterError = { ...registerError };
+		tempRegisterError.email = '';
+		setRegisterError(tempRegisterError);
 	};
 
 	const onRegister = (e: ChangeEvent<HTMLButtonElement>) => {
@@ -173,7 +182,7 @@ export const RegisterForm = () => {
 			<Box sx={{ paddingBottom: '20px' }}>
 				<Typography variant="h4"> Create an account</Typography>
 			</Box>
-			<Box sx={{ paddingBottom: '10px', paddingTop: '10px', width: 1, display: 'grid' }}>
+			<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
 				<TextField
 					onChange={onUsernameChange}
 					required
@@ -185,7 +194,7 @@ export const RegisterForm = () => {
 					error={registerError.username !== ''}
 				/>
 			</Box>
-			<Box sx={{ paddingBottom: '10px', paddingTop: '10px', width: 1, display: 'grid' }}>
+			<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
 				<TextField
 					required
 					label="Password"
@@ -197,7 +206,7 @@ export const RegisterForm = () => {
 					type="password"
 				/>
 			</Box>
-			<Box sx={{ paddingBottom: '10px', paddingTop: '10px', width: 1, display: 'grid' }}>
+			<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
 				<TextField
 					required
 					label="Retype password"
@@ -209,7 +218,7 @@ export const RegisterForm = () => {
 					type="password"
 				/>
 			</Box>
-			<Box sx={{ paddingBottom: '10px', paddingTop: '10px', width: 1, display: 'grid' }}>
+			<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
 				<TextField
 					required
 					label="Full Name"
@@ -221,7 +230,7 @@ export const RegisterForm = () => {
 					type="text"
 				/>
 			</Box>
-			<Box sx={{ paddingBottom: '35px', paddingTop: '10px', width: 1, display: 'grid' }}>
+			<Box sx={{ paddingBottom: '15px', paddingTop: '5px', width: 1, display: 'grid' }}>
 				<TextField
 					required
 					label="Email"
@@ -245,7 +254,7 @@ export const RegisterForm = () => {
 				<Divider variant="middle" style={{ width: '95%' }} />
 			)}
 
-			<Box sx={{ paddingBottom: '20px', paddingTop: '35px', width: 1, display: 'grid' }}>
+			<Box sx={{ paddingBottom: '30px', paddingTop: '15px', width: 1, display: 'grid' }}>
 				{loading ? (
 					<Box sx={{ width: 1, display: 'grid', justifyContent: 'center' }}>
 						<CircularProgress />
