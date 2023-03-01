@@ -1,10 +1,10 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-import { InDevelopment } from './InDevelopment';
+import { InDevelopmentPage } from './InDevelopmentPage';
 
 export default {
 	title: 'Pages/In Development Page',
-	component: InDevelopment
-} as ComponentMeta<typeof InDevelopment>;
+	component: InDevelopmentPage
+} as ComponentMeta<typeof InDevelopmentPage>;
 
-export const Example: ComponentStory<typeof InDevelopment> = () => <InDevelopment />;
+export const Example: ComponentStory<typeof InDevelopmentPage> = () => <InDevelopmentPage />;

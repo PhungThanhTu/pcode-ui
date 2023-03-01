@@ -1,16 +1,17 @@
-import React, { FC, ReactElement } from "react";
+import { FC, ReactElement } from "react";
 import { Box, Container, Grid, Typography } from "@mui/material";
 
 export const Footer: FC = (): ReactElement => {
+    const FooterBoxSx = {
+        width: "100%",
+        height: "auto",
+        backgroundColor: "secondary",
+        paddingTop: "1rem",
+        paddingBottom: "1rem",
+    }
     return (
         <Box
-            sx={{
-                width: "100%",
-                height: "auto",
-                backgroundColor: "secondary",
-                paddingTop: "1rem",
-                paddingBottom: "1rem",
-            }}
+            sx={FooterBoxSx}
         >
             <Container maxWidth="lg">
                 <Grid container direction="column" alignItems="center">

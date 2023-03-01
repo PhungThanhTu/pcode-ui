@@ -10,13 +10,11 @@ interface PropsWithChildrenOnly {
 const Layout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
 
   return (
-    <Box
-     
-    >
+    <React.Fragment>
       <NavBar />
       {props.children}
       <Footer />
-    </Box>
+    </React.Fragment>
   );
 };
 
