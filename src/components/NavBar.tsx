@@ -141,7 +141,7 @@ export default function NavBar() {
 								<Avatar /> Profile
 							</MenuItem>
 							<Divider />
-							<MenuItem onClick={handleClose}>
+							<MenuItem onClick={() => { returnToLogin() }}>
 								<ListItemIcon>
 									<Logout fontSize="small" />
 								</ListItemIcon>

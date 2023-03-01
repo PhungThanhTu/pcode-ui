@@ -11,7 +11,7 @@ const AuthPageLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: P
 		backgroundColor: '#0000000f',
 		backgroundBlendMode: 'soft-light',
 		width: '100%',
-		height: '100%',
+		height: '100vh',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
