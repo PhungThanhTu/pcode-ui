@@ -1,8 +1,7 @@
-import './App.css';
 import { LoginPage } from './pages/LoginPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RegisterPage } from './pages/RegisterPage';
-import { InDevelopment } from './pages/InDevelopment';
+import { InDevelopmentPage } from './pages/InDevelopmentPage';
 import { useDispatch } from 'react-redux';
 import { useCallback, useLayoutEffect } from 'react';
 import { fetchProfile } from './slices/auth.slice';
@@ -25,7 +24,7 @@ function App() {
 					path="/"
 					element={
 						<ProtectedRoute>
-							<InDevelopment />
+							<InDevelopmentPage />
 						</ProtectedRoute>
 					}
 				/>
