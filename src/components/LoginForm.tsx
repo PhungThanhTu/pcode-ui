@@ -3,7 +3,7 @@ import AuthFormLayout from '../layouts/AuthFormLayout';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuth } from '../selectors/auth.selector';
-import { login } from '../slices/auth.slice';
+import { login } from '@/slices/auth.slice';
 import { CustomButton } from './CustomButton';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
