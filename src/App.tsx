@@ -3,9 +3,10 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RegisterPage } from './pages/RegisterPage';
 import { InDevelopmentPage } from './pages/InDevelopmentPage';
 import { useDispatch } from 'react-redux';
-import { useCallback, useLayoutEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { fetchProfile } from './slices/auth.slice';
 import ProtectedRoute from './router/ProtectedRoute';
+import Profile from './pages/Profile';
 
 function App() {
 	const dispatch = useDispatch();
@@ -14,20 +15,16 @@ function App() {
 		dispatch(fetchProfile());
 	}, [dispatch]);
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		fetchProfileAtStart();
 	}, [fetchProfileAtStart]);
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route
-					path="/"
-					element={
-						<ProtectedRoute>
-							<InDevelopmentPage />
-						</ProtectedRoute>
-					}
-				/>
+				<Route element={<ProtectedRoute />}>
+					<Route path='/' element={<InDevelopmentPage />}/>
+					<Route path='/profile' element={<Profile/>}/>
+				</Route>
 
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
