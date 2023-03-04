@@ -1,8 +1,8 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest, delay } from 'redux-saga/effects';
 import { login, loginSuccess, loginError, logout, fetchProfile, logoutSuccess } from '../slices/auth.slice';
 import { PayloadAction } from '@reduxjs/toolkit';
 import authApi from '../api/authApi';
-import { UserCredentials } from 'types';
+import { UserCredentials } from '@/types';
 import { AxiosError, AxiosResponse } from 'axios';
 import { UserProfile } from '../types/auth.type';
 

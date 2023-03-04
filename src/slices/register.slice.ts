@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RegisterRequest, RegisterState } from 'types/register.type';
+import { RegisterRequest, RegisterState } from '@/types/register.type';
 
 export const initialState: RegisterState = {
 	loading: false,

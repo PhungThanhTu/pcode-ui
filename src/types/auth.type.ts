@@ -7,7 +7,7 @@ export interface AuthState {
 	loading: boolean;
 	authTokens?: AuthenticationTokens;
 	error?: string;
-	profile?: UserProfile;
+	profile?: UserProfile | null;
 }
 
 export interface UserCredentials {

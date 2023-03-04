@@ -1,7 +1,8 @@
-import { Box } from '@mui/material';
 import NavBar from '../components/NavBar';
 import React from 'react';
 import Footer from '../components/Footer';
+import { Outlet } from 'react-router-dom';
+
 
 interface PropsWithChildrenOnly {
   children: React.ReactNode;
