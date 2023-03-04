@@ -6,14 +6,18 @@ import Loading from '@/pages/Loading';
 
 const ProtectedRoute = () => {
 	const { profile } = useSelector(getAuth);
-	console.log(profile, "hello");
+	console.log(profile, 'hello');
 
-	if(profile){
-		return <Layout> <Outlet /> </Layout> 
+	if (profile) {
+		return (
+			<Layout>
+				<Outlet />
+			</Layout>
+		);
 	}
-	
+
 	if (profile === undefined) {
-		return <Loading/>
+		return <Loading />;
 	}
 
 	return <Navigate to="/login" replace />;

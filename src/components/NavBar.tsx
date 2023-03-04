@@ -12,8 +12,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
 import Tooltip from '@mui/material/Tooltip';
+import Link from '@mui/material/Link';
 
-import { Slide, useScrollTrigger } from '@mui/material';
+import { Slide, Typography, useScrollTrigger } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { logout } from '../slices/auth.slice';
 
@@ -40,7 +41,7 @@ const AvatarMenuPaper = {
 			width: 32,
 			height: 32,
 			ml: -0.5,
-			mr: 1,
+			mr: 1
 		},
 		'&:before': {
 			content: '""',
@@ -52,10 +53,10 @@ const AvatarMenuPaper = {
 			height: 10,
 			bgcolor: 'background.paper',
 			transform: 'translateY(-50%) rotate(45deg)',
-			zIndex: 0,
-		},
-	},
-}
+			zIndex: 0
+		}
+	}
+};
 
 export default function NavBar() {
 	const dispatch = useDispatch();
@@ -64,11 +65,10 @@ export default function NavBar() {
 	const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null);
 
 	const hamMenuOpen = Boolean(hamAnchorEl);
-	const avatarMenuOpen = Boolean(avatarAnchorEl)
+	const avatarMenuOpen = Boolean(avatarAnchorEl);
 
 	const handleAvatarMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setAvatarAnchorEl(event.currentTarget);
-
 	};
 	const handleHamMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setHamAnchorEl(event.currentTarget);
@@ -108,11 +108,16 @@ export default function NavBar() {
 							onClose={handleClose}
 							TransitionComponent={Fade}
 						>
-							<MenuItem onClick={handleClose}>Home</MenuItem>
-							<MenuItem onClick={handleClose}>Home</MenuItem>
+							<MenuItem>
+								<Link href='/' underline="none" color="inherit">
+									Home
+								</Link>
+							</MenuItem>
 						</Menu>
 
-						<div>LPL</div>
+						<Typography color="white" variant="h5">
+							Programming Learning Platform
+						</Typography>
 
 						<Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
 							<Tooltip title="User settings">
@@ -138,10 +143,20 @@ export default function NavBar() {
 							anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 						>
 							<MenuItem onClick={handleClose}>
-								<Avatar /> Profile
+
+								<Avatar />
+								<Link href='/profile' underline="none" color="inherit">
+									Profile
+								</Link>
+
+
 							</MenuItem>
 							<Divider />
-							<MenuItem onClick={() => { returnToLogin() }}>
+							<MenuItem
+								onClick={() => {
+									returnToLogin();
+								}}
+							>
 								<ListItemIcon>
 									<Logout fontSize="small" />
 								</ListItemIcon>

@@ -22,12 +22,12 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route element={<ProtectedRoute />}>
-					<Route path='/' element={<InDevelopmentPage />}/>
-					<Route path='/profile' element={<Profile/>}/>
+					<Route path="/" element={<InDevelopmentPage />} />
+					<Route path="/profile" element={<Profile />} />
 				</Route>
-
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
+				<Route path='*' element={<InDevelopmentPage/>}/>
 			</Routes>
 		</BrowserRouter>
 	);

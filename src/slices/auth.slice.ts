@@ -21,7 +21,6 @@ const authSlice = createSlice({
 			state.loading = false;
 			state.error = undefined;
 			state.profile = payload;
-			
 		},
 		loginError: (state, { payload }: PayloadAction<string>) => {
 			state.loading = false;
