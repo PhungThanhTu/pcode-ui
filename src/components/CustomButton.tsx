@@ -2,7 +2,7 @@ import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled'
 import { styled } from '@mui/system';
 
 const blue = {
-	500: '#007FFF',
+	500: '#1976d2',
 	600: '#0072E5',
 	700: '#0059B2'
 };
@@ -37,6 +37,6 @@ export const StyledUnstyledButton = styled(ButtonUnstyled)`
 		cursor: not-allowed;
 	}
 `;
-export const CustomButton = ({ content, onClick }: any) => (
-	<StyledUnstyledButton onClick={onClick}>{content}</StyledUnstyledButton>
+export const CustomButton = ({ content, onClick,type }: any) => (
+	<StyledUnstyledButton type={type} onClick={onClick}>{content}</StyledUnstyledButton>
 );

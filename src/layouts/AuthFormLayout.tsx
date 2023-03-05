@@ -8,7 +8,6 @@ interface PropsWithChildrenOnly {
 const AuthFormLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
 	const FormSx: SxProps = {
 		backgroundColor: 'rgba(255, 255, 255, 0.99)',
-		padding: '25px',
 		border: 1,
 		borderWidth: '0px',
 		borderRadius: '12px',

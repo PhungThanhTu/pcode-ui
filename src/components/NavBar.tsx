@@ -137,12 +137,12 @@ export default function NavBar() {
 							anchorEl={avatarAnchorEl}
 							open={avatarMenuOpen}
 							onClose={handleClose}
-							onClick={handleClose}
+						
 							PaperProps={AvatarMenuPaper}
 							transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 							anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 						>
-							<MenuItem onClick={handleClose}>
+							<MenuItem >
 
 								<Avatar />
 								<Link href='/profile' underline="none" color="inherit">
