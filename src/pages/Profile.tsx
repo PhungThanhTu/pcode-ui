@@ -9,16 +9,19 @@ import Avatar from '@mui/material/Avatar'
 
 import { styled } from '@mui/material/styles';
 import { CustomButton } from '@/components/CustomButton';
-import { CustomInput } from '@/components/CustomInput';
 import CustomEditInput from '@/components/CustomEditInput';
 import PasswordChangeModal from '@/components/PasswordChangeModal';
 
 
 const Item = styled(Paper)(({ theme }) => ({
-	padding: '24px 24px 8px',
+	padding: '24px 14px 10px',
 	boxShadow: 'none'
 
 }));
+const AvatarSx = {
+	height: '100%',
+	width: '50%'
+}
 
 const Profile = () => {
 	const initialForm = {
@@ -45,35 +48,36 @@ const Profile = () => {
 							This is your information
 						</Item>
 						<Item>
-							<Grid container spacing={2}>
-								<Grid item xs={4}>
-									Avatar
-								</Grid>
-								<Grid item xs={8}>
-									<Avatar>N</Avatar>
-								</Grid>
-							</Grid>
+							<Stack
+								direction='row'
+								spacing={1}
+								height='100%'
+								alignItems='center'
+								justifyContent='center'
+							>
+								<Tyography variant='subtitle1' width='20%'>Avatar</Tyography>
+								<Stack
+									flexGrow={1}
+									height='270px'
+									width='100%'
+									alignItems='center'
+									justifyContent='center'
+								>
+									<Avatar
+										sx={AvatarSx}
+									>
+										N
+									</Avatar>
+								</Stack>
+
+							</Stack>
 						</Item>
 						<Item>
-							<Grid container spacing={2}>
-								<Grid item xs={4}>
-									Name
-								</Grid>
-								<Grid item xs={8}>
-									<CustomEditInput />
-								</Grid>
-							</Grid>
+							<CustomEditInput label='Name' />
 							<Divider sx={{ marginTop: '10px' }} />
 						</Item>
 						<Item>
-							<Grid container spacing={2}>
-								<Grid item xs={4}>
-									Gender
-								</Grid>
-								<Grid item xs={8}>
-									<CustomEditInput />
-								</Grid>
-							</Grid>
+							<CustomEditInput label='Gender' />
 						</Item>
 					</Stack>
 				</Paper>
@@ -87,25 +91,11 @@ const Profile = () => {
 									<Tyography variant='h5'>Contact info</Tyography>
 								</Item>
 								<Item>
-									<Grid container spacing={2}>
-										<Grid item xs={4}>
-											Email
-										</Grid>
-										<Grid item xs={8}>
-											<CustomEditInput />
-										</Grid>
-									</Grid>
+									<CustomEditInput label='Email' />
 									<Divider sx={{ marginTop: '10px' }} />
 								</Item>
 								<Item>
-									<Grid container spacing={2}>
-										<Grid item xs={4}>
-											Phone
-										</Grid>
-										<Grid item xs={8}>
-											<CustomEditInput />
-										</Grid>
-									</Grid>
+									<CustomEditInput label='Phone' />
 								</Item>
 							</Stack>
 						</Paper>

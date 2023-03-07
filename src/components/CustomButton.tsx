@@ -8,12 +8,11 @@ const blue = {
 };
 
 export const StyledUnstyledButton = styled(ButtonUnstyled)`
-	font-family: IBM Plex Sans, sans-serif;
+	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 	font-weight: bold;
-	font-size: 0.875rem;
 	background-color: ${blue[500]};
 	padding: 12px 24px;
-	border-radius: 12px;
+	border-radius: 5px;
 	color: white;
 	transition: all 150ms ease;
 	cursor: pointer;
@@ -37,6 +36,6 @@ export const StyledUnstyledButton = styled(ButtonUnstyled)`
 		cursor: not-allowed;
 	}
 `;
-export const CustomButton = ({ content, onClick,type }: any) => (
+export const CustomButton = ({ content, onClick, type }: any) => (
 	<StyledUnstyledButton type={type} onClick={onClick}>{content}</StyledUnstyledButton>
 );

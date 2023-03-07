@@ -1,4 +1,4 @@
-import { Box, Divider, Link, TextField, Typography, CircularProgress } from '@mui/material';
+import { Box, Divider, Link, TextField, Typography, CircularProgress,Stack } from '@mui/material';
 import AuthFormLayout from '../layouts/AuthFormLayout';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CustomButton } from './CustomButton';
@@ -179,94 +179,103 @@ export const RegisterForm = () => {
 
 	return (
 		<AuthFormLayout>
-			<Box sx={{ paddingBottom: '20px' }}>
-				<Typography variant="h4"> Create an account</Typography>
-			</Box>
-			<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
-				<TextField
-					onChange={onUsernameChange}
-					required
-					label="Username"
-					aria-label="username"
-					value={registerState.username}
-					helperText={registerError.username}
-					type="text"
-					error={registerError.username !== ''}
-				/>
-			</Box>
-			<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
-				<TextField
-					required
-					label="Password"
-					aria-label="password"
-					value={registerState.password}
-					helperText={registerError.password}
-					error={registerError.password !== ''}
-					onChange={onPasswordChange}
-					type="password"
-				/>
-			</Box>
-			<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
-				<TextField
-					required
-					label="Retype password"
-					aria-label="rePassword"
-					value={registerState.rePassword}
-					error={registerError.rePassword !== ''}
-					helperText={registerError.rePassword}
-					onChange={onRePasswordChange}
-					type="password"
-				/>
-			</Box>
-			<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
-				<TextField
-					required
-					label="Full Name"
-					aria-label="fullName"
-					onChange={onFullNameChange}
-					value={registerState.fullName}
-					error={registerError.fullName !== ''}
-					helperText={registerError.fullName}
-					type="text"
-				/>
-			</Box>
-			<Box sx={{ paddingBottom: '15px', paddingTop: '5px', width: 1, display: 'grid' }}>
-				<TextField
-					required
-					label="Email"
-					aria-label="email"
-					onChange={onEmailChange}
-					value={registerState.email}
-					type="email"
-					error={registerError.email !== ''}
-					helperText={registerError.email}
-				/>
-			</Box>
-			{metaRegister.status === 'error' ? (
-				<Typography variant="h4" fontSize={14} color="red">
-					{metaRegister.message}
-				</Typography>
-			) : metaRegister.status === 'success' ? (
-				<Typography variant="h4" fontSize={14} color="blue">
-					{metaRegister.message}
-				</Typography>
-			) : (
-				<Divider variant="middle" style={{ width: '95%' }} />
-			)}
-
-			<Box sx={{ paddingBottom: '30px', paddingTop: '15px', width: 1, display: 'grid' }}>
-				{loading ? (
-					<Box sx={{ width: 1, display: 'grid', justifyContent: 'center' }}>
-						<CircularProgress />
-					</Box>
+			<Stack
+				width='100%'
+				direction='column'
+				alignItems='center'
+				justifyContent='center'
+				padding='20px 14px 5px'
+			>
+				<Box sx={{ paddingBottom: '20px' }}>
+					<Typography variant="h4"> Create an account</Typography>
+				</Box>
+				<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
+					<TextField
+						onChange={onUsernameChange}
+						required
+						label="Username"
+						aria-label="username"
+						value={registerState.username}
+						helperText={registerError.username}
+						type="text"
+						error={registerError.username !== ''}
+					/>
+				</Box>
+				<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
+					<TextField
+						required
+						label="Password"
+						aria-label="password"
+						value={registerState.password}
+						helperText={registerError.password}
+						error={registerError.password !== ''}
+						onChange={onPasswordChange}
+						type="password"
+					/>
+				</Box>
+				<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
+					<TextField
+						required
+						label="Retype password"
+						aria-label="rePassword"
+						value={registerState.rePassword}
+						error={registerError.rePassword !== ''}
+						helperText={registerError.rePassword}
+						onChange={onRePasswordChange}
+						type="password"
+					/>
+				</Box>
+				<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
+					<TextField
+						required
+						label="Full Name"
+						aria-label="fullName"
+						onChange={onFullNameChange}
+						value={registerState.fullName}
+						error={registerError.fullName !== ''}
+						helperText={registerError.fullName}
+						type="text"
+					/>
+				</Box>
+				<Box sx={{ paddingBottom: '15px', paddingTop: '5px', width: 1, display: 'grid' }}>
+					<TextField
+						required
+						label="Email"
+						aria-label="email"
+						onChange={onEmailChange}
+						value={registerState.email}
+						type="email"
+						error={registerError.email !== ''}
+						helperText={registerError.email}
+					/>
+				</Box>
+				{metaRegister.status === 'error' ? (
+					<Typography variant="h4" fontSize={14} color="red">
+						{metaRegister.message}
+					</Typography>
+				) : metaRegister.status === 'success' ? (
+					<Typography variant="h4" fontSize={14} color="blue">
+						{metaRegister.message}
+					</Typography>
 				) : (
-					<CustomButton content="Create account" onClick={onRegister} />
+					<Divider variant="middle" style={{ width: '95%' }} />
 				)}
-			</Box>
-			<Typography fontSize={16}>Already have an account</Typography>
-			<Link component={RouterLink} to="/login" underline="none" variant="h4" fontSize={16}>
-				Login
-			</Link>
+
+				<Box sx={{ paddingBottom: '30px', paddingTop: '15px', width: 1, display: 'grid' }}>
+					{loading ? (
+						<Box sx={{ width: 1, display: 'grid', justifyContent: 'center' }}>
+							<CircularProgress />
+						</Box>
+					) : (
+						<CustomButton content="Create account" onClick={onRegister} />
+					)}
+				</Box>
+				<Typography fontSize={16}>Already have an account</Typography>
+				<Link component={RouterLink} to="/login" underline="none" variant="h4" fontSize={16}>
+					Login
+				</Link>
+			</Stack>
+
 		</AuthFormLayout>
 	);
 };
