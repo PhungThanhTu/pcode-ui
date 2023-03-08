@@ -8,6 +8,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
+import { labelToProperty } from '@/utils/convert';
 
 
 export const CustomEditIcon = styled(EditIcon)(({ theme }) => ({
@@ -26,6 +27,7 @@ export const CustomCancelIcon = styled(CancelIcon)(({ theme }) => ({
 
 function CustomEditInput(props: any) {
     const [isEdit, setIsEdit] = React.useState(false)
+    const name = labelToProperty(props.label)
 
     return (
         <Stack
@@ -41,8 +43,8 @@ function CustomEditInput(props: any) {
             <Stack flexGrow={1}>
                 {
                     isEdit ?
-                        <TextField fullWidth variant="standard" /> :
-                        <Typography variant='body1'>{props.value ? props.value : "Field"}</Typography>
+                        <TextField name={name} fullWidth variant="standard" value={props.value ? props.value : ""} onChange={props.onChange} /> :
+                        <Typography variant='body1'>{props.value ? props.value : "null"}</Typography>
                 }
             </Stack>
             <React.Fragment>
@@ -58,8 +60,16 @@ function CustomEditInput(props: any) {
                         {
                             isEdit ?
                                 <React.Fragment>
-                                    <CustomSaveIcon onClick={props.onSave} />
-                                    <CustomCancelIcon onClick={() => { setIsEdit(false) }} />
+                                    <CustomSaveIcon onClick={() => {
+                                        props.onSave()
+                                        setIsEdit(false)
+                                    }} />
+                                    <CustomCancelIcon
+                                        onClick={() => {
+                                            setIsEdit(false)
+                                            props.onCancel(name)
+                                        }}
+                                    />
                                 </React.Fragment>
                                 :
                                 <CustomEditIcon onClick={() => { setIsEdit(true) }} />
@@ -75,10 +85,11 @@ function CustomEditInput(props: any) {
 }
 
 CustomEditInput.propTypes = {
-    onChange: PropTypes.func,
-    onSave: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
     value: PropTypes.string,
-    label: PropTypes.string
+    label: PropTypes.string.isRequired
 }
 
 export default CustomEditInput

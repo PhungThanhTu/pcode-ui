@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper'
 import Tyography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider'
 import Avatar from '@mui/material/Avatar'
-
-
-import { styled } from '@mui/material/styles';
-import { CustomButton } from '@/components/CustomButton';
 import CustomEditInput from '@/components/CustomEditInput';
 import PasswordChangeModal from '@/components/PasswordChangeModal';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { styled } from '@mui/material/styles';
+import { CustomButton } from '@/components/CustomButton';
+import { getAuth } from '../selectors/auth.selector';
+import { UserProfile } from '@/types/auth.type';
+import { updateProfile } from '@/slices/profile.slice';
+
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -24,19 +28,39 @@ const AvatarSx = {
 }
 
 const Profile = () => {
-	const initialForm = {
-		name: '',
-		phone: '',
-		email: '',
-		gender: ''
-	}
+	const dispatch = useDispatch();
+	const { profile } = useSelector(getAuth);
 
-	const [ProfileForm, setProfileForm] = React.useState(initialForm)
-	const [OpenPasswordChange, setOpenPasswordChange] = React.useState(false)
+	const [profileForm, setProfileForm] = React.useState({ ...profile });
+	const [OpenPasswordChange, setOpenPasswordChange] = React.useState(false);
 
+	const { fullName, email } = profileForm
+
+	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+		setProfileForm({
+			...profileForm,
+			[e.target.name]: e.target.value
+		})
+	};
+	const onCancel = (name: keyof UserProfile) => {
+		if (profile) {
+			setProfileForm({
+				...profileForm,
+				[name]: profile[name]
+			})
+		}
+	};
 	const UpdateProfile = () => {
-		console.log("Updaet Profile")
-	}
+		let payload = {
+			username: profileForm.username ? profileForm.username : "",
+			fullName: profileForm.fullName ? profileForm.fullName : "",
+			email: profileForm.email ? profileForm.email : "",
+			avatar: profileForm.avatar
+		};
+		if (window.confirm("Update this property?")) {
+			dispatch(updateProfile(payload))
+		}
+	};
 
 	return (
 		<Grid container spacing={2} >
@@ -65,19 +89,20 @@ const Profile = () => {
 								>
 									<Avatar
 										sx={AvatarSx}
+										id="avatar"
+										alt="Avatar"
+										variant='rounded'
+
 									>
 										N
 									</Avatar>
 								</Stack>
 
 							</Stack>
-						</Item>
-						<Item>
-							<CustomEditInput label='Name' />
 							<Divider sx={{ marginTop: '10px' }} />
 						</Item>
 						<Item>
-							<CustomEditInput label='Gender' />
+							<CustomEditInput label='Full Name' value={fullName} onChange={onChange} onCancel={onCancel} onSave={UpdateProfile} />
 						</Item>
 					</Stack>
 				</Paper>
@@ -91,11 +116,8 @@ const Profile = () => {
 									<Tyography variant='h5'>Contact info</Tyography>
 								</Item>
 								<Item>
-									<CustomEditInput label='Email' />
+									<CustomEditInput label='Email' value={email} onChange={onChange} onCancel={onCancel} onSave={UpdateProfile} />
 									<Divider sx={{ marginTop: '10px' }} />
-								</Item>
-								<Item>
-									<CustomEditInput label='Phone' />
 								</Item>
 							</Stack>
 						</Paper>

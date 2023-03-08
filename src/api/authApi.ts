@@ -31,7 +31,7 @@ const authApi = {
 		return TokenService.clearTokens();
 	},
 	getProfile: async () => {
-		const result: AxiosResponse<UserProfile> = await protectedApi.get(API_PREFIX + '/profile');
+		const result: AxiosResponse<UserProfile> = await protectedApi.get('/profile');
 		return result;
 	}
 };

@@ -6,7 +6,6 @@ import Loading from '@/pages/Loading';
 
 const ProtectedRoute = () => {
 	const { profile } = useSelector(getAuth);
-	console.log(profile, 'hello');
 
 	if (profile) {
 		return (
