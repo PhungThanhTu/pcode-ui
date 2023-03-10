@@ -48,12 +48,11 @@ const Profile = () => {
 		}
 	};
 	const ChangePassword = (passwordForm: any) => {
-		
 		let payload = {
 			password: passwordForm.password,
 			newPassword: passwordForm.newPassword
 		};
-		console.log(payload,"hello")
+		console.log(payload, 'hello');
 		dispatch(changePassword(payload));
 	};
 	const UpdateProfile = () => {
