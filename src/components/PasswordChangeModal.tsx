@@ -9,23 +9,24 @@ import { Alert, AlertTitle } from '@mui/material';
 import { Button } from '@mui/material';
 
 const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    p: 4
+	position: 'absolute' as 'absolute',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	width: 400,
+	bgcolor: 'background.paper',
+	p: 4
 };
 const PasswordChangeModal = (props: any) => {
-    const initialForm = {
-        password: '',
-        newPassword: '',
-        reNewPassword: ''
-    };
-    const [alert, setAlert] = React.useState<ReactElement>();
-    const [passwordForm, setPasswordForm] = React.useState(initialForm);
-    const { password, newPassword, reNewPassword } = passwordForm;
+	const initialForm = {
+		password: '',
+		newPassword: '',
+		reNewPassword: ''
+	};
+	const [alert, setAlert] = React.useState<ReactElement>();
+	const [passwordForm, setPasswordForm] = React.useState(initialForm);
+	const { password, newPassword, reNewPassword } = passwordForm;
+
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setPasswordForm({
@@ -119,12 +120,13 @@ const PasswordChangeModal = (props: any) => {
             </Box>
         </Modal>
     );
+
 };
 
 PasswordChangeModal.propTypes = {
-    open: PropTypes.bool,
-    onClose: PropTypes.func,
-    onSave: PropTypes.func
+	open: PropTypes.bool,
+	onClose: PropTypes.func,
+	onSave: PropTypes.func
 };
 
 export default PasswordChangeModal;

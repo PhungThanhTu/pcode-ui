@@ -9,7 +9,6 @@ import Avatar from '@mui/material/Avatar';
 import CustomEditInput from '@/components/CustomEditInput';
 import PasswordChangeModal from '@/components/PasswordChangeModal';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Box from '@mui/material/Box';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
@@ -103,7 +102,6 @@ const Profile = () => {
 			password: passwordForm.password,
 			newPassword: passwordForm.newPassword
 		};
-
 		dispatch(changePassword(payload));
 	};
 	const UpdateProfile = () => {
