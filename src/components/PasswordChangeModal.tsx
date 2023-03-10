@@ -105,6 +105,7 @@ const PasswordChangeModal = (props: any) => {
                                 const check = validation();
                                 if (check) {
                                     props.onSave(passwordForm);
+                                    props.onClose()
                                 }
                             }}
                         >
