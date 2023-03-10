@@ -37,5 +37,7 @@ export const StyledUnstyledButton = styled(ButtonUnstyled)`
 	}
 `;
 export const CustomButton = ({ content, onClick, type }: any) => (
-	<StyledUnstyledButton type={type} onClick={onClick}>{content}</StyledUnstyledButton>
+	<StyledUnstyledButton type={type} onClick={onClick}>
+		{content}
+	</StyledUnstyledButton>
 );

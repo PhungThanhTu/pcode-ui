@@ -1,4 +1,4 @@
-import { Box, Divider, Link, TextField, Typography, CircularProgress,Stack } from '@mui/material';
+import { Box, Divider, Link, TextField, Typography, CircularProgress, Stack } from '@mui/material';
 import AuthFormLayout from '../layouts/AuthFormLayout';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CustomButton } from './CustomButton';
@@ -179,13 +179,7 @@ export const RegisterForm = () => {
 
 	return (
 		<AuthFormLayout>
-			<Stack
-				width='100%'
-				direction='column'
-				alignItems='center'
-				justifyContent='center'
-				padding='20px 14px 5px'
-			>
+			<Stack width="100%" direction="column" alignItems="center" justifyContent="center" padding="20px 14px 5px">
 				<Box sx={{ paddingBottom: '20px' }}>
 					<Typography variant="h4"> Create an account</Typography>
 				</Box>
@@ -275,7 +269,6 @@ export const RegisterForm = () => {
 					Login
 				</Link>
 			</Stack>
-
 		</AuthFormLayout>
 	);
 };

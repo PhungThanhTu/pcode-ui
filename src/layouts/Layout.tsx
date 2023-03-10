@@ -12,14 +12,12 @@ const Layout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWith
 	const LayoutBoxSx = {
 		width: '100%',
 		padding: '30px'
-	}
+	};
 	return (
 		<React.Fragment>
 			<NavBar />
 			<div style={{ marginTop: '70px', height: '100vh' }}>
-				<Box sx={LayoutBoxSx}>
-					{props.children}
-				</Box>
+				<Box sx={LayoutBoxSx}>{props.children}</Box>
 			</div>
 			<Footer />
 			<CustomSnackbar />

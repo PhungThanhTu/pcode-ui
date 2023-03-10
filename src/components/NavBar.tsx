@@ -109,7 +109,7 @@ export default function NavBar() {
 							TransitionComponent={Fade}
 						>
 							<MenuItem>
-								<Link href='/' underline="none" color="inherit">
+								<Link href="/" underline="none" color="inherit">
 									Home
 								</Link>
 							</MenuItem>
@@ -137,19 +137,15 @@ export default function NavBar() {
 							anchorEl={avatarAnchorEl}
 							open={avatarMenuOpen}
 							onClose={handleClose}
-						
 							PaperProps={AvatarMenuPaper}
 							transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 							anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 						>
-							<MenuItem >
-
+							<MenuItem>
 								<Avatar />
-								<Link href='/profile' underline="none" color="inherit">
+								<Link href="/profile" underline="none" color="inherit">
 									Profile
 								</Link>
-
-
 							</MenuItem>
 							<Divider />
 							<MenuItem

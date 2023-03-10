@@ -10,10 +10,11 @@ const profileSlice = createSlice({
     initialState: initialState,
     reducers: {
         fetchProfile: () => { },
-        updateProfile: (state, { payload }: PayloadAction<UserProfile>) => { }
+        updateProfile: (state, { payload }: PayloadAction<UserProfile>) => { },
+        changePassword: (state, any) => { }
     }
 });
 
-export const { fetchProfile, updateProfile } = profileSlice.actions;
+export const { fetchProfile, updateProfile, changePassword } = profileSlice.actions;
 
 export default profileSlice.reducer;

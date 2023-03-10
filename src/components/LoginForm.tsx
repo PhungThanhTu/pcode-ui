@@ -44,8 +44,8 @@ export const LoginForm = () => {
 
 	return (
 		<AuthFormLayout>
-			<Box component="form"  sx={{width: '100%', padding:'20px'}}>
-				<Box sx={{ paddingBottom: '20px' }} >
+			<Box component="form" sx={{ width: '100%', padding: '20px' }}>
+				<Box sx={{ paddingBottom: '20px' }}>
 					<Typography variant="h4"> Sign in</Typography>
 				</Box>
 				<Box sx={{ paddingBottom: '10px', paddingTop: '10px', width: 1, display: 'grid' }}>
@@ -67,7 +67,7 @@ export const LoginForm = () => {
 							<CircularProgress />
 						</Box>
 					) : (
-						<CustomButton type="submit" content="Login" onClick={onLogin}/>
+						<CustomButton type="submit" content="Login" onClick={onLogin} />
 					)}
 				</Box>
 			</Box>
