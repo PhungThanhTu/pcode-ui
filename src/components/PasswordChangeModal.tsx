@@ -27,100 +27,97 @@ const PasswordChangeModal = (props: any) => {
 	const [passwordForm, setPasswordForm] = React.useState(initialForm);
 	const { password, newPassword, reNewPassword } = passwordForm;
 
-
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setPasswordForm({
-            ...passwordForm,
-            [e.target.name]: e.target.value
-        });
-    };
-    const validation = () => {
-        if (newPassword == '' || password == '' || reNewPassword == '') {
-            setAlert(
-                <Alert severity="error">
-                    <AlertTitle>Error</AlertTitle>
-                    Missing field — <strong>please fill all fields!</strong>
-                </Alert>
-            );
-            return false;
-        } else if (newPassword !== reNewPassword) {
-            setAlert(
-                <Alert severity="error">
-                    <AlertTitle>Error</AlertTitle>
-                    Re-New password differ to New password — <strong>check it out!</strong>
-                </Alert>
-            );
-            return false;
-        }
-        return true;
-    };
-    useEffect(() => {
-        let timer = setTimeout(() => {
-            setAlert(undefined);
-        }, 2000);
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [alert]);
-    useEffect(() => {
-        
-        setPasswordForm(initialForm)
-    }, [])
-    return (
-        <Modal open={props.open} onClose={props.onClose}>
-            <Box sx={style}>
-                <Typography variant="h4" component="h2">
-                    Change your password
-                </Typography>
-                <Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
-                    <TextField
-                        name="password"
-                        label="Current password"
-                        type="password"
-                        fullWidth
-                        variant="standard"
-                        onChange={onChange}
-                    />
-                    <TextField
-                        name="newPassword"
-                        label="New password"
-                        type="password"
-                        fullWidth
-                        variant="standard"
-                        onChange={onChange}
-                    />
-                    <TextField
-                        name="reNewPassword"
-                        label="Re-New password"
-                        type="password"
-                        fullWidth
-                        variant="standard"
-                        onChange={onChange}
-                    />
-                    {alert}
-                    <Stack direction="row" spacing={2} height="100%" alignItems="center" justifyContent="center">
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            onClick={() => {
-                                const check = validation();
-                                if (check) {
-                                    props.onSave(passwordForm);
-                                    props.onClose()
-                                }
-                            }}
-                        >
-                            Save
-                        </Button>
-                        <Button fullWidth onClick={props.onClose}>
-                            Cancel
-                        </Button>
-                    </Stack>
-                </Stack>
-            </Box>
-        </Modal>
-    );
-
+	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+		setPasswordForm({
+			...passwordForm,
+			[e.target.name]: e.target.value
+		});
+	};
+	const validation = () => {
+		if (newPassword == '' || password == '' || reNewPassword == '') {
+			setAlert(
+				<Alert severity="error">
+					<AlertTitle>Error</AlertTitle>
+					Missing field — <strong>please fill all fields!</strong>
+				</Alert>
+			);
+			return false;
+		} else if (newPassword !== reNewPassword) {
+			setAlert(
+				<Alert severity="error">
+					<AlertTitle>Error</AlertTitle>
+					Re-New password differ to New password — <strong>check it out!</strong>
+				</Alert>
+			);
+			return false;
+		}
+		return true;
+	};
+	useEffect(() => {
+		let timer = setTimeout(() => {
+			setAlert(undefined);
+		}, 2000);
+		return () => {
+			clearTimeout(timer);
+		};
+	}, [alert]);
+	useEffect(() => {
+		setPasswordForm(initialForm);
+	}, []);
+	return (
+		<Modal open={props.open} onClose={props.onClose}>
+			<Box sx={style}>
+				<Typography variant="h4" component="h2">
+					Change your password
+				</Typography>
+				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
+					<TextField
+						name="password"
+						label="Current password"
+						type="password"
+						fullWidth
+						variant="standard"
+						onChange={onChange}
+					/>
+					<TextField
+						name="newPassword"
+						label="New password"
+						type="password"
+						fullWidth
+						variant="standard"
+						onChange={onChange}
+					/>
+					<TextField
+						name="reNewPassword"
+						label="Re-New password"
+						type="password"
+						fullWidth
+						variant="standard"
+						onChange={onChange}
+					/>
+					{alert}
+					<Stack direction="row" spacing={2} height="100%" alignItems="center" justifyContent="center">
+						<Button
+							fullWidth
+							variant="contained"
+							onClick={() => {
+								const check = validation();
+								if (check) {
+									props.onSave(passwordForm);
+									props.onClose();
+								}
+							}}
+						>
+							Save
+						</Button>
+						<Button fullWidth onClick={props.onClose}>
+							Cancel
+						</Button>
+					</Stack>
+				</Stack>
+			</Box>
+		</Modal>
+	);
 };
 
 PasswordChangeModal.propTypes = {
