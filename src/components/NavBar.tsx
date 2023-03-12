@@ -13,10 +13,12 @@ import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
 import Tooltip from '@mui/material/Tooltip';
 import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { Slide, Typography, useScrollTrigger } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../slices/auth.slice';
+import { getAuth } from '@/selectors/auth.selector';
 
 function HideOnScroll(props: any) {
 	const { children, window } = props;
@@ -60,6 +62,7 @@ const AvatarMenuPaper = {
 
 export default function NavBar() {
 	const dispatch = useDispatch();
+	const { profile } = useSelector(getAuth);
 
 	const [hamAnchorEl, setHamAnchorEl] = React.useState<null | HTMLElement>(null);
 	const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -109,7 +112,7 @@ export default function NavBar() {
 							TransitionComponent={Fade}
 						>
 							<MenuItem>
-								<Link href="/" underline="none" color="inherit">
+								<Link component={RouterLink} to="/" underline="none" color="inherit">
 									Home
 								</Link>
 							</MenuItem>
@@ -129,7 +132,9 @@ export default function NavBar() {
 									aria-haspopup="true"
 									aria-expanded={avatarMenuOpen ? 'true' : undefined}
 								>
-									<Avatar sx={{ width: 45, height: 45 }}>M</Avatar>
+									<Avatar sx={{ width: 45, height: 45 }} src={profile?.avatar}>
+										{profile?.username.charAt(0).toUpperCase() || 'N'}
+									</Avatar>
 								</IconButton>
 							</Tooltip>
 						</Box>
@@ -143,7 +148,7 @@ export default function NavBar() {
 						>
 							<MenuItem>
 								<Avatar />
-								<Link href="/profile" underline="none" color="inherit">
+								<Link component={RouterLink} to="/profile" underline="none" color="inherit">
 									Profile
 								</Link>
 							</MenuItem>

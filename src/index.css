@@ -26,3 +26,6 @@ html {
 .MuiTypography-root {
 	font-family: inherit !important;
 }
+.MuiButton-root{
+	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
+}

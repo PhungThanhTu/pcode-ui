@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useCallback, useEffect } from 'react';
 import { fetchProfile } from './slices/auth.slice';
 import ProtectedRoute from './router/ProtectedRoute';
-import Profile from './pages/Profile';
+import Profile from './pages/ProfilePage';
 
 function App() {
 	const dispatch = useDispatch();

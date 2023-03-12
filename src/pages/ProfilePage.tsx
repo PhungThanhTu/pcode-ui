@@ -22,7 +22,8 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 const AvatarSx = {
 	height: '100%',
-	width: '50%'
+	width: '50%',
+	fontSize: '100pt'
 };
 const AvatarHoverSx = {
 	height: '100%',
@@ -155,7 +156,7 @@ const Profile = () => {
 										</Stack>
 									</Stack>
 									<Avatar sx={AvatarSx} src={avatar} id="avatar" alt="Avatar" variant="rounded">
-										{profile?.username || 'N'}
+										{profile?.username.charAt(0).toUpperCase() || 'N'}
 									</Avatar>
 								</Stack>
 							</Stack>
