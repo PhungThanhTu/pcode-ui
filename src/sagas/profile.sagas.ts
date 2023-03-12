@@ -23,8 +23,8 @@ function* updateProfileSaga(action: PayloadAction<UserProfile>) {
 	try {
 		let body = {
 			fullName: action.payload.fullName,
-			email: action.payload.email
-			// avatar: action.payload.avatar
+			email: action.payload.email,
+			avatar: action.payload.avatar
 		};
 		console.log('saga updating profile');
 		yield call(profileApi.updateProfile, body);

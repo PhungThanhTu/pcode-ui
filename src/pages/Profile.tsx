@@ -55,12 +55,23 @@ const Profile = () => {
 	const dispatch = useDispatch();
 	const { profile } = useSelector(getAuth);
 
-	const pictureRef = React.useRef<any>();
-	const avatarRef = React.useRef<any>();
+	const pictureRef = React.useRef<HTMLInputElement>(null);
+	const avatarRef = React.useRef<HTMLElement>(null);
 	const [profileForm, setProfileForm] = React.useState({ ...profile });
 	const [OpenPasswordChange, setOpenPasswordChange] = React.useState(false);
 
 	const { fullName, email, avatar } = profileForm;
+
+	const UpdateProfile = () => {
+		let payload = {
+			username: profileForm.username ? profileForm.username : '',
+			fullName: profileForm.fullName ? profileForm.fullName : '',
+			email: profileForm.email ? profileForm.email : '',
+			avatar: profileForm.avatar
+		};
+
+		dispatch(updateProfile(payload));
+	};
 
 	const uploadPicture = () => {
 		if (pictureRef.current) {
@@ -102,16 +113,6 @@ const Profile = () => {
 		};
 		dispatch(changePassword(payload));
 	};
-	const UpdateProfile = () => {
-		let payload = {
-			username: profileForm.username ? profileForm.username : '',
-			fullName: profileForm.fullName ? profileForm.fullName : '',
-			email: profileForm.email ? profileForm.email : '',
-			avatar: profileForm.avatar
-		};
-
-		dispatch(updateProfile(payload));
-	};
 
 	return (
 		<Grid container spacing={2}>
@@ -150,13 +151,7 @@ const Profile = () => {
 									>
 										<Stack alignItems="center" justifyContent="center" sx={AvatarHoverContentSx}>
 											<CloudUploadIcon />
-											<input
-												type="file"
-												ref={pictureRef}
-												onChange={(e) => {
-													onAvatarChange(e);
-												}}
-											/>
+											<input type="file" ref={pictureRef} onChange={onAvatarChange} />
 										</Stack>
 									</Stack>
 									<Avatar sx={AvatarSx} src={avatar} id="avatar" alt="Avatar" variant="rounded">
