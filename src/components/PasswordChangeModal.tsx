@@ -17,8 +17,21 @@ const style = {
 	bgcolor: 'background.paper',
 	p: 4
 };
-const PasswordChangeModal = (props: any) => {
-	const initialForm = {
+
+export interface PasswordChangeModalProps {
+	open: boolean;
+	onSave: Function;
+	onClose: Function;
+}
+
+export interface PasswordChangeFormProps {
+	password: string;
+	newPassword: string;
+	reNewPassword: string;
+}
+
+const PasswordChangeModal = ({ open, onSave, onClose }: PasswordChangeModalProps) => {
+	const initialForm: PasswordChangeFormProps = {
 		password: '',
 		newPassword: '',
 		reNewPassword: ''
@@ -34,7 +47,7 @@ const PasswordChangeModal = (props: any) => {
 		});
 	};
 	const validation = () => {
-		if (newPassword == '' || password == '' || reNewPassword == '') {
+		if (newPassword === '' || password === '' || reNewPassword === '') {
 			setAlert(
 				<Alert severity="error">
 					<AlertTitle>Error</AlertTitle>
@@ -53,6 +66,15 @@ const PasswordChangeModal = (props: any) => {
 		}
 		return true;
 	};
+
+	const handleSavePassword = () => {
+		const check = validation();
+		if (check) {
+			onSave(passwordForm);
+			onClose();
+		}
+	};
+
 	useEffect(() => {
 		let timer = setTimeout(() => {
 			setAlert(undefined);
@@ -61,11 +83,9 @@ const PasswordChangeModal = (props: any) => {
 			clearTimeout(timer);
 		};
 	}, [alert]);
-	useEffect(() => {
-		setPasswordForm(initialForm);
-	}, []);
+
 	return (
-		<Modal open={props.open} onClose={props.onClose}>
+		<Modal onClose={() => onClose()} open={open}>
 			<Box sx={style}>
 				<Typography variant="h4" component="h2">
 					Change your password
@@ -97,20 +117,10 @@ const PasswordChangeModal = (props: any) => {
 					/>
 					{alert}
 					<Stack direction="row" spacing={2} height="100%" alignItems="center" justifyContent="center">
-						<Button
-							fullWidth
-							variant="contained"
-							onClick={() => {
-								const check = validation();
-								if (check) {
-									props.onSave(passwordForm);
-									props.onClose();
-								}
-							}}
-						>
+						<Button fullWidth variant="contained" onClick={() => handleSavePassword()}>
 							Save
 						</Button>
-						<Button fullWidth onClick={props.onClose}>
+						<Button fullWidth onClick={() => onClose()}>
 							Cancel
 						</Button>
 					</Stack>

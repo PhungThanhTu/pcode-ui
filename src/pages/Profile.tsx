@@ -1,5 +1,4 @@
 import React, { ChangeEvent } from 'react';
-import ReactDOM from 'react-dom';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Tyography from '@mui/material/Typography';
@@ -14,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import { CustomButton } from '@/components/CustomButton';
 import { getAuth } from '../selectors/auth.selector';
-import { UserProfile } from '@/types/auth.type';
+import { PasswordChangeRequest, UserProfile } from '@/types/auth.type';
 import { changePassword, updateProfile } from '@/slices/profile.slice';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -96,8 +95,8 @@ const Profile = () => {
 			});
 		}
 	};
-	const ChangePassword = (passwordForm: any) => {
-		let payload = {
+	const ChangePassword = (passwordForm: PasswordChangeRequest) => {
+		let payload: PasswordChangeRequest = {
 			password: passwordForm.password,
 			newPassword: passwordForm.newPassword
 		};
@@ -161,7 +160,7 @@ const Profile = () => {
 										</Stack>
 									</Stack>
 									<Avatar sx={AvatarSx} src={avatar} id="avatar" alt="Avatar" variant="rounded">
-										N
+										{profile?.username || 'N'}
 									</Avatar>
 								</Stack>
 							</Stack>
@@ -206,15 +205,6 @@ const Profile = () => {
 								<Item>
 									<Tyography variant="h5">Password</Tyography>
 								</Item>
-								{/* <Item>
-									<Grid container spacing={2}>
-										<Grid item xs={12}>
-											<Tyography variant="h6">••••••••••••••••</Tyography>
-											<Tyography>Last change on 02-03-2023</Tyography>
-										</Grid>
-									</Grid>
-									<Divider sx={{ marginTop: '10px' }} />
-								</Item> */}
 								<Item>
 									<CustomButton
 										content="Change password"

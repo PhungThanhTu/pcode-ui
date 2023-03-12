@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserProfile } from '@/types/auth.type';
+import { PasswordChangeRequest, UserProfile } from '@/types/auth.type';
 
 export const initialState: any = {
 	profile: undefined
@@ -11,7 +11,7 @@ const profileSlice = createSlice({
 	reducers: {
 		fetchProfile: () => {},
 		updateProfile: (state, { payload }: PayloadAction<UserProfile>) => {},
-		changePassword: (state, any) => {}
+		changePassword: (state, { payload }: PayloadAction<PasswordChangeRequest>) => {}
 	}
 });
 

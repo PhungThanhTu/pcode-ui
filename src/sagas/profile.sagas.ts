@@ -1,8 +1,8 @@
-import { put, call, takeLatest, delay } from 'redux-saga/effects';
+import { put, call, takeLatest } from 'redux-saga/effects';
 import { loginSuccess, logout } from '../slices/auth.slice';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { AxiosError, AxiosResponse } from 'axios';
-import { UserProfile } from '../types/auth.type';
+import { AxiosResponse } from 'axios';
+import { PasswordChangeRequest, UserProfile } from '../types/auth.type';
 import profileApi from '@/api/profileApi';
 import { updateProfile, fetchProfile, changePassword } from '@/slices/profile.slice';
 import { setSnackbar } from '@/slices/snackbar.slice';
@@ -35,7 +35,7 @@ function* updateProfileSaga(action: PayloadAction<UserProfile>) {
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('profile', '')));
 	}
 }
-function* changePasswordSaga(action: any) {
+function* changePasswordSaga(action: PayloadAction<PasswordChangeRequest>) {
 	try {
 		console.log('saga change password', action.payload);
 		yield call(profileApi.changePassword, action.payload);
