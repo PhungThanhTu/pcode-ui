@@ -17,7 +17,15 @@ body,
 	margin: 0;
 	box-sizing: border-box;
 }
+
 html {
 	font-size: 14px;
+	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+}
 
+.MuiTypography-root {
+	font-family: inherit !important;
+}
+.MuiButton-root{
+	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }

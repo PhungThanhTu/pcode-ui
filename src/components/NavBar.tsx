@@ -12,10 +12,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
 import Tooltip from '@mui/material/Tooltip';
+import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Slide, useScrollTrigger } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { Slide, Typography, useScrollTrigger } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../slices/auth.slice';
+import { getAuth } from '@/selectors/auth.selector';
 
 function HideOnScroll(props: any) {
 	const { children, window } = props;
@@ -40,7 +43,7 @@ const AvatarMenuPaper = {
 			width: 32,
 			height: 32,
 			ml: -0.5,
-			mr: 1,
+			mr: 1
 		},
 		'&:before': {
 			content: '""',
@@ -52,23 +55,23 @@ const AvatarMenuPaper = {
 			height: 10,
 			bgcolor: 'background.paper',
 			transform: 'translateY(-50%) rotate(45deg)',
-			zIndex: 0,
-		},
-	},
-}
+			zIndex: 0
+		}
+	}
+};
 
 export default function NavBar() {
 	const dispatch = useDispatch();
+	const { profile } = useSelector(getAuth);
 
 	const [hamAnchorEl, setHamAnchorEl] = React.useState<null | HTMLElement>(null);
 	const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null);
 
 	const hamMenuOpen = Boolean(hamAnchorEl);
-	const avatarMenuOpen = Boolean(avatarAnchorEl)
+	const avatarMenuOpen = Boolean(avatarAnchorEl);
 
 	const handleAvatarMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setAvatarAnchorEl(event.currentTarget);
-
 	};
 	const handleHamMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setHamAnchorEl(event.currentTarget);
@@ -108,11 +111,16 @@ export default function NavBar() {
 							onClose={handleClose}
 							TransitionComponent={Fade}
 						>
-							<MenuItem onClick={handleClose}>Home</MenuItem>
-							<MenuItem onClick={handleClose}>Home</MenuItem>
+							<MenuItem>
+								<Link component={RouterLink} to="/" underline="none" color="inherit">
+									Home
+								</Link>
+							</MenuItem>
 						</Menu>
 
-						<div>LPL</div>
+						<Typography color="white" variant="h5">
+							Programming Learning Platform
+						</Typography>
 
 						<Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
 							<Tooltip title="User settings">
@@ -124,7 +132,9 @@ export default function NavBar() {
 									aria-haspopup="true"
 									aria-expanded={avatarMenuOpen ? 'true' : undefined}
 								>
-									<Avatar sx={{ width: 45, height: 45 }}>M</Avatar>
+									<Avatar sx={{ width: 45, height: 45 }} src={profile?.avatar}>
+										{profile?.username.charAt(0).toUpperCase() || 'N'}
+									</Avatar>
 								</IconButton>
 							</Tooltip>
 						</Box>
@@ -132,16 +142,22 @@ export default function NavBar() {
 							anchorEl={avatarAnchorEl}
 							open={avatarMenuOpen}
 							onClose={handleClose}
-							onClick={handleClose}
 							PaperProps={AvatarMenuPaper}
 							transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 							anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 						>
-							<MenuItem onClick={handleClose}>
-								<Avatar /> Profile
+							<MenuItem>
+								<Avatar />
+								<Link component={RouterLink} to="/profile" underline="none" color="inherit">
+									Profile
+								</Link>
 							</MenuItem>
 							<Divider />
-							<MenuItem onClick={() => { returnToLogin() }}>
+							<MenuItem
+								onClick={() => {
+									returnToLogin();
+								}}
+							>
 								<ListItemIcon>
 									<Logout fontSize="small" />
 								</ListItemIcon>

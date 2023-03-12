@@ -2,18 +2,17 @@ import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled'
 import { styled } from '@mui/system';
 
 const blue = {
-	500: '#007FFF',
+	500: '#1976d2',
 	600: '#0072E5',
 	700: '#0059B2'
 };
 
 export const StyledUnstyledButton = styled(ButtonUnstyled)`
-	font-family: IBM Plex Sans, sans-serif;
+	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 	font-weight: bold;
-	font-size: 0.875rem;
 	background-color: ${blue[500]};
 	padding: 12px 24px;
-	border-radius: 12px;
+	border-radius: 5px;
 	color: white;
 	transition: all 150ms ease;
 	cursor: pointer;
@@ -37,6 +36,8 @@ export const StyledUnstyledButton = styled(ButtonUnstyled)`
 		cursor: not-allowed;
 	}
 `;
-export const CustomButton = ({ content, onClick }: any) => (
-	<StyledUnstyledButton onClick={onClick}>{content}</StyledUnstyledButton>
+export const CustomButton = ({ content, onClick, type }: any) => (
+	<StyledUnstyledButton type={type} onClick={onClick}>
+		{content}
+	</StyledUnstyledButton>
 );
