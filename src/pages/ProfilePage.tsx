@@ -52,7 +52,7 @@ const AvatarHoverContentSx = {
 		width: '100%'
 	}
 };
-const Profile = () => {
+const ProfilePage = () => {
 	const dispatch = useDispatch();
 	const { profile } = useSelector(getAuth);
 
@@ -225,4 +225,4 @@ const Profile = () => {
 	);
 };
 
-export default Profile;
+export default ProfilePage;

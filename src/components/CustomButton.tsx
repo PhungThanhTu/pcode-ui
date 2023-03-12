@@ -1,4 +1,5 @@
 import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled';
+import Button from '@mui/material/Button';
 import { styled } from '@mui/system';
 
 const blue = {
@@ -40,4 +41,9 @@ export const CustomButton = ({ content, onClick, type }: any) => (
 	<StyledUnstyledButton type={type} onClick={onClick}>
 		{content}
 	</StyledUnstyledButton>
+);
+export const CustomIconButton = ({ content, onClick, type, startIcon }: any) => (
+	<Button type={type} onClick={onClick} startIcon={startIcon}>
+		{content}
+	</Button>
 );

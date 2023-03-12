@@ -116,6 +116,11 @@ export default function NavBar() {
 									Home
 								</Link>
 							</MenuItem>
+							<MenuItem>
+								<Link component={RouterLink} to="/course" underline="none" color="inherit">
+									Course
+								</Link>
+							</MenuItem>
 						</Menu>
 
 						<Typography color="white" variant="h5">

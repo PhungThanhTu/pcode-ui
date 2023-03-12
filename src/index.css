@@ -19,13 +19,15 @@ body,
 }
 
 html {
-	font-size: 14px;
+	font-size: 13pt;
 	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 }
 
 .MuiTypography-root {
 	font-family: inherit !important;
 }
-.MuiButton-root{
+.MuiButton-root {
 	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
+	font-weight: bold !important;
+	text-transform: none !important;
 }

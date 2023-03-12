@@ -6,7 +6,8 @@ import { useDispatch } from 'react-redux';
 import { useCallback, useEffect } from 'react';
 import { fetchProfile } from './slices/auth.slice';
 import ProtectedRoute from './router/ProtectedRoute';
-import Profile from './pages/ProfilePage';
+import ProfilePage from './pages/ProfilePage';
+import CoursePage from './pages/CoursePage';
 
 function App() {
 	const dispatch = useDispatch();
@@ -23,7 +24,8 @@ function App() {
 			<Routes>
 				<Route element={<ProtectedRoute />}>
 					<Route path="/" element={<InDevelopmentPage />} />
-					<Route path="/profile" element={<Profile />} />
+					<Route path="/profile" element={<ProfilePage />} />
+					<Route path="/course" element={<CoursePage />} />
 				</Route>
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
