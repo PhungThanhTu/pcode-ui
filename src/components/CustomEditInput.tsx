@@ -24,14 +24,16 @@ export const CustomCancelIcon = styled(CancelIcon)(({ theme }) => ({
 	cursor: 'pointer'
 }));
 
-function CustomEditInput(props: any) {
+const CustomEditInput = (props: any) => {
 	const [isEdit, setIsEdit] = React.useState(false);
+
+	const { label, value, onChange, onSave, onCancel } = props;
 	const name = labelToProperty(props.label);
 
 	return (
 		<Stack direction="row" spacing={1} height="100%" alignItems="center" justifyContent="center">
 			<Stack width="20%">
-				<Typography variant="subtitle1">{props.label}</Typography>
+				<Typography variant="subtitle1">{label}</Typography>
 			</Stack>
 			<Stack flexGrow={1}>
 				{isEdit ? (
@@ -39,11 +41,11 @@ function CustomEditInput(props: any) {
 						name={name}
 						fullWidth
 						variant="standard"
-						value={props.value ? props.value : ''}
-						onChange={props.onChange}
+						value={value ? value : ''}
+						onChange={onChange}
 					/>
 				) : (
-					<Typography variant="body1">{props.value ? props.value : 'null'}</Typography>
+					<Typography variant="body1">{value ? value : 'null'}</Typography>
 				)}
 			</Stack>
 			<React.Fragment>
@@ -60,14 +62,14 @@ function CustomEditInput(props: any) {
 							<React.Fragment>
 								<CustomSaveIcon
 									onClick={() => {
-										props.onSave();
+										onSave();
 										setIsEdit(false);
 									}}
 								/>
 								<CustomCancelIcon
 									onClick={() => {
 										setIsEdit(false);
-										props.onCancel(name);
+										onCancel(name);
 									}}
 								/>
 							</React.Fragment>
@@ -83,7 +85,7 @@ function CustomEditInput(props: any) {
 			</React.Fragment>
 		</Stack>
 	);
-}
+};
 
 CustomEditInput.propTypes = {
 	onChange: PropTypes.func.isRequired,

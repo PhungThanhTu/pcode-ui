@@ -7,16 +7,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { Alert, AlertTitle } from '@mui/material';
 import { Button } from '@mui/material';
-
-const style = {
-	position: 'absolute' as 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: 400,
-	bgcolor: 'background.paper',
-	p: 4
-};
+import { BoxModalSx } from './CreateCourseModal';
 
 export interface PasswordChangeModalProps {
 	open: boolean;
@@ -86,8 +77,8 @@ const PasswordChangeModal = ({ open, onSave, onClose }: PasswordChangeModalProps
 
 	return (
 		<Modal onClose={() => onClose()} open={open}>
-			<Box sx={style}>
-				<Typography variant="h4" component="h2">
+			<Box sx={BoxModalSx}>
+				<Typography variant="h5" component="h2">
 					Change your password
 				</Typography>
 				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
@@ -116,24 +107,24 @@ const PasswordChangeModal = ({ open, onSave, onClose }: PasswordChangeModalProps
 						onChange={onChange}
 					/>
 					{alert}
-					<Stack direction="row" spacing={2} height="100%" alignItems="center" justifyContent="center">
-						<Button fullWidth variant="contained" onClick={() => handleSavePassword()}>
+					<Stack
+						direction="row"
+						spacing={1}
+						height="100%"
+						width="100%"
+						alignItems="center"
+						justifyContent="flex-end"
+						paddingTop="25px"
+					>
+						<Button variant="contained" onClick={() => handleSavePassword()}>
 							Save
 						</Button>
-						<Button fullWidth onClick={() => onClose()}>
-							Cancel
-						</Button>
+						<Button onClick={() => onClose()}>Cancel</Button>
 					</Stack>
 				</Stack>
 			</Box>
 		</Modal>
 	);
-};
-
-PasswordChangeModal.propTypes = {
-	open: PropTypes.bool,
-	onClose: PropTypes.func,
-	onSave: PropTypes.func
 };
 
 export default PasswordChangeModal;

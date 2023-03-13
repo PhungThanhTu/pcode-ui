@@ -7,7 +7,7 @@ import { getSnackbar } from '@/selectors/snackbar.selector';
 
 const CustomSnackbar = () => {
 	let dispatch = useDispatch();
-	const snackbarState = useSelector(getSnackbar);
+	const { state, type, message } = useSelector(getSnackbar);
 	const Alert = React.forwardRef(function Alert(props: any, ref: any) {
 		return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 	});
@@ -16,9 +16,9 @@ const CustomSnackbar = () => {
 		dispatch(removeSnackbar(false));
 	};
 	return (
-		<Snackbar open={snackbarState.state} autoHideDuration={2000} onClose={onClose}>
-			<Alert severity={snackbarState.type} sx={{ width: '100%' }} onClose={onClose}>
-				{snackbarState.message}
+		<Snackbar open={state} autoHideDuration={2000} onClose={onClose}>
+			<Alert severity={type} sx={{ width: '100%' }} onClose={onClose}>
+				{message}
 			</Alert>
 		</Snackbar>
 	);
