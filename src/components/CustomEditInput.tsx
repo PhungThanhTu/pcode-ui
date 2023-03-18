@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
 import Grid from '@mui/material/Grid';
@@ -27,31 +27,49 @@ export const CustomCancelIcon = styled(CancelIcon)(({ theme }) => ({
 const CustomEditInput = (props: any) => {
 	const [isEdit, setIsEdit] = React.useState(false);
 
-	const { label, value, onChange, onSave, onCancel } = props;
+	const { label, value, onChange, onSave, onCancel, isNotDisplay, is } = props;
 	const name = labelToProperty(props.label);
 
+	useEffect(() => {
+		console.log(props.isAvatarChange)
+		if (props.isAvatarChange) {
+			setIsEdit(true)
+		}
+		else {
+			setIsEdit(false)
+		}
+	}, [props.isAvatarChange])
 	return (
-		<Stack direction="row" spacing={1} height="100%" alignItems="center" justifyContent="center">
+		<Stack
+			direction="row"
+			spacing={1}
+			height="100%"
+			alignItems="center"
+			justifyContent="center"
+		>
 			<Stack width="20%">
-				<Typography variant="subtitle1">{label}</Typography>
+				{!isNotDisplay ? <Typography variant="subtitle1">{label}</Typography> : null}
 			</Stack>
 			<Stack flexGrow={1}>
+
 				{isEdit ? (
-					<TextField
-						name={name}
-						fullWidth
-						variant="standard"
-						value={value ? value : ''}
-						onChange={onChange}
-					/>
+					!isNotDisplay ?
+						<TextField
+							name={name}
+							fullWidth
+							variant="standard"
+							value={value ? value : ''}
+							onChange={onChange}
+						/>
+						: null
 				) : (
-					<Typography variant="body1">{value ? value : 'null'}</Typography>
+					!isNotDisplay ? <Typography variant="body1">{value ? value : 'null'}</Typography> : null
 				)}
 			</Stack>
 			<React.Fragment>
 				{
 					<Stack
-						width="15%"
+						flexGrow={1}
 						direction="row"
 						spacing={2}
 						height="100%"
@@ -68,17 +86,19 @@ const CustomEditInput = (props: any) => {
 								/>
 								<CustomCancelIcon
 									onClick={() => {
-										setIsEdit(false);
+									
 										onCancel(name);
+										setIsEdit(false);
 									}}
 								/>
 							</React.Fragment>
 						) : (
-							<CustomEditIcon
+							!isNotDisplay ? <CustomEditIcon
 								onClick={() => {
 									setIsEdit(true);
 								}}
 							/>
+								: null
 						)}
 					</Stack>
 				}
@@ -92,7 +112,9 @@ CustomEditInput.propTypes = {
 	onSave: PropTypes.func.isRequired,
 	onCancel: PropTypes.func.isRequired,
 	value: PropTypes.string,
-	label: PropTypes.string.isRequired
+	label: PropTypes.string.isRequired,
+	isNotDisplay: PropTypes.bool,
+	isAvatarChange: PropTypes.bool
 };
 
 export default CustomEditInput;

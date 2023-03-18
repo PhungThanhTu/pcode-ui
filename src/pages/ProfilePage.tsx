@@ -22,12 +22,12 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 const AvatarSx = {
 	height: '100%',
-	width: '50%',
+	width: '60%',
 	fontSize: '100pt'
 };
 const AvatarHoverSx = {
 	height: '100%',
-	width: '100%',
+	width: '60%',
 	position: 'absolute',
 	opacity: 0,
 	'z-index': 10,
@@ -38,7 +38,6 @@ const AvatarHoverSx = {
 		transitionDuration: '0.25s',
 		transitionTimingFunction: 'ease-in-out',
 		transitionDelay: '0s',
-		cursor: 'pointer'
 	}
 };
 const AvatarHoverContentSx = {
@@ -47,6 +46,7 @@ const AvatarHoverContentSx = {
 	color: '#969696',
 	fontSize: '100pt',
 	fontWeight: 500,
+	cursor: 'pointer',
 	'.MuiSvgIcon-root': {
 		height: '100%',
 		width: '100%'
@@ -60,7 +60,7 @@ const ProfilePage = () => {
 	const avatarRef = React.useRef<HTMLElement>(null);
 	const [profileForm, setProfileForm] = React.useState({ ...profile });
 	const [OpenPasswordChange, setOpenPasswordChange] = React.useState(false);
-
+	const [IsAvatarChange, setIsAvatarChange] = React.useState(false);
 	const { fullName, email, avatar } = profileForm;
 
 	const UpdateProfile = () => {
@@ -68,7 +68,7 @@ const ProfilePage = () => {
 			username: profileForm.username ? profileForm.username : '',
 			fullName: profileForm.fullName ? profileForm.fullName : '',
 			email: profileForm.email ? profileForm.email : '',
-			avatar: profileForm.avatar ? profileForm.avatar : '123'
+			avatar: profileForm.avatar ? profileForm.avatar : undefined
 		};
 
 		dispatch(updateProfile(payload));
@@ -88,6 +88,7 @@ const ProfilePage = () => {
 					...profileForm,
 					avatar: fr.result?.toString()
 				});
+				setIsAvatarChange(true)
 			};
 			fr.readAsDataURL(file[0]);
 		}
@@ -105,6 +106,9 @@ const ProfilePage = () => {
 				...profileForm,
 				[name]: profile[name]
 			});
+		}
+		if(name === "avatar"){
+			setIsAvatarChange(false)
 		}
 	};
 	const ChangePassword = (passwordForm: PasswordChangeRequest) => {
@@ -132,12 +136,12 @@ const ProfilePage = () => {
 								alignItems="center"
 								justifyContent="center"
 							>
-								<Tyography variant="subtitle1" width="20%">
+								<Tyography variant="subtitle1" width="10%">
 									Avatar
 								</Tyography>
 								<Stack
 									flexGrow={1}
-									height="270px"
+									height="300px"
 									width="100%"
 									alignItems="center"
 									justifyContent="center"
@@ -148,16 +152,32 @@ const ProfilePage = () => {
 										sx={AvatarHoverSx}
 										alignItems="center"
 										justifyContent="center"
-										onClick={uploadPicture}
+
 									>
 										<Stack alignItems="center" justifyContent="center" sx={AvatarHoverContentSx}>
-											<CloudUploadIcon />
+											<CloudUploadIcon onClick={uploadPicture} />
 											<input type="file" ref={pictureRef} onChange={onAvatarChange} />
 										</Stack>
 									</Stack>
-									<Avatar sx={AvatarSx} src={avatar} id="avatar" alt="Avatar" variant="rounded">
+
+									<Avatar sx={AvatarSx} src={avatar} id="avatar" alt="Avatar" variant="rounded" >
 										{profile?.username.charAt(0).toUpperCase() || 'N'}
 									</Avatar>
+								</Stack>
+								<Stack
+									flexGrow={1}
+									alignItems="center"
+									justifyContent="flex-start"
+								>
+									<CustomEditInput
+										isNotDisplay={true}
+										label="Avatar"
+										value={avatar}
+										onChange={() => { }}
+										onCancel={onCancel}
+										onSave={UpdateProfile}
+										isAvatarChange={IsAvatarChange}
+									/>
 								</Stack>
 							</Stack>
 							<Divider sx={{ marginTop: '10px' }} />
