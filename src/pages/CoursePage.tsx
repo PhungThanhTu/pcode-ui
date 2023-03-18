@@ -23,7 +23,13 @@ const CoursePage = () => {
 						setOpenCreateCourse(true);
 					}}
 				/>
-				<CustomIconButton startIcon={<SchoolIcon />} content="Join a Course" />
+				<CustomIconButton
+					startIcon={<SchoolIcon />}
+					content="Join a Course"
+					onClick={() => {
+						setOpenJoinCourse(true);
+					}}
+				/>
 			</Stack>
 			<Grid container spacing={2}>
 				<Grid item padding="0">
@@ -36,7 +42,12 @@ const CoursePage = () => {
 					setOpenCreateCourse(false);
 				}}
 			/>
-			<JoinCourseModal />
+			<JoinCourseModal
+				open={OpenJoinCourse}
+				onCancel={() => {
+					setOpenJoinCourse(false);
+				}}
+			/>
 		</Stack>
 	);
 };

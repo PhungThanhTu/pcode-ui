@@ -1,5 +1,4 @@
 import React, { ChangeEvent, ReactElement, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -40,7 +39,7 @@ const CreateCourseModal = (props: CreateCourseModalProps) => {
                     alignItems="center"
                     justifyContent="center">
                     <TextField
-                        name="password"
+                        name="title"
                         label="Title"
                         type="text"
                         fullWidth
@@ -48,14 +47,14 @@ const CreateCourseModal = (props: CreateCourseModalProps) => {
 
                     />
                     <TextField
-                        name="newPassword"
+                        name="subject"
                         label="Subject"
                         type="text"
                         fullWidth
                         variant="standard"
                     />
                     <TextField
-                        name="reNewPassword"
+                        name="theme"
                         label="Theme"
                         type="file"
                         fullWidth
@@ -84,10 +83,6 @@ const CreateCourseModal = (props: CreateCourseModalProps) => {
             </Box>
         </Modal>
     )
-}
-
-CreateCourseModal.propTypes = {
-
 }
 
 export default CreateCourseModal
