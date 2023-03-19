@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Course, CreateCourse } from '@/types/course.type';
+import { Course, CourseState, CreateCourse } from '@/types/course.type';
 
-export const initialState: any = {
+export const initialState: CourseState = {
 	course: undefined
 };
 
@@ -11,10 +11,13 @@ const courseSlice = createSlice({
 	reducers: {
 		fetchCourse: () => {},
 		createCourse: (state, { payload }: PayloadAction<CreateCourse>) => {},
-		renameCourse: (state, { payload }: PayloadAction<Course>) => {}
+		renameCourse: (state, { payload }: PayloadAction<Course>) => {},
+		fetchCourseSuccess: (state, { payload }: PayloadAction<Course[]>) => {
+			state.course = payload;
+		}
 	}
 });
 
-export const { fetchCourse, createCourse, renameCourse } = courseSlice.actions;
+export const { fetchCourse, createCourse, renameCourse, fetchCourseSuccess } = courseSlice.actions;
 
 export default courseSlice.reducer;

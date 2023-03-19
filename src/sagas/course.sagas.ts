@@ -5,7 +5,7 @@ import { PasswordChangeRequest, UserProfile } from '../types/auth.type';
 import profileApi from '@/api/profileApi';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
-import { createCourse, fetchCourse, renameCourse } from '@/slices/course.slice';
+import { createCourse, fetchCourse, fetchCourseSuccess, renameCourse } from '@/slices/course.slice';
 import { Course, CreateCourse } from '@/types/course.type';
 import courseApi from '@/api/courseApi';
 
@@ -13,6 +13,7 @@ function* fetchCourseSaga() {
 	try {
 		console.log('saga fetching course');
 		const course: AxiosResponse<Course[]> = yield call(courseApi.getAllCourse);
+		yield put(fetchCourseSuccess(course.data));
 	} catch (error: any) {
 		console.log('saga fetch course failed');
 	}

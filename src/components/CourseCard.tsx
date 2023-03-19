@@ -21,7 +21,9 @@ const AvatarSx = {
 const CardSx = {
 	minWidth: 320,
 	border: `solid 1px ${borderColor}`,
-	shadow: 'none'
+	shadow: 'none',
+	height: '100%',
+	width: '100%'
 };
 const CardContentSx = {
 	position: 'relative',
@@ -33,7 +35,12 @@ const CardActionSx = {
 	alignItems: 'center',
 	justifyContent: 'flex-end'
 };
-const CourseCard = () => {
+export interface CourseCardProps {
+	title: String;
+	subheader: String;
+}
+const CourseCard = (props: CourseCardProps) => {
+	const { title, subheader } = props;
 	return (
 		<Card sx={CardSx}>
 			<CardHeader
@@ -42,8 +49,8 @@ const CourseCard = () => {
 						<MoreVertIcon />
 					</IconButton>
 				}
-				title="OOP"
-				subheader="Nguyen Hoang Thai Duong"
+				title={title}
+				subheader={subheader}
 			/>
 			<CardContent sx={CardContentSx}>
 				<Avatar sx={AvatarSx} />

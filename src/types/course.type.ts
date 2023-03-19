@@ -9,8 +9,12 @@ export interface Course {
 export interface CreateCourse {
 	title: String;
 	theme?: String | null;
+	subject?: String | null;
 }
 export interface CreateCourseResponse {
 	courseId: String;
 	invitationId: String;
+}
+export interface CourseState {
+	course?: Array<Course>;
 }

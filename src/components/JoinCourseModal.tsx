@@ -24,6 +24,18 @@ const JoinCourseModal = (props: JoinCourseModalProps) => {
 				</Typography>
 				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
 					<TextField name="coursecode" label="Course Code" type="text" fullWidth variant="standard" />
+					<Stack
+						direction="row"
+						spacing={1}
+						height="100%"
+						width="100%"
+						alignItems="center"
+						justifyContent="flex-end"
+						paddingTop="25px"
+					>
+						<Button variant="contained">Join</Button>
+						<Button onClick={() => onCancel()}>Cancel</Button>
+					</Stack>
 				</Stack>
 			</Box>
 		</Modal>
