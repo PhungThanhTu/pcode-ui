@@ -31,29 +31,19 @@ const CustomEditInput = (props: any) => {
 	const name = labelToProperty(props.label);
 
 	useEffect(() => {
-		console.log(props.isAvatarChange)
+		console.log(props.isAvatarChange);
 		if (props.isAvatarChange) {
-			setIsEdit(true)
+			setIsEdit(true);
+		} else {
+			setIsEdit(false);
 		}
-		else {
-			setIsEdit(false)
-		}
-	}, [props.isAvatarChange])
+	}, [props.isAvatarChange]);
 	return (
-		<Stack
-			direction="row"
-			spacing={1}
-			height="100%"
-			alignItems="center"
-			justifyContent="center"
-		>
-			<Stack width="20%">
-				{!isNotDisplay ? <Typography variant="subtitle1">{label}</Typography> : null}
-			</Stack>
+		<Stack direction="row" spacing={1} height="100%" alignItems="center" justifyContent="center">
+			<Stack width="20%">{!isNotDisplay ? <Typography variant="subtitle1">{label}</Typography> : null}</Stack>
 			<Stack flexGrow={1}>
-
 				{isEdit ? (
-					!isNotDisplay ?
+					!isNotDisplay ? (
 						<TextField
 							name={name}
 							fullWidth
@@ -61,10 +51,10 @@ const CustomEditInput = (props: any) => {
 							value={value ? value : ''}
 							onChange={onChange}
 						/>
-						: null
-				) : (
-					!isNotDisplay ? <Typography variant="body1">{value ? value : 'null'}</Typography> : null
-				)}
+					) : null
+				) : !isNotDisplay ? (
+					<Typography variant="body1">{value ? value : 'null'}</Typography>
+				) : null}
 			</Stack>
 			<React.Fragment>
 				{
@@ -86,20 +76,18 @@ const CustomEditInput = (props: any) => {
 								/>
 								<CustomCancelIcon
 									onClick={() => {
-									
 										onCancel(name);
 										setIsEdit(false);
 									}}
 								/>
 							</React.Fragment>
-						) : (
-							!isNotDisplay ? <CustomEditIcon
+						) : !isNotDisplay ? (
+							<CustomEditIcon
 								onClick={() => {
 									setIsEdit(true);
 								}}
 							/>
-								: null
-						)}
+						) : null}
 					</Stack>
 				}
 			</React.Fragment>

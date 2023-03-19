@@ -9,36 +9,25 @@ import { Button } from '@mui/material';
 import { BoxModalSx } from './CreateCourseModal';
 
 export interface JoinCourseModalProps {
-    open: boolean;
-    onCreate?: Function;
-    onCancel: Function;
+	open: boolean;
+	onCreate?: Function;
+	onCancel: Function;
 }
-const JoinCourseModal = (props : JoinCourseModalProps) => {
-    const { open, onCreate, onCancel } = props
+const JoinCourseModal = (props: JoinCourseModalProps) => {
+	const { open, onCreate, onCancel } = props;
 
-    return (
-        <Modal open={open}>
-            <Box sx={BoxModalSx} >
-                <Typography variant="h5" component="h2">
-                    Course Code
-                </Typography>
-                <Stack
-                    direction="column"
-                    spacing={2}
-                    height="100%"
-                    alignItems="center"
-                    justifyContent="center">
-                    <TextField
-                        name="coursecode"
-                        label="Course Code"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-
-                    />
-                </Stack>
-            </Box>
-        </Modal>);
+	return (
+		<Modal open={open}>
+			<Box sx={BoxModalSx}>
+				<Typography variant="h5" component="h2">
+					Course Code
+				</Typography>
+				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
+					<TextField name="coursecode" label="Course Code" type="text" fullWidth variant="standard" />
+				</Stack>
+			</Box>
+		</Modal>
+	);
 };
 
 export default JoinCourseModal;

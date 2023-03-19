@@ -59,12 +59,12 @@ const AvatarMenuPaper = {
 		}
 	}
 };
-const LinkAvatarSx ={
-	display:'flex',
-	flexDirection:'row',
+const LinkAvatarSx = {
+	display: 'flex',
+	flexDirection: 'row',
 	alignItems: 'center',
 	justifyContent: 'center'
-}
+};
 export default function NavBar() {
 	const dispatch = useDispatch();
 	const { profile } = useSelector(getAuth);
@@ -156,8 +156,14 @@ export default function NavBar() {
 							transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 							anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 						>
-							<MenuItem >
-								<Link component={RouterLink} to="/profile" underline="none" color="inherit" sx={LinkAvatarSx}>
+							<MenuItem>
+								<Link
+									component={RouterLink}
+									to="/profile"
+									underline="none"
+									color="inherit"
+									sx={LinkAvatarSx}
+								>
 									<Avatar />
 									Profile
 								</Link>

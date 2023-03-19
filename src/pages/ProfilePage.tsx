@@ -37,7 +37,7 @@ const AvatarHoverSx = {
 		transitionProperty: 'opacity',
 		transitionDuration: '0.25s',
 		transitionTimingFunction: 'ease-in-out',
-		transitionDelay: '0s',
+		transitionDelay: '0s'
 	}
 };
 const AvatarHoverContentSx = {
@@ -88,7 +88,7 @@ const ProfilePage = () => {
 					...profileForm,
 					avatar: fr.result?.toString()
 				});
-				setIsAvatarChange(true)
+				setIsAvatarChange(true);
 			};
 			fr.readAsDataURL(file[0]);
 		}
@@ -107,8 +107,8 @@ const ProfilePage = () => {
 				[name]: profile[name]
 			});
 		}
-		if(name === "avatar"){
-			setIsAvatarChange(false)
+		if (name === 'avatar') {
+			setIsAvatarChange(false);
 		}
 	};
 	const ChangePassword = (passwordForm: PasswordChangeRequest) => {
@@ -148,32 +148,23 @@ const ProfilePage = () => {
 									position="relative"
 									ref={avatarRef}
 								>
-									<Stack
-										sx={AvatarHoverSx}
-										alignItems="center"
-										justifyContent="center"
-
-									>
+									<Stack sx={AvatarHoverSx} alignItems="center" justifyContent="center">
 										<Stack alignItems="center" justifyContent="center" sx={AvatarHoverContentSx}>
 											<CloudUploadIcon onClick={uploadPicture} />
 											<input type="file" ref={pictureRef} onChange={onAvatarChange} />
 										</Stack>
 									</Stack>
 
-									<Avatar sx={AvatarSx} src={avatar} id="avatar" alt="Avatar" variant="rounded" >
+									<Avatar sx={AvatarSx} src={avatar} id="avatar" alt="Avatar" variant="rounded">
 										{profile?.username.charAt(0).toUpperCase() || 'N'}
 									</Avatar>
 								</Stack>
-								<Stack
-									flexGrow={1}
-									alignItems="center"
-									justifyContent="flex-start"
-								>
+								<Stack flexGrow={1} alignItems="center" justifyContent="flex-start">
 									<CustomEditInput
 										isNotDisplay={true}
 										label="Avatar"
 										value={avatar}
-										onChange={() => { }}
+										onChange={() => {}}
 										onCancel={onCancel}
 										onSave={UpdateProfile}
 										isAvatarChange={IsAvatarChange}

@@ -8,6 +8,8 @@ import { watchProfile } from '@/sagas/profile.sagas';
 import { watchLogin } from '../sagas/auth.sagas';
 import profileSlice from '@/slices/profile.slice';
 import snackbarSlice from '@/slices/snackbar.slice';
+import courseSlice from '@/slices/course.slice';
+import { watchCourse } from '@/sagas/course.sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -16,7 +18,8 @@ export const store = configureStore({
 		auth: authSlice,
 		register: registerSlice,
 		profile: profileSlice,
-		snackbar: snackbarSlice
+		snackbar: snackbarSlice,
+		course: courseSlice
 	},
 	middleware: [sagaMiddleware]
 });
@@ -24,6 +27,7 @@ export const store = configureStore({
 sagaMiddleware.run(watchLogin);
 sagaMiddleware.run(watchRegister);
 sagaMiddleware.run(watchProfile);
+sagaMiddleware.run(watchCourse);
 
 export type RootState = ReturnType<typeof store.getState>;
 
