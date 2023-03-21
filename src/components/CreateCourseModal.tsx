@@ -4,18 +4,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { Alert, AlertTitle } from '@mui/material';
 import { Button } from '@mui/material';
-
-export const BoxModalSx = {
-	position: 'absolute' as 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: 400,
-	bgcolor: 'background.paper',
-	p: 4
-};
+import { BoxModalSx } from '@/style/BoxModalSx';
 
 export interface CreateCourseModalProps {
 	open: boolean;

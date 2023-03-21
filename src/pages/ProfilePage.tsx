@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { ChangeEvent, useState, useRef } from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Tyography from '@mui/material/Typography';
@@ -56,11 +56,11 @@ const ProfilePage = () => {
 	const dispatch = useDispatch();
 	const { profile } = useSelector(getAuth);
 
-	const pictureRef = React.useRef<HTMLInputElement>(null);
-	const avatarRef = React.useRef<HTMLElement>(null);
-	const [profileForm, setProfileForm] = React.useState({ ...profile });
-	const [OpenPasswordChange, setOpenPasswordChange] = React.useState(false);
-	const [IsAvatarChange, setIsAvatarChange] = React.useState(false);
+	const pictureRef = useRef<HTMLInputElement>(null);
+	const avatarRef = useRef<HTMLElement>(null);
+	const [profileForm, setProfileForm] = useState({ ...profile });
+	const [OpenPasswordChange, setOpenPasswordChange] = useState(false);
+	const [IsAvatarChange, setIsAvatarChange] = useState(false);
 	const { fullName, email, avatar } = profileForm;
 
 	const UpdateProfile = () => {

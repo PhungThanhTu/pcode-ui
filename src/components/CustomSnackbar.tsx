@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -8,7 +8,7 @@ import { getSnackbar } from '@/selectors/snackbar.selector';
 const CustomSnackbar = () => {
 	let dispatch = useDispatch();
 	const { state, type, message } = useSelector(getSnackbar);
-	const Alert = React.forwardRef(function Alert(props: any, ref: any) {
+	const Alert = forwardRef(function Alert(props: any, ref: any) {
 		return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 	});
 

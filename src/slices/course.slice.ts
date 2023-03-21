@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Course, CourseState, CreateCourse } from '@/types/course.type';
 
 export const initialState: CourseState = {
-	course: undefined
+	courses: undefined
 };
 
 const courseSlice = createSlice({
@@ -13,7 +13,7 @@ const courseSlice = createSlice({
 		createCourse: (state, { payload }: PayloadAction<CreateCourse>) => {},
 		renameCourse: (state, { payload }: PayloadAction<Course>) => {},
 		fetchCourseSuccess: (state, { payload }: PayloadAction<Course[]>) => {
-			state.course = payload;
+			state.courses = payload;
 		}
 	}
 });

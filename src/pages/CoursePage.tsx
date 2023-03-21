@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import CreateIcon from '@mui/icons-material/Create';
@@ -15,10 +15,10 @@ import { getCourse } from '@/selectors/course.selector';
 const CoursePage = () => {
 	let dispatch = useDispatch();
 
-	const { course } = useSelector(getCourse);
+	const { courses } = useSelector(getCourse);
 
-	const [OpenCreateCourse, setOpenCreateCourse] = React.useState(false);
-	const [OpenJoinCourse, setOpenJoinCourse] = React.useState(false);
+	const [OpenCreateCourse, setOpenCreateCourse] = useState(false);
+	const [OpenJoinCourse, setOpenJoinCourse] = useState(false);
 
 	useEffect(() => {
 		dispatch(fetchCourse());
@@ -42,7 +42,7 @@ const CoursePage = () => {
 				/>
 			</Stack>
 			<Grid container spacing={1}>
-				{course?.map((item, index) => {
+				{courses?.map((item, index) => {
 					return (
 						<Grid item padding="0" width="100%" xs={12} md={6} lg={3}>
 							<CourseCard key={index} title={item.title} subheader={item.CreatorName} />

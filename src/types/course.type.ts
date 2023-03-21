@@ -16,5 +16,5 @@ export interface CreateCourseResponse {
 	invitationId: String;
 }
 export interface CourseState {
-	course?: Array<Course>;
+	courses?: Array<Course>;
 }
