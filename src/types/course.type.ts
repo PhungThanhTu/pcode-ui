@@ -8,7 +8,7 @@ export interface Course {
 }
 export interface CreateCourse {
 	title: String;
-	theme?: String | null;
+	theme?: String | null | undefined;
 	subject?: String | null;
 }
 export interface CreateCourseResponse {

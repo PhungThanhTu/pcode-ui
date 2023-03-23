@@ -39,12 +39,12 @@ const CustomEditInput = (props: CustomEditInputProps) => {
 	const name = labelToProperty(props.label);
 
 	useEffect(() => {
-		if (props.isAvatarChange) {
+		if (isAvatarChange) {
 			setIsEdit(true);
 		} else {
 			setIsEdit(false);
 		}
-	}, [props.isAvatarChange]);
+	}, [isAvatarChange]);
 	return (
 		<Stack direction="row" spacing={1} height="100%" alignItems="center" justifyContent="center">
 			<Stack width="20%">{!isNotDisplay ? <Typography variant="subtitle1">{label}</Typography> : null}</Stack>

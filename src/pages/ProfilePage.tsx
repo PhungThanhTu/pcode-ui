@@ -58,21 +58,10 @@ const ProfilePage = () => {
 
 	const pictureRef = useRef<HTMLInputElement>(null);
 	const avatarRef = useRef<HTMLElement>(null);
-	const [profileForm, setProfileForm] = useState({ ...profile });
+	const [ProfileForm, setProfileForm] = useState({ ...profile });
 	const [OpenPasswordChange, setOpenPasswordChange] = useState(false);
 	const [IsAvatarChange, setIsAvatarChange] = useState(false);
-	const { fullName, email, avatar } = profileForm;
-
-	const UpdateProfile = () => {
-		let payload = {
-			username: profileForm.username ? profileForm.username : '',
-			fullName: profileForm.fullName ? profileForm.fullName : '',
-			email: profileForm.email ? profileForm.email : '',
-			avatar: profileForm.avatar ? profileForm.avatar : undefined
-		};
-
-		dispatch(updateProfile(payload));
-	};
+	const { fullName, email, avatar } = ProfileForm;
 
 	const uploadPicture = () => {
 		if (pictureRef.current) {
@@ -85,7 +74,7 @@ const ProfilePage = () => {
 			var fr = new FileReader();
 			fr.onload = function () {
 				setProfileForm({
-					...profileForm,
+					...ProfileForm,
 					avatar: fr.result?.toString()
 				});
 				setIsAvatarChange(true);
@@ -96,20 +85,30 @@ const ProfilePage = () => {
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setProfileForm({
-			...profileForm,
+			...ProfileForm,
 			[e.target.name]: e.target.value
 		});
 	};
 	const onCancel = (name: keyof UserProfile) => {
 		if (profile) {
 			setProfileForm({
-				...profileForm,
+				...ProfileForm,
 				[name]: profile[name]
 			});
 		}
 		if (name === 'avatar') {
 			setIsAvatarChange(false);
 		}
+	};
+	const UpdateProfile = () => {
+		let payload = {
+			username: ProfileForm.username ? ProfileForm.username : '',
+			fullName: ProfileForm.fullName ? ProfileForm.fullName : '',
+			email: ProfileForm.email ? ProfileForm.email : '',
+			avatar: ProfileForm.avatar ? ProfileForm.avatar : undefined
+		};
+
+		dispatch(updateProfile(payload));
 	};
 	const ChangePassword = (passwordForm: PasswordChangeRequest) => {
 		let payload: PasswordChangeRequest = {

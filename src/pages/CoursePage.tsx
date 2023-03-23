@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import CreateIcon from '@mui/icons-material/Create';
@@ -9,17 +9,34 @@ import CourseCard from '@/components/CourseCard';
 import CreateCourseModal from '@/components/CreateCourseModal';
 import JoinCourseModal from '@/components/JoinCourseModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCourse } from '@/slices/course.slice';
+import { createCourse, fetchCourse } from '@/slices/course.slice';
 import { getCourse } from '@/selectors/course.selector';
+import { CreateCourse } from '@/types/course.type';
 
 const CoursePage = () => {
 	let dispatch = useDispatch();
 
 	const { courses } = useSelector(getCourse);
-
+	const InitialForm: CreateCourse = {
+		title: '',
+		subject: '',
+		theme: 'null'
+	};
 	const [OpenCreateCourse, setOpenCreateCourse] = useState(false);
 	const [OpenJoinCourse, setOpenJoinCourse] = useState(false);
+	const [CreateCourseForm, setCreateCourseForm] = useState<CreateCourse>(InitialForm);
 
+	const { title, subject, theme } = CreateCourseForm;
+
+	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+		setCreateCourseForm({
+			...CreateCourseForm,
+			[e.target.name]: e.target.value
+		});
+	};
+	const onCreate = () => {
+		dispatch(createCourse(CreateCourseForm));
+	};
 	useEffect(() => {
 		dispatch(fetchCourse());
 	}, []);
@@ -44,14 +61,17 @@ const CoursePage = () => {
 			<Grid container spacing={1}>
 				{courses?.map((item, index) => {
 					return (
-						<Grid item padding="0" width="100%" xs={12} md={6} lg={3}>
-							<CourseCard key={index} title={item.title} subheader={item.CreatorName} />
+						<Grid key={index} item padding="0" width="100%" xs={12} md={6} lg={3}>
+							<CourseCard title={item.title} subheader={item.CreatorName} />
 						</Grid>
 					);
 				})}
 			</Grid>
 			<CreateCourseModal
 				open={OpenCreateCourse}
+				onCreate={onCreate}
+				onChange={onChange}
+				createCourseValues={{ title, subject, theme }}
 				onCancel={() => {
 					setOpenCreateCourse(false);
 				}}

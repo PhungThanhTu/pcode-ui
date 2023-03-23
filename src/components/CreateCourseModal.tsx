@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement, useEffect } from 'react';
+import { ChangeEvent, ReactElement, useEffect } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -6,15 +6,18 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { Button } from '@mui/material';
 import { BoxModalSx } from '@/style/BoxModalSx';
+import { CreateCourse } from '@/types/course.type';
 
 export interface CreateCourseModalProps {
 	open: boolean;
-	onCreate?: Function;
+	onCreate: Function;
 	onCancel: Function;
+	onChange: Function;
+	createCourseValues: CreateCourse;
 }
 
 const CreateCourseModal = (props: CreateCourseModalProps) => {
-	const { open, onCreate, onCancel } = props;
+	const { open, onCreate, onCancel, onChange, createCourseValues } = props;
 
 	return (
 		<Modal open={open}>
@@ -23,9 +26,39 @@ const CreateCourseModal = (props: CreateCourseModalProps) => {
 					Create course
 				</Typography>
 				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
-					<TextField name="title" label="Title" type="text" fullWidth variant="standard" />
-					<TextField name="subject" label="Subject" type="text" fullWidth variant="standard" />
-					<TextField name="theme" label="Theme" type="file" fullWidth variant="standard" />
+					<TextField
+						name="title"
+						label="Title"
+						type="text"
+						value={createCourseValues.title}
+						fullWidth
+						variant="standard"
+						onChange={(e) => {
+							onChange(e);
+						}}
+					/>
+					<TextField
+						name="subject"
+						label="Subject"
+						type="text"
+						fullWidth
+						value={createCourseValues.subject}
+						variant="standard"
+						onChange={(e) => {
+							onChange(e);
+						}}
+					/>
+					<TextField
+						name="theme"
+						label="Theme"
+						type="file"
+						value={createCourseValues.theme}
+						fullWidth
+						variant="standard"
+						onChange={(e) => {
+							onChange(e);
+						}}
+					/>
 					<Typography variant="subtitle2">
 						Theme is optional, default image will be used if no theme provided.
 					</Typography>
@@ -38,7 +71,9 @@ const CreateCourseModal = (props: CreateCourseModalProps) => {
 						justifyContent="flex-end"
 						paddingTop="25px"
 					>
-						<Button variant="contained">Create</Button>
+						<Button variant="contained" onClick={() => onCreate()}>
+							Create
+						</Button>
 						<Button onClick={() => onCancel()}>Cancel</Button>
 					</Stack>
 				</Stack>
