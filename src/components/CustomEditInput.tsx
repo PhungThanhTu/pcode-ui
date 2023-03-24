@@ -38,6 +38,58 @@ const CustomEditInput = (props: CustomEditInputProps) => {
 	const { label, value, onChange, onSave, onCancel, isNotDisplay, isAvatarChange } = props;
 	const name = labelToProperty(props.label);
 
+	const RenderFields = () => {
+		if (isEdit) {
+			return (
+				!isNotDisplay ? (
+					<TextField
+						name={name}
+						fullWidth
+						variant="standard"
+						value={value ? value : ''}
+						onChange={(e) => {
+							onChange(e);
+						}}
+					/>) : null
+			)
+		}
+		else {
+			return !isNotDisplay ? (
+				<Typography variant="body1">
+					{value ? value : 'null'}
+				</Typography>
+			) : null
+		}
+	}
+	const RenderButtons = () => {
+		if (isEdit) {
+			return (
+				<Fragment>
+					<CustomSaveIcon
+						onClick={() => {
+							onSave();
+							setIsEdit(false);
+						}}
+					/>
+					<CustomCancelIcon
+						onClick={() => {
+							onCancel(name);
+							setIsEdit(false);
+						}}
+					/>
+				</Fragment>
+			)
+		}
+		else {
+			return !isNotDisplay ? (
+				<CustomEditIcon
+					onClick={() => {
+						setIsEdit(true);
+					}}
+				/>
+			) : null
+		}
+	}
 	useEffect(() => {
 		if (isAvatarChange) {
 			setIsEdit(true);
@@ -45,25 +97,12 @@ const CustomEditInput = (props: CustomEditInputProps) => {
 			setIsEdit(false);
 		}
 	}, [isAvatarChange]);
+
 	return (
 		<Stack direction="row" spacing={1} height="100%" alignItems="center" justifyContent="center">
 			<Stack width="20%">{!isNotDisplay ? <Typography variant="subtitle1">{label}</Typography> : null}</Stack>
 			<Stack flexGrow={1}>
-				{isEdit ? (
-					!isNotDisplay ? (
-						<TextField
-							name={name}
-							fullWidth
-							variant="standard"
-							value={value ? value : ''}
-							onChange={() => {
-								onChange();
-							}}
-						/>
-					) : null
-				) : !isNotDisplay ? (
-					<Typography variant="body1">{value ? value : 'null'}</Typography>
-				) : null}
+				{RenderFields()}
 			</Stack>
 			<Fragment>
 				{
@@ -75,28 +114,7 @@ const CustomEditInput = (props: CustomEditInputProps) => {
 						alignItems="center"
 						justifyContent="center"
 					>
-						{isEdit ? (
-							<Fragment>
-								<CustomSaveIcon
-									onClick={() => {
-										onSave();
-										setIsEdit(false);
-									}}
-								/>
-								<CustomCancelIcon
-									onClick={() => {
-										onCancel(name);
-										setIsEdit(false);
-									}}
-								/>
-							</Fragment>
-						) : !isNotDisplay ? (
-							<CustomEditIcon
-								onClick={() => {
-									setIsEdit(true);
-								}}
-							/>
-						) : null}
+						{RenderButtons()}
 					</Stack>
 				}
 			</Fragment>

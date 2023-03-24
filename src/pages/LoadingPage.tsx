@@ -1,7 +1,7 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
-const Loading = () => {
+const LoadingPage = () => {
 	return (
 		<Box
 			sx={{
@@ -16,4 +16,4 @@ const Loading = () => {
 	);
 };
 
-export default Loading;
+export default LoadingPage;

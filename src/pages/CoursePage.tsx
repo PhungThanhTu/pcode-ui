@@ -20,7 +20,7 @@ const CoursePage = () => {
 	const InitialForm: CreateCourse = {
 		title: '',
 		subject: '',
-		theme: 'null'
+		theme: null
 	};
 	const [OpenCreateCourse, setOpenCreateCourse] = useState(false);
 	const [OpenJoinCourse, setOpenJoinCourse] = useState(false);
