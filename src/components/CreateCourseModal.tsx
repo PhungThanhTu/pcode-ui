@@ -8,7 +8,7 @@ import { Button } from '@mui/material';
 import { BoxModalSx } from '@/style/BoxModalSx';
 import { CreateCourse } from '@/types/course.type';
 
-export interface CreateCourseModalProps {
+interface CreateCourseModalProps {
 	open: boolean;
 	onCreate: Function;
 	onCancel: Function;
@@ -42,7 +42,7 @@ const CreateCourseModal = (props: CreateCourseModalProps) => {
 						label="Subject"
 						type="text"
 						fullWidth
-						value={createCourseValues.subject}
+						value={createCourseValues.subject ?? ''}
 						variant="standard"
 						onChange={(e) => {
 							onChange(e);
@@ -52,7 +52,6 @@ const CreateCourseModal = (props: CreateCourseModalProps) => {
 						name="theme"
 						label="Theme"
 						type="file"
-						value={createCourseValues.theme}
 						fullWidth
 						variant="standard"
 						onChange={(e) => {

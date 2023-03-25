@@ -1,7 +1,7 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { loginSuccess, logout } from '../slices/auth.slice';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { PasswordChangeRequest, UserProfile } from '../types/auth.type';
 import profileApi from '@/api/profileApi';
 import { updateProfile, fetchProfile, changePassword } from '@/slices/profile.slice';
@@ -30,9 +30,16 @@ function* updateProfileSaga(action: PayloadAction<UserProfile>) {
 		yield call(profileApi.updateProfile, body);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('profile', '')));
 		yield put(fetchProfile());
-	} catch (error: any) {
+	} catch (e) {
+		const error = e as AxiosError;
 		console.log('saga update profile failed');
-		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('profile', '')));
+		if (error.code === '413')
+			yield put(
+				setSnackbar(
+					notificationMessage.UPDATE_FAIL('profile', 'Media file such as image,video,... is too large')
+				)
+			);
+		else yield put(setSnackbar(notificationMessage.UPDATE_FAIL('profile', '')));
 	}
 }
 function* changePasswordSaga(action: PayloadAction<PasswordChangeRequest>) {

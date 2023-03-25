@@ -34,7 +34,7 @@ const CardActionSx = {
 	alignItems: 'center',
 	justifyContent: 'flex-end'
 };
-export interface CourseCardProps {
+interface CourseCardProps {
 	title: String;
 	subheader: String;
 }

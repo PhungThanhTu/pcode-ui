@@ -1,19 +1,19 @@
 export interface Course {
-	id: String;
-	CreatorId: String;
-	CreatorName: String;
-	title: String;
-	Code: String;
+	id: string;
+	CreatorId: string;
+	CreatorName: string;
+	title: string;
+	Code: string;
 	PlpRole: Number;
 }
 export interface CreateCourse {
-	title: String;
-	theme?: String | null | undefined;
-	subject?: String | null;
+	title: string;
+	theme?: string | null | undefined;
+	subject?: string | null;
 }
 export interface CreateCourseResponse {
-	courseId: String;
-	invitationId: String;
+	courseId: string;
+	invitationId: string;
 }
 export interface CourseState {
 	courses?: Array<Course>;

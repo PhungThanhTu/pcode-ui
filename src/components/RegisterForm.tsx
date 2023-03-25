@@ -6,6 +6,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { requestRegister } from '../slices/register.slice';
 import { getRegister } from '../selectors/register.selector';
+
 export const RegisterForm = () => {
 	const dispatch = useDispatch();
 

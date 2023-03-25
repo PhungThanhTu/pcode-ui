@@ -12,16 +12,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createCourse, fetchCourse } from '@/slices/course.slice';
 import { getCourse } from '@/selectors/course.selector';
 import { CreateCourse } from '@/types/course.type';
+import { useImageFileReader } from '@/hook/useFileReader';
 
 const CoursePage = () => {
 	let dispatch = useDispatch();
 
 	const { courses } = useSelector(getCourse);
+	const { B64Value, getImageB64Value } = useImageFileReader();
+
 	const InitialForm: CreateCourse = {
 		title: '',
 		subject: '',
-		theme: null
+		theme: B64Value
 	};
+
 	const [OpenCreateCourse, setOpenCreateCourse] = useState(false);
 	const [OpenJoinCourse, setOpenJoinCourse] = useState(false);
 	const [CreateCourseForm, setCreateCourseForm] = useState<CreateCourse>(InitialForm);
@@ -29,10 +33,14 @@ const CoursePage = () => {
 	const { title, subject, theme } = CreateCourseForm;
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setCreateCourseForm({
-			...CreateCourseForm,
-			[e.target.name]: e.target.value
-		});
+		if (e.target.name === 'theme') {
+			getImageB64Value(e);
+		} else {
+			setCreateCourseForm({
+				...CreateCourseForm,
+				[e.target.name]: e.target.value
+			});
+		}
 	};
 	const onCreate = () => {
 		dispatch(createCourse(CreateCourseForm));
@@ -40,6 +48,14 @@ const CoursePage = () => {
 	useEffect(() => {
 		dispatch(fetchCourse());
 	}, []);
+	useEffect(() => {
+		if (B64Value) {
+			setCreateCourseForm({
+				...CreateCourseForm,
+				theme: B64Value
+			});
+		}
+	}, [B64Value]);
 	return (
 		<Stack direction="column" spacing={2}>
 			<Stack direction="row" spacing={3}>

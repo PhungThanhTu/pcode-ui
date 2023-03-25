@@ -1,14 +1,15 @@
 import { FC, ReactElement } from 'react';
 import { Box, Container, Grid, Typography } from '@mui/material';
 
+const FooterBoxSx = {
+	width: '100%',
+	height: 'auto',
+	backgroundColor: 'secondary',
+	paddingTop: '1rem',
+	paddingBottom: '1rem'
+};
+
 export const Footer: FC = (): ReactElement => {
-	const FooterBoxSx = {
-		width: '100%',
-		height: 'auto',
-		backgroundColor: 'secondary',
-		paddingTop: '1rem',
-		paddingBottom: '1rem'
-	};
 	return (
 		<Box sx={FooterBoxSx}>
 			<Container maxWidth="lg">

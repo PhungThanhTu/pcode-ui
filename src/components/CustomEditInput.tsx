@@ -40,27 +40,21 @@ const CustomEditInput = (props: CustomEditInputProps) => {
 
 	const RenderFields = () => {
 		if (isEdit) {
-			return (
-				!isNotDisplay ? (
-					<TextField
-						name={name}
-						fullWidth
-						variant="standard"
-						value={value ? value : ''}
-						onChange={(e) => {
-							onChange(e);
-						}}
-					/>) : null
-			)
-		}
-		else {
 			return !isNotDisplay ? (
-				<Typography variant="body1">
-					{value ? value : 'null'}
-				</Typography>
-			) : null
+				<TextField
+					name={name}
+					fullWidth
+					variant="standard"
+					value={value ? value : ''}
+					onChange={(e) => {
+						onChange(e);
+					}}
+				/>
+			) : null;
+		} else {
+			return !isNotDisplay ? <Typography variant="body1">{value ? value : 'null'}</Typography> : null;
 		}
-	}
+	};
 	const RenderButtons = () => {
 		if (isEdit) {
 			return (
@@ -78,18 +72,17 @@ const CustomEditInput = (props: CustomEditInputProps) => {
 						}}
 					/>
 				</Fragment>
-			)
-		}
-		else {
+			);
+		} else {
 			return !isNotDisplay ? (
 				<CustomEditIcon
 					onClick={() => {
 						setIsEdit(true);
 					}}
 				/>
-			) : null
+			) : null;
 		}
-	}
+	};
 	useEffect(() => {
 		if (isAvatarChange) {
 			setIsEdit(true);
@@ -101,9 +94,7 @@ const CustomEditInput = (props: CustomEditInputProps) => {
 	return (
 		<Stack direction="row" spacing={1} height="100%" alignItems="center" justifyContent="center">
 			<Stack width="20%">{!isNotDisplay ? <Typography variant="subtitle1">{label}</Typography> : null}</Stack>
-			<Stack flexGrow={1}>
-				{RenderFields()}
-			</Stack>
+			<Stack flexGrow={1}>{RenderFields()}</Stack>
 			<Fragment>
 				{
 					<Stack

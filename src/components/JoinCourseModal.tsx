@@ -4,11 +4,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { Alert, AlertTitle } from '@mui/material';
 import { Button } from '@mui/material';
 import { BoxModalSx } from '@/style/BoxModalSx';
 
-export interface JoinCourseModalProps {
+interface JoinCourseModalProps {
 	open: boolean;
 	onCreate?: Function;
 	onCancel: Function;

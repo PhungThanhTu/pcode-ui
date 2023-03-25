@@ -9,13 +9,13 @@ import { Alert, AlertTitle } from '@mui/material';
 import { Button } from '@mui/material';
 import { BoxModalSx } from '@/style/BoxModalSx';
 
-export interface PasswordChangeModalProps {
+interface PasswordChangeModalProps {
 	open: boolean;
 	onSave: Function;
 	onClose: Function;
 }
 
-export interface PasswordChangeFormProps {
+interface PasswordChangeFormProps {
 	password: string;
 	newPassword: string;
 	reNewPassword: string;

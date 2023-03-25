@@ -23,7 +23,7 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route element={<ProtectedRoute />}>
-					<Route index path='/' element={<Navigate to="/course" />} />
+					<Route index path="/" element={<Navigate to="/course" />} />
 					<Route path="/course" element={<CoursePage />} />
 					<Route path="/profile" element={<ProfilePage />} />
 				</Route>

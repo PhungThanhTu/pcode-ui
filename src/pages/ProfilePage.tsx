@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useRef } from 'react';
+import { ChangeEvent, useState, useRef, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Tyography from '@mui/material/Typography';
@@ -15,6 +15,7 @@ import { CustomButton } from '@/components/CustomButton';
 import { getAuth } from '../selectors/auth.selector';
 import { PasswordChangeRequest, UserProfile } from '@/types/auth.type';
 import { changePassword, updateProfile } from '@/slices/profile.slice';
+import { useImageFileReader } from '@/hook/useFileReader';
 
 const Item = styled(Paper)(({ theme }) => ({
 	padding: '24px 14px 10px',
@@ -54,13 +55,16 @@ const AvatarHoverContentSx = {
 };
 const ProfilePage = () => {
 	const dispatch = useDispatch();
+
 	const { profile } = useSelector(getAuth);
+	const { B64Value, getImageB64Value } = useImageFileReader();
 
 	const pictureRef = useRef<HTMLInputElement>(null);
 	const avatarRef = useRef<HTMLElement>(null);
 	const [ProfileForm, setProfileForm] = useState({ ...profile });
 	const [OpenPasswordChange, setOpenPasswordChange] = useState(false);
 	const [IsAvatarChange, setIsAvatarChange] = useState(false);
+
 	const { fullName, email, avatar } = ProfileForm;
 
 	const uploadPicture = () => {
@@ -68,26 +72,16 @@ const ProfilePage = () => {
 			pictureRef.current.click();
 		}
 	};
-	const onAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
-		var file = e.target.files;
-		if (FileReader && file && file.length) {
-			var fr = new FileReader();
-			fr.onload = function () {
-				setProfileForm({
-					...ProfileForm,
-					avatar: fr.result?.toString()
-				});
-				setIsAvatarChange(true);
-			};
-			fr.readAsDataURL(file[0]);
-		}
-	};
-
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setProfileForm({
-			...ProfileForm,
-			[e.target.name]: e.target.value
-		});
+		if (e.target.name === 'avatar') {
+			getImageB64Value(e);
+			setIsAvatarChange(true);
+		} else {
+			setProfileForm({
+				...ProfileForm,
+				[e.target.name]: e.target.value
+			});
+		}
 	};
 	const onCancel = (name: keyof UserProfile) => {
 		if (profile) {
@@ -109,6 +103,7 @@ const ProfilePage = () => {
 		};
 
 		dispatch(updateProfile(payload));
+		setIsAvatarChange(false);
 	};
 	const ChangePassword = (passwordForm: PasswordChangeRequest) => {
 		let payload: PasswordChangeRequest = {
@@ -118,6 +113,14 @@ const ProfilePage = () => {
 		dispatch(changePassword(payload));
 	};
 
+	useEffect(() => {
+		if (B64Value) {
+			setProfileForm({
+				...ProfileForm,
+				avatar: B64Value
+			});
+		}
+	}, [B64Value]);
 	return (
 		<Grid container spacing={2}>
 			<Grid item xs={6}>
@@ -150,11 +153,11 @@ const ProfilePage = () => {
 									<Stack sx={AvatarHoverSx} alignItems="center" justifyContent="center">
 										<Stack alignItems="center" justifyContent="center" sx={AvatarHoverContentSx}>
 											<CloudUploadIcon onClick={uploadPicture} />
-											<input type="file" ref={pictureRef} onChange={onAvatarChange} />
+											<input type="file" name="avatar" ref={pictureRef} onChange={onChange} />
 										</Stack>
 									</Stack>
 
-									<Avatar sx={AvatarSx} src={avatar} id="avatar" alt="Avatar" variant="rounded">
+									<Avatar sx={AvatarSx} src={avatar} alt="Avatar" variant="rounded">
 										{profile?.username.charAt(0).toUpperCase() || 'N'}
 									</Avatar>
 								</Stack>
