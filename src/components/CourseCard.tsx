@@ -20,7 +20,7 @@ const AvatarSx = {
 const CardSx = {
 	minWidth: 320,
 	border: `solid 1px ${borderColor}`,
-	shadow: 'none',
+	boxShadow: 'none',
 	height: '100%',
 	width: '100%'
 };
@@ -35,14 +35,20 @@ const CardActionSx = {
 	justifyContent: 'flex-end'
 };
 interface CourseCardProps {
-	title: String;
-	subheader: String;
+	title: string;
+	subheader: string;
+	theme: string;
 }
 const CourseCard = (props: CourseCardProps) => {
-	const { title, subheader } = props;
+	const { title, subheader, theme } = props;
 	return (
 		<Card sx={CardSx}>
 			<CardHeader
+				sx={{
+					backgroundImage: theme
+						? `url(${theme})`
+						: 'url("https://img.freepik.com/free-photo/grunge-paint-background_1409-1337.jpg")'
+				}}
 				action={
 					<IconButton aria-label="settings">
 						<MoreVertIcon />
@@ -52,7 +58,7 @@ const CourseCard = (props: CourseCardProps) => {
 				subheader={subheader}
 			/>
 			<CardContent sx={CardContentSx}>
-				<Avatar sx={AvatarSx} />
+				<Avatar sx={AvatarSx} alt="theme" />
 			</CardContent>
 			<CardActions disableSpacing sx={CardActionSx}>
 				<IconButton>

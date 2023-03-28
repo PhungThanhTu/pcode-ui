@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement, useEffect } from 'react';
+import { ChangeEvent, ReactElement, useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -9,11 +9,17 @@ import { BoxModalSx } from '@/style/BoxModalSx';
 
 interface JoinCourseModalProps {
 	open: boolean;
-	onCreate?: Function;
+	onJoin: Function;
 	onCancel: Function;
 }
 const JoinCourseModal = (props: JoinCourseModalProps) => {
-	const { open, onCreate, onCancel } = props;
+	const { open, onJoin, onCancel } = props;
+
+	const [Code, setCode] = useState('');
+
+	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+		setCode(e.target.value);
+	};
 
 	return (
 		<Modal open={open}>
@@ -22,7 +28,14 @@ const JoinCourseModal = (props: JoinCourseModalProps) => {
 					Course Code
 				</Typography>
 				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
-					<TextField name="coursecode" label="Course Code" type="text" fullWidth variant="standard" />
+					<TextField
+						name="coursecode"
+						label="Course Code"
+						type="text"
+						fullWidth
+						variant="standard"
+						onChange={onChange}
+					/>
 					<Stack
 						direction="row"
 						spacing={1}
@@ -32,7 +45,9 @@ const JoinCourseModal = (props: JoinCourseModalProps) => {
 						justifyContent="flex-end"
 						paddingTop="25px"
 					>
-						<Button variant="contained">Join</Button>
+						<Button onClick={() => onJoin(Code)} variant="contained">
+							Join
+						</Button>
 						<Button onClick={() => onCancel()}>Cancel</Button>
 					</Stack>
 				</Stack>

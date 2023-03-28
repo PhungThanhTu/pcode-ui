@@ -1,29 +1,27 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useNavigate, useParams } from 'react-router';
 
 const CourseDialog = () => {
-	const [open, setOpen] = React.useState(false);
+	const { code } = useParams();
+	const navigate = useNavigate();
 
-	const handleClickOpen = () => {
-		setOpen(true);
-	};
+	const [open, setOpen] = useState(true);
 
 	const handleClose = () => {
 		setOpen(false);
+		navigate('/course');
 	};
+
+	useEffect(() => {}, [code]);
 	return (
-		<Dialog
-			open={open}
-			onClose={handleClose}
-			aria-labelledby="alert-dialog-title"
-			aria-describedby="alert-dialog-description"
-		>
-			<DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+		<Dialog open={open} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+			<DialogTitle id="alert-dialog-title">{'join this location service?'}</DialogTitle>
 			<DialogContent>
 				<DialogContentText id="alert-dialog-description">Do you want to join?</DialogContentText>
 			</DialogContent>

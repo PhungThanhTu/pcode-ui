@@ -13,9 +13,11 @@ import { createCourse, fetchCourse } from '@/slices/course.slice';
 import { getCourse } from '@/selectors/course.selector';
 import { CreateCourse } from '@/types/course.type';
 import { useImageFileReader } from '@/hook/useFileReader';
+import { useNavigate } from 'react-router';
 
 const CoursePage = () => {
 	let dispatch = useDispatch();
+	let navigate = useNavigate();
 
 	const { courses } = useSelector(getCourse);
 	const { B64Value, getImageB64Value } = useImageFileReader();
@@ -43,7 +45,11 @@ const CoursePage = () => {
 		}
 	};
 	const onCreate = () => {
+		setOpenCreateCourse(false);
 		dispatch(createCourse(CreateCourseForm));
+	};
+	const onJoin = (code: string) => {
+		navigate(`/invitation/${code}`);
 	};
 	useEffect(() => {
 		dispatch(fetchCourse());
@@ -78,7 +84,7 @@ const CoursePage = () => {
 				{courses?.map((item, index) => {
 					return (
 						<Grid key={index} item padding="0" width="100%" xs={12} md={6} lg={3}>
-							<CourseCard title={item.title} subheader={item.CreatorName} />
+							<CourseCard title={item.title} subheader={item.CreatorName} theme={item.theme} />
 						</Grid>
 					);
 				})}
@@ -94,6 +100,7 @@ const CoursePage = () => {
 			/>
 			<JoinCourseModal
 				open={OpenJoinCourse}
+				onJoin={onJoin}
 				onCancel={() => {
 					setOpenJoinCourse(false);
 				}}

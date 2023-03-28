@@ -5,6 +5,7 @@ export interface Course {
 	title: string;
 	Code: string;
 	PlpRole: Number;
+	theme: string;
 }
 export interface CreateCourse {
 	title: string;
