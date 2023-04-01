@@ -8,8 +8,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate, useParams } from 'react-router';
 
 const CourseDialog = () => {
-	const { code } = useParams();
 	const navigate = useNavigate();
+	const { code } = useParams();
 
 	const [open, setOpen] = useState(true);
 
@@ -18,7 +18,10 @@ const CourseDialog = () => {
 		navigate('/course');
 	};
 
-	useEffect(() => {}, [code]);
+	useEffect(() => {
+		//get course info here
+		console.log('herer', open);
+	}, [code]);
 	return (
 		<Dialog open={open} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
 			<DialogTitle id="alert-dialog-title">{'join this location service?'}</DialogTitle>

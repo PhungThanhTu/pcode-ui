@@ -24,15 +24,21 @@ const CardSx = {
 	height: '100%',
 	width: '100%'
 };
+const CardHeaderSx = {
+	backgroundImage: 'url("https://img.freepik.com/free-photo/grunge-paint-background_1409-1337.jpg")',
+	height: '35%'
+};
 const CardContentSx = {
 	position: 'relative',
 	paddingTop: '50%',
 	borderTop: `solid 1px ${borderColor}`,
-	borderBottom: `solid 1px ${borderColor}`
+	borderBottom: `solid 1px ${borderColor}`,
+	height: '50%'
 };
 const CardActionSx = {
 	alignItems: 'center',
-	justifyContent: 'flex-end'
+	justifyContent: 'flex-end',
+	height: '15%'
 };
 interface CourseCardProps {
 	title: string;
@@ -44,11 +50,14 @@ const CourseCard = (props: CourseCardProps) => {
 	return (
 		<Card sx={CardSx}>
 			<CardHeader
-				sx={{
-					backgroundImage: theme
-						? `url(${theme})`
-						: 'url("https://img.freepik.com/free-photo/grunge-paint-background_1409-1337.jpg")'
-				}}
+				sx={
+					theme
+						? {
+								...CardHeaderSx,
+								backgroundImage: `url(${theme})`
+						  }
+						: CardHeaderSx
+				}
 				action={
 					<IconButton aria-label="settings">
 						<MoreVertIcon />

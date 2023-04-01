@@ -13,9 +13,14 @@ export interface CreateCourse {
 	subject?: string | null;
 }
 export interface CreateCourseResponse {
-	courseId: string;
-	invitationId: string;
+	id: string;
+	CreateId: string;
+	Code: string;
+	title: string;
+	subject: string;
+	theme: string;
 }
 export interface CourseState {
 	courses?: Array<Course>;
+	loading: boolean;
 }

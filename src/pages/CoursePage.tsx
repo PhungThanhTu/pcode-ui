@@ -1,25 +1,26 @@
-import { useEffect, useState, ChangeEvent } from 'react';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import CreateIcon from '@mui/icons-material/Create';
 import SchoolIcon from '@mui/icons-material/School';
-
-import { CustomIconButton } from '@/components/CustomButton';
 import CourseCard from '@/components/CourseCard';
 import CreateCourseModal from '@/components/CreateCourseModal';
 import JoinCourseModal from '@/components/JoinCourseModal';
+
+import { useEffect, useState, ChangeEvent } from 'react';
+import { CustomIconButton } from '@/components/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCourse, fetchCourse } from '@/slices/course.slice';
-import { getCourse } from '@/selectors/course.selector';
+import { getCourses } from '@/selectors/course.selector';
 import { CreateCourse } from '@/types/course.type';
 import { useImageFileReader } from '@/hook/useFileReader';
 import { useNavigate } from 'react-router';
+import { LinearLoading } from '@/components/Loading';
 
 const CoursePage = () => {
 	let dispatch = useDispatch();
 	let navigate = useNavigate();
 
-	const { courses } = useSelector(getCourse);
+	const { courses, loading } = useSelector(getCourses);
 	const { B64Value, getImageB64Value } = useImageFileReader();
 
 	const InitialForm: CreateCourse = {
@@ -51,6 +52,7 @@ const CoursePage = () => {
 	const onJoin = (code: string) => {
 		navigate(`/invitation/${code}`);
 	};
+
 	useEffect(() => {
 		dispatch(fetchCourse());
 	}, []);
@@ -80,15 +82,19 @@ const CoursePage = () => {
 					}}
 				/>
 			</Stack>
-			<Grid container spacing={1}>
-				{courses?.map((item, index) => {
-					return (
-						<Grid key={index} item padding="0" width="100%" xs={12} md={6} lg={3}>
-							<CourseCard title={item.title} subheader={item.CreatorName} theme={item.theme} />
-						</Grid>
-					);
-				})}
-			</Grid>
+			{loading ? (
+				<LinearLoading />
+			) : (
+				<Grid container spacing={1}>
+					{courses?.map((item, index) => {
+						return (
+							<Grid key={index} item padding="0" width="100%" xs={12} md={6} lg={3}>
+								<CourseCard title={item.title} subheader={item.CreatorName} theme={item.theme} />
+							</Grid>
+						);
+					})}
+				</Grid>
+			)}
 			<CreateCourseModal
 				open={OpenCreateCourse}
 				onCreate={onCreate}

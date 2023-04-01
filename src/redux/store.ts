@@ -19,7 +19,7 @@ export const store = configureStore({
 		register: registerSlice,
 		profile: profileSlice,
 		snackbar: snackbarSlice,
-		course: courseSlice
+		courses: courseSlice
 	},
 	middleware: [sagaMiddleware]
 });

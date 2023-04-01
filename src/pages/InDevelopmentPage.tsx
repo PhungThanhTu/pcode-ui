@@ -1,10 +1,10 @@
-import React from 'react';
+import { Fragment } from 'react';
 import InDevelopment from '../components/InDevelopment';
 
 export const InDevelopmentPage = () => {
 	return (
-		<React.Fragment>
+		<Fragment>
 			<InDevelopment />
-		</React.Fragment>
+		</Fragment>
 	);
 };

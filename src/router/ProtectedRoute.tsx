@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 import { getAuth } from '../selectors/auth.selector';
 import Layout from '@/layouts/Layout';
-import LoadingPage from '@/pages/LoadingPage';
+import { CirclePageLoading } from '@/components/Loading';
 
 const ProtectedRoute = () => {
 	const { profile } = useSelector(getAuth);
@@ -16,7 +16,7 @@ const ProtectedRoute = () => {
 	}
 
 	if (profile === undefined) {
-		return <LoadingPage />;
+		return <CirclePageLoading />;
 	}
 
 	return <Navigate to="/login" replace />;

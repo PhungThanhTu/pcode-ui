@@ -1,12 +1,10 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
-import { PasswordChangeRequest, UserProfile } from '../types/auth.type';
-import profileApi from '@/api/profileApi';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
 import { createCourse, fetchCourse, fetchCourseSuccess, renameCourse } from '@/slices/course.slice';
-import { Course, CreateCourse } from '@/types/course.type';
+import { Course, CreateCourse, CreateCourseResponse } from '@/types/course.type';
 import courseApi from '@/api/courseApi';
 
 function* fetchCourseSaga() {
@@ -22,8 +20,11 @@ function* fetchCourseSaga() {
 function* createCourseSaga(action: PayloadAction<CreateCourse>) {
 	try {
 		console.log('saga create course');
-		yield call(courseApi.createCourse, action.payload);
-		yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('course')));
+		const data: CreateCourseResponse = yield call(courseApi.createCourse, action.payload);
+		if (data) {
+			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('course')));
+		} else {
+		}
 		yield put(fetchCourse());
 	} catch (error: any) {
 		console.log('saga create course failed');

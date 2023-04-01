@@ -7,12 +7,11 @@ import CustomSnackbar from '@/components/CustomSnackbar';
 interface PropsWithChildrenOnly {
 	children: React.ReactNode;
 }
-
+const LayoutBoxSx = {
+	width: '100%',
+	padding: '30px'
+};
 const Layout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
-	const LayoutBoxSx = {
-		width: '100%',
-		padding: '30px'
-	};
 	return (
 		<React.Fragment>
 			<NavBar />

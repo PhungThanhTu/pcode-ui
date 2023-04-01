@@ -1,4 +1,3 @@
-import { ChangeEvent, useState, useRef, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Tyography from '@mui/material/Typography';
@@ -9,6 +8,7 @@ import CustomEditInput from '@/components/CustomEditInput';
 import PasswordChangeModal from '@/components/PasswordChangeModal';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
+import { ChangeEvent, useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@mui/material/styles';
 import { CustomButton } from '@/components/CustomButton';
