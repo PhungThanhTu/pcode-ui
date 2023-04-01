@@ -6,12 +6,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate, useParams } from 'react-router';
+import courseApi from '@/api/courseApi';
+import { Course } from '@/types/course.type';
+import { useDispatch } from 'react-redux';
+import { CircleLoading } from './Loading';
 
 const CourseDialog = () => {
-	const navigate = useNavigate();
+	let navigate = useNavigate();
+
 	const { code } = useParams();
 
-	const [open, setOpen] = useState(true);
+	const [Open, setOpen] = useState(true);
+	const [Course, setCourse] = useState<Course>();
+	const [Loading, setLoading] = useState(true);
 
 	const handleClose = () => {
 		setOpen(false);
@@ -20,17 +27,47 @@ const CourseDialog = () => {
 
 	useEffect(() => {
 		//get course info here
-		console.log('herer', open);
+		if (code) {
+			const fetchCourse = async (code: string) => {
+				try {
+					const course = await courseApi.getCourse(code);
+					if (course.data.id) {
+						setCourse(course.data);
+						setLoading(false);
+					} else {
+						setCourse(undefined);
+						setLoading(false);
+					}
+				} catch (e) {
+					setCourse(undefined);
+					setLoading(false);
+				}
+			};
+			fetchCourse(code);
+		}
 	}, [code]);
+	console.log(Course, 'here');
 	return (
-		<Dialog open={open} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-			<DialogTitle id="alert-dialog-title">{'join this location service?'}</DialogTitle>
+		<Dialog open={Open} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+			<DialogTitle id="alert-dialog-title">Do you want to join?</DialogTitle>
 			<DialogContent>
-				<DialogContentText id="alert-dialog-description">Do you want to join?</DialogContentText>
+				{Loading ? (
+					<CircleLoading />
+				) : (
+					<DialogContentText id="alert-dialog-description">
+						{Course
+							? `Title: ${Course.title}\n
+							Title: ${Course.title}\n
+							`
+							: 'Course does not exist or invalid Invitation Code.'}
+					</DialogContentText>
+				)}
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={handleClose}>Disagree</Button>
-				<Button onClick={handleClose} autoFocus>
+				<Button onClick={handleClose} disabled={Loading}>
+					Disagree
+				</Button>
+				<Button onClick={handleClose} disabled={Loading} autoFocus>
 					Agree
 				</Button>
 			</DialogActions>

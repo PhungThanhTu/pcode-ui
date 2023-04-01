@@ -47,6 +47,7 @@ const CoursePage = () => {
 	};
 	const onCreate = () => {
 		setOpenCreateCourse(false);
+		setCreateCourseForm(InitialForm);
 		dispatch(createCourse(CreateCourseForm));
 	};
 	const onJoin = (code: string) => {
@@ -69,7 +70,7 @@ const CoursePage = () => {
 			<Stack direction="row" spacing={3}>
 				<CustomIconButton
 					startIcon={<CreateIcon />}
-					content="Create a course"
+					content="Create a Course"
 					onClick={() => {
 						setOpenCreateCourse(true);
 					}}

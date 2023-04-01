@@ -18,10 +18,15 @@ export const LinearLoading = () => {
 		</Box>
 	);
 };
-
+const CircleLoadingSx = {
+	width: '100%',
+	display: 'flex',
+	justifyContent: 'center',
+	alignItems: 'center'
+};
 export const CircleLoading = () => {
 	return (
-		<Box>
+		<Box sx={CircleLoadingSx}>
 			<CircularProgress />
 		</Box>
 	);

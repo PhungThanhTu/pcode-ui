@@ -28,28 +28,31 @@ const JoinCourseModal = (props: JoinCourseModalProps) => {
 					Course Code
 				</Typography>
 				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
-					<TextField
-						name="coursecode"
-						label="Course Code"
-						type="text"
-						fullWidth
-						variant="standard"
-						onChange={onChange}
-					/>
-					<Stack
-						direction="row"
-						spacing={1}
-						height="100%"
-						width="100%"
-						alignItems="center"
-						justifyContent="flex-end"
-						paddingTop="25px"
-					>
-						<Button onClick={() => onJoin(Code)} variant="contained">
-							Join
-						</Button>
-						<Button onClick={() => onCancel()}>Cancel</Button>
-					</Stack>
+					<Box component="form" onSubmit={() => onJoin(Code)} width="100%">
+						<TextField
+							name="coursecode"
+							label="Course Code"
+							type="text"
+							fullWidth
+							required
+							variant="standard"
+							onChange={onChange}
+						/>
+						<Stack
+							direction="row"
+							spacing={1}
+							height="100%"
+							width="100%"
+							alignItems="center"
+							justifyContent="flex-end"
+							paddingTop="25px"
+						>
+							<Button type="submit" variant="contained">
+								Join
+							</Button>
+							<Button onClick={() => onCancel()}>Cancel</Button>
+						</Stack>
+					</Box>
 				</Stack>
 			</Box>
 		</Modal>

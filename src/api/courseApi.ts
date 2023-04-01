@@ -3,8 +3,12 @@ import protectedApi from './protectedApi';
 import { Course, CreateCourse, CreateCourseResponse } from '@/types/course.type';
 
 const courseApi = {
-	getAllCourse: async () => {
+	getAllCourses: async () => {
 		const result: AxiosResponse<Course[]> = await protectedApi.get('/course');
+		return result;
+	},
+	getCourse: async (code: string) => {
+		const result: AxiosResponse<Course> = await protectedApi.get(`/course/info/${code}`);
 		return result;
 	},
 	createCourse: async (body: CreateCourse) => {

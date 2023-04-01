@@ -1,4 +1,6 @@
+import { Snackbar } from '@/types/snackbar.type';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Action } from '@remix-run/router';
 
 const initialState = {
 	message: '',
@@ -10,12 +12,12 @@ export const snackbarSlice = createSlice({
 	name: 'snackbar',
 	initialState,
 	reducers: {
-		setSnackbar: (state, action) => {
-			state.message = action.payload.message;
-			state.type = action.payload.type;
+		setSnackbar: (state, { payload }: PayloadAction<Snackbar>) => {
+			state.message = payload.message;
+			state.type = payload.type;
 			state.state = true;
 		},
-		removeSnackbar: (state, { payload }: PayloadAction<boolean>) => {
+		removeSnackbar: (state) => {
 			state.state = false;
 		}
 	}

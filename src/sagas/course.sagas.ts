@@ -10,7 +10,7 @@ import courseApi from '@/api/courseApi';
 function* fetchCourseSaga() {
 	try {
 		console.log('saga fetching course');
-		const course: AxiosResponse<Course[]> = yield call(courseApi.getAllCourse);
+		const course: AxiosResponse<Course[]> = yield call(courseApi.getAllCourses);
 		yield put(fetchCourseSuccess(course.data));
 	} catch (error: any) {
 		console.log('saga fetch course failed');
