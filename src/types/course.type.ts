@@ -7,6 +7,9 @@ export interface Course {
 	PlpRole: Number;
 	theme: string;
 }
+export interface JoinCourse {
+	Code: string;
+}
 export interface CreateCourse {
 	title: string;
 	theme?: string | null | undefined;
@@ -19,6 +22,7 @@ export interface CreateCourseResponse {
 	title: string;
 	subject: string;
 	theme: string;
+	CreatorName: string;
 }
 export interface CourseState {
 	courses?: Array<Course>;

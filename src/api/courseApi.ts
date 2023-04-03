@@ -11,6 +11,10 @@ const courseApi = {
 		const result: AxiosResponse<Course> = await protectedApi.get(`/course/info/${code}`);
 		return result;
 	},
+	joinCourse: async (code: string) => {
+		const result: any = await protectedApi.post(`/course/join/${code}`);
+		return result;
+	},
 	createCourse: async (body: CreateCourse) => {
 		const result: AxiosResponse<CreateCourseResponse> = await protectedApi.post('/course', body);
 		return result;

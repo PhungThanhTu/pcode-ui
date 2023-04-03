@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,9 +10,12 @@ import courseApi from '@/api/courseApi';
 import { Course } from '@/types/course.type';
 import { useDispatch } from 'react-redux';
 import { CircleLoading } from './Loading';
+import Box from '@mui/material/Box';
+import { joinCourse } from '@/slices/course.slice';
 
 const CourseDialog = () => {
 	let navigate = useNavigate();
+	let dispatch = useDispatch();
 
 	const { code } = useParams();
 
@@ -23,6 +26,10 @@ const CourseDialog = () => {
 	const handleClose = () => {
 		setOpen(false);
 		navigate('/course');
+	};
+
+	const handleJoinCourse = () => {
+		dispatch(joinCourse({ Code: code ? code : '' }));
 	};
 
 	useEffect(() => {
@@ -48,29 +55,37 @@ const CourseDialog = () => {
 	}, [code]);
 	console.log(Course, 'here');
 	return (
-		<Dialog open={Open} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-			<DialogTitle id="alert-dialog-title">Do you want to join?</DialogTitle>
-			<DialogContent>
-				{Loading ? (
+		<Dialog open={Open}>
+			{Loading ? (
+				<Box width="200px" height="200px">
 					<CircleLoading />
-				) : (
-					<DialogContentText id="alert-dialog-description">
-						{Course
-							? `Title: ${Course.title}\n
-							Title: ${Course.title}\n
-							`
-							: 'Course does not exist or invalid Invitation Code.'}
-					</DialogContentText>
-				)}
-			</DialogContent>
-			<DialogActions>
-				<Button onClick={handleClose} disabled={Loading}>
-					Disagree
-				</Button>
-				<Button onClick={handleClose} disabled={Loading} autoFocus>
-					Agree
-				</Button>
-			</DialogActions>
+				</Box>
+			) : (
+				<Fragment>
+					<DialogTitle>{Course ? 'Do you want to join?' : 'Error Code'}</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							{Course ? `Title: ${Course.title}` : 'Course does not exist or invalid Invitation Code.'}
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						{Course ? (
+							<Fragment>
+								<Button onClick={handleClose} disabled={Loading}>
+									Disagree
+								</Button>
+								<Button onClick={handleJoinCourse} disabled={Loading} autoFocus>
+									Agree
+								</Button>
+							</Fragment>
+						) : (
+							<Button onClick={handleClose} disabled={Loading} autoFocus>
+								Back
+							</Button>
+						)}
+					</DialogActions>
+				</Fragment>
+			)}
 		</Dialog>
 	);
 };

@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
 import { createCourse, fetchCourse, fetchCourseSuccess, renameCourse } from '@/slices/course.slice';
-import { Course, CreateCourse, CreateCourseResponse } from '@/types/course.type';
+import { Course, CreateCourse, CreateCourseResponse, JoinCourse } from '@/types/course.type';
 import courseApi from '@/api/courseApi';
 
 function* fetchCourseSaga() {
@@ -31,17 +31,30 @@ function* createCourseSaga(action: PayloadAction<CreateCourse>) {
 		yield put(setSnackbar(notificationMessage.CREATE_FAIL('course', '')));
 	}
 }
+
 function* renameCourseSaga(action: PayloadAction<Course>) {
 	try {
 		console.log('saga rename course', action.payload.title);
 		yield call(courseApi.renameCourse, action.payload);
-		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('course', 'Rename OK')));
+		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('course', 'Rename Succesfully')));
 		yield put(fetchCourse());
 	} catch (error: any) {
 		console.log('saga rename course failed');
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('course', 'Rename Fail')));
 	}
 }
+
+function* joinCourse(action: PayloadAction<JoinCourse>) {
+	try {
+		yield call(courseApi.joinCourse, action.payload.Code);
+		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('course', 'Join Succesfully')));
+		yield put(fetchCourse());
+	} catch (error: any) {
+		console.log('saga join course failed');
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('course', 'Cannot Join Course')));
+	}
+}
+
 export function* watchCourse() {
 	yield takeLatest(fetchCourse.type, fetchCourseSaga);
 	yield takeLatest(createCourse.type, createCourseSaga);
