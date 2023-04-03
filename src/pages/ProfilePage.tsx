@@ -7,10 +7,10 @@ import Avatar from '@mui/material/Avatar';
 import CustomEditInput from '@/components/CustomEditInput';
 import PasswordChangeModal from '@/components/PasswordChangeModal';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import styled from '@mui/material/styles/styled';
 
 import { ChangeEvent, useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { styled } from '@mui/material/styles';
 import { CustomButton } from '@/components/CustomButton';
 import { getAuth } from '../selectors/auth.selector';
 import { PasswordChangeRequest, UserProfile } from '@/types/auth.type';
@@ -166,7 +166,7 @@ const ProfilePage = () => {
 										isNotDisplay={true}
 										label="Avatar"
 										value={avatar}
-										onChange={() => {}}
+										onChange={() => { }}
 										onCancel={onCancel}
 										onSave={UpdateProfile}
 										isAvatarChange={IsAvatarChange}

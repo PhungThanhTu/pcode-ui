@@ -1,11 +1,12 @@
-import { useEffect, useState, Fragment } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import TextField from '@mui/material/TextField/TextField';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
+import styled from '@mui/material/styles/styled';
+
+import { useEffect, useState, Fragment } from 'react';
 import { labelToProperty } from '@/utils/convert';
 
 export const CustomEditIcon = styled(EditIcon)(({ theme }) => ({

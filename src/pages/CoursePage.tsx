@@ -2,6 +2,7 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import CreateIcon from '@mui/icons-material/Create';
 import SchoolIcon from '@mui/icons-material/School';
+
 import CourseCard from '@/components/CourseCard';
 import CreateCourseModal from '@/components/CreateCourseModal';
 import JoinCourseModal from '@/components/JoinCourseModal';

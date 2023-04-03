@@ -1,10 +1,11 @@
-import { ChangeEvent, ReactElement, useState } from 'react';
+import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { Button } from '@mui/material';
+
+import { ChangeEvent, useState } from 'react';
 import { BoxModalSx } from '@/style/BoxModalSx';
 
 interface JoinCourseModalProps {

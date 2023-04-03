@@ -1,6 +1,7 @@
-import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/system';
+import  styled  from '@mui/system/styled';
+
+import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled';
 
 const blue = {
 	500: '#1976d2',

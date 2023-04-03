@@ -1,7 +1,8 @@
-import { forwardRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+
+import { forwardRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { removeSnackbar } from '@/slices/snackbar.slice';
 import { getSnackbar } from '@/selectors/snackbar.selector';
 
@@ -13,7 +14,7 @@ const CustomSnackbar = () => {
 	});
 
 	const onClose = () => {
-		dispatch(removeSnackbar(false));
+		dispatch(removeSnackbar());
 	};
 	return (
 		<Snackbar open={state} autoHideDuration={2000} onClose={onClose}>

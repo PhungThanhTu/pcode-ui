@@ -1,4 +1,6 @@
-import { MouseEvent, useState } from 'react';
+import Typography from '@mui/material/Typography';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
+import Slide from '@mui/material/Slide';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,9 +15,9 @@ import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
 import Tooltip from '@mui/material/Tooltip';
 import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
 
-import { Slide, Typography, useScrollTrigger } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { MouseEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../slices/auth.slice';
 import { getAuth } from '@/selectors/auth.selector';

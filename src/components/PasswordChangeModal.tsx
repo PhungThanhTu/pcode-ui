@@ -1,12 +1,13 @@
-import React, { ChangeEvent, ReactElement, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { Alert, AlertTitle } from '@mui/material';
-import { Button } from '@mui/material';
+import AlertTitle from '@mui/material/AlertTitle';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+
+import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
 import { BoxModalSx } from '@/style/BoxModalSx';
 
 interface PasswordChangeModalProps {
@@ -27,8 +28,8 @@ const PasswordChangeModal = ({ open, onSave, onClose }: PasswordChangeModalProps
 		newPassword: '',
 		reNewPassword: ''
 	};
-	const [alert, setAlert] = React.useState<ReactElement>();
-	const [passwordForm, setPasswordForm] = React.useState(initialForm);
+	const [alert, setAlert] = useState<ReactElement>();
+	const [passwordForm, setPasswordForm] = useState(initialForm);
 	const { password, newPassword, reNewPassword } = passwordForm;
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {

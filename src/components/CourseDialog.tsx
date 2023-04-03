@@ -5,15 +5,17 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useNavigate, useParams } from 'react-router';
+import Box from '@mui/material/Box';
 import courseApi from '@/api/courseApi';
+
+import { useNavigate, useParams } from 'react-router';
 import { Course } from '@/types/course.type';
 import { useDispatch } from 'react-redux';
 import { CircleLoading } from './Loading';
-import Box from '@mui/material/Box';
 import { joinCourse } from '@/slices/course.slice';
 
 const CourseDialog = () => {
+
 	let navigate = useNavigate();
 	let dispatch = useDispatch();
 
@@ -53,7 +55,6 @@ const CourseDialog = () => {
 			fetchCourse(code);
 		}
 	}, [code]);
-	console.log(Course, 'here');
 	return (
 		<Dialog open={Open}>
 			{Loading ? (
@@ -71,15 +72,15 @@ const CourseDialog = () => {
 					<DialogActions>
 						{Course ? (
 							<Fragment>
-								<Button onClick={handleClose} disabled={Loading}>
+								<Button onClick={handleClose}>
 									Disagree
 								</Button>
-								<Button onClick={handleJoinCourse} disabled={Loading} autoFocus>
+								<Button onClick={handleJoinCourse} autoFocus>
 									Agree
 								</Button>
 							</Fragment>
 						) : (
-							<Button onClick={handleClose} disabled={Loading} autoFocus>
+							<Button onClick={handleClose} autoFocus>
 								Back
 							</Button>
 						)}
