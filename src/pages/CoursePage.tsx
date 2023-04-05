@@ -27,7 +27,7 @@ const CoursePage = () => {
 	const InitialForm: CreateCourse = {
 		title: '',
 		subject: '',
-		theme: B64Value
+		theme: ''
 	};
 
 	const [OpenCreateCourse, setOpenCreateCourse] = useState(false);

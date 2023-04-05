@@ -1,6 +1,5 @@
-import { Snackbar } from '@/types/snackbar.type';
+import { Snackbar } from '@/types/utility.type';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Action } from '@remix-run/router';
 
 const initialState = {
 	message: '',

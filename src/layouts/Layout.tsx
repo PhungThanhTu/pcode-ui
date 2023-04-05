@@ -3,6 +3,7 @@ import React from 'react';
 import Footer from '../components/Footer';
 import Box from '@mui/material/Box';
 import CustomSnackbar from '@/components/CustomSnackbar';
+import { BackdropLoading } from '@/components/Loading';
 
 interface PropsWithChildrenOnly {
 	children: React.ReactNode;
@@ -20,6 +21,7 @@ const Layout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWith
 			</div>
 			<Footer />
 			<CustomSnackbar />
+			<BackdropLoading />
 		</React.Fragment>
 	);
 };

@@ -6,6 +6,7 @@ import notificationMessage from '@/utils/notificationMessage';
 import { createCourse, fetchCourse, fetchCourseSuccess, renameCourse } from '@/slices/course.slice';
 import { Course, CreateCourse, CreateCourseResponse, JoinCourse } from '@/types/course.type';
 import courseApi from '@/api/courseApi';
+import { setLoading } from '@/slices/loading.slice';
 
 function* fetchCourseSaga() {
 	try {
@@ -20,11 +21,14 @@ function* fetchCourseSaga() {
 function* createCourseSaga(action: PayloadAction<CreateCourse>) {
 	try {
 		console.log('saga create course');
+		yield put(setLoading({ isLoading: true }));
 		const data: CreateCourseResponse = yield call(courseApi.createCourse, action.payload);
+
 		if (data) {
+			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('course')));
-		} else {
 		}
+
 		yield put(fetchCourse());
 	} catch (error: any) {
 		console.log('saga create course failed');
