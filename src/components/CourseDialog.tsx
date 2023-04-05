@@ -15,7 +15,6 @@ import { CircleLoading } from './Loading';
 import { joinCourse } from '@/slices/course.slice';
 
 const CourseDialog = () => {
-
 	let navigate = useNavigate();
 	let dispatch = useDispatch();
 
@@ -72,9 +71,7 @@ const CourseDialog = () => {
 					<DialogActions>
 						{Course ? (
 							<Fragment>
-								<Button onClick={handleClose}>
-									Disagree
-								</Button>
+								<Button onClick={handleClose}>Disagree</Button>
 								<Button onClick={handleJoinCourse} autoFocus>
 									Agree
 								</Button>

@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import Button  from '@mui/material/Button';
+import Button from '@mui/material/Button';
 
 import { BoxModalSx } from '@/style/BoxModalSx';
 import { CreateCourse } from '@/types/course.type';

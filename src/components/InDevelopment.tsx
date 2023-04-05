@@ -1,4 +1,4 @@
-import Grid  from '@mui/material/Grid';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 const InDevelopment = () => {

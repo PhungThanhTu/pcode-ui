@@ -166,7 +166,7 @@ const ProfilePage = () => {
 										isNotDisplay={true}
 										label="Avatar"
 										value={avatar}
-										onChange={() => { }}
+										onChange={() => {}}
 										onCancel={onCancel}
 										onSave={UpdateProfile}
 										isAvatarChange={IsAvatarChange}

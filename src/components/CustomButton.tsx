@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import  styled  from '@mui/system/styled';
+import styled from '@mui/system/styled';
 
 import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled';
 
