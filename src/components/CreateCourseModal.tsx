@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
-import { useState } from 'react'
+import { useState } from 'react';
 import { BoxModalSx } from '@/style/BoxModalSx';
 import { CreateCourse } from '@/types/course.type';
 
@@ -19,7 +19,7 @@ interface CreateCourseModalProps {
 
 const CreateCourseModal = (props: CreateCourseModalProps) => {
 	const { open, onCreate, onCancel, onChange, createCourseValues } = props;
-	const [Error, setError] = useState(false)
+	const [Error, setError] = useState(false);
 
 	return (
 		<Modal open={open}>

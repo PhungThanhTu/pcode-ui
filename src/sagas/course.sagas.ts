@@ -53,9 +53,10 @@ function* joinCourseSaga(action: PayloadAction<JoinCourse>) {
 		yield call(courseApi.joinCourse, action.payload.Code);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('course', 'Join Succesfully')));
 		yield put(fetchCourse());
+		yield;
 	} catch (error: any) {
 		console.log('saga join course failed');
-		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('course', 'Cannot Join Course')));	
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('course', 'Cannot Join Course')));
 	}
 }
 
@@ -63,5 +64,5 @@ export function* watchCourse() {
 	yield takeLatest(fetchCourse.type, fetchCourseSaga);
 	yield takeLatest(createCourse.type, createCourseSaga);
 	yield takeLatest(renameCourse.type, renameCourseSaga);
-	yield takeLatest(joinCourse.type, joinCourseSaga)
+	yield takeLatest(joinCourse.type, joinCourseSaga);
 }

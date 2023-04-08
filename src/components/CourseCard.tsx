@@ -5,7 +5,6 @@ import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TabIcon from '@mui/icons-material/Tab';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -45,7 +44,7 @@ const CardContentSx = {
 };
 const CardActionSx = {
 	alignItems: 'center',
-	justifyContent: 'flex-end',
+	justifyContent: 'flex-end'
 };
 interface CourseCardProps {
 	title: string;
@@ -54,9 +53,13 @@ interface CourseCardProps {
 }
 const CourseCard = (props: CourseCardProps) => {
 	const { title, subheader, theme } = props;
-	const Sx = theme ? {
-		...CardHeaderSx, backgroundImage: `url(${theme})`
-	} : CardHeaderSx
+	const Sx = theme
+		? {
+				...CardHeaderSx,
+				backgroundImage: `url(${theme})`
+		  }
+		: CardHeaderSx;
+
 	return (
 		<Card sx={CardSx}>
 			<CardHeader
@@ -67,8 +70,7 @@ const CourseCard = (props: CourseCardProps) => {
 					</IconButton>
 				}
 				title={
-					<Tooltip
-						title={title}>
+					<Tooltip title={title}>
 						<div>{title}</div>
 					</Tooltip>
 				}
@@ -78,7 +80,7 @@ const CourseCard = (props: CourseCardProps) => {
 				<Avatar sx={AvatarSx} alt="theme" />
 			</CardContent>
 			<CardActions disableSpacing sx={CardActionSx}>
-				<Tooltip title='Get invitation link for this course'>
+				<Tooltip title="Get invitation link for this course">
 					<IconButton>
 						<TabIcon />
 					</IconButton>

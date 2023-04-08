@@ -54,12 +54,8 @@ const CoursePage = () => {
 	};
 	const onJoin = (e: FormEvent<HTMLFormElement>, code: string, error: Function) => {
 		e.preventDefault();
-		if (validInvitationCode.test(code)) {
-			navigate(`/invitation/${code}`);
-		}
-		else {
-			error()
-		}
+		if (validInvitationCode.test(code)) navigate(`/invitation/${code}`);
+		else error();
 	};
 
 	useEffect(() => {

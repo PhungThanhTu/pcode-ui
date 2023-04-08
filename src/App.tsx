@@ -9,6 +9,7 @@ import ProtectedRoute from './router/ProtectedRoute';
 import ProfilePage from './pages/ProfilePage';
 import CoursePage from './pages/CoursePage';
 import CourseDialog from './components/CourseDialog';
+import CourseDetailPage from './pages/CourseDetailPage';
 
 function App() {
 	const dispatch = useDispatch();
@@ -26,6 +27,7 @@ function App() {
 				<Route element={<ProtectedRoute />}>
 					<Route index path="/" element={<Navigate to="/course" />} />
 					<Route path="/course" element={<CoursePage />} />
+					<Route path="/course/:code" element={<CourseDetailPage />} />
 					<Route path="/invitation/:code" element={<CourseDialog />} />
 					<Route path="/profile" element={<ProfilePage />} />
 				</Route>

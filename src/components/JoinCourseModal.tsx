@@ -17,14 +17,14 @@ const JoinCourseModal = (props: JoinCourseModalProps) => {
 	const { open, onJoin, onCancel } = props;
 
 	const [Code, setCode] = useState('');
-	const [Error, setError] = useState(false)
+	const [Error, setError] = useState(false);
 
 	const onError = () => {
-		setError(true)
-	}
+		setError(true);
+	};
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setCode(e.target.value);
-		setError(false)
+		setError(false);
 	};
 
 	return (
@@ -43,7 +43,11 @@ const JoinCourseModal = (props: JoinCourseModalProps) => {
 							required
 							variant="standard"
 							error={Error}
-							helperText={Error ? 'Requires 5 characters and right code format (random either digit/upper/lower).' : ''}
+							helperText={
+								Error
+									? 'Requires 5 characters and right code format (random either digit/upper/lower).'
+									: ''
+							}
 							onChange={onChange}
 						/>
 						<Stack

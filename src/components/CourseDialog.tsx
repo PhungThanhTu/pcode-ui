@@ -31,6 +31,7 @@ const CourseDialog = () => {
 
 	const handleJoinCourse = () => {
 		dispatch(joinCourse({ Code: code ? code : '' }));
+		navigate(`/course/${code}`);
 	};
 
 	useEffect(() => {
