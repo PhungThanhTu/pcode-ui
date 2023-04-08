@@ -17,9 +17,14 @@ const JoinCourseModal = (props: JoinCourseModalProps) => {
 	const { open, onJoin, onCancel } = props;
 
 	const [Code, setCode] = useState('');
+	const [Error, setError] = useState(false)
 
+	const onError = () => {
+		setError(true)
+	}
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setCode(e.target.value);
+		setError(false)
 	};
 
 	return (
@@ -29,7 +34,7 @@ const JoinCourseModal = (props: JoinCourseModalProps) => {
 					Course Code
 				</Typography>
 				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
-					<Box component="form" onSubmit={() => onJoin(Code)} width="100%">
+					<Box component="form" onSubmit={(e) => onJoin(e, Code, onError)} width="100%">
 						<TextField
 							name="coursecode"
 							label="Course Code"
@@ -37,6 +42,8 @@ const JoinCourseModal = (props: JoinCourseModalProps) => {
 							fullWidth
 							required
 							variant="standard"
+							error={Error}
+							helperText={Error ? 'Requires 5 characters and right code format (random either digit/upper/lower).' : ''}
 							onChange={onChange}
 						/>
 						<Stack

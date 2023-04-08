@@ -7,7 +7,7 @@ import CourseCard from '@/components/CourseCard';
 import CreateCourseModal from '@/components/CreateCourseModal';
 import JoinCourseModal from '@/components/JoinCourseModal';
 
-import { useEffect, useState, ChangeEvent } from 'react';
+import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { CustomIconButton } from '@/components/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCourse, fetchCourse } from '@/slices/course.slice';
@@ -16,6 +16,7 @@ import { CreateCourse } from '@/types/course.type';
 import { useImageFileReader } from '@/hook/useFileReader';
 import { useNavigate } from 'react-router';
 import { LinearLoading } from '@/components/Loading';
+import { validInvitationCode } from '@/utils/regex';
 
 const CoursePage = () => {
 	let dispatch = useDispatch();
@@ -51,13 +52,20 @@ const CoursePage = () => {
 		setCreateCourseForm(InitialForm);
 		dispatch(createCourse(CreateCourseForm));
 	};
-	const onJoin = (code: string) => {
-		navigate(`/invitation/${code}`);
+	const onJoin = (e: FormEvent<HTMLFormElement>, code: string, error: Function) => {
+		e.preventDefault();
+		if (validInvitationCode.test(code)) {
+			navigate(`/invitation/${code}`);
+		}
+		else {
+			error()
+		}
 	};
 
 	useEffect(() => {
 		dispatch(fetchCourse());
 	}, []);
+
 	useEffect(() => {
 		if (B64Value) {
 			setCreateCourseForm({
@@ -66,6 +74,7 @@ const CoursePage = () => {
 			});
 		}
 	}, [B64Value]);
+
 	return (
 		<Stack direction="column" spacing={2}>
 			<Stack direction="row" spacing={3}>
@@ -87,10 +96,10 @@ const CoursePage = () => {
 			{loading ? (
 				<LinearLoading />
 			) : (
-				<Grid container spacing={1}>
+				<Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} alignItems="center">
 					{courses?.map((item, index) => {
 						return (
-							<Grid key={index} item padding="0" width="100%" xs={12} md={6} lg={3}>
+							<Grid key={index} item width="100%" xs={12} sm={6} md={4} lg={3}>
 								<CourseCard title={item.title} subheader={item.CreatorName} theme={item.theme} />
 							</Grid>
 						);

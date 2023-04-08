@@ -7,6 +7,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TabIcon from '@mui/icons-material/Tab';
+import Tooltip from '@mui/material/Tooltip';
 
 const borderColor = 'rgb(225,227,230)';
 
@@ -18,7 +19,6 @@ const AvatarSx = {
 	width: '75px'
 };
 const CardSx = {
-	minWidth: 320,
 	border: `solid 1px ${borderColor}`,
 	boxShadow: 'none',
 	height: '100%',
@@ -26,7 +26,15 @@ const CardSx = {
 };
 const CardHeaderSx = {
 	backgroundImage: 'url("https://img.freepik.com/free-photo/grunge-paint-background_1409-1337.jpg")',
-	height: '35%'
+	height: '35%',
+	'.MuiCardHeader-content': {
+		width: '90%',
+		whiteSpace: 'nowrap',
+		overflow: 'hidden'
+	},
+	'.MuiCardHeader-action': {
+		width: '10%'
+	}
 };
 const CardContentSx = {
 	position: 'relative',
@@ -38,7 +46,6 @@ const CardContentSx = {
 const CardActionSx = {
 	alignItems: 'center',
 	justifyContent: 'flex-end',
-	height: '15%'
 };
 interface CourseCardProps {
 	title: string;
@@ -47,35 +54,35 @@ interface CourseCardProps {
 }
 const CourseCard = (props: CourseCardProps) => {
 	const { title, subheader, theme } = props;
+	const Sx = theme ? {
+		...CardHeaderSx, backgroundImage: `url(${theme})`
+	} : CardHeaderSx
 	return (
 		<Card sx={CardSx}>
 			<CardHeader
-				sx={
-					theme
-						? {
-								...CardHeaderSx,
-								backgroundImage: `url(${theme})`
-						  }
-						: CardHeaderSx
-				}
+				sx={Sx}
 				action={
 					<IconButton aria-label="settings">
 						<MoreVertIcon />
 					</IconButton>
 				}
-				title={title}
+				title={
+					<Tooltip
+						title={title}>
+						<div>{title}</div>
+					</Tooltip>
+				}
 				subheader={subheader}
 			/>
 			<CardContent sx={CardContentSx}>
 				<Avatar sx={AvatarSx} alt="theme" />
 			</CardContent>
 			<CardActions disableSpacing sx={CardActionSx}>
-				<IconButton>
-					<TrendingUpIcon />
-				</IconButton>
-				<IconButton>
-					<TabIcon />
-				</IconButton>
+				<Tooltip title='Get invitation link for this course'>
+					<IconButton>
+						<TabIcon />
+					</IconButton>
+				</Tooltip>
 			</CardActions>
 		</Card>
 	);

@@ -12,12 +12,19 @@ const LayoutBoxSx = {
 	width: '100%',
 	padding: '30px'
 };
+const DivStyle = {
+	marginTop: '70px',
+	minHeight: '100vh',
+	maxHeight: 'fit-content'
+}
 const Layout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
 	return (
 		<React.Fragment>
 			<NavBar />
-			<div style={{ marginTop: '70px', height: '100vh' }}>
-				<Box sx={LayoutBoxSx}>{props.children}</Box>
+			<div style={DivStyle}>
+				<Box sx={LayoutBoxSx}>
+					{props.children}
+				</Box>
 			</div>
 			<Footer />
 			<CustomSnackbar />

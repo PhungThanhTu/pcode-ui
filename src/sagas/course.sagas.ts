@@ -3,7 +3,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
-import { createCourse, fetchCourse, fetchCourseSuccess, renameCourse } from '@/slices/course.slice';
+import { createCourse, fetchCourse, fetchCourseSuccess, renameCourse, joinCourse } from '@/slices/course.slice';
 import { Course, CreateCourse, CreateCourseResponse, JoinCourse } from '@/types/course.type';
 import courseApi from '@/api/courseApi';
 import { setLoading } from '@/slices/loading.slice';
@@ -48,14 +48,14 @@ function* renameCourseSaga(action: PayloadAction<Course>) {
 	}
 }
 
-function* joinCourse(action: PayloadAction<JoinCourse>) {
+function* joinCourseSaga(action: PayloadAction<JoinCourse>) {
 	try {
 		yield call(courseApi.joinCourse, action.payload.Code);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('course', 'Join Succesfully')));
 		yield put(fetchCourse());
 	} catch (error: any) {
 		console.log('saga join course failed');
-		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('course', 'Cannot Join Course')));
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('course', 'Cannot Join Course')));	
 	}
 }
 
@@ -63,4 +63,5 @@ export function* watchCourse() {
 	yield takeLatest(fetchCourse.type, fetchCourseSaga);
 	yield takeLatest(createCourse.type, createCourseSaga);
 	yield takeLatest(renameCourse.type, renameCourseSaga);
+	yield takeLatest(joinCourse.type, joinCourseSaga)
 }

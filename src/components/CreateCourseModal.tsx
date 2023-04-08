@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
+import { useState } from 'react'
 import { BoxModalSx } from '@/style/BoxModalSx';
 import { CreateCourse } from '@/types/course.type';
 
@@ -18,7 +19,7 @@ interface CreateCourseModalProps {
 
 const CreateCourseModal = (props: CreateCourseModalProps) => {
 	const { open, onCreate, onCancel, onChange, createCourseValues } = props;
-	// const [Error, setError] = useState(false)
+	const [Error, setError] = useState(false)
 
 	return (
 		<Modal open={open}>
@@ -29,6 +30,7 @@ const CreateCourseModal = (props: CreateCourseModalProps) => {
 				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
 					<Box component="form" onSubmit={() => onCreate()}>
 						<TextField
+							error={Error}
 							required
 							name="title"
 							label="Title"
@@ -42,6 +44,7 @@ const CreateCourseModal = (props: CreateCourseModalProps) => {
 						/>
 						<TextField
 							required
+							error={Error}
 							name="subject"
 							label="Subject"
 							type="text"
