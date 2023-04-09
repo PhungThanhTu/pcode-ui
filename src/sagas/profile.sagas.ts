@@ -7,6 +7,7 @@ import profileApi from '@/api/profileApi';
 import { updateProfile, fetchProfile, changePassword } from '@/slices/profile.slice';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
+import { setLoading } from '@/slices/loading.slice';
 
 function* fetchProfileSaga() {
 	try {
@@ -27,12 +28,15 @@ function* updateProfileSaga(action: PayloadAction<UserProfile>) {
 			avatar: action.payload.avatar
 		};
 		console.log('saga updating profile');
+		yield put(setLoading({ isLoading: true }))
 		yield call(profileApi.updateProfile, body);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('profile', '')));
 		yield put(fetchProfile());
+		yield put(setLoading({ isLoading: false }))
 	} catch (e) {
 		const error = e as AxiosError;
 		console.log('saga update profile failed');
+		yield put(setLoading({ isLoading: false }))
 		if (error.code === '413')
 			yield put(
 				setSnackbar(
