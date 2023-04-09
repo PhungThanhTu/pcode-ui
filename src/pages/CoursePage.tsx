@@ -96,7 +96,7 @@ const CoursePage = () => {
 					{courses?.map((item, index) => {
 						return (
 							<Grid key={index} item width="100%" xs={12} sm={6} md={4} lg={3}>
-								<CourseCard title={item.title} subheader={item.CreatorName} theme={item.theme} />
+								<CourseCard course={item} />
 							</Grid>
 						);
 					})}

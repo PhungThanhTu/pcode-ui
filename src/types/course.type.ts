@@ -5,7 +5,8 @@ export interface Course {
 	title: string;
 	Code: string;
 	PlpRole: Number;
-	theme: string;
+	courseTheme: string;
+	courseSubject: string;
 }
 export interface JoinCourse {
 	Code: string;
@@ -20,8 +21,8 @@ export interface CreateCourseResponse {
 	CreateId: string;
 	Code: string;
 	title: string;
-	subject: string;
-	theme: string;
+	courseSubject: string;
+	courseTheme: string;
 	CreatorName: string;
 }
 export interface CourseState {
