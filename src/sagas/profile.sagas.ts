@@ -49,12 +49,16 @@ function* updateProfileSaga(action: PayloadAction<UserProfile>) {
 function* changePasswordSaga(action: PayloadAction<PasswordChangeRequest>) {
 	try {
 		console.log('saga change password', action.payload);
+		yield put(setLoading({ isLoading: true }))
 		yield call(profileApi.changePassword, action.payload);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('password', '')));
+		yield put(setLoading({ isLoading: false }))
 		yield put(fetchProfile());
+
 	} catch (error: any) {
 		console.log('saga update password failed');
-		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('paswword', '')));
+		yield put(setLoading({ isLoading: false }))
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('paswword', 'Current password is not right.')));
 	}
 }
 export function* watchProfile() {
