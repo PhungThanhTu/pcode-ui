@@ -7,9 +7,9 @@ import { useCallback, useEffect } from 'react';
 import { fetchProfile } from './slices/auth.slice';
 import ProtectedRoute from './router/ProtectedRoute';
 import ProfilePage from './pages/ProfilePage';
-import CoursePage from './pages/CoursePage';
+import CoursesPage from './pages/CoursesPage';
 import CourseDialog from './components/CourseDialog';
-import CourseDetailPage from './pages/CourseDetailPage';
+import CoursePage from './pages/CoursePage';
 
 function App() {
 	const dispatch = useDispatch();
@@ -26,8 +26,8 @@ function App() {
 			<Routes>
 				<Route element={<ProtectedRoute />}>
 					<Route index path="/" element={<Navigate to="/course" />} />
-					<Route path="/course" element={<CoursePage />} />
-					<Route path="/course/:code" element={<CourseDetailPage />} />
+					<Route path="/course" element={<CoursesPage />} />
+					<Route path="/course/:code" element={<CoursePage />} />
 					<Route path="/invitation/:code" element={<CourseDialog />} />
 					<Route path="/profile" element={<ProfilePage />} />
 				</Route>

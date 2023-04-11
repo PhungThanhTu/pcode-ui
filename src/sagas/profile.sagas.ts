@@ -28,15 +28,15 @@ function* updateProfileSaga(action: PayloadAction<UserProfile>) {
 			avatar: action.payload.avatar
 		};
 		console.log('saga updating profile');
-		yield put(setLoading({ isLoading: true }))
+		yield put(setLoading({ isLoading: true }));
 		yield call(profileApi.updateProfile, body);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('profile', '')));
 		yield put(fetchProfile());
-		yield put(setLoading({ isLoading: false }))
+		yield put(setLoading({ isLoading: false }));
 	} catch (e) {
 		const error = e as AxiosError;
 		console.log('saga update profile failed');
-		yield put(setLoading({ isLoading: false }))
+		yield put(setLoading({ isLoading: false }));
 		if (error.code === '413')
 			yield put(
 				setSnackbar(
@@ -49,15 +49,14 @@ function* updateProfileSaga(action: PayloadAction<UserProfile>) {
 function* changePasswordSaga(action: PayloadAction<PasswordChangeRequest>) {
 	try {
 		console.log('saga change password', action.payload);
-		yield put(setLoading({ isLoading: true }))
+		yield put(setLoading({ isLoading: true }));
 		yield call(profileApi.changePassword, action.payload);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('password', '')));
-		yield put(setLoading({ isLoading: false }))
+		yield put(setLoading({ isLoading: false }));
 		yield put(fetchProfile());
-
 	} catch (error: any) {
 		console.log('saga update password failed');
-		yield put(setLoading({ isLoading: false }))
+		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('paswword', 'Current password is not right.')));
 	}
 }

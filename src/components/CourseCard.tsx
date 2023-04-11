@@ -7,7 +7,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import ShareIcon from '@mui/icons-material/Share';
 import Tooltip from '@mui/material/Tooltip';
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState, MouseEvent } from 'react';
 import { Course } from '@/types/course.type';
 
 const borderColor = 'rgb(225,227,230)';
@@ -56,11 +57,12 @@ const CardActionSx = {
 };
 interface CourseCardProps {
 	course: Course;
+	onDirect: Function;
 }
 const CourseCard = (props: CourseCardProps) => {
 	const [Copied, setCopied] = useState(false);
 
-	const { course } = props;
+	const { course, onDirect } = props;
 
 	const Sx = course.courseTheme
 		? {
@@ -69,7 +71,8 @@ const CourseCard = (props: CourseCardProps) => {
 		  }
 		: CardHeaderSx;
 
-	const onCopy = async () => {
+	const onCopy = async (e: MouseEvent<HTMLButtonElement>) => {
+		e.stopPropagation();
 		await navigator.clipboard.writeText(`localhost:3000/invitation/${course.Code}`);
 		setCopied(true);
 	};
@@ -84,15 +87,11 @@ const CourseCard = (props: CourseCardProps) => {
 			};
 		}
 	}, [Copied]);
+
 	return (
-		<Card sx={CardSx}>
+		<Card sx={CardSx} onClick={() => onDirect(course.Code)}>
 			<CardHeader
 				sx={Sx}
-				action={
-					<IconButton>
-						<MoreVertIcon />
-					</IconButton>
-				}
 				title={
 					<Tooltip title={course.title}>
 						<div style={{ fontSize: '14pt' }}>{course.title}</div>
@@ -100,10 +99,10 @@ const CourseCard = (props: CourseCardProps) => {
 				}
 				subheader={<div style={{ color: 'white' }}>{course.CreatorName}</div>}
 			/>
-			<CardContent sx={CardContentSx}>{/* <Avatar sx={AvatarSx} alt="theme" src={''} /> */}</CardContent>
+			<CardContent sx={CardContentSx}></CardContent>
 			<CardActions disableSpacing sx={CardActionSx}>
 				<Tooltip title={Copied ? 'Copied to clipboard' : 'Get invitation link for this course'}>
-					<IconButton onClick={onCopy}>
+					<IconButton onClick={(e) => onCopy(e)}>
 						<ShareIcon />
 					</IconButton>
 				</Tooltip>
