@@ -6,3 +6,8 @@ export interface Snackbar {
 export interface Loading {
 	isLoading: boolean;
 }
+
+export interface TabElement {
+	title: string;
+	element: JSX.Element;
+}

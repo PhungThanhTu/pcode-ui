@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
 import CustomEditInput from '@/components/CustomEditInput';
-import PasswordChangeModal from '@/components/PasswordChangeModal';
+import PasswordChangeModal from '@/components/Course/PasswordChangeModal';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import styled from '@mui/material/styles/styled';
 

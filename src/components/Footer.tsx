@@ -9,7 +9,10 @@ const FooterBoxSx = {
 	height: 'auto',
 	backgroundColor: 'secondary',
 	paddingTop: '1rem',
-	paddingBottom: '1rem'
+	paddingBottom: '1rem',
+	'.MuiTypography-root': {
+		fontSize: '9pt'
+	}
 };
 
 export const Footer: FC = (): ReactElement => {

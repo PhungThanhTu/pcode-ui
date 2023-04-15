@@ -10,10 +10,10 @@ interface PropsWithChildrenOnly {
 }
 const LayoutBoxSx = {
 	width: '100%',
-	padding: '30px'
+	padding: '15px'
 };
 const DivStyle = {
-	marginTop: '70px',
+	marginTop: '50px',
 	minHeight: '100vh',
 	maxHeight: 'fit-content'
 };

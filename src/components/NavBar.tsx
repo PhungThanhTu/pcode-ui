@@ -67,6 +67,14 @@ const LinkAvatarSx = {
 	alignItems: 'center',
 	justifyContent: 'center'
 };
+const ToolBarSx = {
+	display: 'flex',
+	flexDirection: 'row',
+	justifyContent: 'space-between',
+	maxHeight: '55px',
+	minHeight: '55px !important'
+};
+
 export default function NavBar() {
 	const dispatch = useDispatch();
 	const { profile } = useSelector(getAuth);
@@ -97,7 +105,7 @@ export default function NavBar() {
 		<Box>
 			<HideOnScroll>
 				<AppBar>
-					<Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+					<Toolbar sx={ToolBarSx}>
 						<Box>
 							<Tooltip title="Menu">
 								<IconButton
@@ -130,7 +138,7 @@ export default function NavBar() {
 							</MenuItem>
 						</Menu>
 
-						<Typography color="white" variant="h5">
+						<Typography color="white" variant="h6">
 							Programming Learning Platform
 						</Typography>
 
