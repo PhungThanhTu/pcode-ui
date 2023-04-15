@@ -1,12 +1,15 @@
 import { LoginPage } from './pages/LoginPage';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { RegisterPage } from './pages/RegisterPage';
 import { InDevelopmentPage } from './pages/InDevelopmentPage';
 import { useDispatch } from 'react-redux';
 import { useCallback, useEffect } from 'react';
 import { fetchProfile } from './slices/auth.slice';
 import ProtectedRoute from './router/ProtectedRoute';
-import Profile from './pages/ProfilePage';
+import ProfilePage from './pages/ProfilePage';
+import CoursesPage from './pages/CoursesPage';
+import CourseDialog from './components/CourseDialog';
+import CoursePage from './pages/CoursePage';
 
 function App() {
 	const dispatch = useDispatch();
@@ -22,8 +25,11 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route element={<ProtectedRoute />}>
-					<Route path="/" element={<InDevelopmentPage />} />
-					<Route path="/profile" element={<Profile />} />
+					<Route index path="/" element={<Navigate to="/course" />} />
+					<Route path="/course" element={<CoursesPage />} />
+					<Route path="/course/:code" element={<CoursePage />} />
+					<Route path="/invitation/:code" element={<CourseDialog />} />
+					<Route path="/profile" element={<ProfilePage />} />
 				</Route>
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />

@@ -1,4 +1,6 @@
-import * as React from 'react';
+import Typography from '@mui/material/Typography';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
+import Slide from '@mui/material/Slide';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,9 +15,9 @@ import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
 import Tooltip from '@mui/material/Tooltip';
 import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
 
-import { Slide, Typography, useScrollTrigger } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { MouseEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../slices/auth.slice';
 import { getAuth } from '@/selectors/auth.selector';
@@ -59,21 +61,34 @@ const AvatarMenuPaper = {
 		}
 	}
 };
+const LinkAvatarSx = {
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	justifyContent: 'center'
+};
+const ToolBarSx = {
+	display: 'flex',
+	flexDirection: 'row',
+	justifyContent: 'space-between',
+	maxHeight: '55px',
+	minHeight: '55px !important'
+};
 
 export default function NavBar() {
 	const dispatch = useDispatch();
 	const { profile } = useSelector(getAuth);
 
-	const [hamAnchorEl, setHamAnchorEl] = React.useState<null | HTMLElement>(null);
-	const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null);
+	const [hamAnchorEl, setHamAnchorEl] = useState<null | HTMLElement>(null);
+	const [avatarAnchorEl, setAvatarAnchorEl] = useState<null | HTMLElement>(null);
 
 	const hamMenuOpen = Boolean(hamAnchorEl);
 	const avatarMenuOpen = Boolean(avatarAnchorEl);
 
-	const handleAvatarMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+	const handleAvatarMenuOpen = (event: MouseEvent<HTMLElement>) => {
 		setAvatarAnchorEl(event.currentTarget);
 	};
-	const handleHamMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+	const handleHamMenuOpen = (event: MouseEvent<HTMLElement>) => {
 		setHamAnchorEl(event.currentTarget);
 	};
 
@@ -90,7 +105,7 @@ export default function NavBar() {
 		<Box>
 			<HideOnScroll>
 				<AppBar>
-					<Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+					<Toolbar sx={ToolBarSx}>
 						<Box>
 							<Tooltip title="Menu">
 								<IconButton
@@ -116,9 +131,14 @@ export default function NavBar() {
 									Home
 								</Link>
 							</MenuItem>
+							<MenuItem>
+								<Link component={RouterLink} to="/course" underline="none" color="inherit">
+									Course
+								</Link>
+							</MenuItem>
 						</Menu>
 
-						<Typography color="white" variant="h5">
+						<Typography color="white" variant="h6">
 							Programming Learning Platform
 						</Typography>
 
@@ -147,8 +167,14 @@ export default function NavBar() {
 							anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 						>
 							<MenuItem>
-								<Avatar />
-								<Link component={RouterLink} to="/profile" underline="none" color="inherit">
+								<Link
+									component={RouterLink}
+									to="/profile"
+									underline="none"
+									color="inherit"
+									sx={LinkAvatarSx}
+								>
+									<Avatar />
 									Profile
 								</Link>
 							</MenuItem>

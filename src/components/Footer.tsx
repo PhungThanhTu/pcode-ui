@@ -1,14 +1,21 @@
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+
 import { FC, ReactElement } from 'react';
-import { Box, Container, Grid, Typography } from '@mui/material';
+const FooterBoxSx = {
+	width: '100%',
+	height: 'auto',
+	backgroundColor: 'secondary',
+	paddingTop: '1rem',
+	paddingBottom: '1rem',
+	'.MuiTypography-root': {
+		fontSize: '9pt'
+	}
+};
 
 export const Footer: FC = (): ReactElement => {
-	const FooterBoxSx = {
-		width: '100%',
-		height: 'auto',
-		backgroundColor: 'secondary',
-		paddingTop: '1rem',
-		paddingBottom: '1rem'
-	};
 	return (
 		<Box sx={FooterBoxSx}>
 			<Container maxWidth="lg">

@@ -1,13 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import EditIcon from '@mui/icons-material/Edit';
-import Grid from '@mui/material/Grid';
 import CancelIcon from '@mui/icons-material/Cancel';
 import TextField from '@mui/material/TextField/TextField';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
+import styled from '@mui/material/styles/styled';
+
+import { useEffect, useState, Fragment } from 'react';
 import { labelToProperty } from '@/utils/convert';
 
 export const CustomEditIcon = styled(EditIcon)(({ theme }) => ({
@@ -24,73 +23,95 @@ export const CustomCancelIcon = styled(CancelIcon)(({ theme }) => ({
 	cursor: 'pointer'
 }));
 
-function CustomEditInput(props: any) {
-	const [isEdit, setIsEdit] = React.useState(false);
+interface CustomEditInputProps {
+	onChange: Function;
+	onSave: Function;
+	onCancel: Function;
+	value?: string;
+	label: string;
+	isNotDisplay?: Boolean;
+	isAvatarChange?: Boolean;
+}
+
+const CustomEditInput = (props: CustomEditInputProps) => {
+	const [isEdit, setIsEdit] = useState(false);
+
+	const { label, value, onChange, onSave, onCancel, isNotDisplay, isAvatarChange } = props;
 	const name = labelToProperty(props.label);
+
+	const RenderFields = () => {
+		if (isEdit) {
+			return !isNotDisplay ? (
+				<TextField
+					name={name}
+					fullWidth
+					variant="standard"
+					value={value ? value : ''}
+					onChange={(e) => {
+						onChange(e);
+					}}
+				/>
+			) : null;
+		} else {
+			return !isNotDisplay ? <Typography variant="body1">{value ? value : 'null'}</Typography> : null;
+		}
+	};
+	const RenderButtons = () => {
+		if (isEdit) {
+			return (
+				<Fragment>
+					<CustomSaveIcon
+						onClick={() => {
+							onSave();
+							setIsEdit(false);
+						}}
+					/>
+					<CustomCancelIcon
+						onClick={() => {
+							onCancel(name);
+							setIsEdit(false);
+						}}
+					/>
+				</Fragment>
+			);
+		} else {
+			return !isNotDisplay ? (
+				<CustomEditIcon
+					onClick={() => {
+						setIsEdit(true);
+					}}
+				/>
+			) : null;
+		}
+	};
+	useEffect(() => {
+		if (isAvatarChange) {
+			setIsEdit(true);
+		} else {
+			setIsEdit(false);
+		}
+	}, [isAvatarChange]);
 
 	return (
 		<Stack direction="row" spacing={1} height="100%" alignItems="center" justifyContent="center">
-			<Stack width="20%">
-				<Typography variant="subtitle1">{props.label}</Typography>
-			</Stack>
-			<Stack flexGrow={1}>
-				{isEdit ? (
-					<TextField
-						name={name}
-						fullWidth
-						variant="standard"
-						value={props.value ? props.value : ''}
-						onChange={props.onChange}
-					/>
-				) : (
-					<Typography variant="body1">{props.value ? props.value : 'null'}</Typography>
-				)}
-			</Stack>
-			<React.Fragment>
+			<Stack width="20%">{!isNotDisplay ? <Typography variant="subtitle1">{label}</Typography> : null}</Stack>
+			<Stack flexGrow={1}>{RenderFields()}</Stack>
+			<Fragment>
 				{
 					<Stack
-						width="15%"
+						flexGrow={1}
 						direction="row"
 						spacing={2}
 						height="100%"
 						alignItems="center"
 						justifyContent="center"
 					>
-						{isEdit ? (
-							<React.Fragment>
-								<CustomSaveIcon
-									onClick={() => {
-										props.onSave();
-										setIsEdit(false);
-									}}
-								/>
-								<CustomCancelIcon
-									onClick={() => {
-										setIsEdit(false);
-										props.onCancel(name);
-									}}
-								/>
-							</React.Fragment>
-						) : (
-							<CustomEditIcon
-								onClick={() => {
-									setIsEdit(true);
-								}}
-							/>
-						)}
+						{RenderButtons()}
 					</Stack>
 				}
-			</React.Fragment>
+			</Fragment>
 		</Stack>
 	);
-}
-
-CustomEditInput.propTypes = {
-	onChange: PropTypes.func.isRequired,
-	onSave: PropTypes.func.isRequired,
-	onCancel: PropTypes.func.isRequired,
-	value: PropTypes.string,
-	label: PropTypes.string.isRequired
 };
 
 export default CustomEditInput;
