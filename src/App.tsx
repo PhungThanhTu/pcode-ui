@@ -8,7 +8,7 @@ import { fetchProfile } from './slices/auth.slice';
 import ProtectedRoute from './router/ProtectedRoute';
 import ProfilePage from './pages/ProfilePage';
 import CoursesPage from './pages/CoursesPage';
-import CourseDialog from './components/CourseDialog';
+import CourseDialog from './components/Course/CourseDialog';
 import CoursePage from './pages/CoursePage';
 
 function App() {

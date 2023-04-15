@@ -3,9 +3,9 @@ import Grid from '@mui/material/Grid';
 import CreateIcon from '@mui/icons-material/Create';
 import SchoolIcon from '@mui/icons-material/School';
 
-import CourseCard from '@/components/CourseCard';
-import CreateCourseModal from '@/components/CreateCourseModal';
-import JoinCourseModal from '@/components/JoinCourseModal';
+import CourseCard from '@/components/Course/CourseCard';
+import CreateCourseModal from '@/components/Course/CreateCourseModal';
+import JoinCourseModal from '@/components/Course/JoinCourseModal';
 
 import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { CustomIconButton } from '@/components/CustomButton';

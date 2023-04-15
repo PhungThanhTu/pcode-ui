@@ -11,7 +11,7 @@ import courseApi from '@/api/courseApi';
 import { useNavigate, useParams } from 'react-router';
 import { Course } from '@/types/course.type';
 import { useDispatch } from 'react-redux';
-import { CircleLoading } from './Loading';
+import { CircleLoading } from '@/components/Loading';
 import { joinCourse } from '@/slices/course.slice';
 
 const CourseDialog = () => {
