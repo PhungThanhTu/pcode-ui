@@ -60,7 +60,7 @@ const ProfilePage = () => {
 	const { B64Value, getImageB64Value } = useImageFileReader();
 
 	const pictureRef = useRef<HTMLInputElement>(null);
-	const avatarRef = useRef<HTMLElement>(null);
+	const avatarRef = useRef<HTMLDivElement>(null);
 	const [ProfileForm, setProfileForm] = useState({ ...profile });
 	const [OpenPasswordChange, setOpenPasswordChange] = useState(false);
 	const [IsAvatarChange, setIsAvatarChange] = useState(false);

@@ -1,16 +1,18 @@
+import Exercise from '@/components/Course/Tab/Exercise';
+import General from '@/components/Course/Tab/General';
 import CustomTab from '@/components/CustomTab';
-import InDevelopment from '@/components/InDevelopment';
+
 import { TabElement } from '@/types/utility.type';
 
 const CoursePage = () => {
 	const tabs: TabElement[] = [
 		{
 			title: 'General',
-			element: <InDevelopment />
+			element: <General />
 		},
 		{
 			title: 'Exercise',
-			element: <InDevelopment />
+			element: <Exercise />
 		}
 	];
 	return <CustomTab ListOfTabs={tabs} />;
