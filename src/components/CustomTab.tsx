@@ -25,12 +25,16 @@ const CustomTab = (props: CustomTabProps) => {
 				<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 					<TabList onChange={handleChangeTab}>
 						{ListOfTabs.map((item, index) => {
-							return <Tab label={item.title.toUpperCase()} value={`${index + 1}`} />;
+							return <Tab key={index} label={item.title.toUpperCase()} value={`${index + 1}`} />;
 						})}
 					</TabList>
 				</Box>
 				{ListOfTabs.map((item, index) => {
-					return <TabPanel value={`${index + 1}`}>{item.element}</TabPanel>;
+					return (
+						<TabPanel key={index} value={`${index + 1}`}>
+							{item.element}
+						</TabPanel>
+					);
 				})}
 			</TabContext>
 		</Box>

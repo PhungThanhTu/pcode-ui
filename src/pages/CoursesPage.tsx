@@ -58,7 +58,7 @@ const CoursesPage = () => {
 		else error();
 	};
 	const onCourseDirect = (code: string) => {
-		navigate(`/course/${code}`);
+		navigate(`/course/${code}`, { state: courses?.filter((item) => item.Code === code)[0] });
 	};
 	useEffect(() => {
 		dispatch(fetchCourse());

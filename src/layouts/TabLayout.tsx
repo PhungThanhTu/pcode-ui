@@ -9,8 +9,8 @@ interface PropsWithChildrenOnly {
 const BoxHeaderSx = {
 	height: '100%',
 	width: '100%',
-	'-webkit-font-smoothing': 'antialiased',
-	'-webkit-tap-highlight-color': 'transparent',
+	WebkitFontSmoothing: 'antialiased',
+	WebkitTapHighlightColor: 'transparent',
 	borderRadius: '5px',
 	marginTop: '1.5rem',
 	overflow: 'hidden'
@@ -28,12 +28,12 @@ const BoxRightBodySx = {
 	flexGrow: '1',
 	height: '100%',
 
-	'-webkit-font-smoothing': 'antialiased'
+	WebkitFontSmoothing: 'antialiased'
 };
 
 const TabLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
 	return (
-		<Stack flexDirection="column" display="flex" width="100%" paddingX="10%">
+		<Stack flexDirection="column" display="flex" width="100%" paddingX="7%">
 			<Box sx={BoxHeaderSx}>{props.header}</Box>
 			<Stack flexDirection="row" marginTop="1.5rem">
 				<Box sx={BoxLeftBodySx}>{props.leftBody}</Box>

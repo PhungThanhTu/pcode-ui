@@ -3,15 +3,12 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Avatar from '@mui/material/Avatar';
 import ShareIcon from '@mui/icons-material/Share';
 import Tooltip from '@mui/material/Tooltip';
 
 import { useEffect, useState, MouseEvent } from 'react';
 import { Course } from '@/types/course.type';
-
-const borderColor = 'rgb(225,227,230)';
+import { borderColor } from '@/style/Variables';
 
 // const AvatarSx = {
 // 	position: 'absolute',
