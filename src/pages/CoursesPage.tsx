@@ -4,11 +4,11 @@ import CreateIcon from '@mui/icons-material/Create';
 import SchoolIcon from '@mui/icons-material/School';
 
 import CourseCard from '@/components/Course/CourseCard';
-import CreateCourseModal from '@/components/Course/CreateCourseModal';
-import JoinCourseModal from '@/components/Course/JoinCourseModal';
+import CourseCreateModal from '@/components/Course/CourseCreateModal';
+import CourseJoinModal from '@/components/Course/CourseJoinModal';
 
 import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { CustomIconButton } from '@/components/CustomButton';
+import { CustomIconButton } from '@/components/Custom/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCourse, fetchCourse } from '@/slices/course.slice';
 import { getCourses } from '@/selectors/course.selector';
@@ -104,7 +104,7 @@ const CoursesPage = () => {
 					})}
 				</Grid>
 			)}
-			<CreateCourseModal
+			<CourseCreateModal
 				open={OpenCreateCourse}
 				onCreate={onCreate}
 				onChange={onChange}
@@ -113,7 +113,7 @@ const CoursesPage = () => {
 					setOpenCreateCourse(false);
 				}}
 			/>
-			<JoinCourseModal
+			<CourseJoinModal
 				open={OpenJoinCourse}
 				onJoin={onJoin}
 				onCancel={() => {

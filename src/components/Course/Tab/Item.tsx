@@ -1,5 +1,6 @@
-const Item = () => {
-	return <div>Item</div>;
-};
+import Box from '@mui/material/Box';
 
-export default Item;
+interface DocumentItemProps {}
+export const DocumentItem = (props: DocumentItemProps) => {
+	return <Box></Box>;
+};

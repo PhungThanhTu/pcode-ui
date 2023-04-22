@@ -10,20 +10,20 @@ import Button from '@mui/material/Button';
 import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
 import { BoxModalSx } from '@/style/BoxModalSx';
 
-interface PasswordChangeModalProps {
+interface ChangePasswordModalProps {
 	open: boolean;
 	onSave: Function;
 	onClose: Function;
 }
 
-interface PasswordChangeFormProps {
+interface ChangePasswordFormProps {
 	password: string;
 	newPassword: string;
 	reNewPassword: string;
 }
 
-const PasswordChangeModal = ({ open, onSave, onClose }: PasswordChangeModalProps) => {
-	const initialForm: PasswordChangeFormProps = {
+const ChangePasswordModal = ({ open, onSave, onClose }: ChangePasswordModalProps) => {
+	const initialForm: ChangePasswordFormProps = {
 		password: '',
 		newPassword: '',
 		reNewPassword: ''
@@ -128,4 +128,4 @@ const PasswordChangeModal = ({ open, onSave, onClose }: PasswordChangeModalProps
 	);
 };
 
-export default PasswordChangeModal;
+export default ChangePasswordModal;

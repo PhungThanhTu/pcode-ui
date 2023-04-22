@@ -1,7 +1,9 @@
 import { Box, Divider, Link, TextField, Typography, CircularProgress, Stack } from '@mui/material';
+
 import AuthFormLayout from '../layouts/AuthFormLayout';
+
 import { ChangeEvent, useEffect, useState } from 'react';
-import { CustomButton } from './CustomButton';
+import { CustomButton } from '@/components/Custom/CustomButton';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { requestRegister } from '../slices/register.slice';

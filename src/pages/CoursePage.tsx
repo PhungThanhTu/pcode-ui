@@ -1,6 +1,6 @@
 import Exercise from '@/components/Course/Tab/Exercise';
 import General from '@/components/Course/Tab/General';
-import CustomTab from '@/components/CustomTab';
+import CustomTab from '@/components/Custom/CustomTab';
 import { LinearLoading } from '@/components/Loading';
 
 import { TabElement } from '@/types/utility.type';
