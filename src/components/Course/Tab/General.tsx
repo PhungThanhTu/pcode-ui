@@ -4,20 +4,19 @@ import ListItems from './ListItems';
 import CourseCodeBox from '../CourseCodeBox';
 
 import { Course } from '@/types/course.type';
-import { useSelector } from 'react-redux';
-import { getProfile } from '@/selectors/auth.selector';
+
 
 interface GeneralProps {
 	course: Course;
+	customizeButton: Function;
 }
 const General = (props: GeneralProps) => {
-	const { course } = props;
 
-	const UserProfile = useSelector(getProfile);
+	const { course, customizeButton } = props;
 
 	return (
 		<TabLayout
-			header={<Header background={course.courseTheme} title={course.title} subtitle={course.courseSubject} />}
+			header={<Header background={course.courseTheme} title={course.title} subtitle={course.courseSubject}  customizeButton={customizeButton} />}
 			leftBody={<CourseCodeBox code={course.Code} />}
 			rightBody={<ListItems list={[]} />}
 		/>

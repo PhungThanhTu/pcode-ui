@@ -55,6 +55,7 @@ const CourseDialog = () => {
 			fetchCourse(code);
 		}
 	}, [code]);
+	
 	return (
 		<Dialog open={Open}>
 			{Loading ? (
