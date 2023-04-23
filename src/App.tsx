@@ -27,7 +27,7 @@ function App() {
 				<Route element={<ProtectedRoute />}>
 					<Route index path="/" element={<Navigate to="/course" />} />
 					<Route path="/course" element={<CoursesPage />} />
-					<Route path="/course/:code" element={<CoursePage />} />
+					<Route path="/course/:id" element={<CoursePage />} />
 					<Route path="/invitation/:code" element={<CourseDialog />} />
 					<Route path="/profile" element={<ProfilePage />} />
 				</Route>

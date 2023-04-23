@@ -1,5 +1,11 @@
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import CropFreeIcon from '@mui/icons-material/CropFree';
+import Tooltip from '@mui/material/Tooltip';
+
+import { MouseEvent, useState, useEffect } from 'react';
 import { borderColor } from '@/style/Variables';
-import { Box, Typography } from '@mui/material';
+import { CustomOnlyIconButton } from '../Custom/CustomButton';
 
 const BoxContainerSx = {
 	border: `solid 1px ${borderColor}`,
@@ -9,14 +15,40 @@ const BoxContainerSx = {
 	alighItems: 'center',
 	justifyContent: 'center'
 };
+
 interface CourseCodeBox {
 	code: string;
 }
 
 const CourseCodeBox = (props: CourseCodeBox) => {
+	const [Copied, setCopied] = useState(false);
+
+	const onCopy = async (e: MouseEvent<HTMLButtonElement>) => {
+		e.stopPropagation();
+		setCopied(true);
+		await navigator.clipboard.writeText(props.code);
+	};
+
+	useEffect(() => {
+		if (Copied) {
+			const timeout = setTimeout(() => {
+				setCopied(false);
+			}, 2000);
+			return () => {
+				clearTimeout(timeout);
+			};
+		}
+	}, [Copied]);
 	return (
 		<Box sx={BoxContainerSx}>
-			<Typography variant="h5">{props.code}</Typography>
+			<Typography display="flex" alignItems="center" justifyContent="center" variant="h5">
+				{props.code}
+			</Typography>
+			<CustomOnlyIconButton onClick={onCopy}>
+				<Tooltip title={Copied ? 'Copied to clipboard' : 'Get this course code'}>
+					<CropFreeIcon />
+				</Tooltip>
+			</CustomOnlyIconButton>
 		</Box>
 	);
 };

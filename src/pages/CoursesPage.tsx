@@ -57,8 +57,8 @@ const CoursesPage = () => {
 		if (validInvitationCode.test(code)) navigate(`/invitation/${code}`);
 		else error();
 	};
-	const onCourseDirect = (code: string) => {
-		navigate(`/course/${code}`, { state: courses?.filter((item) => item.Code === code)[0] });
+	const onCourseDirect = (id: string) => {
+		navigate(`/course/${id}`, { state: courses?.filter((item) => item.id === id)[0] });
 	};
 	useEffect(() => {
 		dispatch(fetchCourse());
@@ -94,7 +94,13 @@ const CoursesPage = () => {
 			{loading ? (
 				<LinearLoading />
 			) : (
-				<Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} alignItems="center">
+				<Grid
+					width="100%"
+					container
+					rowSpacing={2}
+					columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }}
+					alignItems="center"
+				>
 					{courses?.map((item, index) => {
 						return (
 							<Grid key={index} item width="100%" xs={12} sm={6} md={4} lg={3}>
