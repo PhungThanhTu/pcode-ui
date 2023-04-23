@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { BoxModalSx } from '@/style/BoxModalSx';
 import { CreateCourse } from '@/types/course.type';
 
-interface CreateCourseModalProps {
+interface CourseCreateModalProps {
 	open: boolean;
 	onCreate: Function;
 	onCancel: Function;
@@ -17,7 +17,7 @@ interface CreateCourseModalProps {
 	createCourseValues: CreateCourse;
 }
 
-const CreateCourseModal = (props: CreateCourseModalProps) => {
+const CourseCreateModal = (props: CourseCreateModalProps) => {
 	const { open, onCreate, onCancel, onChange, createCourseValues } = props;
 	const [Error, setError] = useState(false);
 
@@ -90,4 +90,4 @@ const CreateCourseModal = (props: CreateCourseModalProps) => {
 	);
 };
 
-export default CreateCourseModal;
+export default CourseCreateModal;

@@ -2,16 +2,13 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Avatar from '@mui/material/Avatar';
 import ShareIcon from '@mui/icons-material/Share';
 import Tooltip from '@mui/material/Tooltip';
 
 import { useEffect, useState, MouseEvent } from 'react';
 import { Course } from '@/types/course.type';
-
-const borderColor = 'rgb(225,227,230)';
+import { borderColor } from '@/style/Variables';
+import { CustomOnlyIconButton } from '../Custom/CustomButton';
 
 // const AvatarSx = {
 // 	position: 'absolute',
@@ -60,9 +57,9 @@ interface CourseCardProps {
 	onDirect: Function;
 }
 const CourseCard = (props: CourseCardProps) => {
-	const [Copied, setCopied] = useState(false);
-
 	const { course, onDirect } = props;
+
+	const [Copied, setCopied] = useState(false);
 
 	const Sx = course.courseTheme
 		? {
@@ -89,7 +86,7 @@ const CourseCard = (props: CourseCardProps) => {
 	}, [Copied]);
 
 	return (
-		<Card sx={CardSx} onClick={() => onDirect(course.Code)}>
+		<Card sx={CardSx} onClick={() => onDirect(course.id)}>
 			<CardHeader
 				sx={Sx}
 				title={
@@ -101,11 +98,11 @@ const CourseCard = (props: CourseCardProps) => {
 			/>
 			<CardContent sx={CardContentSx}></CardContent>
 			<CardActions disableSpacing sx={CardActionSx}>
-				<Tooltip title={Copied ? 'Copied to clipboard' : 'Get invitation link for this course'}>
-					<IconButton onClick={(e) => onCopy(e)}>
+				<CustomOnlyIconButton onClick={onCopy}>
+					<Tooltip title={Copied ? 'Copied to clipboard' : 'Get invitation link for this course'}>
 						<ShareIcon />
-					</IconButton>
-				</Tooltip>
+					</Tooltip>
+				</CustomOnlyIconButton>
 			</CardActions>
 		</Card>
 	);

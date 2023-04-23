@@ -1,5 +1,7 @@
 import Button from '@mui/material/Button';
 import styled from '@mui/system/styled';
+import IconButton from '@mui/material/IconButton';
+import { SxProps } from '@mui/material';
 
 import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled';
 
@@ -43,8 +45,28 @@ export const CustomButton = ({ content, onClick, type }: any) => (
 		{content}
 	</StyledUnstyledButton>
 );
-export const CustomIconButton = ({ content, onClick, type, startIcon }: any) => (
-	<Button type={type} onClick={onClick} startIcon={startIcon}>
+
+export const CustomIconButton = ({ content, sx, variant, type, onClick, startIcon, color }: any) => (
+	<Button color={color} sx={sx} variant={variant} type={type} onClick={onClick} startIcon={startIcon}>
 		{content}
 	</Button>
+);
+
+interface CustomOnlyIconButtonProps {
+	sx?: SxProps;
+	children: any;
+	variant?: any;
+	color?: any;
+	onClick: Function;
+}
+export const CustomOnlyIconButton = (props: CustomOnlyIconButtonProps) => (
+	<IconButton
+		color={props.color}
+		sx={props.sx}
+		onClick={(e) => {
+			props.onClick(e);
+		}}
+	>
+		{props.children}
+	</IconButton>
 );

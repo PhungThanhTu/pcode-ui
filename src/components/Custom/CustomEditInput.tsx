@@ -33,7 +33,7 @@ interface CustomEditInputProps {
 	isAvatarChange?: Boolean;
 }
 
-const CustomEditInput = (props: CustomEditInputProps) => {
+export const CustomEditInput = (props: CustomEditInputProps) => {
 	const [isEdit, setIsEdit] = useState(false);
 
 	const { label, value, onChange, onSave, onCancel, isNotDisplay, isAvatarChange } = props;
@@ -113,5 +113,3 @@ const CustomEditInput = (props: CustomEditInputProps) => {
 		</Stack>
 	);
 };
-
-export default CustomEditInput;

@@ -1,4 +1,3 @@
-import { useState, useEffect, Fragment } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,10 +7,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
 import courseApi from '@/api/courseApi';
 
+import { useState, useEffect, Fragment } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { Course } from '@/types/course.type';
 import { useDispatch } from 'react-redux';
-import { CircleLoading } from './Loading';
+import { CircleLoading } from '@/components/Loading';
 import { joinCourse } from '@/slices/course.slice';
 
 const CourseDialog = () => {
@@ -55,6 +55,7 @@ const CourseDialog = () => {
 			fetchCourse(code);
 		}
 	}, [code]);
+	
 	return (
 		<Dialog open={Open}>
 			{Loading ? (

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeSnackbar } from '@/slices/snackbar.slice';
 import { getSnackbar } from '@/selectors/snackbar.selector';
 
-const CustomSnackbar = () => {
+const NotificationSnackbar = () => {
 	let dispatch = useDispatch();
 	const { state, type, message } = useSelector(getSnackbar);
 	const Alert = forwardRef(function Alert(props: any, ref: any) {
@@ -25,4 +25,4 @@ const CustomSnackbar = () => {
 	);
 };
 
-export default CustomSnackbar;
+export default NotificationSnackbar;

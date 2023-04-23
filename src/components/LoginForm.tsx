@@ -4,7 +4,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuth } from '../selectors/auth.selector';
 import { login } from '@/slices/auth.slice';
-import { CustomButton } from './CustomButton';
+import { CustomButton } from '@/components/Custom/CustomButton';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 export const LoginForm = () => {

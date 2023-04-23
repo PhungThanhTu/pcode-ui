@@ -4,14 +4,15 @@ import Tyography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
-import CustomEditInput from '@/components/CustomEditInput';
-import PasswordChangeModal from '@/components/Course/PasswordChangeModal';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import styled from '@mui/material/styles/styled';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
+import ChangePasswordModal from '@/components/ChangePasswordModal';
 
 import { ChangeEvent, useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CustomButton } from '@/components/CustomButton';
+import { CustomEditInput } from '@/components/Custom/CustomEditInput';
+import { CustomButton } from '@/components/Custom/CustomButton';
 import { getAuth } from '../selectors/auth.selector';
 import { PasswordChangeRequest, UserProfile } from '@/types/auth.type';
 import { changePassword, updateProfile } from '@/slices/profile.slice';
@@ -60,7 +61,7 @@ const ProfilePage = () => {
 	const { B64Value, getImageB64Value } = useImageFileReader();
 
 	const pictureRef = useRef<HTMLInputElement>(null);
-	const avatarRef = useRef<HTMLElement>(null);
+	const avatarRef = useRef<HTMLDivElement>(null);
 	const [ProfileForm, setProfileForm] = useState({ ...profile });
 	const [OpenPasswordChange, setOpenPasswordChange] = useState(false);
 	const [IsAvatarChange, setIsAvatarChange] = useState(false);
@@ -227,7 +228,7 @@ const ProfilePage = () => {
 					</Grid>
 				</Grid>
 			</Grid>
-			<PasswordChangeModal
+			<ChangePasswordModal
 				open={OpenPasswordChange}
 				onClose={() => {
 					setOpenPasswordChange(false);

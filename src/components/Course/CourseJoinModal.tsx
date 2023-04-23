@@ -8,12 +8,12 @@ import Stack from '@mui/material/Stack';
 import { ChangeEvent, useState } from 'react';
 import { BoxModalSx } from '@/style/BoxModalSx';
 
-interface JoinCourseModalProps {
+interface CourseJoinModalProps {
 	open: boolean;
 	onJoin: Function;
 	onCancel: Function;
 }
-const JoinCourseModal = (props: JoinCourseModalProps) => {
+const CourseJoinModal = (props: CourseJoinModalProps) => {
 	const { open, onJoin, onCancel } = props;
 
 	const [Code, setCode] = useState('');
@@ -71,4 +71,4 @@ const JoinCourseModal = (props: JoinCourseModalProps) => {
 	);
 };
 
-export default JoinCourseModal;
+export default CourseJoinModal;

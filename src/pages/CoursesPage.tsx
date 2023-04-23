@@ -3,12 +3,12 @@ import Grid from '@mui/material/Grid';
 import CreateIcon from '@mui/icons-material/Create';
 import SchoolIcon from '@mui/icons-material/School';
 
-import CourseCard from '@/components/CourseCard';
-import CreateCourseModal from '@/components/CreateCourseModal';
-import JoinCourseModal from '@/components/JoinCourseModal';
+import CourseCard from '@/components/Course/CourseCard';
+import CourseCreateModal from '@/components/Course/CourseCreateModal';
+import CourseJoinModal from '@/components/Course/CourseJoinModal';
 
 import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { CustomIconButton } from '@/components/CustomButton';
+import { CustomIconButton } from '@/components/Custom/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCourse, fetchCourse } from '@/slices/course.slice';
 import { getCourses } from '@/selectors/course.selector';
@@ -57,8 +57,8 @@ const CoursesPage = () => {
 		if (validInvitationCode.test(code)) navigate(`/invitation/${code}`);
 		else error();
 	};
-	const onCourseDirect = (code: string) => {
-		navigate(`/course/${code}`);
+	const onCourseDirect = (id: string) => {
+		navigate(`/course/${id}`, { state: courses?.filter((item) => item.id === id)[0] });
 	};
 	useEffect(() => {
 		dispatch(fetchCourse());
@@ -94,7 +94,13 @@ const CoursesPage = () => {
 			{loading ? (
 				<LinearLoading />
 			) : (
-				<Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }} alignItems="center">
+				<Grid
+					width="100%"
+					container
+					rowSpacing={2}
+					columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }}
+					alignItems="center"
+				>
 					{courses?.map((item, index) => {
 						return (
 							<Grid key={index} item width="100%" xs={12} sm={6} md={4} lg={3}>
@@ -104,7 +110,7 @@ const CoursesPage = () => {
 					})}
 				</Grid>
 			)}
-			<CreateCourseModal
+			<CourseCreateModal
 				open={OpenCreateCourse}
 				onCreate={onCreate}
 				onChange={onChange}
@@ -113,7 +119,7 @@ const CoursesPage = () => {
 					setOpenCreateCourse(false);
 				}}
 			/>
-			<JoinCourseModal
+			<CourseJoinModal
 				open={OpenJoinCourse}
 				onJoin={onJoin}
 				onCancel={() => {

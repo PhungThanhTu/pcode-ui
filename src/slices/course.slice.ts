@@ -23,7 +23,8 @@ const courseSlice = createSlice({
 				Code: payload.Code,
 				CreatorName: '',
 				PlpRole: 1,
-				theme: payload.theme,
+				courseTheme: payload.courseTheme,
+				courseSubject: payload.courseSubject,
 				title: payload.title
 			};
 			state.courses?.push(Course);

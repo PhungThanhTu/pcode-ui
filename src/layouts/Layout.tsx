@@ -2,7 +2,8 @@ import NavBar from '../components/NavBar';
 import React from 'react';
 import Footer from '../components/Footer';
 import Box from '@mui/material/Box';
-import CustomSnackbar from '@/components/CustomSnackbar';
+import NotificationSnackbar from '@/components/Custom/CustomSnackbar';
+
 import { BackdropLoading } from '@/components/Loading';
 
 interface PropsWithChildrenOnly {
@@ -25,7 +26,7 @@ const Layout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWith
 				<Box sx={LayoutBoxSx}>{props.children}</Box>
 			</div>
 			<Footer />
-			<CustomSnackbar />
+			<NotificationSnackbar />
 			<BackdropLoading />
 		</React.Fragment>
 	);

@@ -8,7 +8,7 @@ import { fetchProfile } from './slices/auth.slice';
 import ProtectedRoute from './router/ProtectedRoute';
 import ProfilePage from './pages/ProfilePage';
 import CoursesPage from './pages/CoursesPage';
-import CourseDialog from './components/CourseDialog';
+import CourseDialog from './components/Course/CourseDialog';
 import CoursePage from './pages/CoursePage';
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
 				<Route element={<ProtectedRoute />}>
 					<Route index path="/" element={<Navigate to="/course" />} />
 					<Route path="/course" element={<CoursesPage />} />
-					<Route path="/course/:code" element={<CoursePage />} />
+					<Route path="/course/:id" element={<CoursePage />} />
 					<Route path="/invitation/:code" element={<CourseDialog />} />
 					<Route path="/profile" element={<ProfilePage />} />
 				</Route>
