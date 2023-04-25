@@ -27,7 +27,6 @@ const BoxRightBodySx = {
 	padding: '1rem',
 	flexGrow: '1',
 	height: '100%',
-
 	WebkitFontSmoothing: 'antialiased'
 };
 

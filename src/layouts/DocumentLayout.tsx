@@ -1,7 +1,9 @@
-import React from 'react';
+
+import { useState } from 'react';
 
 const DocumentLayout = () => {
-	return <div></div>;
+    return <div></div>;
+
 };
 
 export default DocumentLayout;
