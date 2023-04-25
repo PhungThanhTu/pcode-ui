@@ -12,7 +12,7 @@ import { CustomIconButton } from '@/components/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCourse, fetchCourse } from '@/slices/course.slice';
 import { getCourses } from '@/selectors/course.selector';
-import { CreateCourse } from '@/types/course.type';
+import { CreateCourseRequest } from '@/types/course.type';
 import { useImageFileReader } from '@/hook/useFileReader';
 import { useNavigate } from 'react-router';
 import { LinearLoading } from '@/components/Loading';
@@ -25,7 +25,7 @@ const CoursesPage = () => {
 	const { courses, loading } = useSelector(getCourses);
 	const { B64Value, getImageB64Value } = useImageFileReader();
 
-	const InitialForm: CreateCourse = {
+	const InitialForm: CreateCourseRequest = {
 		title: '',
 		subject: '',
 		theme: ''
@@ -33,7 +33,7 @@ const CoursesPage = () => {
 
 	const [OpenCreateCourse, setOpenCreateCourse] = useState(false);
 	const [OpenJoinCourse, setOpenJoinCourse] = useState(false);
-	const [CreateCourseForm, setCreateCourseForm] = useState<CreateCourse>(InitialForm);
+	const [CreateCourseForm, setCreateCourseForm] = useState<CreateCourseRequest>(InitialForm);
 
 	const { title, subject, theme } = CreateCourseForm;
 

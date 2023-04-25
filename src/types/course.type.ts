@@ -11,7 +11,7 @@ export interface Course {
 export interface JoinCourse {
 	Code: string;
 }
-export interface CreateCourse {
+export interface CreateCourseRequest {
 	title: string;
 	theme?: string | null | undefined;
 	subject?: string | null;

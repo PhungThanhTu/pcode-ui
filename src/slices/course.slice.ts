@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Course, CourseState, CreateCourse, CreateCourseResponse, JoinCourse } from '@/types/course.type';
+import { Course, CourseState, CreateCourseRequest, CreateCourseResponse, JoinCourse } from '@/types/course.type';
 
 export const initialState: CourseState = {
 	courses: undefined,
@@ -13,7 +13,7 @@ const courseSlice = createSlice({
 		fetchCourse: (state) => {
 			state.loading = true;
 		},
-		createCourse: (state, { payload }: PayloadAction<CreateCourse>) => {},
+		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => {},
 		renameCourse: (state, { payload }: PayloadAction<Course>) => {},
 		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => {},
 		createCourseSuccess: (state, { payload }: PayloadAction<CreateCourseResponse>) => {
