@@ -6,5 +6,5 @@ export const BoxModalSx = {
 	width: 'fit-content',
 	bgcolor: 'background.paper',
 	p: 4,
-	borderRadius: '4px',
+	borderRadius: '4px'
 };

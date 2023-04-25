@@ -11,11 +11,9 @@ import { useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 
 const CoursePage = () => {
-
 	const location = useLocation();
 	const navigate = useNavigate();
 	const UserProfile = useSelector(getProfile);
-
 
 	const [OpenCourseCustomize, setOpenCourseCustomize] = useState(false);
 
@@ -24,7 +22,14 @@ const CoursePage = () => {
 	const tabs: TabElement[] = [
 		{
 			title: 'General',
-			element: <General course={course} customizeButton={() => { setOpenCourseCustomize(true) }} />
+			element: (
+				<General
+					course={course}
+					customizeButton={() => {
+						setOpenCourseCustomize(true);
+					}}
+				/>
+			)
 		},
 		{
 			title: 'Exercise',
@@ -38,13 +43,19 @@ const CoursePage = () => {
 		}
 	}, [course]);
 
-	return course ?
+	return course ? (
 		<Fragment>
 			<CustomTab ListOfTabs={tabs} />
-			<CourseCustomizeModal open={OpenCourseCustomize} close={() => { setOpenCourseCustomize(false) }} />
+			<CourseCustomizeModal
+				open={OpenCourseCustomize}
+				close={() => {
+					setOpenCourseCustomize(false);
+				}}
+			/>
 		</Fragment>
-
-		: <LinearLoading />;
+	) : (
+		<LinearLoading />
+	);
 };
 
 export default CoursePage;

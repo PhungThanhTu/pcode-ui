@@ -21,7 +21,6 @@ interface CourseCodeBox {
 }
 
 const CourseCodeBox = (props: CourseCodeBox) => {
-	
 	const [Copied, setCopied] = useState(false);
 
 	const onCopy = async (e: MouseEvent<HTMLButtonElement>) => {
