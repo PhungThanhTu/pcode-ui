@@ -1,3 +1,4 @@
+// State and Variable interface
 export interface Course {
 	id: string;
 	CreatorId: string;
@@ -11,6 +12,13 @@ export interface Course {
 export interface JoinCourse {
 	Code: string;
 }
+
+export interface CourseState {
+	courses?: Array<Course>;
+	loading: boolean;
+}
+
+// API interface
 export interface CreateCourseRequest {
 	title: string;
 	theme?: string | null | undefined;
@@ -24,8 +32,4 @@ export interface CreateCourseResponse {
 	courseSubject: string;
 	courseTheme: string;
 	CreatorName: string;
-}
-export interface CourseState {
-	courses?: Array<Course>;
-	loading: boolean;
 }

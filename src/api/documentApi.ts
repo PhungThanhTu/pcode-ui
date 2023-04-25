@@ -1,26 +1,40 @@
 import { AxiosResponse } from 'axios';
 import protectedApi from './protectedApi';
-import { Course, CreateCourseRequest, CreateCourseResponse } from '@/types/course.type';
+import {
+	CreateDocumentRequest,
+	CreateDocumentResponse,
+	CreateDocumentContentRequest,
+	GetDocumentByIdResponse,
+	UpdateDocumentRequest
+} from '@/types/document.type';
 
 const documentApi = {
-	getAllCourses: async () => {
-		const result: AxiosResponse<Course[]> = await protectedApi.get('/course');
+	getDocumentById: async (id: string) => {
+		const result: AxiosResponse<GetDocumentByIdResponse> = await protectedApi.get(`/document/${id}`);
 		return result;
 	},
-	getCourse: async (code: string) => {
-		const result: AxiosResponse<Course> = await protectedApi.get(`/course/info/${code}`);
+	createDocument: async (body: CreateDocumentRequest) => {
+		const result: AxiosResponse<CreateDocumentResponse> = await protectedApi.post('/document', body);
 		return result;
 	},
-	joinCourse: async (code: string) => {
-		const result: any = await protectedApi.post(`/course/join/${code}`);
+	createDocumentContent: async (id: string, body: CreateDocumentContentRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.post(`/document/${id}/content`, body);
 		return result;
 	},
-	createDocument: async (body: CreateCourseRequest) => {
-		const result: AxiosResponse<CreateCourseResponse> = await protectedApi.post('/course', body);
+	changePublishDocument: async (id: string, status: number) => {
+		const result: AxiosResponse<any> = await protectedApi.post(`/document/${id}/publish?publish=${status}`);
 		return result;
 	},
-	renameCourse: async (body: Course) => {
-		const result: any = await protectedApi.put(`/course/${body.id}`, body.title);
+	updateDocument: async (id: string, body: UpdateDocumentRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.patch(`/document/${id}`, body);
+		return result;
+	},
+	deleteDocument: async (id: string) => {
+		const result: AxiosResponse<any> = await protectedApi.delete(`/document/${id}`);
+		return result;
+	},
+	deleteDocumentContent: async (id: string) => {
+		const result: AxiosResponse<any> = await protectedApi.delete(`/document/${id}/content`);
 		return result;
 	}
 };
