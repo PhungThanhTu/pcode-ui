@@ -3,8 +3,9 @@ export interface Snackbar {
 	message: string;
 }
 
+// loading for actions
 export interface Loading {
-	isLoading: boolean;
+	isLoading: boolean; 
 }
 
 export interface TabElement {
