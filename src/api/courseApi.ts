@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import protectedApi from './protectedApi';
-import { Course, CreateCourse, CreateCourseResponse } from '@/types/course.type';
+import { Course, CreateCourseRequest, CreateCourseResponse } from '@/types/course.type';
 
 const courseApi = {
 	getAllCourses: async () => {
@@ -15,7 +15,7 @@ const courseApi = {
 		const result: any = await protectedApi.post(`/course/join/${code}`);
 		return result;
 	},
-	createCourse: async (body: CreateCourse) => {
+	createCourse: async (body: CreateCourseRequest) => {
 		const result: AxiosResponse<CreateCourseResponse> = await protectedApi.post('/course', body);
 		return result;
 	},

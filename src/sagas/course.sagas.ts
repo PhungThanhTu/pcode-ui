@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
 import { createCourse, fetchCourse, fetchCourseSuccess, renameCourse, joinCourse } from '@/slices/course.slice';
-import { Course, CreateCourse, CreateCourseResponse, JoinCourse } from '@/types/course.type';
+import { Course, CreateCourseRequest, CreateCourseResponse, JoinCourse } from '@/types/course.type';
 import courseApi from '@/api/courseApi';
 import { setLoading } from '@/slices/loading.slice';
 
@@ -18,7 +18,7 @@ function* fetchCourseSaga() {
 	}
 }
 
-function* createCourseSaga(action: PayloadAction<CreateCourse>) {
+function* createCourseSaga(action: PayloadAction<CreateCourseRequest>) {
 	try {
 		console.log('saga create course');
 		yield put(setLoading({ isLoading: true }));

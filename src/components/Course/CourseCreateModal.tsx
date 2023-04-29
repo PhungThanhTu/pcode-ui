@@ -7,14 +7,14 @@ import Button from '@mui/material/Button';
 
 import { useState } from 'react';
 import { BoxModalSx } from '@/style/BoxModalSx';
-import { CreateCourse } from '@/types/course.type';
+import { CreateCourseRequest } from '@/types/course.type';
 
 interface CourseCreateModalProps {
 	open: boolean;
 	onCreate: Function;
 	onCancel: Function;
 	onChange: Function;
-	createCourseValues: CreateCourse;
+	createCourseValues: CreateCourseRequest;
 }
 
 const CourseCreateModal = (props: CourseCreateModalProps) => {
