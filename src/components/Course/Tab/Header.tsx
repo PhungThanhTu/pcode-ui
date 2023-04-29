@@ -33,17 +33,16 @@ interface TabHeaderProps {
 }
 
 const Header = (props: TabHeaderProps) => {
-
-
 	return (
 		<Box sx={BoxSx}>
 			<Paper
 				sx={{
 					height: '100%',
-					backgroundImage: `url(${props.background
-						? props.background
-						: 'https://www.gstatic.com/classroom/themes/Honors_thumb.jpg'
-						})`,
+					backgroundImage: `url(${
+						props.background
+							? props.background
+							: 'https://www.gstatic.com/classroom/themes/Honors_thumb.jpg'
+					})`,
 					backgroundRepeat: 'no-repeat',
 					backgroundSize: '100%',
 					width: '100%',
@@ -55,7 +54,13 @@ const Header = (props: TabHeaderProps) => {
 				<Typography variant="h6">{props.subtitle}</Typography>
 			</Box>
 			<Box sx={BoxActionSx}>
-				<CustomIconButton startIcon={<EditIcon />} content="Customize" variant="contained" color="inherit" onClick={props.customizeButton}  />
+				<CustomIconButton
+					startIcon={<EditIcon />}
+					content="Customize"
+					variant="contained"
+					color="inherit"
+					onClick={props.customizeButton}
+				/>
 			</Box>
 		</Box>
 	);
