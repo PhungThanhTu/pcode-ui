@@ -5,6 +5,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getLoading } from '@/selectors/loading.selector';
+import { borderRadius } from '@/style/Variables';
 
 const LinearLoadingSx = {
 	width: '70%',
@@ -52,7 +53,7 @@ const BackdropLoadingSx = {
 	bottom: '45%',
 	top: '45%',
 	left: '45%',
-	borderRadius: '5px'
+	borderRadius: borderRadius
 };
 export const BackdropLoading = () => {
 	const { isLoading } = useSelector(getLoading);

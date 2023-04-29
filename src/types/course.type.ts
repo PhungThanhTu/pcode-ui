@@ -1,3 +1,5 @@
+import { Document } from "./document.type";
+
 // State and Variable interface
 export interface Course {
 	id: string;
@@ -9,13 +11,26 @@ export interface Course {
 	courseTheme: string;
 	courseSubject: string;
 }
+
 export interface JoinCourse {
 	Code: string;
 }
-
-export interface CourseState {
-	courses?: Array<Course>;
+export interface CoursesState {
+	courses?: Array<Course> | null;
 	loading: boolean;
+}
+export interface CourseState {
+	course?: GetCourseByIdResponse | null;
+	loading: boolean;
+}
+
+// API interface
+export interface GetCourseByIdResponse {
+	id: string;
+	title: string;
+	courseSubject: string;
+	courseTheme: string;
+	documents: Array<Document>;
 }
 
 // API interface

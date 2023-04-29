@@ -3,14 +3,15 @@ import Header from './Header';
 import ListItems from './ListItems';
 import CourseCodeBox from '../CourseCodeBox';
 
-import { Course } from '@/types/course.type';
+import { GetCourseByIdResponse } from '@/types/course.type';
 
 interface GeneralProps {
-	course: Course;
+	course: GetCourseByIdResponse;
 	customizeButton: Function;
+	code: string;
 }
 const General = (props: GeneralProps) => {
-	const { course, customizeButton } = props;
+	const { course, customizeButton, code } = props;
 
 	return (
 		<TabLayout
@@ -22,9 +23,10 @@ const General = (props: GeneralProps) => {
 					customizeButton={customizeButton}
 				/>
 			}
-			leftBody={<CourseCodeBox code={course.Code} />}
-			rightBody={<ListItems list={[]} />}
+			leftBody={<CourseCodeBox code={code} />}
+			rightBody={<ListItems list={course ? course.documents : []} />}
 		/>
+
 	);
 };
 

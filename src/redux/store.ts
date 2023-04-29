@@ -5,7 +5,7 @@ import authSlice from '../slices/auth.slice';
 import registerSlice from '../slices/register.slice';
 import profileSlice from '@/slices/profile.slice';
 import snackbarSlice from '@/slices/snackbar.slice';
-import courseSlice from '@/slices/course.slice';
+import { courseReducer, coursesReducer } from '@/slices/course.slice';
 import loadingSlice from '@/slices/loading.slice';
 
 import { watchRegister } from '../sagas/register.saga';
@@ -21,7 +21,8 @@ export const store = configureStore({
 		register: registerSlice,
 		profile: profileSlice,
 		snackbar: snackbarSlice,
-		courses: courseSlice,
+		courses: coursesReducer,
+		course: courseReducer,
 		loading: loadingSlice
 	},
 	middleware: [sagaMiddleware]

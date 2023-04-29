@@ -6,6 +6,13 @@ export interface DocumentContent {
 	ContentBody: string;
 }
 
+export interface Document {
+	Id: string;
+	Title: string;
+	DocumentDescription: string;
+	HasExercise: boolean;
+}
+
 // API interface
 export interface CreateDocumentRequest {
 	courseId: string;
@@ -14,7 +21,7 @@ export interface CreateDocumentRequest {
 	hasExercise: boolean;
 }
 export interface CreateDocumentResponse {
-	Id: string; // creatorId
+	Id: string; 
 	CourseId: string;
 	Title: string;
 	Description: string;

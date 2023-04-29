@@ -1,21 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Course, CourseState, CreateCourseRequest, CreateCourseResponse, JoinCourse } from '@/types/course.type';
+import { Course, CoursesState, CourseState, CreateCourseRequest, CreateCourseResponse, GetCourseByIdResponse, JoinCourse } from '@/types/course.type';
 
-export const initialState: CourseState = {
+export const initialCoursesState: CoursesState = {
 	courses: undefined,
 	loading: false
 };
-
-const courseSlice = createSlice({
+export const initialCourseState: CourseState = {
+	course: undefined,
+	loading: false
+}
+const coursesSlice = createSlice({
 	name: 'course',
-	initialState: initialState,
+	initialState: initialCoursesState,
 	reducers: {
-		fetchCourse: (state) => {
+		fetchCourses: (state) => {
 			state.loading = true;
 		},
-		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => {},
-		renameCourse: (state, { payload }: PayloadAction<Course>) => {},
-		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => {},
+		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => { },
+		renameCourse: (state, { payload }: PayloadAction<Course>) => { },
+		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => { },
 		createCourseSuccess: (state, { payload }: PayloadAction<CreateCourseResponse>) => {
 			let Course: Course = {
 				id: payload.id,
@@ -29,18 +32,36 @@ const courseSlice = createSlice({
 			};
 			state.courses?.push(Course);
 		},
-		fetchCourseSuccess: (state, { payload }: PayloadAction<Course[]>) => {
+		fetchCoursesSuccess: (state, { payload }: PayloadAction<Course[]>) => {
 			state.courses = payload;
 			state.loading = false;
 		},
-		fetchCourseError: (state, { payload }: PayloadAction<Course[]>) => {
-			state.courses = undefined;
+		fetchCoursesError: (state) => {
+			state.courses = null;
 			state.loading = false;
 		}
 	}
 });
+const courseSlice = createSlice({
+	name: 'course',
+	initialState: initialCourseState,
+	reducers: {
+		fetchCourseById: (state, { payload }: PayloadAction<{ id: string }>) => {
+			state.loading = true;	
+		},
+		fetchCourseByIdSuccess: (state, { payload }: PayloadAction<GetCourseByIdResponse>) => {
+			state.course = payload;
+			state.loading = false;
+		},
+		fetchCourseByIdError: (state) => {
+			state.course = null;
+			state.loading = false;
+		}
+	}
+});
+export const { fetchCourses, createCourse, renameCourse, joinCourse, fetchCoursesSuccess, fetchCoursesError } =
+	coursesSlice.actions;
+export const { fetchCourseById, fetchCourseByIdError, fetchCourseByIdSuccess } = courseSlice.actions
 
-export const { fetchCourse, createCourse, renameCourse, joinCourse, fetchCourseSuccess, fetchCourseError } =
-	courseSlice.actions;
-
-export default courseSlice.reducer;
+export const coursesReducer = coursesSlice.reducer;
+export const courseReducer = courseSlice.reducer

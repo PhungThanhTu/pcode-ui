@@ -1,16 +1,21 @@
 import { AxiosResponse } from 'axios';
 import protectedApi from './protectedApi';
-import { Course, CreateCourseRequest, CreateCourseResponse } from '@/types/course.type';
+import { Course, CreateCourseRequest, CreateCourseResponse, GetCourseByIdResponse } from '@/types/course.type';
 
 const courseApi = {
 	getAllCourses: async () => {
 		const result: AxiosResponse<Course[]> = await protectedApi.get('/course');
 		return result;
 	},
-	getCourse: async (code: string) => {
+	getCourseByCode: async (code: string) => {
 		const result: AxiosResponse<Course> = await protectedApi.get(`/course/info/${code}`);
 		return result;
 	},
+	getCourseById: async (id: string) => {
+		const result: AxiosResponse<GetCourseByIdResponse> = await protectedApi.get(`/course/${id}`);
+		return result;
+	},
+
 	joinCourse: async (code: string) => {
 		const result: any = await protectedApi.post(`/course/join/${code}`);
 		return result;

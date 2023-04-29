@@ -1,3 +1,5 @@
+import { borderRadius } from "./Variables";
+
 export const BoxModalSx = {
 	position: 'absolute' as 'absolute',
 	top: '50%',
@@ -6,5 +8,5 @@ export const BoxModalSx = {
 	width: 'fit-content',
 	bgcolor: 'background.paper',
 	p: 4,
-	borderRadius: '4px'
+	borderRadius: borderRadius
 };
