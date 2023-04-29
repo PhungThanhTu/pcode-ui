@@ -1,3 +1,4 @@
+import { borderRadius } from '@/style/Variables';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
@@ -6,12 +7,13 @@ interface PropsWithChildrenOnly {
 	leftBody: React.ReactNode;
 	rightBody: React.ReactNode;
 }
+
 const BoxHeaderSx = {
 	height: '100%',
 	width: '100%',
 	WebkitFontSmoothing: 'antialiased',
 	WebkitTapHighlightColor: 'transparent',
-	borderRadius: '5px',
+	borderRadius: borderRadius,
 	marginTop: '1.5rem',
 	overflow: 'hidden'
 };
@@ -19,12 +21,15 @@ const BoxLeftBodySx = {
 	height: '100%',
 	flexShrink: '0',
 	minWidth: '10.75rem'
+	
 };
 
 const BoxRightBodySx = {
 	overflow: 'hidden',
 	margin: '0',
 	padding: '1rem',
+	paddingRight: 0,
+	paddingTop: 0,
 	flexGrow: '1',
 	height: '100%',
 	WebkitFontSmoothing: 'antialiased'

@@ -10,7 +10,7 @@ import CourseJoinModal from '@/components/Course/CourseJoinModal';
 import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCourse, fetchCourse } from '@/slices/course.slice';
+import { createCourse, fetchCourseById, fetchCourses } from '@/slices/course.slice';
 import { getCourses } from '@/selectors/course.selector';
 import { CreateCourseRequest } from '@/types/course.type';
 import { useImageFileReader } from '@/hook/useFileReader';
@@ -59,9 +59,10 @@ const CoursesPage = () => {
 	};
 	const onCourseDirect = (id: string) => {
 		navigate(`/course/${id}`, { state: courses?.filter((item) => item.id === id)[0] });
+
 	};
 	useEffect(() => {
-		dispatch(fetchCourse());
+		dispatch(fetchCourses());
 	}, []);
 
 	useEffect(() => {

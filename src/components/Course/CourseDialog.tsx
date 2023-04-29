@@ -39,7 +39,7 @@ const CourseDialog = () => {
 		if (code) {
 			const fetchCourse = async (code: string) => {
 				try {
-					const course = await courseApi.getCourse(code);
+					const course = await courseApi.getCourseByCode(code);
 					if (course.data.id) {
 						setCourse(course.data);
 						setLoading(false);

@@ -5,43 +5,43 @@ export const notificationType = {
 	INFO: 'info'
 };
 const notificationMessage = {
-	ERROR: (props: String) => {
+	ERROR: (props: string) => {
 		return {
 			message: props,
 			type: notificationType.ERROR
 		};
 	},
-	UPDATE_SUCCESS: (title: String, detail: String) => {
+	UPDATE_SUCCESS: (title: string, detail: string) => {
 		return {
 			message: `Update ${title ? title : ''} successfully! ${detail ? detail : ''}`,
 			type: notificationType.SUCCESS
 		};
 	},
-	UPDATE_FAIL: (title: String, detail: String) => {
+	UPDATE_FAIL: (title: string, detail: string) => {
 		return {
 			message: `Update ${title ? title : ''} fail! ${detail ? detail : ''}`,
 			type: notificationType.ERROR
 		};
 	},
-	CREATE_SUCCESS: (props: String) => {
+	CREATE_SUCCESS: (props: string) => {
 		return {
 			message: `Create ${props ? props : ''} successfully!`,
 			type: notificationType.SUCCESS
 		};
 	},
-	CREATE_FAIL: (title: String, detail: String) => {
+	CREATE_FAIL: (title: string, detail: string) => {
 		return {
 			message: `Create ${title ? title : ''} fail! ${detail ? detail : ''}`,
 			type: notificationType.ERROR
 		};
 	},
-	DELETE_SUCCESS: (props: String) => {
+	DELETE_SUCCESS: (props: string) => {
 		return {
 			message: `Delete ${props ? props : ''} successfully!`,
 			type: notificationType.SUCCESS
 		};
 	},
-	DELETE_FAIL: (title: String, detail: string) => {
+	DELETE_FAIL: (title: string, detail: string) => {
 		return {
 			message: `Delete ${title ? title : ''} fail! ${detail ? detail : ''}`,
 			type: notificationType.ERROR

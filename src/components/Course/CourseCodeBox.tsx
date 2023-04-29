@@ -4,7 +4,7 @@ import CropFreeIcon from '@mui/icons-material/CropFree';
 import Tooltip from '@mui/material/Tooltip';
 
 import { MouseEvent, useState, useEffect } from 'react';
-import { borderColor } from '@/style/Variables';
+import { borderColor, borderRadius } from '@/style/Variables';
 import { CustomOnlyIconButton } from '../Custom/CustomButton';
 
 const BoxContainerSx = {
@@ -13,7 +13,8 @@ const BoxContainerSx = {
 	display: 'flex',
 	padding: '1.5rem 2rem',
 	alighItems: 'center',
-	justifyContent: 'center'
+	justifyContent: 'center',
+	borderRadius: borderRadius,
 };
 
 interface CourseCodeBox {
