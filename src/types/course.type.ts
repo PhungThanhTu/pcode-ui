@@ -1,4 +1,4 @@
-import { Document } from "./document.type";
+import { Document } from './document.type';
 
 // State and Variable interface
 export interface Course {

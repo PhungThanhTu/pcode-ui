@@ -20,6 +20,7 @@ export interface UserProfile {
 	fullName: string;
 	email: string;
 	avatar?: string;
+	id: string;
 }
 
 export interface PasswordChangeRequest {

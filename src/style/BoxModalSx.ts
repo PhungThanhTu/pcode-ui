@@ -1,4 +1,4 @@
-import { borderRadius } from "./Variables";
+import { borderRadius } from './Variables';
 
 export const BoxModalSx = {
 	position: 'absolute' as 'absolute',

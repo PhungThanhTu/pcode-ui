@@ -12,7 +12,10 @@ export interface Document {
 	DocumentDescription: string;
 	HasExercise: boolean;
 }
-
+export interface DocumentState {
+	document?: GetDocumentByIdResponse | null;
+	loading: boolean;
+}
 // API interface
 export interface CreateDocumentRequest {
 	courseId: string;
@@ -21,7 +24,7 @@ export interface CreateDocumentRequest {
 	hasExercise: boolean;
 }
 export interface CreateDocumentResponse {
-	Id: string; 
+	Id: string;
 	CourseId: string;
 	Title: string;
 	Description: string;

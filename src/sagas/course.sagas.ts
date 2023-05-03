@@ -3,8 +3,24 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
-import { createCourse, fetchCourses, fetchCoursesSuccess, renameCourse, joinCourse, fetchCourseById, fetchCourseByIdSuccess, fetchCourseByIdError, fetchCoursesError } from '@/slices/course.slice';
-import { Course, CreateCourseRequest, CreateCourseResponse, GetCourseByIdResponse, JoinCourse } from '@/types/course.type';
+import {
+	createCourse,
+	fetchCourses,
+	fetchCoursesSuccess,
+	renameCourse,
+	joinCourse,
+	fetchCourseById,
+	fetchCourseByIdSuccess,
+	fetchCourseByIdError,
+	fetchCoursesError
+} from '@/slices/course.slice';
+import {
+	Course,
+	CreateCourseRequest,
+	CreateCourseResponse,
+	GetCourseByIdResponse,
+	JoinCourse
+} from '@/types/course.type';
 import courseApi from '@/api/courseApi';
 import { setLoading } from '@/slices/loading.slice';
 
@@ -67,8 +83,8 @@ function* fetchCourseByIdSaga(action: PayloadAction<{ id: string }>) {
 		const course: AxiosResponse<GetCourseByIdResponse> = yield call(courseApi.getCourseById, action.payload.id);
 		yield put(fetchCourseByIdSuccess(course.data));
 	} catch (error: any) {
-		yield put(fetchCourseByIdError())
-		yield put(setSnackbar(notificationMessage.ERROR('Invalid course id or course does not exist.')))
+		yield put(fetchCourseByIdError());
+		yield put(setSnackbar(notificationMessage.ERROR('Invalid course id or course does not exist.')));
 		console.log('saga fetch course by id failed');
 	}
 }

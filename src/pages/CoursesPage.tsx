@@ -59,7 +59,6 @@ const CoursesPage = () => {
 	};
 	const onCourseDirect = (id: string) => {
 		navigate(`/course/${id}`, { state: courses?.filter((item) => item.id === id)[0] });
-
 	};
 	useEffect(() => {
 		dispatch(fetchCourses());

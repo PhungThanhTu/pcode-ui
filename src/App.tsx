@@ -10,6 +10,7 @@ import ProfilePage from './pages/ProfilePage';
 import CoursesPage from './pages/CoursesPage';
 import CourseDialog from './components/Course/CourseDialog';
 import CoursePage from './pages/CoursePage';
+import DocumentPage from './pages/DocumentPage';
 
 function App() {
 	const dispatch = useDispatch();
@@ -30,6 +31,7 @@ function App() {
 					<Route path="/course/:id" element={<CoursePage />} />
 					<Route path="/invitation/:code" element={<CourseDialog />} />
 					<Route path="/profile" element={<ProfilePage />} />
+					<Route path="/course/:id/:documentId" element={<DocumentPage />} />
 				</Route>
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
