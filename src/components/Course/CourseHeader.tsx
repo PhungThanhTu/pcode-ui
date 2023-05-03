@@ -29,10 +29,10 @@ interface TabHeaderProps {
 	background: string;
 	title: string;
 	subtitle: string;
-	customizeButton: Function;
+	customizeButton: Function | null;
 }
 
-const Header = (props: TabHeaderProps) => {
+const CourseTabHeader = (props: TabHeaderProps) => {
 	return (
 		<Box sx={BoxSx}>
 			<Paper
@@ -54,16 +54,18 @@ const Header = (props: TabHeaderProps) => {
 				<Typography variant="h6">{props.subtitle}</Typography>
 			</Box>
 			<Box sx={BoxActionSx}>
-				<CustomIconButton
-					startIcon={<EditIcon />}
-					content="Customize"
-					variant="contained"
-					color="inherit"
-					onClick={props.customizeButton}
-				/>
+				{props.customizeButton ? (
+					<CustomIconButton
+						startIcon={<EditIcon />}
+						content="Customize"
+						variant="contained"
+						color="inherit"
+						onClick={props.customizeButton}
+					/>
+				) : null}
 			</Box>
 		</Box>
 	);
 };
 
-export default Header;
+export default CourseTabHeader;

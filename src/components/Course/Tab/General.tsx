@@ -1,13 +1,13 @@
 import TabLayout from '@/layouts/TabLayout';
-import Header from './Header';
-import ListItems from './ListItems';
+import CourseTabHeader from '../CourseHeader';
+import ListItems from '../../ListItems';
 import CourseCodeBox from '../CourseCodeBox';
 
 import { GetCourseByIdResponse } from '@/types/course.type';
 
 interface GeneralProps {
 	course: GetCourseByIdResponse;
-	customizeButton: Function;
+	customizeButton: Function | null;
 	code: string;
 }
 const General = (props: GeneralProps) => {
@@ -16,17 +16,16 @@ const General = (props: GeneralProps) => {
 	return (
 		<TabLayout
 			header={
-				<Header
+				<CourseTabHeader
 					background={course.courseTheme}
 					title={course.title}
 					subtitle={course.courseSubject}
-					customizeButton={customizeButton}
+					customizeButton={customizeButton ? customizeButton : null}
 				/>
 			}
 			leftBody={<CourseCodeBox code={code} />}
 			rightBody={<ListItems list={course ? course.documents : []} />}
 		/>
-
 	);
 };
 

@@ -14,7 +14,7 @@ const BoxContainerSx = {
 	padding: '1.5rem 2rem',
 	alighItems: 'center',
 	justifyContent: 'center',
-	borderRadius: borderRadius,
+	borderRadius: borderRadius
 };
 
 interface CourseCodeBox {

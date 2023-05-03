@@ -12,30 +12,26 @@ const BoxSx = {
 	padding: '1.5rem',
 	borderRadius: borderRadius,
 	boxShadow: '0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15)',
-	cursor: 'pointer',
-
-}
+	cursor: 'pointer'
+};
 interface DocumentItemProps {
-	document: Document
+	document: Document;
 }
 export const DocumentItem = (props: DocumentItemProps) => {
-	const { document } = props
-	return <Box sx={BoxSx}>
-		<Stack width="100%">
-			<Typography variant='h5'>{document.Title}</Typography>
-			{
-				document.DocumentDescription ?
-					<Typography variant='h6'>{document.DocumentDescription}</Typography>
-					: undefined
-			}
-			{document.HasExercise ? 
-				<Fragment>
-					<Typography color="red">Exercise status: Not Submited</Typography>
-				</Fragment>
-				:
-				undefined
-			}
-
-		</Stack>
-	</Box>;
+	const { document } = props;
+	return (
+		<Box sx={BoxSx}>
+			<Stack width="100%">
+				<Typography variant="h5">{document.Title}</Typography>
+				{document.DocumentDescription ? (
+					<Typography variant="h6">{document.DocumentDescription}</Typography>
+				) : undefined}
+				{document.HasExercise ? (
+					<Fragment>
+						<Typography color="red">Exercise status: Not Submited</Typography>
+					</Fragment>
+				) : undefined}
+			</Stack>
+		</Box>
+	);
 };

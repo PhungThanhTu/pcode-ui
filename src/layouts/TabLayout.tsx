@@ -21,7 +21,6 @@ const BoxLeftBodySx = {
 	height: '100%',
 	flexShrink: '0',
 	minWidth: '10.75rem'
-	
 };
 
 const BoxRightBodySx = {
