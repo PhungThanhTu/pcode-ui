@@ -22,7 +22,7 @@ const DocumentPage = () => {
 
     // const UserProfile = useSelector(getProfile);
     const { document, loading } = useSelector(getDocument);
-
+    console.log(document)
     const [Tabs, setTabs] = useState<TabElement[]>([]);
 
     useEffect(() => {
@@ -34,7 +34,7 @@ const DocumentPage = () => {
             setTabs([{
                 title: 'Editor',
                 element: (
-                    <Editor />
+                    <Editor document={document}/>
                 )
             },
             {

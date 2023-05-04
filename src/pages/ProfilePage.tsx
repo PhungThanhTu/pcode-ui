@@ -100,7 +100,8 @@ const ProfilePage = () => {
 			username: ProfileForm.username ? ProfileForm.username : '',
 			fullName: ProfileForm.fullName ? ProfileForm.fullName : '',
 			email: ProfileForm.email ? ProfileForm.email : '',
-			avatar: ProfileForm.avatar ? ProfileForm.avatar : ''
+			avatar: ProfileForm.avatar ? ProfileForm.avatar : '',
+			id: ProfileForm.id ? ProfileForm.id : ''
 		};
 
 		dispatch(updateProfile(payload));
