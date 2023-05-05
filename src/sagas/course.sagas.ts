@@ -45,7 +45,6 @@ function* createCourseSaga(action: PayloadAction<CreateCourseRequest>) {
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('course')));
 		}
-
 		yield put(fetchCourses());
 	} catch (error: any) {
 		console.log('saga create course failed');
