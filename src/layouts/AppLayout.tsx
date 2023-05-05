@@ -18,7 +18,7 @@ const DivStyle = {
 	minHeight: '100vh',
 	maxHeight: 'fit-content'
 };
-const Layout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
+const AppLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
 	return (
 		<React.Fragment>
 			<NavBar />
@@ -32,4 +32,4 @@ const Layout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWith
 	);
 };
 
-export default Layout;
+export default AppLayout;

@@ -17,10 +17,16 @@ const BoxHeaderSx = {
 	marginTop: '1.5rem',
 	overflow: 'hidden'
 };
+
 const BoxLeftBodySx = {
 	height: '100%',
 	flexShrink: '0',
-	minWidth: '10.75rem'
+	minWidth: '10.75rem',
+	display: 'flex',
+	flexDirection: 'column',
+	alighItems: 'center',
+	justifyContent: 'center',
+	rowGap: 2
 };
 
 const BoxRightBodySx = {

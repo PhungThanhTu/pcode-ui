@@ -2,45 +2,67 @@ import CourseCustomizeModal from '@/components/Course/CourseCustomizeModal';
 import Exercise from '@/components/Course/Tab/Exercise';
 import General from '@/components/Course/Tab/General';
 import CustomTab from '@/components/Custom/CustomTab';
+import NotFound from '@/components/NotFound';
+import DocumentCreateModal from '@/components/Document/DocumentCreateModal';
 import { LinearLoading } from '@/components/Loading';
 
 import { TabElement } from '@/types/utility.type';
-import { useEffect, Fragment, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, Fragment, useState, ChangeEvent } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 import { getCourse, getCourses } from '@/selectors/course.selector';
 import { fetchCourseById, fetchCourses } from '@/slices/course.slice';
-import NotFound from '@/components/NotFound';
+import { CreateDocumentRequest } from '@/types/document.type';
+import { createDocument } from '@/slices/document.slice';
 
 const CoursePage = () => {
 	const params = useParams();
-	const location = useLocation();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
+	const InitialForm: CreateDocumentRequest = {
+		title: '',
+		courseId: params.id ? params.id : '',
+		description: '',
+		hasExercise: false
+	};
 
 	const UserProfile = useSelector(getProfile);
 	const { courses } = useSelector(getCourses);
 	const { course, loading } = useSelector(getCourse);
 
-	const [OpenCourseCustomize, setOpenCourseCustomize] = useState(false);
 	const [Tabs, setTabs] = useState<TabElement[]>([]);
+	const [CreateDocumentForm, setCreateDocumentForm] = useState<CreateDocumentRequest>(InitialForm);
+	const [OpenCourseCustomize, setOpenCourseCustomize] = useState(false);
+	const [OpenDocumentCreate, setOpenDocumentCreate] = useState(false);
 
-	console.log(location);
+	const { title, description, hasExercise, courseId } = CreateDocumentForm;
 
 	const findCourseCode = (id: string) => {
 		let found = courses?.filter((item) => item.id === id)[0];
 		return found ? found.Code : 'null';
 	};
+
 	const isCourseCreator = (id: string, creatorId: string) => {
 		let found = courses?.filter((item) => item.id === id)[0];
 		let isCreator = found?.CreatorId === creatorId;
 		return isCreator;
 	};
-	const onDocumentDirect = (id: string) => {
-		let { pathname } = location;
-		navigate(`${pathname}/`);
+
+	const onCreateDocument = () => {
+		setOpenDocumentCreate(false);
+		setCreateDocumentForm(InitialForm);
+		console.log(InitialForm, 'hello');
+		dispatch(createDocument(CreateDocumentForm));
 	};
+	const onCreateDocumentFieldsChange = (e: ChangeEvent<HTMLInputElement>) => {
+		setCreateDocumentForm({
+			...CreateDocumentForm,
+			[e.target.name]: e.target.value
+		});
+	};
+
 	useEffect(() => {
 		if (!course) {
 			dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
@@ -62,6 +84,9 @@ const CoursePage = () => {
 									  }
 									: null
 							}
+							createDocumentModal={() => {
+								setOpenDocumentCreate(true);
+							}}
 						/>
 					)
 				},
@@ -82,6 +107,16 @@ const CoursePage = () => {
 				open={OpenCourseCustomize}
 				close={() => {
 					setOpenCourseCustomize(false);
+				}}
+			/>
+			<DocumentCreateModal
+				open={OpenDocumentCreate}
+				onCreate={onCreateDocument}
+				onChange={onCreateDocumentFieldsChange}
+				createDocumentValues={{ title, description, hasExercise, courseId }}
+				onCancel={() => {
+					setOpenDocumentCreate(false);
+					setCreateDocumentForm(InitialForm);
 				}}
 			/>
 		</Fragment>

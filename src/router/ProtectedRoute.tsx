@@ -1,4 +1,4 @@
-import Layout from '@/layouts/Layout';
+import AppLayout from '@/layouts/AppLayout';
 import { CirclePageLoading } from '@/components/Loading';
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
@@ -9,9 +9,9 @@ const ProtectedRoute = () => {
 
 	if (profile) {
 		return (
-			<Layout>
+			<AppLayout>
 				<Outlet />
-			</Layout>
+			</AppLayout>
 		);
 	}
 

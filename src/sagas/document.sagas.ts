@@ -2,10 +2,17 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import documentApi from '@/api/documentApi';
 import { AxiosResponse } from 'axios';
-import { GetDocumentByIdResponse } from '@/types/document.type';
-import { fetchDocumentById, fetchDocumentByIdError, fetchDocumentByIdSuccess } from '@/slices/document.slice';
+import { CreateDocumentRequest, CreateDocumentResponse, GetDocumentByIdResponse } from '@/types/document.type';
+import {
+	createDocument,
+	fetchDocumentById,
+	fetchDocumentByIdError,
+	fetchDocumentByIdSuccess
+} from '@/slices/document.slice';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
+import { setLoading } from '@/slices/loading.slice';
+import { fetchCourseById } from '@/slices/course.slice';
 
 function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 	try {
@@ -21,7 +28,26 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 		console.log('saga fetch course by id failed');
 	}
 }
+function* createDocumentSaga(action: PayloadAction<CreateDocumentRequest>) {
+	try {
+		console.log('saga create document');
+		yield put(setLoading({ isLoading: true }));
+
+		const data: AxiosResponse<CreateDocumentResponse> = yield call(documentApi.createDocument, action.payload);
+
+		if (data) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('document')));
+		}
+		yield put(fetchCourseById({ id: action.payload.courseId }));
+	} catch (error: any) {
+		console.log('saga create course failed');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.CREATE_FAIL('document', '')));
+	}
+}
 
 export function* watchDocument() {
 	yield takeLatest(fetchDocumentById.type, fetchDocumentByIdSaga);
+	yield takeLatest(createDocument.type, createDocumentSaga);
 }
