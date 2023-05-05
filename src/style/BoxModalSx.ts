@@ -10,3 +10,8 @@ export const BoxModalSx = {
 	p: 4,
 	borderRadius: borderRadius
 };
+
+export const BoxPDFView = {
+	overflow: 'auto',
+	height: '100%'
+};

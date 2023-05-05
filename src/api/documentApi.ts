@@ -36,6 +36,10 @@ const documentApi = {
 	deleteDocumentContent: async (id: string) => {
 		const result: AxiosResponse<any> = await protectedApi.delete(`/document/${id}/content`);
 		return result;
+	},
+	getMedia: async (id: string) => {
+		const result: AxiosResponse<any> = await protectedApi.get(`/media/${id}`, { responseType: 'blob' });
+		return result;
 	}
 };
 

@@ -5,50 +5,62 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+import { Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
+
 import { GetDocumentByIdResponse } from '@/types/document.type';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
 import { borderColor } from '@/style/Variables';
 import { CustomButton } from '@/components/Custom/CustomButton';
+import { BoxPDFView } from '@/style/BoxModalSx';
 
 interface EditorProps {
 	document: GetDocumentByIdResponse;
+	documentContent: any;
 }
 
 const BoxContainerSx = {
-	height: '100vh',
+	height: '100%',
 	width: '100%'
 };
 const BoxLeftSx = {
 	height: '100%',
-	width: '100%',
-	borderRight: `3px solid ${borderColor}`
+	width: '100%'
 };
 const BoxRightSx = {
+	height: '80vh',
 	width: '100%',
-	textAlign: 'center'
+	textAlign: 'center',
+	borderLeft: `3px solid ${borderColor}`
 };
 const Editor = (props: EditorProps) => {
-	const { document } = props;
+	const { document, documentContent } = props;
 
 	const [isSetUp, setIsSetUp] = useState(false);
 	const [type, setType] = useState('PDF');
+	const fileRef = useRef<HTMLInputElement>(null);
 
 	const handleChange = (event: SelectChangeEvent) => {
 		setType(event.target.value as string);
 	};
 
+	const uploadFile = () => {
+		if (fileRef.current) {
+			fileRef.current.click();
+		}
+	};
+
+	useEffect(() => {
+		if (documentContent) {
+			setIsSetUp(true);
+			setType(document.Contents[0].ContentTypeId === 2 ? 'PDF' : 'Other');
+		}
+	}, [document, documentContent]);
+
 	return (
 		<Box sx={BoxContainerSx}>
 			<Stack flexDirection="column" rowGap={4} height="100%">
 				<Typography variant="h6">{document.Title}</Typography>
-				<Stack
-					flexDirection="row"
-					width="100%"
-					height="100%"
-					alignItems="center"
-					justifyContent="center"
-					padding="0.75rem"
-				>
+				<Stack flexDirection="row" width="100%" height="100%" padding="0.75rem">
 					<Box sx={BoxLeftSx}>
 						<Stack
 							flexDirection="column"
@@ -80,11 +92,8 @@ const Editor = (props: EditorProps) => {
 							) : (
 								<Fragment>
 									<Typography variant="subtitle1">Type : {type}</Typography>
-
-									<input type="file" id="file-type2" style={{ display: 'none' }} />
-									<label htmlFor="file-type2">
-										<button>Uplkaod</button>
-									</label>
+									<CustomButton content="Upload" onClick={uploadFile} />
+									<input id="fileUpload" name="file" type="file" hidden ref={fileRef} />
 								</Fragment>
 							)}
 							<Typography variant="subtitle1" width="40%" textAlign="center">
@@ -95,7 +104,12 @@ const Editor = (props: EditorProps) => {
 					</Box>
 					<Box sx={BoxRightSx}>
 						{document.Contents.length > 0 ? (
-							<div>{document.Contents[0].Id}</div>
+							<Box sx={BoxPDFView}>
+								<Viewer
+									defaultScale={SpecialZoomLevel.PageFit}
+									fileUrl={URL.createObjectURL(documentContent)}
+								/>
+							</Box>
 						) : (
 							<Typography variant="h6">No contents to preview.</Typography>
 						)}

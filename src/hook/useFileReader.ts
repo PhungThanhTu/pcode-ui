@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useEffect } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 export const useImageFileReader = () => {
 	const [B64Value, setB64Value] = useState('');
@@ -19,4 +19,5 @@ export const useImageFileReader = () => {
 	return { B64Value, getImageB64Value };
 };
 
+export const usePDFFileReader = () => {};
 // others file reader in future
