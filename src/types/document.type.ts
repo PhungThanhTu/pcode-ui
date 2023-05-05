@@ -14,6 +14,7 @@ export interface Document {
 }
 export interface DocumentState {
 	document?: GetDocumentByIdResponse | null;
+	documentContent?: any | null;
 	loading: boolean;
 }
 // API interface

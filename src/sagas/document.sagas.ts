@@ -7,7 +7,8 @@ import {
 	createDocument,
 	fetchDocumentById,
 	fetchDocumentByIdError,
-	fetchDocumentByIdSuccess
+	fetchDocumentByIdSuccess,
+	fetchDocumentByIdWithContentSuccess
 } from '@/slices/document.slice';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
@@ -21,7 +22,11 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 			documentApi.getDocumentById,
 			action.payload.id
 		);
-		yield put(fetchDocumentByIdSuccess(document.data));
+		if (document.data.Contents.length > 0) {
+			const file: AxiosResponse<any> = yield call(documentApi.getMedia, document.data.Contents[1].ContentBody);
+			let temp = new Blob([file.data], { type: 'application/pdf' });
+			yield put(fetchDocumentByIdWithContentSuccess({ document: document.data, documentContent: temp }));
+		} else yield put(fetchDocumentByIdSuccess(document.data));
 	} catch (error: any) {
 		yield put(fetchDocumentByIdError());
 		yield put(setSnackbar(notificationMessage.ERROR('Invalid document id or document does not exist.')));
