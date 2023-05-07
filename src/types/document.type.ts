@@ -32,6 +32,7 @@ export interface CreateDocumentResponse {
 	HasExercise: boolean;
 }
 export interface CreateDocumentContentRequest {
+	documentId: string;
 	contentTypeId: string;
 	file: Blob;
 }

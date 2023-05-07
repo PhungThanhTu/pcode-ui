@@ -9,7 +9,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 import { CreateDocumentRequest } from '@/types/document.type';
-import { BoxModalSx } from '@/style/BoxModalSx';
+import { BoxModalSx } from '@/style/BoxSx';
 import { useState } from 'react';
 
 interface DocumentCreateModalProps {

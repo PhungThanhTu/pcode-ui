@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 
 import { ChangeEvent, useState } from 'react';
-import { BoxModalSx } from '@/style/BoxModalSx';
+import { BoxModalSx } from '@/style/BoxSx';
 
 interface CourseJoinModalProps {
 	open: boolean;

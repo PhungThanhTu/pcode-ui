@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 
 import InDevelopment from '../InDevelopment';
 import { useState } from 'react';
-import { BoxModalSx } from '@/style/BoxModalSx';
+import { BoxModalSx } from '@/style/BoxSx';
 
 interface CourseCustomizeModalProps {
 	open: boolean;

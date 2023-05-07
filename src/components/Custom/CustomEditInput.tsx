@@ -8,6 +8,7 @@ import styled from '@mui/material/styles/styled';
 
 import { useEffect, useState, Fragment } from 'react';
 import { labelToProperty } from '@/utils/convert';
+import { Tooltip } from '@mui/material';
 
 export const CustomEditIcon = styled(EditIcon)(({ theme }) => ({
 	color: theme.palette.primary.main,
@@ -34,7 +35,6 @@ interface CustomEditInputProps {
 }
 
 export const CustomEditInput = (props: CustomEditInputProps) => {
-	
 	const [isEdit, setIsEdit] = useState(false);
 
 	const { label, value, onChange, onSave, onCancel, isNotDisplay, isAvatarChange } = props;
@@ -61,18 +61,22 @@ export const CustomEditInput = (props: CustomEditInputProps) => {
 		if (isEdit) {
 			return (
 				<Fragment>
-					<CustomSaveIcon
-						onClick={() => {
-							onSave();
-							setIsEdit(false);
-						}}
-					/>
-					<CustomCancelIcon
-						onClick={() => {
-							onCancel(name);
-							setIsEdit(false);
-						}}
-					/>
+					<Tooltip title="Save">
+						<CustomSaveIcon
+							onClick={() => {
+								onSave();
+								setIsEdit(false);
+							}}
+						/>
+					</Tooltip>
+					<Tooltip title="Cancel">
+						<CustomCancelIcon
+							onClick={() => {
+								onCancel(name);
+								setIsEdit(false);
+							}}
+						/>
+					</Tooltip>
 				</Fragment>
 			);
 		} else {

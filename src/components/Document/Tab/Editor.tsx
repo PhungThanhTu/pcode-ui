@@ -5,17 +5,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-import { Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
-import { Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
-
-
 import { GetDocumentByIdResponse } from '@/types/document.type';
 import { Fragment, useState, useEffect, useRef, ChangeEvent } from 'react';
 import { borderColor } from '@/style/Variables';
 import { CustomButton } from '@/components/Custom/CustomButton';
-import { BoxPDFView } from '@/style/BoxModalSx';
 import { CustomEditInput } from '@/components/Custom/CustomEditInput';
+import MyPDFViewer from '@/components/MyPDFViewer';
 
 interface EditorProps {
 	document: GetDocumentByIdResponse;
@@ -25,8 +20,7 @@ interface EditorProps {
 }
 
 const BoxContainerSx = {
-	height: '100%',
-	width: '100%'
+	height: '100%'
 };
 const BoxLeftSx = {
 	height: '100%',
@@ -38,22 +32,21 @@ const BoxRightSx = {
 	textAlign: 'center',
 	borderLeft: `3px solid ${borderColor}`
 };
-
-
+const BoxPDFViewSx = {
+	overflow: 'auto',
+	height: '100%'
+};
 
 const Editor = (props: EditorProps) => {
-
-
 	const { document, documentContent, onChange, onCreate } = props;
-	const NFC = 'No file chosen'
+
+	const NFC = 'No file chosen';
 
 	const [IsSetUp, setIsSetUp] = useState(false);
 	const [IsFileUploaded, setIsFileUploaded] = useState(NFC);
 	const [PreviewPdfFile, setPreviewPdfFile] = useState<any>(null);
-	const [type, setType] = useState('PDF');
-
+	const [Type, setType] = useState('PDF');
 	const fileRef = useRef<HTMLInputElement>(null);
-	const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
 	const handleChange = (event: SelectChangeEvent) => {
 		setType(event.target.value as string);
@@ -64,29 +57,31 @@ const Editor = (props: EditorProps) => {
 			fileRef.current.click();
 		}
 	};
-	const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
 
+	const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.name === 'file') {
 			if (e.target.files) {
-				console.log("hello")
-				setIsFileUploaded(e.target.files[0].name)
-				setPreviewPdfFile(e.target.files[0])
+				setIsFileUploaded(e.target.files[0].name);
+				setPreviewPdfFile(e.target.files[0]);
 			}
 		}
-	}
+	};
 
-	const onCanelFileChange = () => {
-		setPreviewPdfFile(undefined)
-		setIsFileUploaded(NFC)
+	const onCancelFileChange = () => {
+		setPreviewPdfFile(undefined);
+		setIsFileUploaded(NFC);
 		if (fileRef.current) {
-			fileRef.current.value = ''
+			fileRef.current.value = '';
 		}
-	}
+	};
 
 	useEffect(() => {
 		if (documentContent) {
 			setIsSetUp(true);
-			setType(document.Contents[0].ContentTypeId === 2 ? 'PDF' : 'Other');
+			setType(document.Contents[0].ContentTypeId === 2 ? 'PDF' : 'Markdown');
+		} else {
+			setIsSetUp(false);
+			setType('PDF');
 		}
 	}, [document, documentContent]);
 
@@ -104,12 +99,44 @@ const Editor = (props: EditorProps) => {
 							justifyContent="flex-start"
 							rowGap={3}
 						>
-							{!IsSetUp ? (
+							{IsSetUp ? (
+								<Fragment>
+									<Typography variant="subtitle1">Type : {Type}</Typography>
+									<CustomButton content="Upload" onClick={uploadFile} />
+									<input
+										id="fileUpload"
+										name="file"
+										type="file"
+										hidden
+										ref={fileRef}
+										onChange={(e) => {
+											onChange(e);
+											onFileChange(e);
+										}}
+									/>
+									<Typography variant="subtitle1">{IsFileUploaded}</Typography>
+									<CustomEditInput
+										isNotDisplay={true}
+										label="Avatar"
+										value={''}
+										onChange={() => {}}
+										onCancel={onCancelFileChange}
+										onSave={() => {
+											onCreate(Type, PreviewPdfFile);
+											setIsFileUploaded(NFC);
+											if (fileRef.current) {
+												fileRef.current.value = '';
+											}
+										}}
+										isAvatarChange={IsFileUploaded.length > 0 && IsFileUploaded != NFC}
+									/>
+								</Fragment>
+							) : (
 								<Fragment>
 									<Typography variant="subtitle1">Decide a type</Typography>
 									<Box sx={{ width: '40%' }}>
 										<FormControl fullWidth>
-											<Select value={type} onChange={handleChange}>
+											<Select value={Type} onChange={handleChange}>
 												<MenuItem value={'PDF'}>PDF</MenuItem>
 												<MenuItem value={'File'}>File</MenuItem>
 												<MenuItem value={'Markdown'}>Markdown</MenuItem>
@@ -123,28 +150,6 @@ const Editor = (props: EditorProps) => {
 										}}
 									/>
 								</Fragment>
-							) : (
-								<Fragment>
-									<Typography variant="subtitle1">Type : {type}</Typography>
-									<CustomButton content="Upload" onClick={uploadFile} />
-									<input id="fileUpload" name="file" type="file" hidden ref={fileRef} onChange={
-										(e) => {
-											console.log("1")
-											onChange(e);
-											onFileChange(e);
-										}
-									} />
-									<Typography variant="subtitle1">{IsFileUploaded}</Typography>
-									<CustomEditInput
-										isNotDisplay={true}
-										label="Avatar"
-										value={""}
-										onChange={() => { }}
-										onCancel={onCanelFileChange}
-										onSave={() => { onCreate(); setIsFileUploaded(NFC) }}
-										isAvatarChange={IsFileUploaded.length > 0 && IsFileUploaded != NFC}
-									/>
-								</Fragment>
 							)}
 							<Typography variant="subtitle1" width="40%" textAlign="center">
 								Markdown and PDF can be viewed directly in the broswer, whereas file can only be
@@ -153,16 +158,11 @@ const Editor = (props: EditorProps) => {
 						</Stack>
 					</Box>
 					<Box sx={BoxRightSx}>
-						{document.Contents.length > 0 ? (
-							<Box sx={BoxPDFView}>
-								<Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-									<Viewer
-										defaultScale={SpecialZoomLevel.PageFit}
-										fileUrl={URL.createObjectURL(documentContent)}
-									// fileUrl={PreviewPdfFile ? URL.createObjectURL(PreviewPdfFile) : URL.createObjectURL(documentContent)}
-									/>
-								</Worker>
-
+						{PreviewPdfFile ? (
+							<MyPDFViewer source={PreviewPdfFile} />
+						) : document.Contents.length > 0 ? (
+							<Box sx={BoxPDFViewSx}>
+								<MyPDFViewer source={PreviewPdfFile ? PreviewPdfFile : documentContent} />
 								{/* <Typography variant="subtitle1">File: {documentContent.size}</Typography> */}
 							</Box>
 						) : (

@@ -11,7 +11,10 @@ export const BoxModalSx = {
 	borderRadius: borderRadius
 };
 
-export const BoxPDFView = {
-	overflow: 'auto',
-	height: '100%'
+export const BoxNotFoundSx = {
+	width: '100%',
+	height: '100%',
+	display: 'flex',
+	alighItems: 'center',
+	justifyContent: 'center'
 };
