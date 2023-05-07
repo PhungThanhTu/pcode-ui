@@ -6,16 +6,22 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
+import { Worker } from '@react-pdf-viewer/core';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+
 
 import { GetDocumentByIdResponse } from '@/types/document.type';
-import { Fragment, useState, useEffect, useRef } from 'react';
+import { Fragment, useState, useEffect, useRef, ChangeEvent } from 'react';
 import { borderColor } from '@/style/Variables';
 import { CustomButton } from '@/components/Custom/CustomButton';
 import { BoxPDFView } from '@/style/BoxModalSx';
+import { CustomEditInput } from '@/components/Custom/CustomEditInput';
 
 interface EditorProps {
 	document: GetDocumentByIdResponse;
 	documentContent: any;
+	onChange: Function;
+	onCreate: Function;
 }
 
 const BoxContainerSx = {
@@ -32,12 +38,22 @@ const BoxRightSx = {
 	textAlign: 'center',
 	borderLeft: `3px solid ${borderColor}`
 };
-const Editor = (props: EditorProps) => {
-	const { document, documentContent } = props;
 
-	const [isSetUp, setIsSetUp] = useState(false);
+
+
+const Editor = (props: EditorProps) => {
+
+
+	const { document, documentContent, onChange, onCreate } = props;
+	const NFC = 'No file chosen'
+
+	const [IsSetUp, setIsSetUp] = useState(false);
+	const [IsFileUploaded, setIsFileUploaded] = useState(NFC);
+	const [PreviewPdfFile, setPreviewPdfFile] = useState<any>(null);
 	const [type, setType] = useState('PDF');
+
 	const fileRef = useRef<HTMLInputElement>(null);
+	const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
 	const handleChange = (event: SelectChangeEvent) => {
 		setType(event.target.value as string);
@@ -48,6 +64,24 @@ const Editor = (props: EditorProps) => {
 			fileRef.current.click();
 		}
 	};
+	const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+
+		if (e.target.name === 'file') {
+			if (e.target.files) {
+				console.log("hello")
+				setIsFileUploaded(e.target.files[0].name)
+				setPreviewPdfFile(e.target.files[0])
+			}
+		}
+	}
+
+	const onCanelFileChange = () => {
+		setPreviewPdfFile(undefined)
+		setIsFileUploaded(NFC)
+		if (fileRef.current) {
+			fileRef.current.value = ''
+		}
+	}
 
 	useEffect(() => {
 		if (documentContent) {
@@ -70,7 +104,7 @@ const Editor = (props: EditorProps) => {
 							justifyContent="flex-start"
 							rowGap={3}
 						>
-							{!isSetUp ? (
+							{!IsSetUp ? (
 								<Fragment>
 									<Typography variant="subtitle1">Decide a type</Typography>
 									<Box sx={{ width: '40%' }}>
@@ -93,7 +127,23 @@ const Editor = (props: EditorProps) => {
 								<Fragment>
 									<Typography variant="subtitle1">Type : {type}</Typography>
 									<CustomButton content="Upload" onClick={uploadFile} />
-									<input id="fileUpload" name="file" type="file" hidden ref={fileRef} />
+									<input id="fileUpload" name="file" type="file" hidden ref={fileRef} onChange={
+										(e) => {
+											console.log("1")
+											onChange(e);
+											onFileChange(e);
+										}
+									} />
+									<Typography variant="subtitle1">{IsFileUploaded}</Typography>
+									<CustomEditInput
+										isNotDisplay={true}
+										label="Avatar"
+										value={""}
+										onChange={() => { }}
+										onCancel={onCanelFileChange}
+										onSave={() => { onCreate(); setIsFileUploaded(NFC) }}
+										isAvatarChange={IsFileUploaded.length > 0 && IsFileUploaded != NFC}
+									/>
 								</Fragment>
 							)}
 							<Typography variant="subtitle1" width="40%" textAlign="center">
@@ -105,10 +155,15 @@ const Editor = (props: EditorProps) => {
 					<Box sx={BoxRightSx}>
 						{document.Contents.length > 0 ? (
 							<Box sx={BoxPDFView}>
-								<Viewer
-									defaultScale={SpecialZoomLevel.PageFit}
-									fileUrl={URL.createObjectURL(documentContent)}
-								/>
+								<Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+									<Viewer
+										defaultScale={SpecialZoomLevel.PageFit}
+										fileUrl={URL.createObjectURL(documentContent)}
+									// fileUrl={PreviewPdfFile ? URL.createObjectURL(PreviewPdfFile) : URL.createObjectURL(documentContent)}
+									/>
+								</Worker>
+
+								{/* <Typography variant="subtitle1">File: {documentContent.size}</Typography> */}
 							</Box>
 						) : (
 							<Typography variant="h6">No contents to preview.</Typography>
