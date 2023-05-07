@@ -4,10 +4,10 @@ interface PreviewProps {
 	source: any;
 	type: string;
 }
-const Preview = (props: PreviewProps) => {
+const Content = (props: PreviewProps) => {
 	const { source } = props;
 
 	return <MarkdownPreview source={source} />;
 };
 
-export default Preview;
+export default Content;
