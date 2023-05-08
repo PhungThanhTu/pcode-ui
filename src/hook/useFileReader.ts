@@ -20,7 +20,6 @@ export const useImageFileReader = () => {
 };
 
 export const usePDFFileReader = () => {
-
 	const [PdfFile, setPdfFile] = useState<any>(null);
 
 	const getFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +28,7 @@ export const usePDFFileReader = () => {
 			// var fr = new FileReader();
 			// fr.onload = function () {
 			// 	if (fr.result) {
-					
+
 			// 	}
 			// };
 			// fr.readAsDataURL();

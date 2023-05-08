@@ -8,7 +8,7 @@ import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 
 import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
-import { BoxModalSx } from '@/style/BoxModalSx';
+import { BoxModalSx } from '@/style/BoxSx';
 
 interface ChangePasswordModalProps {
 	open: boolean;

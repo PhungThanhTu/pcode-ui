@@ -1,4 +1,9 @@
-import { CreateDocumentRequest, DocumentState, GetDocumentByIdResponse } from '@/types/document.type';
+import {
+	CreateDocumentContentRequest,
+	CreateDocumentRequest,
+	DocumentState,
+	GetDocumentByIdResponse
+} from '@/types/document.type';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export const initialDocumentState: DocumentState = {
@@ -17,6 +22,7 @@ const documentSlice = createSlice({
 		fetchDocumentByIdSuccess: (state, { payload }: PayloadAction<GetDocumentByIdResponse>) => {
 			state.document = payload;
 			state.loading = false;
+			state.documentContent = null;
 		},
 		fetchDocumentByIdWithContentSuccess: (
 			state,
@@ -30,7 +36,8 @@ const documentSlice = createSlice({
 			state.document = null;
 			state.loading = false;
 		},
-		createDocument: (state, { payload }: PayloadAction<CreateDocumentRequest>) => {}
+		createDocument: (state, { payload }: PayloadAction<CreateDocumentRequest>) => {},
+		createDocumentContent: (state, { payload }: PayloadAction<CreateDocumentContentRequest>) => {}
 	}
 });
 
@@ -39,6 +46,7 @@ export const {
 	fetchDocumentByIdError,
 	fetchDocumentByIdSuccess,
 	createDocument,
-	fetchDocumentByIdWithContentSuccess
+	fetchDocumentByIdWithContentSuccess,
+	createDocumentContent
 } = documentSlice.actions;
 export default documentSlice.reducer;

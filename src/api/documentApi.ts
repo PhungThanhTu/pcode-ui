@@ -17,9 +17,26 @@ const documentApi = {
 		const result: AxiosResponse<CreateDocumentResponse> = await protectedApi.post('/document', body);
 		return result;
 	},
-	createDocumentContent: async (id: string, body: CreateDocumentContentRequest) => {
-		const result: AxiosResponse<any> = await protectedApi.post(`/document/${id}/content`, body);
-		return result;
+	createDocumentContent: async (body: CreateDocumentContentRequest) => {
+		if (body.contentTypeId === '2') {
+			var bodyFormData = new FormData();
+			bodyFormData.append('file', body.content);
+			bodyFormData.append('contentTypeId', '2');
+
+			const result: AxiosResponse<any> = await protectedApi.post(
+				`/document/${body.documentId}/content`,
+				bodyFormData,
+				{ headers: { 'Content-Type': 'multipart/form-data' } }
+			);
+			return result;
+		} else {
+			var tmp = {
+				content: body.content,
+				contentTypeId: 0
+			};
+			const result: AxiosResponse<any> = await protectedApi.post(`/document/${body.documentId}/content`, tmp);
+			return result;
+		}
 	},
 	changePublishDocument: async (id: string, status: number) => {
 		const result: AxiosResponse<any> = await protectedApi.post(`/document/${id}/publish?publish=${status}`);

@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import { useState } from 'react';
-import { BoxModalSx } from '@/style/BoxModalSx';
+import { BoxModalSx } from '@/style/BoxSx';
 import { CreateCourseRequest } from '@/types/course.type';
 
 interface CourseCreateModalProps {
