@@ -29,9 +29,21 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 			action.payload.id
 		);
 		if (document.data.Contents.length > 0) {
-			const file: AxiosResponse<any> = yield call(documentApi.getMedia, document.data.Contents[0].ContentBody);
-			let temp = new Blob([file.data], { type: 'application/pdf' });
-			yield put(fetchDocumentByIdWithContentSuccess({ document: document.data, documentContent: temp }));
+			if (document.data.Contents[0].ContentTypeId != 0) {
+				const file: AxiosResponse<any> = yield call(
+					documentApi.getMedia,
+					document.data.Contents[0].ContentBody
+				);
+				let temp = new Blob([file.data], { type: 'application/pdf' });
+				yield put(fetchDocumentByIdWithContentSuccess({ document: document.data, documentContent: temp }));
+			} else {
+				yield put(
+					fetchDocumentByIdWithContentSuccess({
+						document: document.data,
+						documentContent: document.data.Contents[0].ContentBody
+					})
+				);
+			}
 		} else {
 			yield put(fetchDocumentByIdSuccess(document.data));
 		}

@@ -12,14 +12,14 @@ const BoxPDFViewSx = {
 
 interface PreviewProps {
 	source: any;
-	type: string;
+	type: number;
 }
 
 const Content = (props: PreviewProps) => {
 	const { source, type } = props;
 
 	if (source) {
-		if (type === 'PDF')
+		if (type === 2)
 			return (
 				<Box sx={BoxPDFViewSx}>
 					<MyPDFViewer source={source} />
@@ -29,7 +29,7 @@ const Content = (props: PreviewProps) => {
 	} else {
 		return (
 			<Box sx={BoxNotFoundSx}>
-				<Typography variant="h5">No content/file to view.</Typography>
+				<Typography variant="h5">No content/file/markdown to view.</Typography>
 			</Box>
 		);
 	}

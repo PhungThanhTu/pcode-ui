@@ -22,12 +22,6 @@ const DocumentPage = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const InitialCreateDocumentContentForm = {
-		file: new Blob(),
-		contentTypeId: '',
-		documentId: params.documentId ? params.documentId : ''
-	};
-
 	const UserProfile = useSelector(getProfile);
 	const { document, loading, documentContent } = useSelector(getDocument);
 
@@ -42,14 +36,20 @@ const DocumentPage = () => {
 	};
 
 	// this for update as well as create
-	const onCreateDocumentContent = (Type: string, File: Blob) => {
+	const onCreateDocumentContent = (Type: string, content: any) => {
 		if (Type === 'PDF') {
 			let CreateDocumentContentForm: CreateDocumentContentRequest = {
-				file: File,
+				content: content,
 				contentTypeId: '2',
 				documentId: params.documentId ? params.documentId : ''
 			};
-			console.log(CreateDocumentContentForm);
+			dispatch(createDocumentContent(CreateDocumentContentForm));
+		} else if (Type === 'Markdown') {
+			let CreateDocumentContentForm: CreateDocumentContentRequest = {
+				content: content,
+				contentTypeId: '0',
+				documentId: params.documentId ? params.documentId : ''
+			};
 			dispatch(createDocumentContent(CreateDocumentContentForm));
 		}
 	};
@@ -76,7 +76,12 @@ const DocumentPage = () => {
 						},
 						{
 							title: 'Content',
-							element: <Content source={documentContent} type="PDF" />
+							element: (
+								<Content
+									source={documentContent}
+									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
+								/>
+							)
 						},
 						{
 							title: 'Exercise',
@@ -98,17 +103,49 @@ const DocumentPage = () => {
 						},
 						{
 							title: 'Content',
-							element: <Content source={documentContent} type="PDF" />
+							element: (
+								<Content
+									source={documentContent}
+									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
+								/>
+							)
 						}
 					]);
 				}
 			} else {
-				setTabs([
-					{
-						title: 'Content',
-						element: <Content source={'Test'} type="markdown" />
-					}
-				]);
+				if (document.HasExercise) {
+					setTabs([
+						{
+							title: 'Content',
+							element: (
+								<Content
+									source={documentContent}
+									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
+								/>
+							)
+						},
+						{
+							title: 'Submission',
+							element: <></>
+						},
+						{
+							title: 'Exercise',
+							element: <></>
+						}
+					]);
+				} else {
+					setTabs([
+						{
+							title: 'Content',
+							element: (
+								<Content
+									source={documentContent}
+									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
+								/>
+							)
+						}
+					]);
+				}
 			}
 		}
 	}, [document]);
