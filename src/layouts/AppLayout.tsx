@@ -22,14 +22,12 @@ const AppLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsW
 	return (
 		<React.Fragment>
 			<NavBar />
-
 			<div style={DivStyle}>
 				<Box sx={LayoutBoxSx}>{props.children}</Box>
 			</div>
-
-			<Footer />
 			<NotificationSnackbar />
 			<BackdropLoading />
+			<Footer />
 		</React.Fragment>
 	);
 };

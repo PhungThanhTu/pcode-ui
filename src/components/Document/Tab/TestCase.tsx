@@ -1,5 +1,5 @@
 const TestCase = () => {
-	return <div></div>;
+	return <div>Test</div>;
 };
 
 export default TestCase;

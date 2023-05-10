@@ -7,25 +7,29 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { GetDocumentByIdResponse } from '@/types/document.type';
 import { Fragment, useState, useEffect, useRef, ChangeEvent } from 'react';
-import { borderColor } from '@/style/Variables';
+import { borderColor, borderRadius, componentStyle, componentsBoxColor } from '@/style/Variables';
 import { CustomButton } from '@/components/Custom/CustomButton';
 import { CustomEditInput } from '@/components/Custom/CustomEditInput';
 
 import MyPDFViewer from '@/components/MyPDFViewer';
 import MarkdownEditor from '@uiw/react-markdown-editor';
+import { cancelButton } from '@/style/ButtonSx';
 
 const BoxContainerSx = {
 	height: '100%'
 };
 const BoxLeftSx = {
+	backgroundColor: `${componentsBoxColor}`,
 	height: '100%',
-	width: '100%'
+	width: '100%',
+	borderRadius: borderRadius
 };
 const BoxRightSx = {
-	height: '80vh',
+	border: `1px solid ${componentsBoxColor}`,
+	height: '100%',
 	width: '100%',
 	textAlign: 'center',
-	borderLeft: `3px solid ${borderColor}`
+	borderRadius: borderRadius
 };
 const BoxPDFViewSx = {
 	overflow: 'auto',
@@ -36,13 +40,15 @@ const BoxSetUpSx = {
 	display: 'flex',
 	alignItems: 'center',
 	flexDirection: 'column',
-	width: '50%',
+	width: '100%',
 	height: '100%',
 	rowGap: 2
 };
 const MarkdownSx = {
+	overflow: 'auto',
+	height: '100%',
 	width: '100%',
-	rowGap: 2,
+	rowGap: 1,
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center'
@@ -53,10 +59,12 @@ interface EditorProps {
 	documentContent: any;
 	onChange: Function;
 	onCreate: Function;
+	onReset: Function;
 }
 
-const Editor = (props: EditorProps) => {
-	const { document, documentContent, onChange, onCreate } = props;
+const Compose = (props: EditorProps) => {
+
+	const { document, documentContent, onChange, onCreate, onReset } = props;
 
 	const NFC = 'No file chosen';
 
@@ -86,6 +94,10 @@ const Editor = (props: EditorProps) => {
 		}
 	};
 
+	const onMarkdownChange = (value: string) => {
+		setMarkdownValue(value)
+	}
+
 	const onCancelFileChange = () => {
 		setPreviewPdfFile(undefined);
 		setIsFileUploaded(NFC);
@@ -95,7 +107,7 @@ const Editor = (props: EditorProps) => {
 	};
 
 	useEffect(() => {
-		console.log(documentContent, document.Contents, 'hello');
+
 		if (documentContent || document.Contents.length > 0) {
 			setIsSetUp(true);
 			if (document.Contents[0].ContentTypeId === 2) setType('PDF');
@@ -111,31 +123,41 @@ const Editor = (props: EditorProps) => {
 
 	return (
 		<Box sx={BoxContainerSx}>
-			<Stack flexDirection="column" rowGap={4} height="100%">
-				<Typography variant="h6">{document.Title}</Typography>
+			<Stack flexDirection="column" rowGap={1} height="100%">
+				<Box sx={componentStyle}>
+					<Typography variant="h6" >{document.Title}
+					</Typography>
+				</Box>
 				<Stack
 					flexDirection="row"
 					width="100%"
-					height="100%"
-					padding="0.75rem"
+					height="100vh"
+					columnGap={1}
 					alignItems={'flex-start'}
 					justifyContent={'center'}
 				>
 					{IsSetUp ? (
 						Type === 'PDF' ? (
 							<Fragment>
-								<Box sx={BoxLeftSx}>
+								<Box sx={{ ...BoxLeftSx, ...componentStyle }}>
 									<Stack
 										flexDirection="column"
 										width="100%"
 										height="100%"
 										alignItems="center"
-										justifyContent="flex-start"
-										rowGap={3}
+										justifyContent="center"
+										rowGap={2}
 									>
 										<Fragment>
 											<Typography variant="subtitle1">Type : {Type}</Typography>
-											<CustomButton content="Upload" onClick={uploadFile} />
+											<Stack rowGap={2}>
+												<CustomButton
+													sx={{ width: '100%' }} content="Upload" onClick={uploadFile} />
+												<CustomButton
+													sx={cancelButton}
+													content="Reset" onClick={onReset}
+												/>
+											</Stack>
 											<input
 												id="fileUpload"
 												name="file"
@@ -148,21 +170,25 @@ const Editor = (props: EditorProps) => {
 												}}
 											/>
 											<Typography variant="subtitle1">{IsFileUploaded}</Typography>
-											<CustomEditInput
-												isNotDisplay={true}
-												label="Avatar"
-												value={''}
-												onChange={() => {}}
-												onCancel={onCancelFileChange}
-												onSave={() => {
-													onCreate(Type, PreviewPdfFile);
-													setIsFileUploaded(NFC);
-													if (fileRef.current) {
-														fileRef.current.value = '';
-													}
-												}}
-												isAvatarChange={IsFileUploaded.length > 0 && IsFileUploaded != NFC}
-											/>
+											<Box>
+												<CustomEditInput
+													isNotDisplay={true}
+													label=""
+													value={''}
+													onChange={() => { }}
+													onCancel={onCancelFileChange}
+													onSave={() => {
+														onCreate(Type, PreviewPdfFile);
+														setIsFileUploaded(NFC);
+														if (fileRef.current) {
+															fileRef.current.value = '';
+														}
+													}}
+													isAvatarChange={IsFileUploaded.length > 0 && IsFileUploaded != NFC}
+
+												/>
+											</Box>
+
 											<Typography variant="subtitle1" width="40%" textAlign="center">
 												Markdown and PDF can be viewed directly in the broswer, whereas file can
 												only be downloaded
@@ -170,7 +196,7 @@ const Editor = (props: EditorProps) => {
 										</Fragment>
 									</Stack>
 								</Box>
-								<Box sx={BoxRightSx}>
+								<Box sx={{ ...BoxRightSx, ...componentStyle }}>
 									{PreviewPdfFile ? (
 										<MyPDFViewer source={PreviewPdfFile} />
 									) : document.Contents.length > 0 ? (
@@ -184,26 +210,39 @@ const Editor = (props: EditorProps) => {
 								</Box>
 							</Fragment>
 						) : (
-							<Box sx={MarkdownSx}>
-								<CustomButton
-									content="Save"
-									onClick={() => {
-										onCreate(Type, MarkdownValue);
-									}}
-								/>
-								<div data-color-mode="dark" style={{ width: '100%' }}>
+							<Box sx={{ ...MarkdownSx, ...componentStyle }}>
+								<Stack
+									flexDirection="row"
+									width="30%"
+									columnGap={1}
+								>
+									<CustomButton
+										sx={cancelButton}
+										content='Reset'
+										onClick={onReset} />
+									<CustomButton
+										sx={{ width: '100%' }}
+										content="Save"
+										onClick={() => {
+											onCreate(Type, MarkdownValue);
+										}}
+									/>
+								</Stack>
+
+								<Box sx={{ width: '100%' }}>
 									<MarkdownEditor
 										width="100%"
-										height="100vh"
+										height="100%"
 										visible
 										value={MarkdownValue ? MarkdownValue : ''}
-										onChange={(value, viewUpdate) => setMarkdownValue(value)}
+										onChange={(value, viewUpdate) => { onMarkdownChange(value) }}
 									/>
-								</div>
+								</Box>
+
 							</Box>
 						)
 					) : (
-						<Box sx={BoxSetUpSx}>
+						<Box sx={{ ...BoxSetUpSx, ...componentStyle }}>
 							<Typography variant="subtitle1">Decide a type</Typography>
 							<Box sx={{ width: '40%' }}>
 								<FormControl fullWidth>
@@ -232,4 +271,4 @@ const Editor = (props: EditorProps) => {
 	);
 };
 
-export default Editor;
+export default Compose;

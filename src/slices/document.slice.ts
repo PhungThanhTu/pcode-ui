@@ -37,7 +37,8 @@ const documentSlice = createSlice({
 			state.loading = false;
 		},
 		createDocument: (state, { payload }: PayloadAction<CreateDocumentRequest>) => {},
-		createDocumentContent: (state, { payload }: PayloadAction<CreateDocumentContentRequest>) => {}
+		createDocumentContent: (state, { payload }: PayloadAction<CreateDocumentContentRequest>) => {},
+		resetDocumentContent: (state, { payload }: PayloadAction<{ id: string }>) => {}
 	}
 });
 
@@ -47,6 +48,7 @@ export const {
 	fetchDocumentByIdSuccess,
 	createDocument,
 	fetchDocumentByIdWithContentSuccess,
-	createDocumentContent
+	createDocumentContent,
+	resetDocumentContent
 } = documentSlice.actions;
 export default documentSlice.reducer;

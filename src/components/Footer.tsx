@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 
 import { FC, ReactElement } from 'react';
 const FooterBoxSx = {
+	position: 'relative',
 	width: '100%',
 	height: 'auto',
 	backgroundColor: 'secondary',

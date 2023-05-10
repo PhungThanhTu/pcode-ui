@@ -4,17 +4,12 @@ import IconButton from '@mui/material/IconButton';
 import { SxProps } from '@mui/material';
 
 import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled';
-
-const blue = {
-	500: '#1976d2',
-	600: '#0072E5',
-	700: '#0059B2'
-};
+import { Blue } from '@/style/Variables';
 
 export const StyledUnstyledButton = styled(ButtonUnstyled)`
 	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 	font-weight: bold;
-	background-color: ${blue[500]};
+	background-color: ${Blue[500]};
 	padding: 12px 24px;
 	border-radius: 5px;
 	color: white;
@@ -23,11 +18,11 @@ export const StyledUnstyledButton = styled(ButtonUnstyled)`
 	border: none;
 
 	&:hover {
-		background-color: ${blue[600]};
+		background-color: ${Blue[600]};
 	}
 
 	&.${buttonUnstyledClasses.active} {
-		background-color: ${blue[700]};
+		background-color: ${Blue[700]};
 	}
 
 	&.${buttonUnstyledClasses.focusVisible} {
@@ -40,8 +35,8 @@ export const StyledUnstyledButton = styled(ButtonUnstyled)`
 		cursor: not-allowed;
 	}
 `;
-export const CustomButton = ({ content, onClick, type }: any) => (
-	<StyledUnstyledButton type={type} onClick={onClick}>
+export const CustomButton = ({ content, onClick, type, sx }: any) => (
+	<StyledUnstyledButton sx={sx} type={type} onClick={onClick}>
 		{content}
 	</StyledUnstyledButton>
 );

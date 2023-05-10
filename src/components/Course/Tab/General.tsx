@@ -13,7 +13,7 @@ interface GeneralProps {
 	course: GetCourseByIdResponse;
 	customizeButton: Function | null;
 	code: string;
-	createDocumentModal: Function;
+	createDocumentModal: Function | null;
 }
 const General = (props: GeneralProps) => {
 	const { course, customizeButton, code, createDocumentModal } = props;
@@ -29,16 +29,18 @@ const General = (props: GeneralProps) => {
 				/>
 			}
 			leftBody={
-				<Fragment>
-					<CustomIconButton
-						onClick={() => {
-							createDocumentModal();
-						}}
-						startIcon={<CreateIcon />}
-						content="Create Document"
-					/>
-					<CourseCodeBox code={code} />
-				</Fragment>
+				createDocumentModal ? (
+					<Fragment>
+						<CustomIconButton
+							onClick={() => {
+								createDocumentModal();
+							}}
+							startIcon={<CreateIcon />}
+							content="Create Document"
+						/>
+						<CourseCodeBox code={code} />
+					</Fragment>
+				) : null
 			}
 			rightBody={<ListItems list={course ? course.documents : []} />}
 		/>
