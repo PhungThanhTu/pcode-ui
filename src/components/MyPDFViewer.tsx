@@ -35,7 +35,8 @@ const MyPDFViewer = (props: MyPDFViewerProps) => {
 
 	const transform: TransformToolbarSlot = (slot: ToolbarSlot) => ({
 		...slot,
-		Open: () => <></>
+		Open: () => <></>,
+		SwitchTheme: () => <></>
 	});
 	const { source } = props;
 

@@ -53,7 +53,6 @@ const CoursePage = () => {
 	const onCreateDocument = () => {
 		setOpenDocumentCreate(false);
 		setCreateDocumentForm(InitialForm);
-		console.log(InitialForm, 'hello');
 		dispatch(createDocument(CreateDocumentForm));
 	};
 	const onCreateDocumentFieldsChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -84,9 +83,13 @@ const CoursePage = () => {
 									  }
 									: null
 							}
-							createDocumentModal={() => {
-								setOpenDocumentCreate(true);
-							}}
+							createDocumentModal={
+								isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
+									? () => {
+											setOpenDocumentCreate(true);
+									  }
+									: null
+							}
 						/>
 					)
 				},

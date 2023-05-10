@@ -4,9 +4,10 @@ import Typography from '@mui/material/Typography';
 import MyPDFViewer from '@/components/MyPDFViewer';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { BoxNotFoundSx } from '@/style/BoxSx';
+import { componentStyle } from '@/style/Variables';
 
-const BoxPDFViewSx = {
-	height: '100vh',
+const BoxViewSx = {
+	minHeight: '100vh',
 	width: '100%'
 };
 
@@ -21,11 +22,16 @@ const Content = (props: PreviewProps) => {
 	if (source) {
 		if (type === 2)
 			return (
-				<Box sx={BoxPDFViewSx}>
+				<Box sx={{ ...BoxViewSx, ...componentStyle }}>
 					<MyPDFViewer source={source} />
 				</Box>
 			);
-		else return <MarkdownPreview source={source} />;
+		else
+			return (
+				<Box sx={{ ...BoxViewSx, ...componentStyle }}>
+					<MarkdownPreview source={source} />
+				</Box>
+			);
 	} else {
 		return (
 			<Box sx={BoxNotFoundSx}>

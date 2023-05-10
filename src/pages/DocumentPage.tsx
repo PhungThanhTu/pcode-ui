@@ -1,6 +1,6 @@
 import CustomTab from '@/components/Custom/CustomTab';
 import NotFound from '@/components/NotFound';
-import Editor from '@/components/Document/Tab/Editor';
+import Compose from '@/components/Document/Tab/Compose';
 import Content from '@/components/Document/Tab/Content';
 import Exercise from '@/components/Document/Tab/Exercise';
 import { LinearLoading } from '@/components/Loading';
@@ -11,11 +11,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 import { getDocument } from '@/selectors/document.selector';
-import { createDocumentContent, fetchDocumentById } from '@/slices/document.slice';
+import { createDocumentContent, fetchDocumentById, resetDocumentContent } from '@/slices/document.slice';
 
 import { usePDFFileReader } from '@/hook/useFileReader';
 import { CreateDocumentContentRequest } from '@/types/document.type';
 import { Worker } from '@react-pdf-viewer/core';
+import TestCase from '@/components/Document/Tab/TestCase';
+import CustomDialog from '@/components/Custom/CustomDialog';
 
 const DocumentPage = () => {
 	const params = useParams();
@@ -26,6 +28,7 @@ const DocumentPage = () => {
 	const { document, loading, documentContent } = useSelector(getDocument);
 
 	const [Tabs, setTabs] = useState<TabElement[]>([]);
+	const [OpenDialog, setOpenDialog] = useState(false);
 
 	const { PdfFile, getFile } = usePDFFileReader();
 
@@ -54,6 +57,11 @@ const DocumentPage = () => {
 		}
 	};
 
+	const onResetDocumentContent = () => {
+		dispatch(resetDocumentContent({ id: params.documentId ? params.documentId : '' }));
+		setOpenDialog(false);
+	};
+
 	useEffect(() => {
 		if (!document) {
 			// dispatch(fetchDocumentById({ id: params.documentId ? params.documentId : '' }));
@@ -64,13 +72,16 @@ const DocumentPage = () => {
 				if (document.HasExercise) {
 					setTabs([
 						{
-							title: 'Editor',
+							title: 'Compose',
 							element: (
-								<Editor
+								<Compose
 									document={document}
 									documentContent={documentContent}
 									onChange={onChangeDocumentContent}
 									onCreate={onCreateDocumentContent}
+									onReset={() => {
+										setOpenDialog(true);
+									}}
 								/>
 							)
 						},
@@ -86,18 +97,25 @@ const DocumentPage = () => {
 						{
 							title: 'Exercise',
 							element: <Exercise />
+						},
+						{
+							title: 'TestCases',
+							element: <TestCase />
 						}
 					]);
 				} else {
 					setTabs([
 						{
-							title: 'Editor',
+							title: 'Composer',
 							element: (
-								<Editor
+								<Compose
 									document={document}
 									documentContent={documentContent}
 									onChange={onChangeDocumentContent}
 									onCreate={onCreateDocumentContent}
+									onReset={() => {
+										setOpenDialog(true);
+									}}
 								/>
 							)
 						},
@@ -161,6 +179,15 @@ const DocumentPage = () => {
 			<Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js">
 				<CustomTab ListOfTabs={Tabs} />
 			</Worker>
+			<CustomDialog
+				title="Reset the content?"
+				content="This will reset (delete) and make the document content can be set up again!"
+				open={OpenDialog}
+				onCancel={() => setOpenDialog(false)}
+				onSave={() => {
+					onResetDocumentContent();
+				}}
+			/>
 		</Fragment>
 	) : (
 		<NotFound />

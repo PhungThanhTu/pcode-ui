@@ -14,7 +14,8 @@ import {
 	fetchDocumentById,
 	fetchDocumentByIdError,
 	fetchDocumentByIdSuccess,
-	fetchDocumentByIdWithContentSuccess
+	fetchDocumentByIdWithContentSuccess,
+	resetDocumentContent
 } from '@/slices/document.slice';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
@@ -88,9 +89,22 @@ function* createDocumentContentSaga(action: PayloadAction<CreateDocumentContentR
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('document content', '')));
 	}
 }
-
+function* resetDocumentContentSaga(action: PayloadAction<{ id: string }>) {
+	try {
+		console.log('saga delete document content');
+		const data: AxiosResponse<any> = yield call(documentApi.deleteDocumentContent, action.payload.id);
+		if (data) {
+			yield put(setSnackbar(notificationMessage.DELETE_SUCCESS('document content')));
+		}
+		yield put(fetchDocumentById({ id: action.payload.id }));
+	} catch (error: any) {
+		console.log('saga delete document content failed');
+		yield put(setSnackbar(notificationMessage.DELETE_FAIL('document content', '')));
+	}
+}
 export function* watchDocument() {
 	yield takeLatest(fetchDocumentById.type, fetchDocumentByIdSaga);
 	yield takeLatest(createDocument.type, createDocumentSaga);
 	yield takeLatest(createDocumentContent.type, createDocumentContentSaga);
+	yield takeLatest(resetDocumentContent.type, resetDocumentContentSaga);
 }

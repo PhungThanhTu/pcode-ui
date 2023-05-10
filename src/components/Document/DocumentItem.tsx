@@ -28,7 +28,7 @@ export const DocumentItem = (props: DocumentItemProps) => {
 				) : undefined}
 				{document.HasExercise ? (
 					<Fragment>
-						<Typography color="red">Exercise status: Not Submited</Typography>
+						<Typography color="red">Exercise status: Nothing</Typography>
 					</Fragment>
 				) : undefined}
 			</Stack>
