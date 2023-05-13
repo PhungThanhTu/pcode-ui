@@ -10,8 +10,19 @@ import { TabElement } from '@/types/utility.type';
 interface CustomTabProps {
 	ListOfTabs: Array<TabElement>;
 }
+
+const BoxCustomTabSx = {
+	width: '100%',
+	'.MuiTabPanel-root' : {
+		padding: 0,
+		paddingTop: '5px'
+	}
+}
+
 const CustomTab = (props: CustomTabProps) => {
 	const { ListOfTabs } = props;
+	
+	
 
 	const [TabIndex, setTabIndex] = useState('1');
 
@@ -20,9 +31,14 @@ const CustomTab = (props: CustomTabProps) => {
 	};
 
 	return (
-		<Box sx={{ width: '100%' }}>
+		<Box
+			id='CustomTab'
+			sx={{
+				...BoxCustomTabSx,
+			}}
+		>
 			<TabContext value={TabIndex}>
-				<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+				<Box sx={{  borderColor: 'divider' }}>
 					<TabList onChange={handleChangeTab}>
 						{ListOfTabs.map((item, index) => {
 							return <Tab key={index} label={item.title.toUpperCase()} value={`${index + 1}`} />;

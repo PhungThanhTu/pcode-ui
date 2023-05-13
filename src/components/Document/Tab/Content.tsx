@@ -7,8 +7,10 @@ import { BoxNotFoundSx } from '@/style/BoxSx';
 import { componentStyle } from '@/style/Variables';
 
 const BoxViewSx = {
-	minHeight: '100vh',
-	width: '100%'
+	minHeight: '80vh',
+	maxHeight: '100vh',
+	width: '100%',
+
 };
 
 interface PreviewProps {
@@ -17,19 +19,20 @@ interface PreviewProps {
 }
 
 const Content = (props: PreviewProps) => {
+	
 	const { source, type } = props;
 
 	if (source) {
 		if (type === 2)
 			return (
 				<Box sx={{ ...BoxViewSx, ...componentStyle }}>
-					<MyPDFViewer source={source} />
+					<MyPDFViewer source={source}  />
 				</Box>
 			);
 		else
 			return (
 				<Box sx={{ ...BoxViewSx, ...componentStyle }}>
-					<MarkdownPreview source={source} />
+					<MarkdownPreview source={source} style={{height : '100%'}} />
 				</Box>
 			);
 	} else {

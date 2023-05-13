@@ -11,24 +11,41 @@ interface PropsWithChildrenOnly {
 }
 const LayoutBoxSx = {
 	width: '100%',
-	padding: '15px'
+	padding: '15px',
+	paddingTop: 0
 };
-const DivStyle = {
-	marginTop: '50px',
-	minHeight: '100vh',
-	maxHeight: 'fit-content'
+const BoxContentSx = {
+	overflowX: 'hidden',
+	height: '100%'
 };
+const BoxContainerSx = {
+
+}
+
+
 const AppLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
+	const HeaderHeight = document.getElementsByTagName('header')[0]
+
 	return (
 		<React.Fragment>
-			<NavBar />
-			<div style={DivStyle}>
-				<Box sx={LayoutBoxSx}>{props.children}</Box>
-			</div>
-			<NotificationSnackbar />
-			<BackdropLoading />
-			<Footer />
-		</React.Fragment>
+			<Box id='AppContainer' 			>
+				<NavBar />
+				<Box id='AppContent' sx={
+					{
+						...BoxContentSx,
+						paddingTop: `${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px`,
+						minHeight: `calc(100vh - ${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px)`,
+						// maxHeight: `calc(100vh - ${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px)`
+					}
+				}>
+					<Box sx={LayoutBoxSx}>{props.children}</Box>
+				</Box>
+				<NotificationSnackbar />
+				<BackdropLoading />
+				<Footer />
+			</Box>
+
+		</React.Fragment >
 	);
 };
 

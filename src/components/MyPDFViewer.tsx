@@ -49,7 +49,7 @@ const MyPDFViewer = (props: MyPDFViewerProps) => {
 						<Viewer
 							plugins={[toolbarPluginInstance]}
 							fileUrl={URL.createObjectURL(source)}
-							defaultScale={SpecialZoomLevel.PageFit}
+							// defaultScale={SpecialZoomLevel.PageFit}
 						/>
 					</Box>
 				</Fragment>
