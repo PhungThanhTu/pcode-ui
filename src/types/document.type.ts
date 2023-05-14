@@ -48,3 +48,15 @@ export interface UpdateDocumentRequest {
 	title: string;
 	description: string;
 }
+export interface CreateExerciseRequest {
+	runtimeLimit: number;
+	memoryLimit: number;
+	scoreWeight: number;
+	manualPercentage: number;
+}
+export interface CreateTestCaseRequest {
+	input: string;	
+	output: string,
+	scoreWeight: number,
+	visibility: boolean
+}

@@ -32,13 +32,13 @@ const DocumentPage = () => {
 
 	const { PdfFile, getFile } = usePDFFileReader();
 
+	//#region document content
 	const onChangeDocumentContent = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.name === 'file') {
 			getFile(e);
 		}
 	};
 
-	// this for update as well as create
 	const onCreateDocumentContent = (Type: string, content: any) => {
 		if (Type === 'PDF') {
 			let CreateDocumentContentForm: CreateDocumentContentRequest = {
@@ -61,6 +61,19 @@ const DocumentPage = () => {
 		dispatch(resetDocumentContent({ id: params.documentId ? params.documentId : '' }));
 		setOpenDialog(false);
 	};
+	//#endregion
+
+	//#region exercise
+	const onChangeExercise = () => {
+
+	}
+	const onCreateExercise = () => {
+
+	}
+	const onUpdateExercise = () => {
+
+	}
+	//#endregion
 
 	useEffect(() => {
 		if (!document) {
@@ -89,6 +102,7 @@ const DocumentPage = () => {
 							title: 'Content',
 							element: (
 								<Content
+									title={document.Title}
 									source={documentContent}
 									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
 								/>
@@ -96,7 +110,13 @@ const DocumentPage = () => {
 						},
 						{
 							title: 'Exercise',
-							element: <Exercise />
+							element: <Exercise
+								title={document.Title}
+								isCreator={true}
+								onChange={onChangeExercise}
+								onCreate={onCreateExercise}
+								onUpdate={onUpdateExercise}
+							/>
 						},
 						{
 							title: 'TestCases',
@@ -123,6 +143,7 @@ const DocumentPage = () => {
 							title: 'Content',
 							element: (
 								<Content
+									title={document.Title}
 									source={documentContent}
 									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
 								/>
@@ -137,6 +158,7 @@ const DocumentPage = () => {
 							title: 'Content',
 							element: (
 								<Content
+									title={document.Title}
 									source={documentContent}
 									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
 								/>
@@ -157,6 +179,7 @@ const DocumentPage = () => {
 							title: 'Content',
 							element: (
 								<Content
+									title={document.Title}
 									source={documentContent}
 									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
 								/>

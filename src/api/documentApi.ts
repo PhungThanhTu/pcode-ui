@@ -57,6 +57,10 @@ const documentApi = {
 	getMedia: async (id: string) => {
 		const result: AxiosResponse<any> = await protectedApi.get(`/media/${id}`, { responseType: 'blob' });
 		return result;
+	},
+	createExercise: async () => {
+		const result: AxiosResponse<any> = await protectedApi.post(`/document/${""}`);
+		return result;
 	}
 };
 

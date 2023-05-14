@@ -38,13 +38,12 @@ const CourseTabHeader = (props: TabHeaderProps) => {
 			<Paper
 				sx={{
 					height: '100%',
-					backgroundImage: `url(${
-						props.background
-							? props.background
-							: 'https://www.gstatic.com/classroom/themes/Honors_thumb.jpg'
-					})`,
+					backgroundImage: `url(${props.background
+						? props.background
+						: 'https://www.gstatic.com/classroom/themes/Honors_thumb.jpg'
+						})`,
 					backgroundRepeat: 'no-repeat',
-					backgroundSize: '100%',
+					'-webkit-background-size': '100%',
 					width: '100%',
 					position: 'absolute'
 				}}

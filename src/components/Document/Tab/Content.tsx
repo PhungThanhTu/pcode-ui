@@ -5,35 +5,48 @@ import MyPDFViewer from '@/components/MyPDFViewer';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { BoxNotFoundSx } from '@/style/BoxSx';
 import { componentStyle } from '@/style/Variables';
+import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 
 const BoxViewSx = {
 	minHeight: '80vh',
 	maxHeight: '100vh',
 	width: '100%',
-
 };
 
 interface PreviewProps {
 	source: any;
 	type: number;
+	title: string;
 }
 
 const Content = (props: PreviewProps) => {
-	
-	const { source, type } = props;
+
+	const { source, type, title } = props;
 
 	if (source) {
 		if (type === 2)
 			return (
-				<Box sx={{ ...BoxViewSx, ...componentStyle }}>
-					<MyPDFViewer source={source}  />
-				</Box>
+				<DocumentTabLayout
+					title={title}
+					content={<Box sx={{ ...BoxViewSx, ...componentStyle }}>
+						<MyPDFViewer source={source} />
+					</Box>
+
+					}
+				/>
+
 			);
 		else
 			return (
-				<Box sx={{ ...BoxViewSx, ...componentStyle }}>
-					<MarkdownPreview source={source} style={{height : '100%'}} />
-				</Box>
+				<DocumentTabLayout
+					title={title}
+					content={
+						<Box sx={{ ...BoxViewSx, ...componentStyle }}>
+							<MarkdownPreview source={source} style={{ height: '100%' }} />
+						</Box>
+					}
+				/>
+
 			);
 	} else {
 		return (

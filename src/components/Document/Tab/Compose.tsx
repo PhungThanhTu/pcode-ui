@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { GetDocumentByIdResponse } from '@/types/document.type';
 import { Fragment, useState, useEffect, useRef, ChangeEvent } from 'react';
-import { borderColor, borderRadius, componentStyle, componentsBoxColor } from '@/style/Variables';
+import { borderRadius, componentStyle, componentsBoxColor } from '@/style/Variables';
 import { CustomButton } from '@/components/Custom/CustomButton';
 import { CustomEditInput } from '@/components/Custom/CustomEditInput';
 
@@ -45,7 +45,7 @@ const BoxSetUpSx = {
 	rowGap: 2
 };
 const MarkdownSx = {
-	overflow: 'auto',
+	overflow: 'hidden',
 	height: '100%',
 	width: '100%',
 	rowGap: 1,
@@ -211,6 +211,16 @@ const Compose = (props: EditorProps) => {
 							</Fragment>
 						) : (
 							<Box sx={{ ...MarkdownSx, ...componentStyle }}>
+
+								<Box sx={{ width: '100%',height :'635px' ,overflow: 'auto'}}>
+									<MarkdownEditor
+										width="100%"
+										height="100%"
+										visible
+										value={MarkdownValue ? MarkdownValue : ''}
+										onChange={(value, viewUpdate) => { onMarkdownChange(value) }}
+									/>
+								</Box>
 								<Stack
 									flexDirection="row"
 									width="30%"
@@ -228,17 +238,6 @@ const Compose = (props: EditorProps) => {
 										}}
 									/>
 								</Stack>
-
-								<Box sx={{ width: '100%' }}>
-									<MarkdownEditor
-										width="100%"
-										height="100%"
-										visible
-										value={MarkdownValue ? MarkdownValue : ''}
-										onChange={(value, viewUpdate) => { onMarkdownChange(value) }}
-									/>
-								</Box>
-
 							</Box>
 						)
 					) : (
