@@ -1,4 +1,4 @@
-import { SpecialZoomLevel, Viewer } from '@react-pdf-viewer/core';
+import { Viewer } from '@react-pdf-viewer/core';
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import type { ToolbarSlot, TransformToolbarSlot } from '@react-pdf-viewer/toolbar';
 
@@ -49,7 +49,7 @@ const MyPDFViewer = (props: MyPDFViewerProps) => {
 						<Viewer
 							plugins={[toolbarPluginInstance]}
 							fileUrl={URL.createObjectURL(source)}
-							defaultScale={SpecialZoomLevel.PageFit}
+							// defaultScale={SpecialZoomLevel.PageFit}
 						/>
 					</Box>
 				</Fragment>

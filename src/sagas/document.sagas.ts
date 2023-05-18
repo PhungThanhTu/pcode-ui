@@ -92,14 +92,17 @@ function* createDocumentContentSaga(action: PayloadAction<CreateDocumentContentR
 function* resetDocumentContentSaga(action: PayloadAction<{ id: string }>) {
 	try {
 		console.log('saga delete document content');
+		yield put(setLoading({ isLoading: true }));
 		const data: AxiosResponse<any> = yield call(documentApi.deleteDocumentContent, action.payload.id);
 		if (data) {
+			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.DELETE_SUCCESS('document content')));
 		}
 		yield put(fetchDocumentById({ id: action.payload.id }));
 	} catch (error: any) {
-		console.log('saga delete document content failed');
-		yield put(setSnackbar(notificationMessage.DELETE_FAIL('document content', '')));
+		console.log('saga reset document content failed');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.ERROR('Reset document content failed, please try again!.')));
 	}
 }
 export function* watchDocument() {

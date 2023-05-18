@@ -18,10 +18,10 @@ const documentApi = {
 		return result;
 	},
 	createDocumentContent: async (body: CreateDocumentContentRequest) => {
-		if (body.contentTypeId === '2') {
+		if (body.contentTypeId === '1') {
 			var bodyFormData = new FormData();
 			bodyFormData.append('file', body.content);
-			bodyFormData.append('contentTypeId', '2');
+			bodyFormData.append('contentTypeId', '1');
 
 			const result: AxiosResponse<any> = await protectedApi.post(
 				`/document/${body.documentId}/content`,
@@ -56,6 +56,10 @@ const documentApi = {
 	},
 	getMedia: async (id: string) => {
 		const result: AxiosResponse<any> = await protectedApi.get(`/media/${id}`, { responseType: 'blob' });
+		return result;
+	},
+	createExercise: async () => {
+		const result: AxiosResponse<any> = await protectedApi.post(`/document/${''}`);
 		return result;
 	}
 };

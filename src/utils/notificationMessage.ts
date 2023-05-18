@@ -43,7 +43,7 @@ const notificationMessage = {
 	},
 	DELETE_FAIL: (title: string, detail: string) => {
 		return {
-			message: `Delete ${title ? title : ''} fail! ${detail ? detail : ''}`,
+			message: `Delete ${title ? title : ''} fail! ${detail ? detail : ''} ,please try again!`,
 			type: notificationType.ERROR
 		};
 	}

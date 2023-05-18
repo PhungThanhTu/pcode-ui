@@ -9,8 +9,6 @@ const FooterBoxSx = {
 	width: '100%',
 	height: 'auto',
 	backgroundColor: 'secondary',
-	paddingTop: '1rem',
-	paddingBottom: '1rem',
 	'.MuiTypography-root': {
 		fontSize: '9pt'
 	}

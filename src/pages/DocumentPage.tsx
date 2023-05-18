@@ -14,7 +14,7 @@ import { getDocument } from '@/selectors/document.selector';
 import { createDocumentContent, fetchDocumentById, resetDocumentContent } from '@/slices/document.slice';
 
 import { usePDFFileReader } from '@/hook/useFileReader';
-import { CreateDocumentContentRequest } from '@/types/document.type';
+import { CreateDocumentContentRequest, CreateExerciseRequest } from '@/types/document.type';
 import { Worker } from '@react-pdf-viewer/core';
 import TestCase from '@/components/Document/Tab/TestCase';
 import CustomDialog from '@/components/Custom/CustomDialog';
@@ -32,18 +32,18 @@ const DocumentPage = () => {
 
 	const { PdfFile, getFile } = usePDFFileReader();
 
+	//#region document content
 	const onChangeDocumentContent = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.name === 'file') {
 			getFile(e);
 		}
 	};
 
-	// this for update as well as create
 	const onCreateDocumentContent = (Type: string, content: any) => {
 		if (Type === 'PDF') {
 			let CreateDocumentContentForm: CreateDocumentContentRequest = {
 				content: content,
-				contentTypeId: '2',
+				contentTypeId: '1',
 				documentId: params.documentId ? params.documentId : ''
 			};
 			dispatch(createDocumentContent(CreateDocumentContentForm));
@@ -61,6 +61,13 @@ const DocumentPage = () => {
 		dispatch(resetDocumentContent({ id: params.documentId ? params.documentId : '' }));
 		setOpenDialog(false);
 	};
+	//#endregion
+
+	//#region exercise
+
+	const onCreateExercise = () => {};
+	const onUpdateExercise = () => {};
+	//#endregion
 
 	useEffect(() => {
 		if (!document) {
@@ -89,14 +96,24 @@ const DocumentPage = () => {
 							title: 'Content',
 							element: (
 								<Content
+									title={document.Title}
 									source={documentContent}
-									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
+									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
 								/>
 							)
 						},
 						{
 							title: 'Exercise',
-							element: <Exercise />
+							element: (
+								<Exercise
+									title={document.Title}
+									isCreator={true}
+									// onChange={onChangeExercise}
+									onCreate={onCreateExercise}
+									onUpdate={onUpdateExercise}
+									// exerciseValues={{ runtimeLimit, manualPercentage, memoryLimit, scoreWeight }}
+								/>
+							)
 						},
 						{
 							title: 'TestCases',
@@ -123,8 +140,9 @@ const DocumentPage = () => {
 							title: 'Content',
 							element: (
 								<Content
+									title={document.Title}
 									source={documentContent}
-									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
+									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
 								/>
 							)
 						}
@@ -137,8 +155,9 @@ const DocumentPage = () => {
 							title: 'Content',
 							element: (
 								<Content
+									title={document.Title}
 									source={documentContent}
-									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
+									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
 								/>
 							)
 						},
@@ -148,7 +167,7 @@ const DocumentPage = () => {
 						},
 						{
 							title: 'Exercise',
-							element: <></>
+							element: <Exercise title={document.Title} isCreator={false} />
 						}
 					]);
 				} else {
@@ -157,6 +176,7 @@ const DocumentPage = () => {
 							title: 'Content',
 							element: (
 								<Content
+									title={document.Title}
 									source={documentContent}
 									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
 								/>

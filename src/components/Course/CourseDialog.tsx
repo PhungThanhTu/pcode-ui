@@ -29,9 +29,9 @@ const CourseDialog = () => {
 		navigate('/course');
 	};
 
-	const handleJoinCourse = () => {
+	const handleJoinCourse = (id: string) => {
 		dispatch(joinCourse({ Code: code ? code : '' }));
-		navigate(`/course/${code}`);
+		navigate(`/course/${id}`);
 	};
 
 	useEffect(() => {
@@ -74,7 +74,12 @@ const CourseDialog = () => {
 						{Course ? (
 							<Fragment>
 								<Button onClick={handleClose}>Disagree</Button>
-								<Button onClick={handleJoinCourse} autoFocus>
+								<Button
+									onClick={() => {
+										handleJoinCourse(Course.id);
+									}}
+									autoFocus
+								>
 									Agree
 								</Button>
 							</Fragment>

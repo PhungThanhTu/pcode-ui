@@ -76,7 +76,7 @@ const CoursesPage = () => {
 
 	return (
 		<Stack direction="column" spacing={2}>
-			<Stack direction="row" spacing={3}>
+			<Stack direction="row" spacing={2} paddingTop="0.5rem">
 				<CustomIconButton
 					startIcon={<CreateIcon />}
 					content="Create a Course"

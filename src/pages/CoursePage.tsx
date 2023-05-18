@@ -7,7 +7,7 @@ import DocumentCreateModal from '@/components/Document/DocumentCreateModal';
 import { LinearLoading } from '@/components/Loading';
 
 import { TabElement } from '@/types/utility.type';
-import { useEffect, Fragment, useState, ChangeEvent } from 'react';
+import { useEffect, Fragment, useState, ChangeEvent, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
@@ -100,6 +100,10 @@ const CoursePage = () => {
 			]);
 		}
 	}, [course]);
+
+	useLayoutEffect(() => {
+		dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
+	}, []);
 
 	return loading ? (
 		<LinearLoading />

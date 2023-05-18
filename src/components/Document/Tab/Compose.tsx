@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { GetDocumentByIdResponse } from '@/types/document.type';
 import { Fragment, useState, useEffect, useRef, ChangeEvent } from 'react';
-import { borderColor, borderRadius, componentStyle, componentsBoxColor } from '@/style/Variables';
+import { borderRadius, componentStyle, componentsBoxColor } from '@/style/Variables';
 import { CustomButton } from '@/components/Custom/CustomButton';
 import { CustomEditInput } from '@/components/Custom/CustomEditInput';
 
@@ -45,7 +45,7 @@ const BoxSetUpSx = {
 	rowGap: 2
 };
 const MarkdownSx = {
-	overflow: 'auto',
+	overflow: 'hidden',
 	height: '100%',
 	width: '100%',
 	rowGap: 1,
@@ -63,7 +63,6 @@ interface EditorProps {
 }
 
 const Compose = (props: EditorProps) => {
-
 	const { document, documentContent, onChange, onCreate, onReset } = props;
 
 	const NFC = 'No file chosen';
@@ -95,8 +94,8 @@ const Compose = (props: EditorProps) => {
 	};
 
 	const onMarkdownChange = (value: string) => {
-		setMarkdownValue(value)
-	}
+		setMarkdownValue(value);
+	};
 
 	const onCancelFileChange = () => {
 		setPreviewPdfFile(undefined);
@@ -107,10 +106,9 @@ const Compose = (props: EditorProps) => {
 	};
 
 	useEffect(() => {
-
 		if (documentContent || document.Contents.length > 0) {
 			setIsSetUp(true);
-			if (document.Contents[0].ContentTypeId === 2) setType('PDF');
+			if (document.Contents[0].ContentTypeId === 1) setType('PDF');
 			else {
 				setType('Markdown');
 				setMarkdownValue(document.Contents[0].ContentBody);
@@ -125,8 +123,7 @@ const Compose = (props: EditorProps) => {
 		<Box sx={BoxContainerSx}>
 			<Stack flexDirection="column" rowGap={1} height="100%">
 				<Box sx={componentStyle}>
-					<Typography variant="h6" >{document.Title}
-					</Typography>
+					<Typography variant="h6">{document.Title}</Typography>
 				</Box>
 				<Stack
 					flexDirection="row"
@@ -152,11 +149,11 @@ const Compose = (props: EditorProps) => {
 											<Typography variant="subtitle1">Type : {Type}</Typography>
 											<Stack rowGap={2}>
 												<CustomButton
-													sx={{ width: '100%' }} content="Upload" onClick={uploadFile} />
-												<CustomButton
-													sx={cancelButton}
-													content="Reset" onClick={onReset}
+													sx={{ width: '100%' }}
+													content="Upload"
+													onClick={uploadFile}
 												/>
+												<CustomButton sx={cancelButton} content="Reset" onClick={onReset} />
 											</Stack>
 											<input
 												id="fileUpload"
@@ -175,7 +172,7 @@ const Compose = (props: EditorProps) => {
 													isNotDisplay={true}
 													label=""
 													value={''}
-													onChange={() => { }}
+													onChange={() => {}}
 													onCancel={onCancelFileChange}
 													onSave={() => {
 														onCreate(Type, PreviewPdfFile);
@@ -185,7 +182,6 @@ const Compose = (props: EditorProps) => {
 														}
 													}}
 													isAvatarChange={IsFileUploaded.length > 0 && IsFileUploaded != NFC}
-
 												/>
 											</Box>
 
@@ -211,15 +207,20 @@ const Compose = (props: EditorProps) => {
 							</Fragment>
 						) : (
 							<Box sx={{ ...MarkdownSx, ...componentStyle }}>
-								<Stack
-									flexDirection="row"
-									width="30%"
-									columnGap={1}
-								>
-									<CustomButton
-										sx={cancelButton}
-										content='Reset'
-										onClick={onReset} />
+								<Box sx={{ width: '100%', height: '650px', overflow: 'auto', flex: 1 }}>
+									<MarkdownEditor
+										width="100%"
+										minHeight="650px"
+										maxHeight="650px"
+										visible
+										value={MarkdownValue ? MarkdownValue : ''}
+										onChange={(value, viewUpdate) => {
+											onMarkdownChange(value);
+										}}
+									/>
+								</Box>
+								<Stack flexDirection="row" width="30%" columnGap={1}>
+									<CustomButton sx={cancelButton} content="Reset" onClick={onReset} />
 									<CustomButton
 										sx={{ width: '100%' }}
 										content="Save"
@@ -228,17 +229,6 @@ const Compose = (props: EditorProps) => {
 										}}
 									/>
 								</Stack>
-
-								<Box sx={{ width: '100%' }}>
-									<MarkdownEditor
-										width="100%"
-										height="100%"
-										visible
-										value={MarkdownValue ? MarkdownValue : ''}
-										onChange={(value, viewUpdate) => { onMarkdownChange(value) }}
-									/>
-								</Box>
-
 							</Box>
 						)
 					) : (
@@ -248,7 +238,7 @@ const Compose = (props: EditorProps) => {
 								<FormControl fullWidth>
 									<Select value={Type} onChange={handleChange}>
 										<MenuItem value={'PDF'}>PDF</MenuItem>
-										<MenuItem value={'File'}>File</MenuItem>
+										{/* <MenuItem value={'File'}>File</MenuItem> */}
 										<MenuItem value={'Markdown'}>Markdown</MenuItem>
 									</Select>
 								</FormControl>

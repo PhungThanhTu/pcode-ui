@@ -26,8 +26,25 @@ html {
 .MuiTypography-root {
 	font-family: inherit !important;
 }
+
 .MuiButton-root {
 	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 	font-weight: bold !important;
 	text-transform: none !important;
+}
+
+.MuiInputLabel-asterisk {
+	display: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+	-moz-appearance: textfield;
 }

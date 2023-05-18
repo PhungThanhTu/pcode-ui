@@ -25,13 +25,6 @@ export const usePDFFileReader = () => {
 	const getFile = (e: ChangeEvent<HTMLInputElement>) => {
 		var file = e.target.files;
 		if (FileReader && file && file.length) {
-			// var fr = new FileReader();
-			// fr.onload = function () {
-			// 	if (fr.result) {
-
-			// 	}
-			// };
-			// fr.readAsDataURL();
 			setPdfFile(file[0]);
 		}
 	};
