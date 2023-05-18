@@ -13,16 +13,14 @@ interface CustomTabProps {
 
 const BoxCustomTabSx = {
 	width: '100%',
-	'.MuiTabPanel-root' : {
+	'.MuiTabPanel-root': {
 		padding: 0,
 		paddingTop: '5px'
 	}
-}
+};
 
 const CustomTab = (props: CustomTabProps) => {
 	const { ListOfTabs } = props;
-	
-	
 
 	const [TabIndex, setTabIndex] = useState('1');
 
@@ -32,13 +30,13 @@ const CustomTab = (props: CustomTabProps) => {
 
 	return (
 		<Box
-			id='CustomTab'
+			id="CustomTab"
 			sx={{
-				...BoxCustomTabSx,
+				...BoxCustomTabSx
 			}}
 		>
 			<TabContext value={TabIndex}>
-				<Box sx={{  borderColor: 'divider' }}>
+				<Box sx={{ borderColor: 'divider' }}>
 					<TabList onChange={handleChangeTab}>
 						{ListOfTabs.map((item, index) => {
 							return <Tab key={index} label={item.title.toUpperCase()} value={`${index + 1}`} />;

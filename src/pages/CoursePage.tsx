@@ -104,7 +104,7 @@ const CoursePage = () => {
 	useLayoutEffect(() => {
 		dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
 	}, []);
-	
+
 	return loading ? (
 		<LinearLoading />
 	) : course ? (

@@ -18,34 +18,31 @@ const BoxContentSx = {
 	overflowX: 'hidden',
 	height: '100%'
 };
-const BoxContainerSx = {
-
-}
-
+const BoxContainerSx = {};
 
 const AppLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
-	const HeaderHeight = document.getElementsByTagName('header')[0]
+	const HeaderHeight = document.getElementsByTagName('header')[0];
 
 	return (
 		<React.Fragment>
-			<Box id='AppContainer' 			>
+			<Box id="AppContainer">
 				<NavBar />
-				<Box id='AppContent' sx={
-					{
+				<Box
+					id="AppContent"
+					sx={{
 						...BoxContentSx,
 						paddingTop: `${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px`,
-						minHeight: `calc(100vh - ${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px)`,
+						minHeight: `calc(100vh - ${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px)`
 						// maxHeight: `calc(100vh - ${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px)`
-					}
-				}>
+					}}
+				>
 					<Box sx={LayoutBoxSx}>{props.children}</Box>
 				</Box>
 				<NotificationSnackbar />
 				<BackdropLoading />
 				<Footer />
 			</Box>
-
-		</React.Fragment >
+		</React.Fragment>
 	);
 };
 

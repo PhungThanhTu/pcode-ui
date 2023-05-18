@@ -55,8 +55,8 @@ export interface CreateExerciseRequest {
 	manualPercentage: number;
 }
 export interface CreateTestCaseRequest {
-	input: string;	
-	output: string,
-	scoreWeight: number,
-	visibility: boolean
+	input: string;
+	output: string;
+	scoreWeight: number;
+	visibility: boolean;
 }

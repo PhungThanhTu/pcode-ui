@@ -1,4 +1,4 @@
-import {  Viewer } from '@react-pdf-viewer/core';
+import { Viewer } from '@react-pdf-viewer/core';
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import type { ToolbarSlot, TransformToolbarSlot } from '@react-pdf-viewer/toolbar';
 

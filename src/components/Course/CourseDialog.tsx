@@ -20,7 +20,6 @@ const CourseDialog = () => {
 
 	const { code } = useParams();
 
-
 	const [Open, setOpen] = useState(true);
 	const [Course, setCourse] = useState<Course>();
 	const [Loading, setLoading] = useState(true);
@@ -75,7 +74,12 @@ const CourseDialog = () => {
 						{Course ? (
 							<Fragment>
 								<Button onClick={handleClose}>Disagree</Button>
-								<Button onClick={() => { handleJoinCourse(Course.id) }} autoFocus>
+								<Button
+									onClick={() => {
+										handleJoinCourse(Course.id);
+									}}
+									autoFocus
+								>
 									Agree
 								</Button>
 							</Fragment>

@@ -10,7 +10,7 @@ import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 const BoxViewSx = {
 	minHeight: '80vh',
 	maxHeight: '100vh',
-	width: '100%',
+	width: '100%'
 };
 
 interface PreviewProps {
@@ -20,21 +20,19 @@ interface PreviewProps {
 }
 
 const Content = (props: PreviewProps) => {
-
 	const { source, type, title } = props;
 
 	if (source) {
-		if (type === 2)
+		if (type === 1)
 			return (
 				<DocumentTabLayout
 					title={title}
-					content={<Box sx={{ ...BoxViewSx, ...componentStyle }}>
-						<MyPDFViewer source={source} />
-					</Box>
-
+					content={
+						<Box sx={{ ...BoxViewSx, ...componentStyle }}>
+							<MyPDFViewer source={source} />
+						</Box>
 					}
 				/>
-
 			);
 		else
 			return (
@@ -46,7 +44,6 @@ const Content = (props: PreviewProps) => {
 						</Box>
 					}
 				/>
-
 			);
 	} else {
 		return (
