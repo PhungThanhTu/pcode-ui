@@ -106,12 +106,14 @@ const DocumentPage = () => {
 							title: 'Exercise',
 							element: (
 								<Exercise
-									title={document.Title}
 									isCreator={true}
-									// onChange={onChangeExercise}
+									document={document}
+									content={{
+										source: documentContent,
+										type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3
+									}}
 									onCreate={onCreateExercise}
 									onUpdate={onUpdateExercise}
-									// exerciseValues={{ runtimeLimit, manualPercentage, memoryLimit, scoreWeight }}
 								/>
 							)
 						},
@@ -167,7 +169,16 @@ const DocumentPage = () => {
 						},
 						{
 							title: 'Exercise',
-							element: <Exercise title={document.Title} isCreator={false} />
+							element: (
+								<Exercise
+									content={{
+										source: documentContent,
+										type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3
+									}}
+									document={document}
+									isCreator={false}
+								/>
+							)
 						}
 					]);
 				} else {
@@ -178,7 +189,7 @@ const DocumentPage = () => {
 								<Content
 									title={document.Title}
 									source={documentContent}
-									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 1}
+									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
 								/>
 							)
 						}

@@ -14,6 +14,7 @@ import { CustomEditInput } from '@/components/Custom/CustomEditInput';
 import MyPDFViewer from '@/components/MyPDFViewer';
 import MarkdownEditor from '@uiw/react-markdown-editor';
 import { cancelButton } from '@/style/ButtonSx';
+import { LinearLoading } from '@/components/Loading';
 
 const BoxContainerSx = {
 	height: '100%'
@@ -67,7 +68,7 @@ const Compose = (props: EditorProps) => {
 
 	const NFC = 'No file chosen';
 
-	const [IsSetUp, setIsSetUp] = useState(false);
+	const [IsSetUp, setIsSetUp] = useState<any>(undefined);
 	const [IsFileUploaded, setIsFileUploaded] = useState(NFC);
 	const [PreviewPdfFile, setPreviewPdfFile] = useState<any>(null);
 	const [Type, setType] = useState('PDF');
@@ -133,7 +134,9 @@ const Compose = (props: EditorProps) => {
 					alignItems={'flex-start'}
 					justifyContent={'center'}
 				>
-					{IsSetUp ? (
+					{IsSetUp === undefined ? (
+						<LinearLoading />
+					) : IsSetUp ? (
 						Type === 'PDF' ? (
 							<Fragment>
 								<Box sx={{ ...BoxLeftSx, ...componentStyle }}>

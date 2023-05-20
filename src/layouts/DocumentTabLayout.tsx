@@ -21,7 +21,7 @@ const BoxRightSx = {
 	padding: '5px'
 };
 interface PropsWithChildrenOnly {
-	title: string;
+	title?: string;
 	right?: React.ReactNode;
 	left?: React.ReactNode;
 	content?: React.ReactNode;
@@ -33,9 +33,12 @@ const DocumentTabLayout = (props: PropsWithChildrenOnly) => {
 
 	return (
 		<Stack flexDirection="column" rowGap={1} minHeight="100%" maxHeight={'inherit'}>
-			<Box sx={componentStyle}>
-				<Typography variant="h6">{title} </Typography>
-			</Box>
+			{title ? (
+				<Box sx={componentStyle}>
+					<Typography variant="h6">{title} </Typography>
+				</Box>
+			) : null}
+
 			<Stack
 				flexDirection="row"
 				minHeight="700px"
