@@ -44,7 +44,7 @@ const CourseTabHeader = (props: TabHeaderProps) => {
 							: 'https://www.gstatic.com/classroom/themes/Honors_thumb.jpg'
 					})`,
 					backgroundRepeat: 'no-repeat',
-					'-webkit-background-size': '100%',
+					WebkitBackgroundSize: '100%',
 					width: '100%',
 					position: 'absolute'
 				}}

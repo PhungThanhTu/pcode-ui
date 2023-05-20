@@ -15,6 +15,7 @@ export interface Document {
 export interface DocumentState {
 	document?: GetDocumentByIdResponse | null;
 	documentContent?: any | null;
+	documentExercise?: any | null;
 	loading: boolean;
 }
 // API interface
@@ -53,10 +54,23 @@ export interface CreateExerciseRequest {
 	memoryLimit: number;
 	scoreWeight: number;
 	manualPercentage: number;
+	judgerId: string;
 }
 export interface CreateTestCaseRequest {
 	input: string;
 	output: string;
 	scoreWeight: number;
 	visibility: boolean;
+}
+export interface getExerciseResponse {
+	Id: string;
+	RuntimeLimit: number;
+	MemoryLimit: number;
+	ScoreWeight: number;
+	TimeCreated: Date;
+	HaveDeadline: boolean;
+	Deadline: Date;
+	StrictDeadline: boolean;
+	ManualPercentage: number;
+	JudgerId: string;
 }

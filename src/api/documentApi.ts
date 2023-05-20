@@ -5,7 +5,8 @@ import {
 	CreateDocumentResponse,
 	CreateDocumentContentRequest,
 	GetDocumentByIdResponse,
-	UpdateDocumentRequest
+	UpdateDocumentRequest,
+	CreateExerciseRequest
 } from '@/types/document.type';
 
 const documentApi = {
@@ -58,8 +59,12 @@ const documentApi = {
 		const result: AxiosResponse<any> = await protectedApi.get(`/media/${id}`, { responseType: 'blob' });
 		return result;
 	},
-	createExercise: async () => {
-		const result: AxiosResponse<any> = await protectedApi.post(`/document/${''}`);
+	createExercise: async (documentid: string, body: CreateExerciseRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.post(`/document/${documentid}/exercise`, body);
+		return result;
+	},
+	getExercise: async (documentid: string) => {
+		const result: AxiosResponse<any> = await protectedApi.get(`/document/${documentid}/exercise`);
 		return result;
 	}
 };

@@ -32,7 +32,6 @@ export const parseToISOSDate = (date_local: Date) => {
 	// var now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
 	//     date.getUTCDate(), date.getUTCHours(),
 	//     date.getUTCMinutes(), date.getUTCSeconds());
-
 	return date.toISOString();
 };
 export const today = () => {

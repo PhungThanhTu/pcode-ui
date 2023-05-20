@@ -1,14 +1,17 @@
 import {
 	CreateDocumentContentRequest,
 	CreateDocumentRequest,
+	CreateExerciseRequest,
 	DocumentState,
-	GetDocumentByIdResponse
+	GetDocumentByIdResponse,
+	getExerciseResponse
 } from '@/types/document.type';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export const initialDocumentState: DocumentState = {
 	document: undefined,
 	documentContent: undefined,
+	documentExercise: undefined,
 	loading: false
 };
 
@@ -32,12 +35,26 @@ const documentSlice = createSlice({
 			state.documentContent = payload.documentContent;
 			state.loading = false;
 		},
+		fetchDocumentByIdWithExercise: (state, { payload }: PayloadAction<{ documentId: string }>) => {
+			state.documentExercise = null;
+		},
+		fetchDocumentByIdWithExerciseSuccess: (state, { payload }: PayloadAction<getExerciseResponse>) => {
+			state.documentExercise = payload;
+		},
+		fetchDocumentByIdWithExerciseError: (state) => {
+			state.documentExercise = undefined;
+		},
 		fetchDocumentByIdError: (state) => {
 			state.document = null;
 			state.loading = false;
 		},
+
 		createDocument: (state, { payload }: PayloadAction<CreateDocumentRequest>) => {},
 		createDocumentContent: (state, { payload }: PayloadAction<CreateDocumentContentRequest>) => {},
+		createDocumentExercise: (
+			state,
+			{ payload }: PayloadAction<{ body: CreateExerciseRequest; documentId: string }>
+		) => {},
 		resetDocumentContent: (state, { payload }: PayloadAction<{ id: string }>) => {}
 	}
 });
@@ -46,9 +63,13 @@ export const {
 	fetchDocumentById,
 	fetchDocumentByIdError,
 	fetchDocumentByIdSuccess,
+	fetchDocumentByIdWithExerciseSuccess,
+	fetchDocumentByIdWithExerciseError,
+	fetchDocumentByIdWithExercise,
 	createDocument,
 	fetchDocumentByIdWithContentSuccess,
 	createDocumentContent,
-	resetDocumentContent
+	resetDocumentContent,
+	createDocumentExercise
 } = documentSlice.actions;
 export default documentSlice.reducer;

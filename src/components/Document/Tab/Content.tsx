@@ -10,13 +10,14 @@ import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 const BoxViewSx = {
 	minHeight: '80vh',
 	maxHeight: '100vh',
-	width: '100%'
+	width: '100%',
+	overflow: 'auto'
 };
 
-interface PreviewProps {
+export interface PreviewProps {
 	source: any;
 	type: number;
-	title: string;
+	title?: string;
 }
 
 const Content = (props: PreviewProps) => {
@@ -40,7 +41,10 @@ const Content = (props: PreviewProps) => {
 					title={title}
 					content={
 						<Box sx={{ ...BoxViewSx, ...componentStyle }}>
-							<MarkdownPreview source={source} style={{ height: '100%' }} />
+							<MarkdownPreview
+								source={source}
+								style={{ minHeight: 'inherit', maxHeight: '700px', overflow: 'scroll' }}
+							/>
 						</Box>
 					}
 				/>
