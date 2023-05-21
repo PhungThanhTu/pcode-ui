@@ -6,7 +6,8 @@ import {
 	CreateDocumentContentRequest,
 	GetDocumentByIdResponse,
 	UpdateDocumentRequest,
-	CreateExerciseRequest
+	CreateExerciseRequest,
+	getSampleSourceCode
 } from '@/types/document.type';
 
 const documentApi = {
@@ -66,7 +67,11 @@ const documentApi = {
 	getExercise: async (documentid: string) => {
 		const result: AxiosResponse<any> = await protectedApi.get(`/document/${documentid}/exercise`);
 		return result;
-	}
+	},
+	getSampleSourceCode: async (documentid: string, type: number) => {
+		const result: AxiosResponse<getSampleSourceCode> = await protectedApi.get(`/document/${documentid}/exercise/sample?programmingLanguage=${type}`);
+		return result;
+	},
 };
 
 export default documentApi;

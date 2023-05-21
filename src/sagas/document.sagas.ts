@@ -8,7 +8,8 @@ import {
 	CreateDocumentResponse,
 	CreateExerciseRequest,
 	GetDocumentByIdResponse,
-	getExerciseResponse
+	getExerciseResponse,
+	getSampleSourceCode
 } from '@/types/document.type';
 import {
 	createDocument,
@@ -21,6 +22,9 @@ import {
 	fetchDocumentByIdWithExercise,
 	fetchDocumentByIdWithExerciseError,
 	fetchDocumentByIdWithExerciseSuccess,
+	fetchSampleSourceCode,
+	fetchSampleSourceCodeError,
+	fetchSampleSourceCodeSuccess,
 	resetDocumentContent
 } from '@/slices/document.slice';
 import { setSnackbar } from '@/slices/snackbar.slice';
@@ -72,6 +76,22 @@ function* fetchDocumentByIdWithExerciseSaga(action: PayloadAction<{ documentId: 
 		}
 	} catch (error) {
 		yield put(fetchDocumentByIdWithExerciseError());
+	}
+}
+function* fetchSampleSourceCodeSaga(action: PayloadAction<{ documentId: string, type: number }>) {
+	try {
+		console.log('saga fetching sample source code');
+		const source: AxiosResponse<getSampleSourceCode> = yield call(
+			documentApi.getSampleSourceCode,
+			action.payload.documentId,
+			action.payload.type
+		);
+		if (source.data) {
+			yield put(fetchSampleSourceCodeSuccess(source.data));
+		}
+	} catch (error) {
+		yield put(setSnackbar(notificationMessage.ERROR('programming language not supported.')));
+		yield put(fetchSampleSourceCodeError());
 	}
 }
 function* createDocumentSaga(action: PayloadAction<CreateDocumentRequest>) {
@@ -153,4 +173,5 @@ export function* watchDocument() {
 	yield takeLatest(resetDocumentContent.type, resetDocumentContentSaga);
 	yield takeLatest(fetchDocumentByIdWithExercise.type, fetchDocumentByIdWithExerciseSaga);
 	yield takeLatest(createDocumentExercise.type, createDocumentExerciseSaga);
+	yield takeLatest(fetchSampleSourceCode.type, fetchSampleSourceCodeSaga);
 }

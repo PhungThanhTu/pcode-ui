@@ -1,3 +1,5 @@
+import { useTabContext } from "@mui/lab";
+
 export const labelToProperty = (str: String) => {
 	let tmp = str.trim().split(' ');
 	tmp[0] = tmp[0].toLowerCase();
@@ -18,14 +20,26 @@ export const positiveNumberWithMin = (number: number, min: number) => {
 	return Min;
 };
 
-export const parseToLocalDate = (date_ISO: Date) => {
-	var date = new Date(date_ISO);
+export const parseToLocalDate = (date_UTC: string) => {
+	if (date_UTC) {
 
-	var dd = String(date.getDate()).padStart(2, '0');
-	var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-	var yyyy = date.getFullYear();
 
-	return yyyy + '-' + mm + '-' + dd;
+		var date = new Date(date_UTC);
+
+		// var date = new Date(UTC.getTime() - offset);
+
+
+
+		var dd = String(date.getDate()).padStart(2, '0');
+		var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+		var yyyy = date.getFullYear();
+
+		var hh = date.getHours();
+		var mn = date.getMinutes();
+
+		return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn;
+	}
+	return getToday();
 };
 export const parseToISOSDate = (date_local: Date) => {
 	var date = new Date(date_local);
@@ -34,12 +48,41 @@ export const parseToISOSDate = (date_local: Date) => {
 	//     date.getUTCMinutes(), date.getUTCSeconds());
 	return date.toISOString();
 };
-export const today = () => {
+export const getToday = (type?: string) => {
 	var date = new Date();
 
 	var dd = String(date.getDate()).padStart(2, '0');
 	var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
 	var yyyy = date.getFullYear();
 
-	return yyyy + '-' + mm + '-' + dd;
+	var hh = date.getHours();
+	var mn = date.getMinutes();
+
+	if (type === 'date')
+		return yyyy + '-' + mm + '-' + dd;
+	else if (type === 'time')
+		return hh + ':' + mn;
+
+	return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn;
 };
+
+export const getNextDay = (type?: string) => {
+
+	var nowDate = new Date();
+	var nexDate = new Date(nowDate.getDate() + 1);
+
+	var dd = String(nexDate.getDate()).padStart(2, '0');
+	var mm = String(nexDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = nexDate.getFullYear();
+
+	var hh = nexDate.getHours();
+	var mn = nexDate.getMinutes();
+
+	if (type === 'date')
+		return yyyy + '-' + mm + '-' + dd;
+	else if (type === 'time')
+		return hh + ':' + mn;
+
+	return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn;
+
+}

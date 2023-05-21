@@ -8,16 +8,17 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 
 import { CodeEditor } from '@/components/CodeEditor';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
-import { CreateExerciseRequest, GetDocumentByIdResponse } from '@/types/document.type';
+import { CreateExerciseRequest, GetDocumentByIdResponse, getExerciseResponse } from '@/types/document.type';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import Content, { PreviewProps } from './Content';
 import { useDispatch, useSelector } from 'react-redux';
-import { createDocumentExercise, fetchDocumentByIdWithExercise } from '@/slices/document.slice';
+import { fetchDocumentByIdWithExercise } from '@/slices/document.slice';
 import { getDocumentExercise } from '@/selectors/document.selector';
 import { LinearLoading } from '@/components/Loading';
 import CustomDialog from '@/components/Custom/CustomDialog';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
-import { createExerciseDefault } from '@/config';
+import { parseToISOSDate, parseToLocalDate } from '@/utils/convert';
+
 
 const BoxFieldSx = {
 	width: '100%',
@@ -46,6 +47,8 @@ const FormGroupDeadlineSx = {
 interface ExerciseProps {
 	onCreate?: Function;
 	onUpdate?: Function;
+	onSubmit?: Function;
+	onGetSampleSourceCode: Function;
 	isCreator: boolean;
 	content?: PreviewProps;
 	document: GetDocumentByIdResponse;
@@ -55,37 +58,46 @@ const Exercise = (props: ExerciseProps) => {
 	const dispatch = useDispatch();
 	const exercise = useSelector(getDocumentExercise);
 
-	const InitialCreateExerciseForm: CreateExerciseRequest = {
-		manualPercentage: 0,
-		memoryLimit: 50000,
-		runtimeLimit: 2000,
-		scoreWeight: 1,
-		judgerId: ''
-	};
-	const { document, isCreator, onCreate, onUpdate, content } = props;
 
-	const [CreateExerciseForm, setCreateExerciseForm] = useState<CreateExerciseRequest>(InitialCreateExerciseForm);
+	const InitialUpdateExerciseForm: getExerciseResponse = {
+		ManualPercentage: 0,
+		MemoryLimit: 50000,
+		RuntimeLimit: 2000,
+		ScoreWeight: 1,
+		Id: '',
+		Deadline: '',
+		HaveDeadline: true,
+		StrictDeadline: false,
+		TimeCreated: ''
+	};
+	const { document, isCreator, onCreate, onUpdate, content, onSubmit, onGetSampleSourceCode } = props;
+
+	const [ExerciseForm, setExerciseForm] = useState<getExerciseResponse>(InitialUpdateExerciseForm);
 	const [DeadlineCheck, setDeadlineCheck] = useState(false);
 	const [StrictDeadlineCheck, setStrictDeadlineCheck] = useState(false);
 	const [OpenCreateExerciseDialog, setOpenCreateExerciseDialog] = useState(false);
 
-	const { runtimeLimit, manualPercentage, memoryLimit, scoreWeight } = CreateExerciseForm;
+	const { ManualPercentage, MemoryLimit, RuntimeLimit, ScoreWeight, Deadline, HaveDeadline, StrictDeadline, TimeCreated } = ExerciseForm;
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setCreateExerciseForm({
-			...CreateExerciseForm,
+		setExerciseForm({
+			...ExerciseForm,
 			[e.target.name]: e.target.value
 		});
 	};
-	const onCreateExercise = () => {
-		let form = createExerciseDefault;
-		dispatch(createDocumentExercise({ body: form, documentId: document.Id }));
-		setOpenCreateExerciseDialog(false);
-	};
+
+
 	useEffect(() => {
 		dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
 	}, []);
 
+	useEffect(() => {
+		if (exercise) {
+			setExerciseForm({ ...exercise })
+			setDeadlineCheck(exercise.HaveDeadline)
+			setStrictDeadlineCheck(exercise.StrictDeadline)
+		}
+	}, [exercise])
 	return (
 		<Fragment>
 			{exercise === null ? (
@@ -104,7 +116,13 @@ const Exercise = (props: ExerciseProps) => {
 			) : (
 				<DocumentTabLayout
 					title={document.Title}
-					left={<CodeEditor />}
+					left={
+						<CodeEditor
+							document={document}
+							isCreator={isCreator}
+							onGetSampleSourceCode={onGetSampleSourceCode}
+						/>
+					}
 					right={
 						isCreator ? (
 							<Fragment>
@@ -116,7 +134,7 @@ const Exercise = (props: ExerciseProps) => {
 											label="Runtime limit (ms):"
 											type="number"
 											name="runtimeLimit"
-											value={runtimeLimit}
+											value={RuntimeLimit}
 											onChange={onChange}
 										/>
 										<TextField
@@ -125,7 +143,7 @@ const Exercise = (props: ExerciseProps) => {
 											label="Memory limit (bytes):"
 											type="number"
 											name="memoryLimit"
-											value={memoryLimit}
+											value={MemoryLimit}
 											onChange={onChange}
 										/>
 									</Box>
@@ -136,7 +154,7 @@ const Exercise = (props: ExerciseProps) => {
 											label="Score Weight"
 											type="number"
 											name="scoreWeight"
-											value={scoreWeight}
+											value={ScoreWeight}
 											onChange={onChange}
 										/>
 										<TextField
@@ -145,7 +163,7 @@ const Exercise = (props: ExerciseProps) => {
 											label="Manual Percentage"
 											type="number"
 											name="manualPercentage"
-											value={manualPercentage}
+											value={ManualPercentage}
 											onChange={onChange}
 										/>
 									</Box>
@@ -181,7 +199,7 @@ const Exercise = (props: ExerciseProps) => {
 											labelPlacement="start"
 											label="Deadline"
 											sx={{
-												columnGap: 2
+												columnGap: 1
 											}}
 											control={
 												<TextField
@@ -190,7 +208,7 @@ const Exercise = (props: ExerciseProps) => {
 													label="Deadline"
 													type="datetime-local"
 													name="deadline"
-													// value={runtimeLimit}
+													value={parseToLocalDate(Deadline)}
 												/>
 											}
 										/>
@@ -213,7 +231,8 @@ const Exercise = (props: ExerciseProps) => {
 					setOpenCreateExerciseDialog(false);
 				}}
 				onSave={() => {
-					onCreateExercise();
+					onCreate ? onCreate(document.Id) : () => { console.log('null action : create Exercise') };
+					setOpenCreateExerciseDialog(false);
 				}}
 			/>
 		</Fragment>

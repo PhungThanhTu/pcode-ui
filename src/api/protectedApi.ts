@@ -40,8 +40,6 @@ const refreshToken = async (error: AxiosError, logout: Function) => {
 			refreshToken: storedRefreshToken,
 			token: storedAccessToken
 		});
-		console.log('Refreshing tokens');
-		console.log(result.data);
 		TokenService.setRefreshToken(result.data.refreshToken);
 		TokenService.setToken(result.data.token);
 

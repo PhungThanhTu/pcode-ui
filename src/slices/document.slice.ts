@@ -4,7 +4,8 @@ import {
 	CreateExerciseRequest,
 	DocumentState,
 	GetDocumentByIdResponse,
-	getExerciseResponse
+	getExerciseResponse,
+	getSampleSourceCode
 } from '@/types/document.type';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -12,6 +13,7 @@ export const initialDocumentState: DocumentState = {
 	document: undefined,
 	documentContent: undefined,
 	documentExercise: undefined,
+	sampleSourceCode: undefined,
 	loading: false
 };
 
@@ -48,14 +50,22 @@ const documentSlice = createSlice({
 			state.document = null;
 			state.loading = false;
 		},
-
-		createDocument: (state, { payload }: PayloadAction<CreateDocumentRequest>) => {},
-		createDocumentContent: (state, { payload }: PayloadAction<CreateDocumentContentRequest>) => {},
+		fetchSampleSourceCode: (state, { payload }: PayloadAction<{ documentId: string, type: number }>) => {
+			state.sampleSourceCode = null
+		},
+		fetchSampleSourceCodeSuccess: (state, { payload }: PayloadAction<getSampleSourceCode>) => {
+			state.sampleSourceCode = payload;
+		},
+		fetchSampleSourceCodeError: (state) => {
+			state.sampleSourceCode = undefined;
+		},
+		createDocument: (state, { payload }: PayloadAction<CreateDocumentRequest>) => { },
+		createDocumentContent: (state, { payload }: PayloadAction<CreateDocumentContentRequest>) => { },
 		createDocumentExercise: (
 			state,
 			{ payload }: PayloadAction<{ body: CreateExerciseRequest; documentId: string }>
-		) => {},
-		resetDocumentContent: (state, { payload }: PayloadAction<{ id: string }>) => {}
+		) => { },
+		resetDocumentContent: (state, { payload }: PayloadAction<{ id: string }>) => { }
 	}
 });
 
@@ -70,6 +80,9 @@ export const {
 	fetchDocumentByIdWithContentSuccess,
 	createDocumentContent,
 	resetDocumentContent,
-	createDocumentExercise
+	createDocumentExercise,
+	fetchSampleSourceCode,
+	fetchSampleSourceCodeSuccess,
+	fetchSampleSourceCodeError
 } = documentSlice.actions;
 export default documentSlice.reducer;

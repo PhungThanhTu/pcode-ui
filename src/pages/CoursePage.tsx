@@ -50,16 +50,27 @@ const CoursePage = () => {
 		return isCreator;
 	};
 
-	const onCreateDocument = () => {
+	const onCreateDocument = (form : CreateDocumentRequest) => {
 		setOpenDocumentCreate(false);
 		setCreateDocumentForm(InitialForm);
-		dispatch(createDocument(CreateDocumentForm));
+		dispatch(createDocument(form));
 	};
+
 	const onCreateDocumentFieldsChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setCreateDocumentForm({
-			...CreateDocumentForm,
-			[e.target.name]: e.target.value
-		});
+		if (e.target.name === "hasExercise") {
+			setCreateDocumentForm({
+				...CreateDocumentForm,
+				[e.target.name]: e.target.checked
+			});
+		}
+		else {
+			setCreateDocumentForm({
+				...CreateDocumentForm,
+				[e.target.name]: e.target.value
+			});
+		}
+
+
 	};
 
 	useEffect(() => {
@@ -79,15 +90,15 @@ const CoursePage = () => {
 							customizeButton={
 								isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
 									? () => {
-											setOpenCourseCustomize(true);
-									  }
+										setOpenCourseCustomize(true);
+									}
 									: null
 							}
 							createDocumentModal={
 								isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
 									? () => {
-											setOpenDocumentCreate(true);
-									  }
+										setOpenDocumentCreate(true);
+									}
 									: null
 							}
 						/>

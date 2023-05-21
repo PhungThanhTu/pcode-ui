@@ -11,13 +11,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 import { getDocument } from '@/selectors/document.selector';
-import { createDocumentContent, fetchDocumentById, resetDocumentContent } from '@/slices/document.slice';
+import { createDocumentContent, createDocumentExercise, fetchDocumentById, fetchSampleSourceCode, resetDocumentContent } from '@/slices/document.slice';
 
 import { usePDFFileReader } from '@/hook/useFileReader';
 import { CreateDocumentContentRequest, CreateExerciseRequest } from '@/types/document.type';
 import { Worker } from '@react-pdf-viewer/core';
 import TestCase from '@/components/Document/Tab/TestCase';
 import CustomDialog from '@/components/Custom/CustomDialog';
+import { createExerciseDefault } from '@/config';
 
 const DocumentPage = () => {
 	const params = useParams();
@@ -39,15 +40,15 @@ const DocumentPage = () => {
 		}
 	};
 
-	const onCreateDocumentContent = (Type: string, content: any) => {
-		if (Type === 'PDF') {
+	const onCreateDocumentContent = (type: string, content: any) => {
+		if (type === 'PDF') {
 			let CreateDocumentContentForm: CreateDocumentContentRequest = {
 				content: content,
 				contentTypeId: '1',
 				documentId: params.documentId ? params.documentId : ''
 			};
 			dispatch(createDocumentContent(CreateDocumentContentForm));
-		} else if (Type === 'Markdown') {
+		} else if (type === 'Markdown') {
 			let CreateDocumentContentForm: CreateDocumentContentRequest = {
 				content: content,
 				contentTypeId: '0',
@@ -65,8 +66,17 @@ const DocumentPage = () => {
 
 	//#region exercise
 
-	const onCreateExercise = () => {};
-	const onUpdateExercise = () => {};
+	const onCreateExercise = (documentId: string) => {
+
+		let form = createExerciseDefault;
+		dispatch(createDocumentExercise({ body: form, documentId: documentId }));
+
+	};
+
+	const onUpdateExercise = () => { };
+	const onGetSampleSourceCode = (documentId: string, type: number) => {
+		dispatch(fetchSampleSourceCode({ documentId: documentId, type: type }))
+	};
 	//#endregion
 
 	useEffect(() => {
@@ -114,6 +124,7 @@ const DocumentPage = () => {
 									}}
 									onCreate={onCreateExercise}
 									onUpdate={onUpdateExercise}
+									onGetSampleSourceCode={onGetSampleSourceCode}
 								/>
 							)
 						},
@@ -177,6 +188,7 @@ const DocumentPage = () => {
 									}}
 									document={document}
 									isCreator={false}
+									onGetSampleSourceCode={onGetSampleSourceCode}
 								/>
 							)
 						}
