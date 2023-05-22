@@ -6,44 +6,52 @@ import ListItems from '../../ListItems';
 import CourseCodeBox from '../CourseCodeBox';
 
 import { GetCourseByIdResponse } from '@/types/course.type';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
+import CustomDialog from '@/components/Custom/CustomDialog';
 
 interface GeneralProps {
 	course: GetCourseByIdResponse;
 	customizeButton: Function | null;
 	code: string;
 	createDocumentModal: Function | null;
+	changePublishDocument: Function;
 }
 const General = (props: GeneralProps) => {
-	const { course, customizeButton, code, createDocumentModal } = props;
+
+	const { course, customizeButton, code, createDocumentModal, changePublishDocument } = props;
+
+	
 
 	return (
-		<TabLayout
-			header={
-				<CourseTabHeader
-					background={course.courseTheme}
-					title={course.title}
-					subtitle={course.courseSubject}
-					customizeButton={customizeButton ? customizeButton : null}
-				/>
-			}
-			leftBody={
-				createDocumentModal ? (
-					<Fragment>
-						<CustomIconButton
-							onClick={() => {
-								createDocumentModal();
-							}}
-							startIcon={<CreateIcon />}
-							content="Create Document"
-						/>
-						<CourseCodeBox code={code} />
-					</Fragment>
-				) : null
-			}
-			rightBody={<ListItems list={course ? course.documents : []} />}
-		/>
+			<TabLayout
+				header={
+					<CourseTabHeader
+						background={course.courseTheme}
+						title={course.title}
+						subtitle={course.courseSubject}
+						customizeButton={customizeButton ? customizeButton : null}
+					/>
+				}
+				leftBody={
+					createDocumentModal ? (
+						<Fragment>
+							<CustomIconButton
+								onClick={() => {
+									createDocumentModal();
+								}}
+								startIcon={<CreateIcon />}
+								content="Create Document"
+							/>
+							<CourseCodeBox code={code} />
+
+						</Fragment>
+					) : null
+				}
+				rightBody={<ListItems list={course ? course.documents : []} publishDocument={changePublishDocument}/>}
+			/>
+
+
 	);
 };
 

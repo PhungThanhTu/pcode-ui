@@ -14,7 +14,7 @@ import { getDocument } from '@/selectors/document.selector';
 import { createDocumentContent, createDocumentExercise, fetchDocumentById, fetchSampleSourceCode, resetDocumentContent } from '@/slices/document.slice';
 
 import { usePDFFileReader } from '@/hook/useFileReader';
-import { CreateDocumentContentRequest, CreateExerciseRequest } from '@/types/document.type';
+import { CreateDocumentContentRequest, CreateExerciseRequest, getExerciseResponse, updateExerciseRequest } from '@/types/document.type';
 import { Worker } from '@react-pdf-viewer/core';
 import TestCase from '@/components/Document/Tab/TestCase';
 import CustomDialog from '@/components/Custom/CustomDialog';
@@ -73,7 +73,20 @@ const DocumentPage = () => {
 
 	};
 
-	const onUpdateExercise = () => { };
+	const onUpdateExercise = (ExeriseForm: getExerciseResponse) => {
+		let form: updateExerciseRequest = {
+
+			deadline: ExeriseForm.Deadline,
+			haveDeadline: ExeriseForm.HaveDeadline,
+			manualPercentage: ExeriseForm.ManualPercentage,
+			memoryLimit: ExeriseForm.MemoryLimit,
+			runtimeLimit: ExeriseForm.RuntimeLimit,
+			scoreWeight: ExeriseForm.ScoreWeight,
+			strictDeadline: ExeriseForm.StrictDeadline,
+			judgerId: ''
+		}
+		console.log(form)
+	};
 	const onGetSampleSourceCode = (documentId: string, type: number) => {
 		dispatch(fetchSampleSourceCode({ documentId: documentId, type: type }))
 	};

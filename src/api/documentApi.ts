@@ -40,8 +40,8 @@ const documentApi = {
 			return result;
 		}
 	},
-	changePublishDocument: async (id: string, status: number) => {
-		const result: AxiosResponse<any> = await protectedApi.post(`/document/${id}/publish?publish=${status}`);
+	changePublishDocument: async (documentId: string, status: number) => {
+		const result: AxiosResponse<any> = await protectedApi.post(`/document/${documentId}/publish?publish=${status}`);
 		return result;
 	},
 	updateDocument: async (id: string, body: UpdateDocumentRequest) => {

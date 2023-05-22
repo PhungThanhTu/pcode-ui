@@ -75,6 +75,16 @@ export interface getExerciseResponse {
 	StrictDeadline: boolean;
 	ManualPercentage: number;
 }
+export interface updateExerciseRequest {
+	runtimeLimit: number,
+	memoryLimit: number,
+	scoreWeight: number,
+	manualPercentage: number,
+	haveDeadline: boolean,
+	deadline: string,
+	strictDeadline: boolean,
+	judgerId: string
+}
 export interface getSampleSourceCode {
 	programmingLanguageId: string,
 	sourceCode: string

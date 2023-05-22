@@ -23,12 +23,7 @@ export const positiveNumberWithMin = (number: number, min: number) => {
 export const parseToLocalDate = (date_UTC: string) => {
 	if (date_UTC) {
 
-
 		var date = new Date(date_UTC);
-
-		// var date = new Date(UTC.getTime() - offset);
-
-
 
 		var dd = String(date.getDate()).padStart(2, '0');
 		var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -39,7 +34,7 @@ export const parseToLocalDate = (date_UTC: string) => {
 
 		return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn;
 	}
-	return getToday();
+	return getNextDay();
 };
 export const parseToISOSDate = (date_local: Date) => {
 	var date = new Date(date_local);
@@ -69,14 +64,25 @@ export const getToday = (type?: string) => {
 export const getNextDay = (type?: string) => {
 
 	var nowDate = new Date();
-	var nexDate = new Date(nowDate.getDate() + 1);
+	let nextDate = new Date();
 
-	var dd = String(nexDate.getDate()).padStart(2, '0');
-	var mm = String(nexDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-	var yyyy = nexDate.getFullYear();
 
-	var hh = nexDate.getHours();
-	var mn = nexDate.getMinutes();
+	for (let i = 0; i < 25; i++) {
+		const nextHour = new Date(nowDate); // Create a new date object with the current date and time
+		nextHour.setHours(nowDate.getHours() + i); // Set the hour to the next hour
+
+
+		nextDate = new Date(nextHour)
+
+	}
+
+
+	var dd = String(nextDate.getDate()).padStart(2, '0');
+	var mm = String(nextDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = nextDate.getFullYear();
+
+	var hh = String(nextDate.getHours()).padStart(2, '0');
+	var mn = String(nextDate.getMinutes()).padStart(2, '0');
 
 	if (type === 'date')
 		return yyyy + '-' + mm + '-' + dd;

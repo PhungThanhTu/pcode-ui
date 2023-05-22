@@ -65,7 +65,8 @@ const documentSlice = createSlice({
 			state,
 			{ payload }: PayloadAction<{ body: CreateExerciseRequest; documentId: string }>
 		) => { },
-		resetDocumentContent: (state, { payload }: PayloadAction<{ id: string }>) => { }
+		resetDocumentContent: (state, { payload }: PayloadAction<{ id: string }>) => { },
+		changePublishDocument: (state, { payload }: PayloadAction<{ documentId: string, status: number }>) => { }
 	}
 });
 
@@ -83,6 +84,7 @@ export const {
 	createDocumentExercise,
 	fetchSampleSourceCode,
 	fetchSampleSourceCodeSuccess,
-	fetchSampleSourceCodeError
+	fetchSampleSourceCodeError,
+	changePublishDocument,
 } = documentSlice.actions;
 export default documentSlice.reducer;

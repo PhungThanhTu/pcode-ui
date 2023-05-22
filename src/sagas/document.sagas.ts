@@ -12,6 +12,7 @@ import {
 	getSampleSourceCode
 } from '@/types/document.type';
 import {
+	changePublishDocument,
 	createDocument,
 	createDocumentContent,
 	createDocumentExercise,
@@ -30,7 +31,7 @@ import {
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
 import { setLoading } from '@/slices/loading.slice';
-import { fetchCourseById } from '@/slices/course.slice';
+import { changePublishDocumentSuccess, fetchCourseById } from '@/slices/course.slice';
 
 function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 	try {
@@ -166,6 +167,23 @@ function* resetDocumentContentSaga(action: PayloadAction<{ id: string }>) {
 		yield put(setSnackbar(notificationMessage.ERROR('Reset document content failed, please try again!.')));
 	}
 }
+function* changePublishDocumentSaga(action: PayloadAction<{ documentId: string, status: number }>) {
+	try {
+		console.log('saga publish/unpublish document ');
+		yield put(setLoading({ isLoading: true }));
+		const data: AxiosResponse<any> = yield call(documentApi.changePublishDocument, action.payload.documentId, action.payload.status);
+
+		if (data) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('document', `Document ${action.payload.status === 1 ? 'published' : 'unpublished'}`)));
+		}
+		yield put(changePublishDocumentSuccess({ documentId: action.payload.documentId, status: action.payload.status }));
+	} catch (error: any) {
+		console.log('saga publish/unpublish document failed.');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.ERROR('Published/Unpublished document failed! Please try again!')));
+	}
+}
 export function* watchDocument() {
 	yield takeLatest(fetchDocumentById.type, fetchDocumentByIdSaga);
 	yield takeLatest(createDocument.type, createDocumentSaga);
@@ -174,4 +192,6 @@ export function* watchDocument() {
 	yield takeLatest(fetchDocumentByIdWithExercise.type, fetchDocumentByIdWithExerciseSaga);
 	yield takeLatest(createDocumentExercise.type, createDocumentExerciseSaga);
 	yield takeLatest(fetchSampleSourceCode.type, fetchSampleSourceCodeSaga);
+	yield takeLatest(changePublishDocument.type, changePublishDocumentSaga);
+
 }
