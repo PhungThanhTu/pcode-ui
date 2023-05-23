@@ -16,11 +16,13 @@ export interface Document {
 export interface DocumentState {
 	document?: GetDocumentByIdResponse | null;
 	documentContent?: any | null;
-	documentExercise?: getExerciseResponse | null;
-	sampleSourceCode?: getSampleSourceCode | null;
+	documentExercise?: GetExerciseResponse | null;
+	sampleSourceCode?: GetSampleSourceCodeResponse | null;
 	loading: boolean;
 }
 // API interface
+
+//#region document
 export interface CreateDocumentRequest {
 	courseId: string;
 	title: string;
@@ -34,10 +36,9 @@ export interface CreateDocumentResponse {
 	Description: string;
 	HasExercise: boolean;
 }
-export interface CreateDocumentContentRequest {
-	documentId: string;
-	contentTypeId: string;
-	content: any;
+export interface UpdateDocumentRequest {
+	title: string;
+	description: string;
 }
 export interface GetDocumentByIdResponse {
 	Id: string;
@@ -47,10 +48,20 @@ export interface GetDocumentByIdResponse {
 	HasExercise: boolean;
 	Contents: Array<DocumentContent>;
 }
-export interface UpdateDocumentRequest {
-	title: string;
-	description: string;
+//#endregion document
+
+//#region document content
+
+export interface CreateDocumentContentRequest {
+	documentId: string;
+	contentTypeId: string;
+	content: any;
 }
+
+//#endregion document content
+
+//#region exercise
+
 export interface CreateExerciseRequest {
 	runtimeLimit: number;
 	memoryLimit: number;
@@ -58,13 +69,8 @@ export interface CreateExerciseRequest {
 	manualPercentage: number;
 	judgerId: string;
 }
-export interface CreateTestCaseRequest {
-	input: string;
-	output: string;
-	scoreWeight: number;
-	visibility: boolean;
-}
-export interface getExerciseResponse {
+
+export interface GetExerciseResponse {
 	Id: string;
 	RuntimeLimit: number;
 	MemoryLimit: number;
@@ -75,7 +81,7 @@ export interface getExerciseResponse {
 	StrictDeadline: boolean;
 	ManualPercentage: number;
 }
-export interface updateExerciseRequest {
+export interface UpdateExerciseRequest {
 	runtimeLimit: number,
 	memoryLimit: number,
 	scoreWeight: number,
@@ -85,7 +91,58 @@ export interface updateExerciseRequest {
 	strictDeadline: boolean,
 	judgerId: string
 }
-export interface getSampleSourceCode {
+export interface GetSampleSourceCodeResponse {
 	programmingLanguageId: string,
 	sourceCode: string
 }
+export interface UpdateSampleSourceCodeRequest {
+	sampleSourceCode: string,
+	type: number
+}
+export interface UpdateSampleSourceCodeResponse {
+	documentId: string,
+	programmingLanguageId: string,
+	validatedSourceCode: string
+}
+//#endregion exercise
+
+//#region test cases
+
+export interface GetAllTestCasesResponse {
+
+	List: Array<GetSingleTestCaseResponse>
+}
+export interface CreateTestCaseRequest {
+	input: string;
+	output: string;
+	scoreWeight: number;
+	visibility: boolean;
+}
+export interface CreateTestCaseResponse {
+	id: string,
+	order: number,
+	input: string,
+	output: string,
+	scoreWeight: number,
+	visibility: boolean
+}
+
+export interface GetSingleTestCaseResponse {
+	TestOrder: number,
+	Id: number,
+	input: string,
+	output: string,
+	scoreWeight: number,
+	visibility: boolean
+}
+export interface UpdateTestCaseRequest {
+	input: string,
+	output: string,
+	scoreWeight: number,
+	visibility: boolean
+}
+export interface SwapTestCaseOrderRequest {
+	TestOrder1: number,
+	TestOrder2: number
+}
+//#endregion 

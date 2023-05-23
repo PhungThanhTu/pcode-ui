@@ -8,8 +8,10 @@ import {
 	CreateDocumentResponse,
 	CreateExerciseRequest,
 	GetDocumentByIdResponse,
-	getExerciseResponse,
-	getSampleSourceCode
+	GetExerciseResponse,
+	GetSampleSourceCodeResponse,
+	UpdateExerciseRequest,
+	UpdateSampleSourceCodeRequest
 } from '@/types/document.type';
 import {
 	changePublishDocument,
@@ -26,7 +28,8 @@ import {
 	fetchSampleSourceCode,
 	fetchSampleSourceCodeError,
 	fetchSampleSourceCodeSuccess,
-	resetDocumentContent
+	resetDocumentContent,
+	updateDocumentExercise
 } from '@/slices/document.slice';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
@@ -68,7 +71,7 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 function* fetchDocumentByIdWithExerciseSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
 		console.log('saga fetching document exercise by id');
-		const exercise: AxiosResponse<getExerciseResponse> = yield call(
+		const exercise: AxiosResponse<GetExerciseResponse> = yield call(
 			documentApi.getExercise,
 			action.payload.documentId
 		);
@@ -82,7 +85,7 @@ function* fetchDocumentByIdWithExerciseSaga(action: PayloadAction<{ documentId: 
 function* fetchSampleSourceCodeSaga(action: PayloadAction<{ documentId: string, type: number }>) {
 	try {
 		console.log('saga fetching sample source code');
-		const source: AxiosResponse<getSampleSourceCode> = yield call(
+		const source: AxiosResponse<GetSampleSourceCodeResponse> = yield call(
 			documentApi.getSampleSourceCode,
 			action.payload.documentId,
 			action.payload.type
@@ -151,16 +154,16 @@ function* createDocumentExerciseSaga(action: PayloadAction<{ body: CreateExercis
 		yield put(setSnackbar(notificationMessage.CREATE_FAIL('document content', 'Please, try again!')));
 	}
 }
-function* resetDocumentContentSaga(action: PayloadAction<{ id: string }>) {
+function* resetDocumentContentSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
 		console.log('saga delete document content');
 		yield put(setLoading({ isLoading: true }));
-		const data: AxiosResponse<any> = yield call(documentApi.deleteDocumentContent, action.payload.id);
+		const data: AxiosResponse<any> = yield call(documentApi.deleteDocumentContent, action.payload.documentId);
 		if (data) {
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.DELETE_SUCCESS('document content')));
 		}
-		yield put(fetchDocumentById({ id: action.payload.id }));
+		yield put(fetchDocumentById({ id: action.payload.documentId }));
 	} catch (error: any) {
 		console.log('saga reset document content failed');
 		yield put(setLoading({ isLoading: false }));
@@ -184,6 +187,38 @@ function* changePublishDocumentSaga(action: PayloadAction<{ documentId: string, 
 		yield put(setSnackbar(notificationMessage.ERROR('Published/Unpublished document failed! Please try again!')));
 	}
 }
+
+function* updateDocumentExerciseSaga(action: PayloadAction<{ ExerciseBody: UpdateExerciseRequest; documentId: string, SourceBody: UpdateSampleSourceCodeRequest }>) {
+	try {
+		console.log('saga update document exercise');
+		yield put(setLoading({ isLoading: true }));
+		const data: AxiosResponse<any> = yield call(documentApi.updateExercise, action.payload.documentId, action.payload.ExerciseBody);
+
+		if (data) {
+			try {
+				console.log('saga update document exercise source');
+				const data2: AxiosResponse<any> = yield call(documentApi.updateSampleSourceCode, action.payload.documentId, action.payload.SourceBody.type, action.payload.SourceBody.sampleSourceCode);
+				if (data2) {
+					yield put(setLoading({ isLoading: false }));
+				}
+			} catch (error: any) {
+				console.log('saga update document exercise source  failed.');
+				yield put(setLoading({ isLoading: false }));
+				yield put(setSnackbar(notificationMessage.UPDATE_FAIL('document exercise source failed!', ' Please try again!')));
+			}
+		}
+		yield put(fetchDocumentByIdWithExercise({ documentId: action.payload.documentId }));
+	} catch (error: any) {
+		console.log('saga update document exercise failed.');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('document exercise failed!', ' Please try again!')));
+	}
+}
+
+function* updateSampleSourceCodeSaga(action: PayloadAction<{ documentId: string, type: number, body: UpdateSampleSourceCodeRequest }>) {
+
+}
+
 export function* watchDocument() {
 	yield takeLatest(fetchDocumentById.type, fetchDocumentByIdSaga);
 	yield takeLatest(createDocument.type, createDocumentSaga);
@@ -193,5 +228,5 @@ export function* watchDocument() {
 	yield takeLatest(createDocumentExercise.type, createDocumentExerciseSaga);
 	yield takeLatest(fetchSampleSourceCode.type, fetchSampleSourceCodeSaga);
 	yield takeLatest(changePublishDocument.type, changePublishDocumentSaga);
-
+	yield takeLatest(updateDocumentExercise.type, updateDocumentExerciseSaga);
 }

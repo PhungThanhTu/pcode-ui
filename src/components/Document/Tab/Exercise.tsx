@@ -11,7 +11,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 import { CodeEditor } from '@/components/CodeEditor';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
-import { GetDocumentByIdResponse, getExerciseResponse } from '@/types/document.type';
+import { GetDocumentByIdResponse, GetExerciseResponse, UpdateSampleSourceCodeRequest } from '@/types/document.type';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import Content, { PreviewProps } from './Content';
 import { useDispatch, useSelector } from 'react-redux';
@@ -48,6 +48,7 @@ const BoxCreateSx = {
 const FormGroupDeadlineSx = {
 	rowGap: 1
 };
+
 interface ExerciseProps {
 	onCreate?: Function;
 	onUpdate?: Function;
@@ -63,20 +64,25 @@ const Exercise = (props: ExerciseProps) => {
 	const exercise = useSelector(getDocumentExercise);
 
 
-	const InitialUpdateExerciseForm: getExerciseResponse = {
+	const InitialUpdateExerciseForm: GetExerciseResponse = {
 		ManualPercentage: 0,
 		MemoryLimit: 50000,
 		RuntimeLimit: 2000,
 		ScoreWeight: 1,
 		Id: '',
-		Deadline: ,
+		Deadline: '',
 		HaveDeadline: true,
 		StrictDeadline: false,
 		TimeCreated: '',
 	};
+	const InitialSourceForm: UpdateSampleSourceCodeRequest = {
+		sampleSourceCode: '',
+		type: 1
+	}
 	const { document, isCreator, onCreate, onUpdate, content, onSubmit, onGetSampleSourceCode } = props;
 
-	const [ExerciseForm, setExerciseForm] = useState<getExerciseResponse>(InitialUpdateExerciseForm);
+	const [ExerciseForm, setExerciseForm] = useState<GetExerciseResponse>(InitialUpdateExerciseForm);
+	const [Source, SetSource] = useState<UpdateSampleSourceCodeRequest>(InitialSourceForm)
 	const [DeadlineCheck, setDeadlineCheck] = useState(false);
 	const [StrictDeadlineCheck, setStrictDeadlineCheck] = useState(false);
 	const [OpenCreateExerciseDialog, setOpenCreateExerciseDialog] = useState(false);
@@ -102,25 +108,35 @@ const Exercise = (props: ExerciseProps) => {
 
 	};
 
-	console.log(ExerciseForm)
-	useEffect(() => {
-		dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
-	}, []);
+	const getSource = (source: string, type: number) => {
+		SetSource({
+			...Source,
+			sampleSourceCode: source,
+			type: type
+		})
+	}
 
 	useEffect(() => {
 		if (exercise) {
-			
+
 			setExerciseForm({ ...exercise })
-			setDeadlineCheck(exercise.HaveDeadline)
-			setStrictDeadlineCheck(exercise.StrictDeadline)
+			setDeadlineCheck(exercise.HaveDeadline ? exercise.HaveDeadline : false)
+			setStrictDeadlineCheck(exercise.StrictDeadline ? exercise.StrictDeadline : false)
 			let temp = getNextDay()
-			if(!exercise.Deadline){
-				setExerciseForm({ ...exercise,
-				// Deadline: getNextDay().toString()
+			if (!exercise.Deadline) {
+				setExerciseForm({
+					...exercise,
+					Deadline: new Date(temp).toISOString()
 				})
 			}
 		}
 	}, [exercise])
+
+	useEffect(() => {
+		dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
+	}, []);
+
+
 
 	return (
 		<Fragment>
@@ -146,6 +162,7 @@ const Exercise = (props: ExerciseProps) => {
 							document={document}
 							isCreator={isCreator}
 							onGetSampleSourceCode={onGetSampleSourceCode}
+							getSource={getSource}
 						/>
 					}
 					right={
@@ -196,15 +213,17 @@ const Exercise = (props: ExerciseProps) => {
 								<Box>
 									<FormGroup sx={FormGroupDeadlineSx}>
 										<FormControlLabel
+
 											control={
 												<Checkbox
 													name="haveDeadline"
 													checked={DeadlineCheck}
+													value={DeadlineCheck}
 													onChange={onChange}
 													onClick={() => {
 														setDeadlineCheck(!DeadlineCheck);
 														setStrictDeadlineCheck(false);
-														
+
 													}}
 												/>
 											}
@@ -216,6 +235,7 @@ const Exercise = (props: ExerciseProps) => {
 												<Checkbox
 													name="strictDeadline"
 													checked={StrictDeadlineCheck && DeadlineCheck}
+													value={StrictDeadlineCheck}
 													onChange={onChange}
 													onClick={() => {
 														setStrictDeadlineCheck(!StrictDeadlineCheck);
@@ -239,6 +259,7 @@ const Exercise = (props: ExerciseProps) => {
 													type="datetime-local"
 													name="deadline"
 													onChange={onChange}
+													// value={new Date(parseToLocalDate(Deadline)).toISOString()}
 													value={parseToLocalDate(Deadline)}
 												/>
 											}
@@ -257,7 +278,7 @@ const Exercise = (props: ExerciseProps) => {
 								size="large"
 								fullWidth
 								sx={{ padding: '10px' }}
-								onClick={() => { onUpdate ? onUpdate(ExerciseForm) : () => { console.log('Update Error') } }}
+								onClick={() => { onUpdate ? onUpdate(ExerciseForm,Source,document.Id) : () => { console.log('Update Error') } }}
 								endIcon={<SaveIcon />}
 								// loading={loading}
 								loadingPosition="end"

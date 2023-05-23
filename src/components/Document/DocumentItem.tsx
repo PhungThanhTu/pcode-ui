@@ -24,9 +24,10 @@ const BoxSx = {
 interface DocumentItemProps {
 	document: Document;
 	publishDocument: Function;
+	isCreator: boolean;
 }
 export const DocumentItem = (props: DocumentItemProps) => {
-	const { document, publishDocument } = props;
+	const { document, publishDocument, isCreator } = props;
 
 	return (
 		<Box sx={BoxSx}>
@@ -41,20 +42,27 @@ export const DocumentItem = (props: DocumentItemProps) => {
 					</Fragment>
 				) : undefined}
 			</Stack>
-			<Stack minHeight='100%' justifyContent="center" onClick={(e: MouseEvent) => { 
-				
-				publishDocument(e, document.Id, document.IsPublic ? 0 : 1) }} >
-				<CustomOnlyIconButton onClick={() => { }} color={document.IsPublic ? 'error' : 'primary'}>
-					<Tooltip title={document.IsPublic ? 'UnPublish' : 'Publish'}>
-						{
-							document.IsPublic ?
-								<UnpublishedIcon />
-								:
-								<PublishIcon />
-						}
-					</Tooltip>
-				</CustomOnlyIconButton>
-			</Stack>
+			{
+				isCreator ?
+					<Stack minHeight='100%' justifyContent="center" onClick={(e: MouseEvent) => {
+
+						publishDocument(e, document.Id, document.IsPublic ? 0 : 1)
+					}} >
+						<CustomOnlyIconButton onClick={() => { }} color={document.IsPublic ? 'error' : 'primary'}>
+							<Tooltip title={document.IsPublic ? 'UnPublish' : 'Publish'}>
+								{
+									document.IsPublic ?
+										<UnpublishedIcon />
+										:
+										<PublishIcon />
+								}
+							</Tooltip>
+						</CustomOnlyIconButton>
+					</Stack>
+					:
+					null
+			}
+
 		</Box>
 	);
 };

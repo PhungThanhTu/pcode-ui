@@ -7,7 +7,10 @@ import {
 	GetDocumentByIdResponse,
 	UpdateDocumentRequest,
 	CreateExerciseRequest,
-	getSampleSourceCode
+	GetSampleSourceCodeResponse,
+	UpdateExerciseRequest,
+	UpdateSampleSourceCodeResponse,
+	UpdateSampleSourceCodeRequest
 } from '@/types/document.type';
 
 const documentApi = {
@@ -60,16 +63,25 @@ const documentApi = {
 		const result: AxiosResponse<any> = await protectedApi.get(`/media/${id}`, { responseType: 'blob' });
 		return result;
 	},
-	createExercise: async (documentid: string, body: CreateExerciseRequest) => {
-		const result: AxiosResponse<any> = await protectedApi.post(`/document/${documentid}/exercise`, body);
+	createExercise: async (documentId: string, body: CreateExerciseRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.post(`/document/${documentId}/exercise`, body);
 		return result;
 	},
-	getExercise: async (documentid: string) => {
-		const result: AxiosResponse<any> = await protectedApi.get(`/document/${documentid}/exercise`);
+	updateExercise: async (documentId: string, body: UpdateExerciseRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.patch(`/document/${documentId}/exercise`, body);
+		return result;
+	}
+	,
+	getExercise: async (documentId: string) => {
+		const result: AxiosResponse<any> = await protectedApi.get(`/document/${documentId}/exercise`);
 		return result;
 	},
-	getSampleSourceCode: async (documentid: string, type: number) => {
-		const result: AxiosResponse<getSampleSourceCode> = await protectedApi.get(`/document/${documentid}/exercise/sample?programmingLanguage=${type}`);
+	getSampleSourceCode: async (documentId: string, type: number) => {
+		const result: AxiosResponse<GetSampleSourceCodeResponse> = await protectedApi.get(`/document/${documentId}/exercise/sample?programmingLanguage=${type}`);
+		return result;
+	},
+	updateSampleSourceCode: async (documentId: string, type: number, sampleSourceCode: string) => {
+		const result: AxiosResponse<UpdateSampleSourceCodeResponse> = await protectedApi.post(`/document/${documentId}/exercise/sample?programmingLanguage=${type}`, { sampleSourceCode: sampleSourceCode });
 		return result;
 	},
 };

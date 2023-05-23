@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import { Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,12 +15,13 @@ import { GetDocumentByIdResponse } from '@/types/document.type';
 
 interface CodeEditorProps {
 	document?: GetDocumentByIdResponse,
-	onGetSampleSourceCode: Function;
-	isCreator: boolean
+	onGetSampleSourceCode: Function,
+	isCreator: boolean,
+	getSource: Function
 }
 export const CodeEditor = (props: CodeEditorProps) => {
 
-	const { document, isCreator, onGetSampleSourceCode } = props
+	const { document, isCreator, onGetSampleSourceCode, getSource } = props
 
 	const dispatch = useDispatch();
 	const sourceCode = useSelector(getSampleSourceCode)
@@ -32,8 +33,12 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		let type = event.target.value
 		setLanguage(type as string);
 		onGetSampleSourceCode(document?.Id, Number(type))
+		getSource(Value, Number(type))
 	}
-
+	const onValueChange = (value: string | undefined) => {
+		SetValue(value ? value : '')
+		getSource(value, Number(Language))
+	}
 	useEffect(() => {
 		onGetSampleSourceCode(document?.Id, Number(Language))
 	}, [])
@@ -41,6 +46,10 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	useEffect(() => {
 		if (sourceCode && Object.keys(sourceCode).length > 0) {
 			SetValue(sourceCode.sourceCode)
+			getSource(sourceCode.sourceCode, sourceCode.programmingLanguageId)
+		}
+		else {
+			SetValue('//some code')
 		}
 	}, [sourceCode])
 
@@ -64,7 +73,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 				</Box>
 			</Stack>
 			<Box sx={{ flex: 1, paddingTop: '5px' }}>
-				<Editor language={Language.toLowerCase()} height={640} defaultValue="//some code" value={Value} theme="light" />
+				<Editor language={Language.toLowerCase()} height={640} defaultValue="//some code" value={Value} theme="light" onChange={onValueChange} />
 			</Box>
 		</Stack>
 	);

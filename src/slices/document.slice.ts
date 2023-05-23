@@ -4,8 +4,10 @@ import {
 	CreateExerciseRequest,
 	DocumentState,
 	GetDocumentByIdResponse,
-	getExerciseResponse,
-	getSampleSourceCode
+	GetExerciseResponse,
+	GetSampleSourceCodeResponse,
+	UpdateExerciseRequest,
+	UpdateSampleSourceCodeRequest
 } from '@/types/document.type';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -40,7 +42,7 @@ const documentSlice = createSlice({
 		fetchDocumentByIdWithExercise: (state, { payload }: PayloadAction<{ documentId: string }>) => {
 			state.documentExercise = null;
 		},
-		fetchDocumentByIdWithExerciseSuccess: (state, { payload }: PayloadAction<getExerciseResponse>) => {
+		fetchDocumentByIdWithExerciseSuccess: (state, { payload }: PayloadAction<GetExerciseResponse>) => {
 			state.documentExercise = payload;
 		},
 		fetchDocumentByIdWithExerciseError: (state) => {
@@ -53,7 +55,7 @@ const documentSlice = createSlice({
 		fetchSampleSourceCode: (state, { payload }: PayloadAction<{ documentId: string, type: number }>) => {
 			state.sampleSourceCode = null
 		},
-		fetchSampleSourceCodeSuccess: (state, { payload }: PayloadAction<getSampleSourceCode>) => {
+		fetchSampleSourceCodeSuccess: (state, { payload }: PayloadAction<GetSampleSourceCodeResponse>) => {
 			state.sampleSourceCode = payload;
 		},
 		fetchSampleSourceCodeError: (state) => {
@@ -61,12 +63,10 @@ const documentSlice = createSlice({
 		},
 		createDocument: (state, { payload }: PayloadAction<CreateDocumentRequest>) => { },
 		createDocumentContent: (state, { payload }: PayloadAction<CreateDocumentContentRequest>) => { },
-		createDocumentExercise: (
-			state,
-			{ payload }: PayloadAction<{ body: CreateExerciseRequest; documentId: string }>
-		) => { },
-		resetDocumentContent: (state, { payload }: PayloadAction<{ id: string }>) => { },
-		changePublishDocument: (state, { payload }: PayloadAction<{ documentId: string, status: number }>) => { }
+		createDocumentExercise: (state, { payload }: PayloadAction<{ body: CreateExerciseRequest; documentId: string }>) => { },
+		resetDocumentContent: (state, { payload }: PayloadAction<{ documentId: string }>) => { },
+		changePublishDocument: (state, { payload }: PayloadAction<{ documentId: string, status: number }>) => { },
+		updateDocumentExercise: (state, { payload }: PayloadAction<{ ExerciseBody: UpdateExerciseRequest, documentId: string, SourceBody: UpdateSampleSourceCodeRequest }>) => { },
 	}
 });
 
@@ -86,5 +86,6 @@ export const {
 	fetchSampleSourceCodeSuccess,
 	fetchSampleSourceCodeError,
 	changePublishDocument,
+	updateDocumentExercise,
 } = documentSlice.actions;
 export default documentSlice.reducer;

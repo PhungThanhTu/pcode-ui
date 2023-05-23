@@ -88,15 +88,17 @@ const CoursePage = () => {
 		} else if (course === null) {
 			navigate(-1);
 		} else {
+			let isCreator = isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
 			setTabs([
 				{
 					title: 'General',
 					element: (
 						<General
+							isCreator= {isCreator}
 							course={course}
 							code={findCourseCode(course.id)}
 							customizeButton={
-								isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
+								isCreator
 									? () => {
 										setOpenCourseCustomize(true);
 									}
@@ -119,7 +121,8 @@ const CoursePage = () => {
 				}
 			]);
 		}
-	}, [course]);
+		
+	}, [course,course?.documents]);
 
 	useLayoutEffect(() => {
 		dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
