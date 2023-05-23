@@ -11,14 +11,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 import { getDocument } from '@/selectors/document.selector';
-import { createDocumentContent, createDocumentExercise, fetchDocumentById, fetchSampleSourceCode, resetDocumentContent } from '@/slices/document.slice';
+import { createDocumentContent, createDocumentExercise, fetchDocumentById, fetchSampleSourceCode, resetDocumentContent, updateDocumentExercise } from '@/slices/document.slice';
 
 import { usePDFFileReader } from '@/hook/useFileReader';
-import { CreateDocumentContentRequest, CreateExerciseRequest, getExerciseResponse, updateExerciseRequest } from '@/types/document.type';
+import { CreateDocumentContentRequest, CreateExerciseRequest, GetExerciseResponse, UpdateExerciseRequest, UpdateSampleSourceCodeRequest } from '@/types/document.type';
 import { Worker } from '@react-pdf-viewer/core';
 import TestCase from '@/components/Document/Tab/TestCase';
 import CustomDialog from '@/components/Custom/CustomDialog';
-import { createExerciseDefault } from '@/config';
+import { JudgerId, createExerciseDefault } from '@/config';
+import { getApiDateFormat, parseToLocalDate } from '@/utils/convert';
 
 const DocumentPage = () => {
 	const params = useParams();
@@ -59,7 +60,7 @@ const DocumentPage = () => {
 	};
 
 	const onResetDocumentContent = () => {
-		dispatch(resetDocumentContent({ id: params.documentId ? params.documentId : '' }));
+		dispatch(resetDocumentContent({ documentId: params.documentId ? params.documentId : '' }));
 		setOpenDialog(false);
 	};
 	//#endregion
@@ -67,29 +68,33 @@ const DocumentPage = () => {
 	//#region exercise
 
 	const onCreateExercise = (documentId: string) => {
-
 		let form = createExerciseDefault;
 		dispatch(createDocumentExercise({ body: form, documentId: documentId }));
 
 	};
 
-	const onUpdateExercise = (ExeriseForm: getExerciseResponse) => {
-		let form: updateExerciseRequest = {
+	const onUpdateExercise = (ExeriseForm: GetExerciseResponse, sourceForm: UpdateSampleSourceCodeRequest, documentId: string) => {
+		let exerciseForm: UpdateExerciseRequest = {
 
-			deadline: ExeriseForm.Deadline,
+			deadline: ExeriseForm.HaveDeadline ? getApiDateFormat(ExeriseForm.Deadline) : '',
 			haveDeadline: ExeriseForm.HaveDeadline,
 			manualPercentage: ExeriseForm.ManualPercentage,
 			memoryLimit: ExeriseForm.MemoryLimit,
 			runtimeLimit: ExeriseForm.RuntimeLimit,
 			scoreWeight: ExeriseForm.ScoreWeight,
-			strictDeadline: ExeriseForm.StrictDeadline,
-			judgerId: ''
+			strictDeadline: ExeriseForm.HaveDeadline ? ExeriseForm.StrictDeadline ? ExeriseForm.StrictDeadline : false : false,
+			judgerId: JudgerId
 		}
-		console.log(form)
+
+		dispatch(updateDocumentExercise({ documentId: documentId, ExerciseBody: exerciseForm, SourceBody: sourceForm }))
+
 	};
 	const onGetSampleSourceCode = (documentId: string, type: number) => {
 		dispatch(fetchSampleSourceCode({ documentId: documentId, type: type }))
 	};
+	const onSubmit = () =>{
+		
+	}
 	//#endregion
 
 	useEffect(() => {

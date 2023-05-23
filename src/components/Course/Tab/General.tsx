@@ -6,9 +6,9 @@ import ListItems from '../../ListItems';
 import CourseCodeBox from '../CourseCodeBox';
 
 import { GetCourseByIdResponse } from '@/types/course.type';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
-import CustomDialog from '@/components/Custom/CustomDialog';
+
 
 interface GeneralProps {
 	course: GetCourseByIdResponse;
@@ -16,40 +16,39 @@ interface GeneralProps {
 	code: string;
 	createDocumentModal: Function | null;
 	changePublishDocument: Function;
+	isCreator: boolean
 }
 const General = (props: GeneralProps) => {
 
-	const { course, customizeButton, code, createDocumentModal, changePublishDocument } = props;
-
-	
+	const { course, customizeButton, code, createDocumentModal, changePublishDocument, isCreator } = props;
 
 	return (
-			<TabLayout
-				header={
-					<CourseTabHeader
-						background={course.courseTheme}
-						title={course.title}
-						subtitle={course.courseSubject}
-						customizeButton={customizeButton ? customizeButton : null}
-					/>
-				}
-				leftBody={
-					createDocumentModal ? (
-						<Fragment>
-							<CustomIconButton
-								onClick={() => {
-									createDocumentModal();
-								}}
-								startIcon={<CreateIcon />}
-								content="Create Document"
-							/>
-							<CourseCodeBox code={code} />
+		<TabLayout
+			header={
+				<CourseTabHeader
+					background={course.courseTheme}
+					title={course.title}
+					subtitle={course.courseSubject}
+					customizeButton={customizeButton ? customizeButton : null}
+				/>
+			}
+			leftBody={
+				createDocumentModal ? (
+					<Fragment>
+						<CustomIconButton
+							onClick={() => {
+								createDocumentModal();
+							}}
+							startIcon={<CreateIcon />}
+							content="Create Document"
+						/>
+						<CourseCodeBox code={code} />
 
-						</Fragment>
-					) : null
-				}
-				rightBody={<ListItems list={course ? course.documents : []} publishDocument={changePublishDocument}/>}
-			/>
+					</Fragment>
+				) : null
+			}
+			rightBody={<ListItems isCreator={isCreator} list={course ? course.documents : []} publishDocument={changePublishDocument} />}
+		/>
 
 
 	);

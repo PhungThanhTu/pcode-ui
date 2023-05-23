@@ -29,8 +29,8 @@ export const parseToLocalDate = (date_UTC: string) => {
 		var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
 		var yyyy = date.getFullYear();
 
-		var hh = date.getHours();
-		var mn = date.getMinutes();
+		var hh = String(date.getHours()).padStart(2, '0');
+		var mn = String(date.getMinutes()).padStart(2, '0');
 
 		return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn;
 	}
@@ -70,10 +70,7 @@ export const getNextDay = (type?: string) => {
 	for (let i = 0; i < 25; i++) {
 		const nextHour = new Date(nowDate); // Create a new date object with the current date and time
 		nextHour.setHours(nowDate.getHours() + i); // Set the hour to the next hour
-
-
 		nextDate = new Date(nextHour)
-
 	}
 
 
@@ -91,4 +88,9 @@ export const getNextDay = (type?: string) => {
 
 	return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn;
 
+}
+
+export const getApiDateFormat = (date: string) => {
+	let temp = date.replace('T', ' ').replace('.000Z', '');
+	return temp.substring(0, 16)
 }

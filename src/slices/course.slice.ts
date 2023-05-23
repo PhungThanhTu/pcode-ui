@@ -66,12 +66,13 @@ const courseSlice = createSlice({
 			state.loading = false;
 		},
 		changePublishDocumentSuccess: (state, { payload }: PayloadAction<{ documentId: string, status: number }>) => {
-			let index = state.course?.documents.findIndex(item => item.Id === payload.documentId)
-			if (index && index !== -1) {
-				if (state.course)
-					state.course.documents[index]['IsPublic'] = payload.status === 1 ? true : false;
 
+			const documentIndex = state.course?.documents.findIndex(item => item.Id === payload.documentId);
+			if (documentIndex !== -1) {
+				
+				state.course ? state.course.documents[documentIndex ? documentIndex : -1].IsPublic = payload.status === 1 : null;
 			}
+
 		}
 	}
 });
