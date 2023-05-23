@@ -11,11 +11,13 @@ export interface Document {
 	Title: string;
 	DocumentDescription: string;
 	HasExercise: boolean;
+	IsPublic: boolean;
 }
 export interface DocumentState {
 	document?: GetDocumentByIdResponse | null;
 	documentContent?: any | null;
-	documentExercise?: any | null;
+	documentExercise?: getExerciseResponse | null;
+	sampleSourceCode?: getSampleSourceCode | null;
 	loading: boolean;
 }
 // API interface
@@ -67,10 +69,23 @@ export interface getExerciseResponse {
 	RuntimeLimit: number;
 	MemoryLimit: number;
 	ScoreWeight: number;
-	TimeCreated: Date;
+	TimeCreated: string;
 	HaveDeadline: boolean;
-	Deadline: Date;
+	Deadline: string;
 	StrictDeadline: boolean;
 	ManualPercentage: number;
-	JudgerId: string;
+}
+export interface updateExerciseRequest {
+	runtimeLimit: number,
+	memoryLimit: number,
+	scoreWeight: number,
+	manualPercentage: number,
+	haveDeadline: boolean,
+	deadline: string,
+	strictDeadline: boolean,
+	judgerId: string
+}
+export interface getSampleSourceCode {
+	programmingLanguageId: string,
+	sourceCode: string
 }

@@ -6,7 +6,8 @@ import {
 	CreateDocumentContentRequest,
 	GetDocumentByIdResponse,
 	UpdateDocumentRequest,
-	CreateExerciseRequest
+	CreateExerciseRequest,
+	getSampleSourceCode
 } from '@/types/document.type';
 
 const documentApi = {
@@ -39,8 +40,8 @@ const documentApi = {
 			return result;
 		}
 	},
-	changePublishDocument: async (id: string, status: number) => {
-		const result: AxiosResponse<any> = await protectedApi.post(`/document/${id}/publish?publish=${status}`);
+	changePublishDocument: async (documentId: string, status: number) => {
+		const result: AxiosResponse<any> = await protectedApi.post(`/document/${documentId}/publish?publish=${status}`);
 		return result;
 	},
 	updateDocument: async (id: string, body: UpdateDocumentRequest) => {
@@ -66,7 +67,11 @@ const documentApi = {
 	getExercise: async (documentid: string) => {
 		const result: AxiosResponse<any> = await protectedApi.get(`/document/${documentid}/exercise`);
 		return result;
-	}
+	},
+	getSampleSourceCode: async (documentid: string, type: number) => {
+		const result: AxiosResponse<getSampleSourceCode> = await protectedApi.get(`/document/${documentid}/exercise/sample?programmingLanguage=${type}`);
+		return result;
+	},
 };
 
 export default documentApi;

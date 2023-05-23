@@ -10,7 +10,8 @@ const BoxLeftSx = {
 	minHeight: 'inherit',
 	width: '100%',
 	borderRadius: borderRadius,
-	padding: '5px'
+	padding: '5px',
+	position: 'relative'
 };
 const BoxRightSx = {
 	backgroundColor: `${componentsBoxColor}`,
@@ -18,18 +19,36 @@ const BoxRightSx = {
 	minHeight: 'inherit',
 	width: '100%',
 	borderRadius: borderRadius,
-	padding: '5px'
+	padding: '5px',
+	position: 'relative'
 };
+const BoxChildRightSx = {
+	position: 'absolute',
+	bottom: 10,
+	left: 0,
+	width: '100%',
+	padding: '10px'
+}
+const BoxChildLeftSx = {
+	position: 'absolute',
+	bottom: 0,
+	left: 0,
+	width: '100%',
+	padding: '5px',
+	borderRadius : `0 0 ${borderRadius} ${borderRadius}`
+
+}
 interface PropsWithChildrenOnly {
 	title?: string;
 	right?: React.ReactNode;
 	left?: React.ReactNode;
 	content?: React.ReactNode;
 	children?: React.ReactNode;
+	childrenPosition?: boolean;
 }
 
 const DocumentTabLayout = (props: PropsWithChildrenOnly) => {
-	const { title, right, left, children, content } = props;
+	const { title, right, left, children, content, childrenPosition } = props;
 
 	return (
 		<Stack flexDirection="column" rowGap={1} minHeight="100%" maxHeight={'inherit'}>
@@ -47,17 +66,39 @@ const DocumentTabLayout = (props: PropsWithChildrenOnly) => {
 				columnGap={2}
 				alignItems={'flex-start'}
 				justifyContent={'center'}
+				position="relative"
 			>
 				{content ? (
 					content
 				) : (
-					<Fragment>
-						<Box sx={BoxLeftSx}>{left}</Box>
-						<Box sx={BoxRightSx}>{right}</Box>
-					</Fragment>
+
+					childrenPosition ?
+						<Fragment>
+							<Box sx={BoxLeftSx}>
+								{left}
+							</Box>
+							<Box sx={BoxRightSx}>{right}
+								<Box sx={BoxChildRightSx}>
+									{children}
+								</Box>
+							</Box>
+						</Fragment>
+						:
+						<Fragment>
+							<Box sx={BoxLeftSx}>
+								{left}
+								<Box sx={BoxChildLeftSx}>
+									{children}
+								</Box>
+							</Box>
+							<Box sx={BoxRightSx}>{right}
+							</Box>
+
+						</Fragment>
+
 				)}
 			</Stack>
-			<Box>{children}</Box>
+
 		</Stack>
 	);
 };

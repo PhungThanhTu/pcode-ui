@@ -1,3 +1,5 @@
+import { useTabContext } from "@mui/lab";
+
 export const labelToProperty = (str: String) => {
 	let tmp = str.trim().split(' ');
 	tmp[0] = tmp[0].toLowerCase();
@@ -18,14 +20,21 @@ export const positiveNumberWithMin = (number: number, min: number) => {
 	return Min;
 };
 
-export const parseToLocalDate = (date_ISO: Date) => {
-	var date = new Date(date_ISO);
+export const parseToLocalDate = (date_UTC: string) => {
+	if (date_UTC) {
 
-	var dd = String(date.getDate()).padStart(2, '0');
-	var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-	var yyyy = date.getFullYear();
+		var date = new Date(date_UTC);
 
-	return yyyy + '-' + mm + '-' + dd;
+		var dd = String(date.getDate()).padStart(2, '0');
+		var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+		var yyyy = date.getFullYear();
+
+		var hh = date.getHours();
+		var mn = date.getMinutes();
+
+		return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn;
+	}
+	return getNextDay();
 };
 export const parseToISOSDate = (date_local: Date) => {
 	var date = new Date(date_local);
@@ -34,12 +43,52 @@ export const parseToISOSDate = (date_local: Date) => {
 	//     date.getUTCMinutes(), date.getUTCSeconds());
 	return date.toISOString();
 };
-export const today = () => {
+export const getToday = (type?: string) => {
 	var date = new Date();
 
 	var dd = String(date.getDate()).padStart(2, '0');
 	var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
 	var yyyy = date.getFullYear();
 
-	return yyyy + '-' + mm + '-' + dd;
+	var hh = date.getHours();
+	var mn = date.getMinutes();
+
+	if (type === 'date')
+		return yyyy + '-' + mm + '-' + dd;
+	else if (type === 'time')
+		return hh + ':' + mn;
+
+	return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn;
 };
+
+export const getNextDay = (type?: string) => {
+
+	var nowDate = new Date();
+	let nextDate = new Date();
+
+
+	for (let i = 0; i < 25; i++) {
+		const nextHour = new Date(nowDate); // Create a new date object with the current date and time
+		nextHour.setHours(nowDate.getHours() + i); // Set the hour to the next hour
+
+
+		nextDate = new Date(nextHour)
+
+	}
+
+
+	var dd = String(nextDate.getDate()).padStart(2, '0');
+	var mm = String(nextDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = nextDate.getFullYear();
+
+	var hh = String(nextDate.getHours()).padStart(2, '0');
+	var mn = String(nextDate.getMinutes()).padStart(2, '0');
+
+	if (type === 'date')
+		return yyyy + '-' + mm + '-' + dd;
+	else if (type === 'time')
+		return hh + ':' + mn;
+
+	return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn;
+
+}

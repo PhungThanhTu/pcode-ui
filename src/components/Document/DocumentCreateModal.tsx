@@ -21,6 +21,7 @@ interface DocumentCreateModalProps {
 }
 
 const DocumentCreateModal = (props: DocumentCreateModalProps) => {
+
 	const { open, onCreate, onCancel, onChange, createDocumentValues } = props;
 	const [Error, setError] = useState(false);
 
@@ -31,7 +32,7 @@ const DocumentCreateModal = (props: DocumentCreateModalProps) => {
 					Create course
 				</Typography>
 				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
-					<Box component="form" onSubmit={() => onCreate()}>
+					<Box component="form" onSubmit={() => onCreate(createDocumentValues)}>
 						<TextField
 							error={Error}
 							required
@@ -64,7 +65,8 @@ const DocumentCreateModal = (props: DocumentCreateModalProps) => {
 							<FormControlLabel
 								control={
 									<Checkbox
-										defaultChecked
+										name='hasExercise'
+										checked={createDocumentValues.hasExercise}
 										onChange={(e) => {
 											onChange(e);
 										}}

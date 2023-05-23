@@ -24,9 +24,9 @@ const coursesSlice = createSlice({
 		fetchCourses: (state) => {
 			state.loading = true;
 		},
-		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => {},
-		renameCourse: (state, { payload }: PayloadAction<Course>) => {},
-		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => {},
+		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => { },
+		renameCourse: (state, { payload }: PayloadAction<Course>) => { },
+		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => { },
 		createCourseSuccess: (state, { payload }: PayloadAction<CreateCourseResponse>) => {
 			let Course: Course = {
 				id: payload.id,
@@ -64,12 +64,20 @@ const courseSlice = createSlice({
 		fetchCourseByIdError: (state) => {
 			state.course = null;
 			state.loading = false;
+		},
+		changePublishDocumentSuccess: (state, { payload }: PayloadAction<{ documentId: string, status: number }>) => {
+			let index = state.course?.documents.findIndex(item => item.Id === payload.documentId)
+			if (index && index !== -1) {
+				if (state.course)
+					state.course.documents[index]['IsPublic'] = payload.status === 1 ? true : false;
+
+			}
 		}
 	}
 });
 export const { fetchCourses, createCourse, renameCourse, joinCourse, fetchCoursesSuccess, fetchCoursesError } =
 	coursesSlice.actions;
-export const { fetchCourseById, fetchCourseByIdError, fetchCourseByIdSuccess } = courseSlice.actions;
+export const { fetchCourseById, fetchCourseByIdError, fetchCourseByIdSuccess, changePublishDocumentSuccess } = courseSlice.actions;
 
 export const coursesReducer = coursesSlice.reducer;
 export const courseReducer = courseSlice.reducer;

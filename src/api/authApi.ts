@@ -11,7 +11,6 @@ const authApi = {
 	login: async (credential: UserCredentials) => {
 		const result = await publicApi.post<AuthenticationTokens>(API_PREFIX + '/login', credential);
 		console.log('USER LOGIN');
-		console.log(result.data);
 		TokenService.setToken(result.data.token);
 		TokenService.setRefreshToken(result.data.refreshToken);
 		return result;

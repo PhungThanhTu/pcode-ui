@@ -6,6 +6,7 @@ import { useLocation, Link as RouterLink } from 'react-router-dom';
 
 interface ListItemsProps {
 	list: Array<any>;
+	publishDocument?: Function | null;
 }
 const LinkItemSx = {
 	display: 'block',
@@ -13,7 +14,7 @@ const LinkItemSx = {
 };
 const ListItems = (props: ListItemsProps) => {
 	const { pathname } = useLocation();
-	const { list } = props;
+	const { list, publishDocument } = props;
 
 	return (
 		<Stack flexDirection="column" rowGap={2} alignItems="center" justifyContent="center" width="100%">
@@ -27,7 +28,7 @@ const ListItems = (props: ListItemsProps) => {
 						color="inherit"
 						sx={LinkItemSx}
 					>
-						<DocumentItem document={item} />
+						<DocumentItem document={item} publishDocument={publishDocument ? publishDocument : () => {console.log("Null Publish")}} />
 					</Link>
 				);
 			})}

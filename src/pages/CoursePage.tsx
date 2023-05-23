@@ -7,14 +7,15 @@ import DocumentCreateModal from '@/components/Document/DocumentCreateModal';
 import { LinearLoading } from '@/components/Loading';
 
 import { TabElement } from '@/types/utility.type';
-import { useEffect, Fragment, useState, ChangeEvent, useLayoutEffect } from 'react';
+import { useEffect, Fragment, useState, ChangeEvent, useLayoutEffect, MouseEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 import { getCourse, getCourses } from '@/selectors/course.selector';
 import { fetchCourseById, fetchCourses } from '@/slices/course.slice';
 import { CreateDocumentRequest } from '@/types/document.type';
-import { createDocument } from '@/slices/document.slice';
+import { changePublishDocument, createDocument } from '@/slices/document.slice';
+
 
 const CoursePage = () => {
 	const params = useParams();
@@ -37,6 +38,7 @@ const CoursePage = () => {
 	const [OpenCourseCustomize, setOpenCourseCustomize] = useState(false);
 	const [OpenDocumentCreate, setOpenDocumentCreate] = useState(false);
 
+
 	const { title, description, hasExercise, courseId } = CreateDocumentForm;
 
 	const findCourseCode = (id: string) => {
@@ -50,17 +52,34 @@ const CoursePage = () => {
 		return isCreator;
 	};
 
-	const onCreateDocument = () => {
+	const onCreateDocument = (form: CreateDocumentRequest) => {
 		setOpenDocumentCreate(false);
 		setCreateDocumentForm(InitialForm);
-		dispatch(createDocument(CreateDocumentForm));
+		dispatch(createDocument(form));
 	};
+
 	const onCreateDocumentFieldsChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setCreateDocumentForm({
-			...CreateDocumentForm,
-			[e.target.name]: e.target.value
-		});
+		if (e.target.name === "hasExercise") {
+			setCreateDocumentForm({
+				...CreateDocumentForm,
+				[e.target.name]: e.target.checked
+			});
+		}
+		else {
+			setCreateDocumentForm({
+				...CreateDocumentForm,
+				[e.target.name]: e.target.value
+			});
+		}
+
+
 	};
+
+	const ChangePublishDocument = (e: MouseEvent<HTMLButtonElement>, documentId: string, status: number) => {
+		e.preventDefault();
+		e.stopPropagation();
+		dispatch(changePublishDocument({ documentId: documentId, status: status }))
+	}
 
 	useEffect(() => {
 		if (!course) {
@@ -79,15 +98,16 @@ const CoursePage = () => {
 							customizeButton={
 								isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
 									? () => {
-											setOpenCourseCustomize(true);
-									  }
+										setOpenCourseCustomize(true);
+									}
 									: null
 							}
+							changePublishDocument={ChangePublishDocument}
 							createDocumentModal={
 								isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
 									? () => {
-											setOpenDocumentCreate(true);
-									  }
+										setOpenDocumentCreate(true);
+									}
 									: null
 							}
 						/>
@@ -116,6 +136,7 @@ const CoursePage = () => {
 					setOpenCourseCustomize(false);
 				}}
 			/>
+
 			<DocumentCreateModal
 				open={OpenDocumentCreate}
 				onCreate={onCreateDocument}
