@@ -11,10 +11,28 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 import { getDocument } from '@/selectors/document.selector';
-import { createDocumentContent, createDocumentExercise, fetchDocumentById, fetchSampleSourceCode, resetDocumentContent, updateDocumentExercise } from '@/slices/document.slice';
+import {
+	createDocumentContent,
+	createDocumentExercise,
+	createTestCase,
+	deleteTestCase,
+	fetchDocumentById,
+	fetchSampleSourceCode,
+	resetDocumentContent,
+	updateDocumentExercise,
+	updateTestCase
+} from '@/slices/document.slice';
 
 import { usePDFFileReader } from '@/hook/useFileReader';
-import { CreateDocumentContentRequest, CreateExerciseRequest, GetExerciseResponse, UpdateExerciseRequest, UpdateSampleSourceCodeRequest } from '@/types/document.type';
+import {
+	CreateDocumentContentRequest,
+	CreateExerciseRequest,
+	CreateTestCaseRequest,
+	GetExerciseResponse,
+	UpdateExerciseRequest,
+	UpdateSampleSourceCodeRequest,
+	UpdateTestCaseRequest
+} from '@/types/document.type';
 import { Worker } from '@react-pdf-viewer/core';
 import TestCase from '@/components/Document/Tab/TestCase';
 import CustomDialog from '@/components/Custom/CustomDialog';
@@ -70,33 +88,51 @@ const DocumentPage = () => {
 	const onCreateExercise = (documentId: string) => {
 		let form = createExerciseDefault;
 		dispatch(createDocumentExercise({ body: form, documentId: documentId }));
-
 	};
 
-	const onUpdateExercise = (ExeriseForm: GetExerciseResponse, sourceForm: UpdateSampleSourceCodeRequest, documentId: string) => {
+	const onUpdateExercise = (
+		ExeriseForm: GetExerciseResponse,
+		sourceForm: UpdateSampleSourceCodeRequest,
+		documentId: string
+	) => {
 		let exerciseForm: UpdateExerciseRequest = {
-
 			deadline: ExeriseForm.HaveDeadline ? getApiDateFormat(ExeriseForm.Deadline) : '',
 			haveDeadline: ExeriseForm.HaveDeadline,
 			manualPercentage: ExeriseForm.ManualPercentage,
 			memoryLimit: ExeriseForm.MemoryLimit,
 			runtimeLimit: ExeriseForm.RuntimeLimit,
 			scoreWeight: ExeriseForm.ScoreWeight,
-			strictDeadline: ExeriseForm.HaveDeadline ? ExeriseForm.StrictDeadline ? ExeriseForm.StrictDeadline : false : false,
+			strictDeadline: ExeriseForm.HaveDeadline
+				? ExeriseForm.StrictDeadline
+					? ExeriseForm.StrictDeadline
+					: false
+				: false,
 			judgerId: JudgerId
-		}
+		};
 
-		dispatch(updateDocumentExercise({ documentId: documentId, ExerciseBody: exerciseForm, SourceBody: sourceForm }))
-
+		dispatch(
+			updateDocumentExercise({ documentId: documentId, ExerciseBody: exerciseForm, SourceBody: sourceForm })
+		);
 	};
 	const onGetSampleSourceCode = (documentId: string, type: number) => {
-		dispatch(fetchSampleSourceCode({ documentId: documentId, type: type }))
+		dispatch(fetchSampleSourceCode({ documentId: documentId, type: type }));
 	};
-	const onSubmit = () =>{
-		
-	}
+
+	const onSubmit = () => {};
 	//#endregion
 
+	//#region test cases
+	const onCreateTestCase = (documentId: string, form: CreateTestCaseRequest) => {
+		// dispatch(createTestCase({ body: form, documentId: documentId }));
+	};
+
+	const onUpdateTestCase = (documentId: string, order: number, form: UpdateTestCaseRequest) => {
+		// dispatch(updateTestCase({ documentId: documentId, order: order, body: form }))
+	};
+	const onDeleteTestCase = (documentId: string, order: number) => {
+		// dispatch(deleteTestCase({ documentId: documentId, order: order}))
+	};
+	//#endregion
 	useEffect(() => {
 		if (!document) {
 			// dispatch(fetchDocumentById({ id: params.documentId ? params.documentId : '' }));
@@ -148,7 +184,14 @@ const DocumentPage = () => {
 						},
 						{
 							title: 'TestCases',
-							element: <TestCase />
+							element: (
+								<TestCase
+									document={document}
+									onCreate={onCreateTestCase}
+									onUpdate={onUpdateTestCase}
+									onDelete={onDeleteTestCase}
+								/>
+							)
 						}
 					]);
 				} else {

@@ -1,23 +1,34 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import documentApi from '@/api/documentApi';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import {
 	CreateDocumentContentRequest,
 	CreateDocumentRequest,
 	CreateDocumentResponse,
 	CreateExerciseRequest,
+	CreateTestCaseRequest,
+	CreateTestCaseResponse,
+	GetAllTestCasesResponse,
 	GetDocumentByIdResponse,
 	GetExerciseResponse,
 	GetSampleSourceCodeResponse,
 	UpdateExerciseRequest,
-	UpdateSampleSourceCodeRequest
+	UpdateSampleSourceCodeRequest,
+	UpdateTestCaseRequest
 } from '@/types/document.type';
 import {
 	changePublishDocument,
 	createDocument,
 	createDocumentContent,
 	createDocumentExercise,
+	createTestCase,
+	createTestCaseSuccess,
+	deleteTestCase,
+	deleteTestCaseSuccess,
+	fetchAllTestCases,
+	fetchAllTestCasesError,
+	fetchAllTestCasesSuccess,
 	fetchDocumentById,
 	fetchDocumentByIdError,
 	fetchDocumentByIdSuccess,
@@ -29,13 +40,16 @@ import {
 	fetchSampleSourceCodeError,
 	fetchSampleSourceCodeSuccess,
 	resetDocumentContent,
-	updateDocumentExercise
+	updateDocumentExercise,
+	updateTestCase,
+	updateTestCaseSuccess
 } from '@/slices/document.slice';
 import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
 import { setLoading } from '@/slices/loading.slice';
 import { changePublishDocumentSuccess, fetchCourseById } from '@/slices/course.slice';
 
+//#region document
 function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 	try {
 		console.log('saga fetching document by id');
@@ -68,36 +82,6 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 		console.log('saga fetch course by id failed');
 	}
 }
-function* fetchDocumentByIdWithExerciseSaga(action: PayloadAction<{ documentId: string }>) {
-	try {
-		console.log('saga fetching document exercise by id');
-		const exercise: AxiosResponse<GetExerciseResponse> = yield call(
-			documentApi.getExercise,
-			action.payload.documentId
-		);
-		if (exercise.data) {
-			yield put(fetchDocumentByIdWithExerciseSuccess(exercise.data));
-		}
-	} catch (error) {
-		yield put(fetchDocumentByIdWithExerciseError());
-	}
-}
-function* fetchSampleSourceCodeSaga(action: PayloadAction<{ documentId: string, type: number }>) {
-	try {
-		console.log('saga fetching sample source code');
-		const source: AxiosResponse<GetSampleSourceCodeResponse> = yield call(
-			documentApi.getSampleSourceCode,
-			action.payload.documentId,
-			action.payload.type
-		);
-		if (source.data) {
-			yield put(fetchSampleSourceCodeSuccess(source.data));
-		}
-	} catch (error) {
-		yield put(setSnackbar(notificationMessage.ERROR('programming language not supported.')));
-		yield put(fetchSampleSourceCodeError());
-	}
-}
 function* createDocumentSaga(action: PayloadAction<CreateDocumentRequest>) {
 	try {
 		console.log('saga create document');
@@ -116,6 +100,39 @@ function* createDocumentSaga(action: PayloadAction<CreateDocumentRequest>) {
 		yield put(setSnackbar(notificationMessage.CREATE_FAIL('document', '')));
 	}
 }
+function* changePublishDocumentSaga(action: PayloadAction<{ documentId: string; status: number }>) {
+	try {
+		console.log('saga publish/unpublish document ');
+		yield put(setLoading({ isLoading: true }));
+		const data: AxiosResponse<any> = yield call(
+			documentApi.changePublishDocument,
+			action.payload.documentId,
+			action.payload.status
+		);
+
+		if (data) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(
+				setSnackbar(
+					notificationMessage.UPDATE_SUCCESS(
+						'document',
+						`Document ${action.payload.status === 1 ? 'published' : 'unpublished'}`
+					)
+				)
+			);
+		}
+		yield put(
+			changePublishDocumentSuccess({ documentId: action.payload.documentId, status: action.payload.status })
+		);
+	} catch (error: any) {
+		console.log('saga publish/unpublish document failed.');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.ERROR('Published/Unpublished document failed! Please try again!')));
+	}
+}
+//#endregion
+
+//#region document content
 function* createDocumentContentSaga(action: PayloadAction<CreateDocumentContentRequest>) {
 	try {
 		console.log('saga create/update document content');
@@ -131,6 +148,39 @@ function* createDocumentContentSaga(action: PayloadAction<CreateDocumentContentR
 		console.log('saga create/update document content failed');
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('document content', '')));
+	}
+}
+function* resetDocumentContentSaga(action: PayloadAction<{ documentId: string }>) {
+	try {
+		console.log('saga delete document content');
+		yield put(setLoading({ isLoading: true }));
+		const data: AxiosResponse<any> = yield call(documentApi.deleteDocumentContent, action.payload.documentId);
+		if (data) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(setSnackbar(notificationMessage.DELETE_SUCCESS('document content')));
+		}
+		yield put(fetchDocumentById({ id: action.payload.documentId }));
+	} catch (error: any) {
+		console.log('saga reset document content failed');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.ERROR('Reset document content failed, please try again!.')));
+	}
+}
+//#endregion
+
+//#region document exercise
+function* fetchDocumentByIdWithExerciseSaga(action: PayloadAction<{ documentId: string }>) {
+	try {
+		console.log('saga fetching document exercise by id');
+		const exercise: AxiosResponse<GetExerciseResponse> = yield call(
+			documentApi.getExercise,
+			action.payload.documentId
+		);
+		if (exercise.data) {
+			yield put(fetchDocumentByIdWithExerciseSuccess(exercise.data));
+		}
+	} catch (error) {
+		yield put(fetchDocumentByIdWithExerciseError());
 	}
 }
 function* createDocumentExerciseSaga(action: PayloadAction<{ body: CreateExerciseRequest; documentId: string }>) {
@@ -154,57 +204,42 @@ function* createDocumentExerciseSaga(action: PayloadAction<{ body: CreateExercis
 		yield put(setSnackbar(notificationMessage.CREATE_FAIL('document content', 'Please, try again!')));
 	}
 }
-function* resetDocumentContentSaga(action: PayloadAction<{ documentId: string }>) {
-	try {
-		console.log('saga delete document content');
-		yield put(setLoading({ isLoading: true }));
-		const data: AxiosResponse<any> = yield call(documentApi.deleteDocumentContent, action.payload.documentId);
-		if (data) {
-			yield put(setLoading({ isLoading: false }));
-			yield put(setSnackbar(notificationMessage.DELETE_SUCCESS('document content')));
-		}
-		yield put(fetchDocumentById({ id: action.payload.documentId }));
-	} catch (error: any) {
-		console.log('saga reset document content failed');
-		yield put(setLoading({ isLoading: false }));
-		yield put(setSnackbar(notificationMessage.ERROR('Reset document content failed, please try again!.')));
-	}
-}
-function* changePublishDocumentSaga(action: PayloadAction<{ documentId: string, status: number }>) {
-	try {
-		console.log('saga publish/unpublish document ');
-		yield put(setLoading({ isLoading: true }));
-		const data: AxiosResponse<any> = yield call(documentApi.changePublishDocument, action.payload.documentId, action.payload.status);
-
-		if (data) {
-			yield put(setLoading({ isLoading: false }));
-			yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('document', `Document ${action.payload.status === 1 ? 'published' : 'unpublished'}`)));
-		}
-		yield put(changePublishDocumentSuccess({ documentId: action.payload.documentId, status: action.payload.status }));
-	} catch (error: any) {
-		console.log('saga publish/unpublish document failed.');
-		yield put(setLoading({ isLoading: false }));
-		yield put(setSnackbar(notificationMessage.ERROR('Published/Unpublished document failed! Please try again!')));
-	}
-}
-
-function* updateDocumentExerciseSaga(action: PayloadAction<{ ExerciseBody: UpdateExerciseRequest; documentId: string, SourceBody: UpdateSampleSourceCodeRequest }>) {
+function* updateDocumentExerciseSaga(
+	action: PayloadAction<{
+		ExerciseBody: UpdateExerciseRequest;
+		documentId: string;
+		SourceBody: UpdateSampleSourceCodeRequest;
+	}>
+) {
 	try {
 		console.log('saga update document exercise');
 		yield put(setLoading({ isLoading: true }));
-		const data: AxiosResponse<any> = yield call(documentApi.updateExercise, action.payload.documentId, action.payload.ExerciseBody);
+		const data: AxiosResponse<any> = yield call(
+			documentApi.updateExercise,
+			action.payload.documentId,
+			action.payload.ExerciseBody
+		);
 
 		if (data) {
 			try {
 				console.log('saga update document exercise source');
-				const data2: AxiosResponse<any> = yield call(documentApi.updateSampleSourceCode, action.payload.documentId, action.payload.SourceBody.type, action.payload.SourceBody.sampleSourceCode);
+				const data2: AxiosResponse<any> = yield call(
+					documentApi.updateSampleSourceCode,
+					action.payload.documentId,
+					action.payload.SourceBody.type,
+					action.payload.SourceBody.sampleSourceCode
+				);
 				if (data2) {
 					yield put(setLoading({ isLoading: false }));
 				}
 			} catch (error: any) {
 				console.log('saga update document exercise source  failed.');
 				yield put(setLoading({ isLoading: false }));
-				yield put(setSnackbar(notificationMessage.UPDATE_FAIL('document exercise source failed!', ' Please try again!')));
+				yield put(
+					setSnackbar(
+						notificationMessage.UPDATE_FAIL('document exercise source failed!', ' Please try again!')
+					)
+				);
 			}
 		}
 		yield put(fetchDocumentByIdWithExercise({ documentId: action.payload.documentId }));
@@ -214,10 +249,106 @@ function* updateDocumentExerciseSaga(action: PayloadAction<{ ExerciseBody: Updat
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('document exercise failed!', ' Please try again!')));
 	}
 }
+function* fetchSampleSourceCodeSaga(action: PayloadAction<{ documentId: string; type: number }>) {
+	try {
+		console.log('saga fetching sample source code');
+		const source: AxiosResponse<GetSampleSourceCodeResponse> = yield call(
+			documentApi.getSampleSourceCode,
+			action.payload.documentId,
+			action.payload.type
+		);
 
-function* updateSampleSourceCodeSaga(action: PayloadAction<{ documentId: string, type: number, body: UpdateSampleSourceCodeRequest }>) {
-
+		yield put(fetchSampleSourceCodeSuccess(source.data));
+	} catch (error) {
+		yield put(setSnackbar(notificationMessage.ERROR('programming language not supported.')));
+		yield put(fetchSampleSourceCodeError());
+	}
 }
+//#endregion
+
+//#region test case
+function* fetchAllTestCasesSaga(action: PayloadAction<{ documentId: string }>) {
+	try {
+		console.log('saga fetching document test case');
+		const document: AxiosResponse<GetAllTestCasesResponse> = yield call(
+			documentApi.getAllTestCases,
+			action.payload.documentId
+		);
+		yield put(fetchAllTestCasesSuccess(document.data));
+	} catch (error: any) {
+		yield put(fetchAllTestCasesError());
+		yield put(setSnackbar(notificationMessage.ERROR('Fetch Test Cases failed.')));
+		console.log('saga fetch document test cases failed');
+	}
+}
+function* createTestCaseSaga(action: PayloadAction<{ documentId: string; body: CreateTestCaseRequest }>) {
+	try {
+		console.log('saga create test case');
+		yield put(setLoading({ isLoading: true }));
+
+		const testcase: AxiosResponse<CreateTestCaseResponse> = yield call(
+			documentApi.createTestCase,
+			action.payload.documentId,
+			action.payload.body
+		);
+
+		if (testcase.data) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('test case')));
+			yield put(createTestCaseSuccess(testcase.data));
+		}
+	} catch (error: any) {
+		console.log('saga create test case failed');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.CREATE_FAIL('test case', '')));
+	}
+}
+function* updateTestCaseSaga(
+	action: PayloadAction<{ documentId: string; order: number; body: UpdateTestCaseRequest }>
+) {
+	try {
+		console.log('saga update test case');
+		yield put(setLoading({ isLoading: true }));
+		const testcase: AxiosResponse<any> = yield call(
+			documentApi.updateTestCase,
+			action.payload.documentId,
+			action.payload.order,
+			action.payload.body
+		);
+
+		if (testcase) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('test case', '')));
+			yield put(updateTestCaseSuccess({ body: action.payload.body, order: action.payload.order }));
+		}
+	} catch (error: any) {
+		console.log('saga update test case failed');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('test case', '')));
+	}
+}
+function* deleteTestCaseSaga(action: PayloadAction<{ documentId: string; order: number }>) {
+	try {
+		console.log('saga delete test case');
+		yield put(setLoading({ isLoading: true }));
+		const testcase: AxiosResponse<any> = yield call(
+			documentApi.deleteTestCase,
+			action.payload.documentId,
+			action.payload.order
+		);
+
+		if (testcase) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(setSnackbar(notificationMessage.DELETE_SUCCESS('test case')));
+			yield put(deleteTestCaseSuccess({ order: action.payload.order }));
+		}
+	} catch (error: any) {
+		console.log('saga delete test case failed');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.DELETE_FAIL('test case', '')));
+	}
+}
+//#endregion
 
 export function* watchDocument() {
 	yield takeLatest(fetchDocumentById.type, fetchDocumentByIdSaga);
@@ -229,4 +360,8 @@ export function* watchDocument() {
 	yield takeLatest(fetchSampleSourceCode.type, fetchSampleSourceCodeSaga);
 	yield takeLatest(changePublishDocument.type, changePublishDocumentSaga);
 	yield takeLatest(updateDocumentExercise.type, updateDocumentExerciseSaga);
+	yield takeLatest(fetchAllTestCases.type, fetchAllTestCasesSaga);
+	yield takeLatest(createTestCase.type, createTestCaseSaga);
+	yield takeLatest(updateTestCase.type, updateTestCaseSaga);
+	yield takeLatest(deleteTestCase.type, deleteTestCaseSaga);
 }

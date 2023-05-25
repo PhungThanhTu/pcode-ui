@@ -9,17 +9,15 @@ import { GetCourseByIdResponse } from '@/types/course.type';
 import { Fragment } from 'react';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
 
-
 interface GeneralProps {
 	course: GetCourseByIdResponse;
 	customizeButton: Function | null;
 	code: string;
 	createDocumentModal: Function | null;
 	changePublishDocument: Function;
-	isCreator: boolean
+	isCreator: boolean;
 }
 const General = (props: GeneralProps) => {
-
 	const { course, customizeButton, code, createDocumentModal, changePublishDocument, isCreator } = props;
 
 	return (
@@ -43,14 +41,17 @@ const General = (props: GeneralProps) => {
 							content="Create Document"
 						/>
 						<CourseCodeBox code={code} />
-
 					</Fragment>
 				) : null
 			}
-			rightBody={<ListItems isCreator={isCreator} list={course ? course.documents : []} publishDocument={changePublishDocument} />}
+			rightBody={
+				<ListItems
+					isCreator={isCreator}
+					list={course ? course.documents : []}
+					publishDocument={changePublishDocument}
+				/>
+			}
 		/>
-
-
 	);
 };
 

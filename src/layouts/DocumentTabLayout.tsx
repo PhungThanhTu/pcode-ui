@@ -28,16 +28,15 @@ const BoxChildRightSx = {
 	left: 0,
 	width: '100%',
 	padding: '10px'
-}
+};
 const BoxChildLeftSx = {
 	position: 'absolute',
 	bottom: 0,
 	left: 0,
 	width: '100%',
 	padding: '5px',
-	borderRadius : `0 0 ${borderRadius} ${borderRadius}`
-
-}
+	borderRadius: `0 0 ${borderRadius} ${borderRadius}`
+};
 interface PropsWithChildrenOnly {
 	title?: string;
 	right?: React.ReactNode;
@@ -70,35 +69,24 @@ const DocumentTabLayout = (props: PropsWithChildrenOnly) => {
 			>
 				{content ? (
 					content
+				) : childrenPosition ? (
+					<Fragment>
+						<Box sx={BoxLeftSx}>{left}</Box>
+						<Box sx={BoxRightSx}>
+							{right}
+							<Box sx={BoxChildRightSx}>{children}</Box>
+						</Box>
+					</Fragment>
 				) : (
-
-					childrenPosition ?
-						<Fragment>
-							<Box sx={BoxLeftSx}>
-								{left}
-							</Box>
-							<Box sx={BoxRightSx}>{right}
-								<Box sx={BoxChildRightSx}>
-									{children}
-								</Box>
-							</Box>
-						</Fragment>
-						:
-						<Fragment>
-							<Box sx={BoxLeftSx}>
-								{left}
-								<Box sx={BoxChildLeftSx}>
-									{children}
-								</Box>
-							</Box>
-							<Box sx={BoxRightSx}>{right}
-							</Box>
-
-						</Fragment>
-
+					<Fragment>
+						<Box sx={BoxLeftSx}>
+							{left}
+							<Box sx={BoxChildLeftSx}>{children}</Box>
+						</Box>
+						<Box sx={BoxRightSx}>{right}</Box>
+					</Fragment>
 				)}
 			</Stack>
-
 		</Stack>
 	);
 };

@@ -10,7 +10,6 @@ import { borderColor, borderRadius } from '@/style/Variables';
 import { Fragment, MouseEvent } from 'react';
 import { CustomOnlyIconButton } from '../Custom/CustomButton';
 
-
 const BoxSx = {
 	border: `1px solid ${borderColor}`,
 	width: '100%',
@@ -19,7 +18,6 @@ const BoxSx = {
 	boxShadow: '0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15)',
 	cursor: 'pointer',
 	display: 'flex'
-
 };
 interface DocumentItemProps {
 	document: Document;
@@ -42,27 +40,21 @@ export const DocumentItem = (props: DocumentItemProps) => {
 					</Fragment>
 				) : undefined}
 			</Stack>
-			{
-				isCreator ?
-					<Stack minHeight='100%' justifyContent="center" onClick={(e: MouseEvent) => {
-
-						publishDocument(e, document.Id, document.IsPublic ? 0 : 1)
-					}} >
-						<CustomOnlyIconButton onClick={() => { }} color={document.IsPublic ? 'error' : 'primary'}>
-							<Tooltip title={document.IsPublic ? 'UnPublish' : 'Publish'}>
-								{
-									document.IsPublic ?
-										<UnpublishedIcon />
-										:
-										<PublishIcon />
-								}
-							</Tooltip>
-						</CustomOnlyIconButton>
-					</Stack>
-					:
-					null
-			}
-
+			{isCreator ? (
+				<Stack
+					minHeight="100%"
+					justifyContent="center"
+					onClick={(e: MouseEvent) => {
+						publishDocument(e, document.Id, document.IsPublic ? 0 : 1);
+					}}
+				>
+					<CustomOnlyIconButton onClick={() => {}} color={document.IsPublic ? 'error' : 'primary'}>
+						<Tooltip title={document.IsPublic ? 'UnPublish' : 'Publish'}>
+							{document.IsPublic ? <UnpublishedIcon /> : <PublishIcon />}
+						</Tooltip>
+					</CustomOnlyIconButton>
+				</Stack>
+			) : null}
 		</Box>
 	);
 };
