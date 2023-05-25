@@ -10,7 +10,12 @@ import {
 	GetSampleSourceCodeResponse,
 	UpdateExerciseRequest,
 	UpdateSampleSourceCodeResponse,
-	UpdateSampleSourceCodeRequest
+	UpdateSampleSourceCodeRequest,
+	GetAllTestCasesResponse,
+	GetSingleTestCaseResponse,
+	CreateTestCaseResponse,
+	CreateTestCaseRequest,
+	UpdateTestCaseRequest
 } from '@/types/document.type';
 
 const documentApi = {
@@ -70,20 +75,57 @@ const documentApi = {
 	updateExercise: async (documentId: string, body: UpdateExerciseRequest) => {
 		const result: AxiosResponse<any> = await protectedApi.patch(`/document/${documentId}/exercise`, body);
 		return result;
-	}
-	,
+	},
 	getExercise: async (documentId: string) => {
 		const result: AxiosResponse<any> = await protectedApi.get(`/document/${documentId}/exercise`);
 		return result;
 	},
 	getSampleSourceCode: async (documentId: string, type: number) => {
-		const result: AxiosResponse<GetSampleSourceCodeResponse> = await protectedApi.get(`/document/${documentId}/exercise/sample?programmingLanguage=${type}`);
+		const result: AxiosResponse<GetSampleSourceCodeResponse> = await protectedApi.get(
+			`/document/${documentId}/exercise/sample?programmingLanguage=${type}`
+		);
 		return result;
 	},
 	updateSampleSourceCode: async (documentId: string, type: number, sampleSourceCode: string) => {
-		const result: AxiosResponse<UpdateSampleSourceCodeResponse> = await protectedApi.post(`/document/${documentId}/exercise/sample?programmingLanguage=${type}`, { sampleSourceCode: sampleSourceCode });
+		const result: AxiosResponse<UpdateSampleSourceCodeResponse> = await protectedApi.post(
+			`/document/${documentId}/exercise/sample?programmingLanguage=${type}`,
+			{ sampleSourceCode: sampleSourceCode }
+		);
 		return result;
 	},
+	createTestCase: async (documentId: string, body: CreateTestCaseRequest) => {
+		const result: AxiosResponse<CreateTestCaseResponse> = await protectedApi.post(
+			`/document/${documentId}/testcase`,
+			body
+		);
+		return result;
+	},
+	getAllTestCases: async (documentId: string) => {
+		const result: AxiosResponse<GetAllTestCasesResponse> = await protectedApi.get(
+			`/document/${documentId}/testcase`
+		);
+		return result;
+	},
+	getSingleTestCase: async (documentId: string, order: number) => {
+		const result: AxiosResponse<GetSingleTestCaseResponse> = await protectedApi.get(
+			`/document/${documentId}/testcase/${order}`
+		);
+		return result;
+	},
+	updateTestCase: async (documentId: string, order: number, body: UpdateTestCaseRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.patch(`/document/${documentId}/testcase/${order}`);
+		return result;
+	},
+	swapTestCase: async (documentId: string, order1: number, order2: number) => {
+		const result: AxiosResponse<any> = await protectedApi.post(
+			`/document/${documentId}/testcase/swap?order1=${order1}&order2=${order2}`
+		);
+		return result;
+	},
+	deleteTestCase: async (documentId: string, order: number) => {
+		const result: AxiosResponse<any> = await protectedApi.delete(`/document/${documentId}/testcase/${order}`);
+		return result;
+	}
 };
 
 export default documentApi;

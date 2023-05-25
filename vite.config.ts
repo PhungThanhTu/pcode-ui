@@ -7,14 +7,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    hmr:{
-      overlay:false
+    hmr: {
+      overlay: false
     }
   },
   resolve: {
-	alias: {
-		'@': path.resolve(__dirname, 'src'),
-	}
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    }
   }
-  
 })

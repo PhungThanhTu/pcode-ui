@@ -7,7 +7,7 @@ import '@react-pdf-viewer/toolbar/lib/styles/index.css';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { BoxNotFoundSx } from '@/style/BoxSx';
 
 const BoxViewerSx = {
@@ -40,17 +40,22 @@ const MyPDFViewer = (props: MyPDFViewerProps) => {
 	});
 	const { source } = props;
 
+	const MemoViewer = useMemo(
+		() => <Viewer plugins={[toolbarPluginInstance]} fileUrl={URL.createObjectURL(source)} />,
+		[source]
+	);
 	return (
 		<Box sx={BoxContainerSx}>
 			{source ? (
 				<Fragment>
 					<Toolbar>{renderDefaultToolbar(transform)}</Toolbar>
 					<Box sx={BoxViewerSx}>
-						<Viewer
+						{/* <Viewer
 							plugins={[toolbarPluginInstance]}
 							fileUrl={URL.createObjectURL(source)}
-							// defaultScale={SpecialZoomLevel.PageFit}
-						/>
+						// defaultScale={SpecialZoomLevel.PageFit}
+						/> */}
+						{MemoViewer}
 					</Box>
 				</Fragment>
 			) : (

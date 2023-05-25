@@ -18,6 +18,7 @@ export interface DocumentState {
 	documentContent?: any | null;
 	documentExercise?: GetExerciseResponse | null;
 	sampleSourceCode?: GetSampleSourceCodeResponse | null;
+	documentTestCases?: Array<GetSingleTestCaseResponse> | null;
 	loading: boolean;
 }
 // API interface
@@ -82,35 +83,34 @@ export interface GetExerciseResponse {
 	ManualPercentage: number;
 }
 export interface UpdateExerciseRequest {
-	runtimeLimit: number,
-	memoryLimit: number,
-	scoreWeight: number,
-	manualPercentage: number,
-	haveDeadline: boolean,
-	deadline: string,
-	strictDeadline: boolean,
-	judgerId: string
+	runtimeLimit: number;
+	memoryLimit: number;
+	scoreWeight: number;
+	manualPercentage: number;
+	haveDeadline: boolean;
+	deadline: string;
+	strictDeadline: boolean;
+	judgerId: string;
 }
 export interface GetSampleSourceCodeResponse {
-	programmingLanguageId: string,
-	sourceCode: string
+	programmingLanguageId: string;
+	sourceCode: string;
 }
 export interface UpdateSampleSourceCodeRequest {
-	sampleSourceCode: string,
-	type: number
+	sampleSourceCode: string;
+	type: number;
 }
 export interface UpdateSampleSourceCodeResponse {
-	documentId: string,
-	programmingLanguageId: string,
-	validatedSourceCode: string
+	documentId: string;
+	programmingLanguageId: string;
+	validatedSourceCode: string;
 }
 //#endregion exercise
 
 //#region test cases
 
 export interface GetAllTestCasesResponse {
-
-	List: Array<GetSingleTestCaseResponse>
+	TestCases: Array<GetSingleTestCaseResponse>;
 }
 export interface CreateTestCaseRequest {
 	input: string;
@@ -119,30 +119,30 @@ export interface CreateTestCaseRequest {
 	visibility: boolean;
 }
 export interface CreateTestCaseResponse {
-	id: string,
-	order: number,
-	input: string,
-	output: string,
-	scoreWeight: number,
-	visibility: boolean
+	id: string;
+	order: number;
+	input: string;
+	output: string;
+	scoreWeight: number;
+	visibility: boolean;
 }
 
 export interface GetSingleTestCaseResponse {
-	TestOrder: number,
-	Id: number,
-	input: string,
-	output: string,
-	scoreWeight: number,
-	visibility: boolean
+	TestOrder: number;
+	Id: string;
+	input: string;
+	output: string;
+	scoreWeight: number;
+	visibility: boolean;
 }
 export interface UpdateTestCaseRequest {
-	input: string,
-	output: string,
-	scoreWeight: number,
-	visibility: boolean
+	input: string;
+	output: string;
+	scoreWeight: number;
+	visibility: boolean;
 }
 export interface SwapTestCaseOrderRequest {
-	TestOrder1: number,
-	TestOrder2: number
+	TestOrder1: number;
+	TestOrder2: number;
 }
-//#endregion 
+//#endregion

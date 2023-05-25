@@ -7,7 +7,7 @@ import { useLocation, Link as RouterLink } from 'react-router-dom';
 interface ListItemsProps {
 	list: Array<any>;
 	publishDocument?: Function | null;
-	isCreator: boolean;
+	isCreator?: boolean;
 }
 const LinkItemSx = {
 	display: 'block',
@@ -29,7 +29,17 @@ const ListItems = (props: ListItemsProps) => {
 						color="inherit"
 						sx={LinkItemSx}
 					>
-						<DocumentItem isCreator={isCreator} document={item} publishDocument={publishDocument ? publishDocument : () => { console.log("Null Publish") }} />
+						<DocumentItem
+							isCreator={isCreator ? isCreator : false}
+							document={item}
+							publishDocument={
+								publishDocument
+									? publishDocument
+									: () => {
+											console.log('Null Publish');
+									  }
+							}
+						/>
 					</Link>
 				);
 			})}

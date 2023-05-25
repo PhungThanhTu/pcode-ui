@@ -18,3 +18,13 @@ export const BoxNotFoundSx = {
 	alighItems: 'center',
 	justifyContent: 'center'
 };
+
+export const BoxFieldSx = {
+	width: '100%',
+	padding: '5px',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
+	flexDirection: 'column',
+	'& .MuiTextField-root': { m: 1, width: '100%' }
+};

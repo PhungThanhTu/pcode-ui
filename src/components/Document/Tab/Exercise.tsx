@@ -22,17 +22,8 @@ import CustomDialog from '@/components/Custom/CustomDialog';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
 import { getNextDay, parseToLocalDate } from '@/utils/convert';
 import { borderRadius } from '@/style/Variables';
+import { BoxFieldSx } from '@/style/BoxSx';
 
-
-const BoxFieldSx = {
-	width: '100%',
-	padding: '5px',
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-	flexDirection: 'column',
-	'& .MuiTextField-root': { m: 1, width: '100%' }
-};
 const BoxCreateSx = {
 	position: 'absolute',
 	top: '50%',
@@ -63,7 +54,6 @@ const Exercise = (props: ExerciseProps) => {
 	const dispatch = useDispatch();
 	const exercise = useSelector(getDocumentExercise);
 
-
 	const InitialUpdateExerciseForm: GetExerciseResponse = {
 		ManualPercentage: 0,
 		MemoryLimit: 50000,
@@ -73,39 +63,51 @@ const Exercise = (props: ExerciseProps) => {
 		Deadline: '',
 		HaveDeadline: true,
 		StrictDeadline: false,
-		TimeCreated: '',
+		TimeCreated: ''
 	};
 	const InitialSourceForm: UpdateSampleSourceCodeRequest = {
 		sampleSourceCode: '',
 		type: 1
-	}
+	};
 	const { document, isCreator, onCreate, onUpdate, content, onSubmit, onGetSampleSourceCode } = props;
 
 	const [ExerciseForm, setExerciseForm] = useState<GetExerciseResponse>(InitialUpdateExerciseForm);
-	const [Source, SetSource] = useState<UpdateSampleSourceCodeRequest>(InitialSourceForm)
+	const [Source, SetSource] = useState<UpdateSampleSourceCodeRequest>(InitialSourceForm);
 	const [DeadlineCheck, setDeadlineCheck] = useState(false);
 	const [StrictDeadlineCheck, setStrictDeadlineCheck] = useState(false);
 	const [OpenCreateExerciseDialog, setOpenCreateExerciseDialog] = useState(false);
 
-	const { ManualPercentage, MemoryLimit, RuntimeLimit, ScoreWeight, Deadline, HaveDeadline, StrictDeadline, TimeCreated } = ExerciseForm;
+	const {
+		ManualPercentage,
+		MemoryLimit,
+		RuntimeLimit,
+		ScoreWeight,
+		Deadline,
+		HaveDeadline,
+		StrictDeadline,
+		TimeCreated
+	} = ExerciseForm;
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+		let name = e.target.name.charAt(0).toUpperCase() + e.target.name.slice(1);
 
-		let name = e.target.name.charAt(0).toUpperCase() + e.target.name.slice(1)
-
-		if (name === "HaveDeadline" || name === "StrictDeadline") {
+		if (name === 'HaveDeadline' || name === 'StrictDeadline') {
 			setExerciseForm({
 				...ExerciseForm,
 				[name]: e.target.checked
 			});
-		}
-		else {
+		} else if (name === 'Deadline') {
 			setExerciseForm({
 				...ExerciseForm,
 				[name]: e.target.value
 			});
+		} else {
+			let value = Number(e.target.value);
+			setExerciseForm({
+				...ExerciseForm,
+				[name]: value >= 0 ? value : 0
+			});
 		}
-
 	};
 
 	const getSource = (source: string, type: number) => {
@@ -113,30 +115,27 @@ const Exercise = (props: ExerciseProps) => {
 			...Source,
 			sampleSourceCode: source,
 			type: type
-		})
-	}
+		});
+	};
 
 	useEffect(() => {
 		if (exercise) {
-
-			setExerciseForm({ ...exercise })
-			setDeadlineCheck(exercise.HaveDeadline ? exercise.HaveDeadline : false)
-			setStrictDeadlineCheck(exercise.StrictDeadline ? exercise.StrictDeadline : false)
-			let temp = getNextDay()
+			setExerciseForm({ ...exercise });
+			setDeadlineCheck(exercise.HaveDeadline ? exercise.HaveDeadline : false);
+			setStrictDeadlineCheck(exercise.StrictDeadline ? exercise.StrictDeadline : false);
+			let temp = getNextDay();
 			if (!exercise.Deadline) {
 				setExerciseForm({
 					...exercise,
 					Deadline: new Date(temp).toISOString()
-				})
+				});
 			}
 		}
-	}, [exercise])
+	}, [exercise]);
 
 	useEffect(() => {
 		dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
 	}, []);
-
-
 
 	return (
 		<Fragment>
@@ -167,8 +166,20 @@ const Exercise = (props: ExerciseProps) => {
 					}
 					right={
 						isCreator ? (
-							<Stack flexDirection="column" alignItems="flex-start" justifyContent="flex-start" rowGap="2" minHeight="inherit" >
-								<Stack flexDirection="row" alignItems="center" justifyContent="center" rowGap="2">
+							<Stack
+								flexDirection="column"
+								alignItems="flex-start"
+								justifyContent="flex-start"
+								rowGap="2"
+								minHeight="inherit"
+							>
+								<Stack
+									flexDirection="row"
+									alignItems="center"
+									justifyContent="center"
+									rowGap="2"
+									width="100%"
+								>
 									<Box sx={BoxFieldSx}>
 										<TextField
 											fullWidth
@@ -177,6 +188,7 @@ const Exercise = (props: ExerciseProps) => {
 											type="number"
 											name="runtimeLimit"
 											value={RuntimeLimit}
+											defaultValue={0}
 											onChange={onChange}
 										/>
 										<TextField
@@ -189,6 +201,14 @@ const Exercise = (props: ExerciseProps) => {
 											onChange={onChange}
 										/>
 									</Box>
+								</Stack>
+								<Stack
+									flexDirection="row"
+									alignItems="center"
+									justifyContent="center"
+									rowGap="2"
+									width="100%"
+								>
 									<Box sx={BoxFieldSx}>
 										<TextField
 											fullWidth
@@ -213,7 +233,6 @@ const Exercise = (props: ExerciseProps) => {
 								<Box>
 									<FormGroup sx={FormGroupDeadlineSx}>
 										<FormControlLabel
-
 											control={
 												<Checkbox
 													name="haveDeadline"
@@ -223,7 +242,6 @@ const Exercise = (props: ExerciseProps) => {
 													onClick={() => {
 														setDeadlineCheck(!DeadlineCheck);
 														setStrictDeadlineCheck(false);
-
 													}}
 												/>
 											}
@@ -272,37 +290,41 @@ const Exercise = (props: ExerciseProps) => {
 						)
 					}
 				>
-					{
-						isCreator ?
-							<LoadingButton
-								size="large"
-								fullWidth
-								sx={{ padding: '10px' }}
-								onClick={() => { onUpdate ? onUpdate(ExerciseForm,Source,document.Id) : () => { console.log('Update Error') } }}
-								endIcon={<SaveIcon />}
-								// loading={loading}
-								loadingPosition="end"
-								variant="contained"
-							>
-								<span>Save</span>
-							</LoadingButton>
-							:
-							<LoadingButton
-								size="small"
-								fullWidth
-								sx={{
-									borderRadius: `0 0 ${borderRadius} ${borderRadius}`
-								}}
-								// onClick={handleClick}
-								endIcon={<SendIcon />}
-								// loading={loading}
-								loadingPosition="end"
-								variant="contained"
-
-							>
-								<span>Submit</span>
-							</LoadingButton>
-					}
+					{isCreator ? (
+						<LoadingButton
+							size="large"
+							fullWidth
+							sx={{ padding: '10px' }}
+							onClick={() => {
+								onUpdate
+									? onUpdate(ExerciseForm, Source, document.Id)
+									: () => {
+											console.log('Update Error');
+									  };
+							}}
+							endIcon={<SaveIcon />}
+							// loading={loading}
+							loadingPosition="end"
+							variant="contained"
+						>
+							<span>Save</span>
+						</LoadingButton>
+					) : (
+						<LoadingButton
+							size="small"
+							fullWidth
+							sx={{
+								borderRadius: `0 0 ${borderRadius} ${borderRadius}`
+							}}
+							// onClick={handleClick}
+							endIcon={<SendIcon />}
+							// loading={loading}
+							loadingPosition="end"
+							variant="contained"
+						>
+							<span>Submit</span>
+						</LoadingButton>
+					)}
 				</DocumentTabLayout>
 			)}
 			<CustomDialog
@@ -313,7 +335,11 @@ const Exercise = (props: ExerciseProps) => {
 					setOpenCreateExerciseDialog(false);
 				}}
 				onSave={() => {
-					onCreate ? onCreate(document.Id) : () => { console.log('null action : create Exercise') };
+					onCreate
+						? onCreate(document.Id)
+						: () => {
+								console.log('null action : create Exercise');
+						  };
 					setOpenCreateExerciseDialog(false);
 				}}
 			/>

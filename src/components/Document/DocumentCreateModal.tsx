@@ -21,7 +21,6 @@ interface DocumentCreateModalProps {
 }
 
 const DocumentCreateModal = (props: DocumentCreateModalProps) => {
-
 	const { open, onCreate, onCancel, onChange, createDocumentValues } = props;
 	const [Error, setError] = useState(false);
 
@@ -65,7 +64,7 @@ const DocumentCreateModal = (props: DocumentCreateModalProps) => {
 							<FormControlLabel
 								control={
 									<Checkbox
-										name='hasExercise'
+										name="hasExercise"
 										checked={createDocumentValues.hasExercise}
 										onChange={(e) => {
 											onChange(e);

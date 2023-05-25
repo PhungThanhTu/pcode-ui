@@ -24,9 +24,9 @@ const coursesSlice = createSlice({
 		fetchCourses: (state) => {
 			state.loading = true;
 		},
-		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => { },
-		renameCourse: (state, { payload }: PayloadAction<Course>) => { },
-		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => { },
+		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => {},
+		renameCourse: (state, { payload }: PayloadAction<Course>) => {},
+		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => {},
 		createCourseSuccess: (state, { payload }: PayloadAction<CreateCourseResponse>) => {
 			let Course: Course = {
 				id: payload.id,
@@ -65,20 +65,18 @@ const courseSlice = createSlice({
 			state.course = null;
 			state.loading = false;
 		},
-		changePublishDocumentSuccess: (state, { payload }: PayloadAction<{ documentId: string, status: number }>) => {
-
-			const documentIndex = state.course?.documents.findIndex(item => item.Id === payload.documentId);
-			if (documentIndex !== -1) {
-				
-				state.course ? state.course.documents[documentIndex ? documentIndex : -1].IsPublic = payload.status === 1 : null;
+		changePublishDocumentSuccess: (state, { payload }: PayloadAction<{ documentId: string; status: number }>) => {
+			const documentIndex = state.course?.documents.findIndex((item) => item.Id === payload.documentId);
+			if (documentIndex !== -1 && documentIndex !== null && documentIndex !== undefined) {
+				state.course ? (state.course.documents[documentIndex].IsPublic = payload.status === 1) : null;
 			}
-
 		}
 	}
 });
 export const { fetchCourses, createCourse, renameCourse, joinCourse, fetchCoursesSuccess, fetchCoursesError } =
 	coursesSlice.actions;
-export const { fetchCourseById, fetchCourseByIdError, fetchCourseByIdSuccess, changePublishDocumentSuccess } = courseSlice.actions;
+export const { fetchCourseById, fetchCourseByIdError, fetchCourseByIdSuccess, changePublishDocumentSuccess } =
+	courseSlice.actions;
 
 export const coursesReducer = coursesSlice.reducer;
 export const courseReducer = courseSlice.reducer;

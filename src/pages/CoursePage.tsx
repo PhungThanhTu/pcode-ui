@@ -16,7 +16,6 @@ import { fetchCourseById, fetchCourses } from '@/slices/course.slice';
 import { CreateDocumentRequest } from '@/types/document.type';
 import { changePublishDocument, createDocument } from '@/slices/document.slice';
 
-
 const CoursePage = () => {
 	const params = useParams();
 	const navigate = useNavigate();
@@ -38,7 +37,6 @@ const CoursePage = () => {
 	const [OpenCourseCustomize, setOpenCourseCustomize] = useState(false);
 	const [OpenDocumentCreate, setOpenDocumentCreate] = useState(false);
 
-
 	const { title, description, hasExercise, courseId } = CreateDocumentForm;
 
 	const findCourseCode = (id: string) => {
@@ -59,27 +57,24 @@ const CoursePage = () => {
 	};
 
 	const onCreateDocumentFieldsChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (e.target.name === "hasExercise") {
+		if (e.target.name === 'hasExercise') {
 			setCreateDocumentForm({
 				...CreateDocumentForm,
 				[e.target.name]: e.target.checked
 			});
-		}
-		else {
+		} else {
 			setCreateDocumentForm({
 				...CreateDocumentForm,
 				[e.target.name]: e.target.value
 			});
 		}
-
-
 	};
 
 	const ChangePublishDocument = (e: MouseEvent<HTMLButtonElement>, documentId: string, status: number) => {
 		e.preventDefault();
 		e.stopPropagation();
-		dispatch(changePublishDocument({ documentId: documentId, status: status }))
-	}
+		dispatch(changePublishDocument({ documentId: documentId, status: status }));
+	};
 
 	useEffect(() => {
 		if (!course) {
@@ -88,28 +83,28 @@ const CoursePage = () => {
 		} else if (course === null) {
 			navigate(-1);
 		} else {
-			let isCreator = isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
+			let isCreator = isCourseCreator(course.id, UserProfile ? UserProfile.id : '');
 			setTabs([
 				{
 					title: 'General',
 					element: (
 						<General
-							isCreator= {isCreator}
+							isCreator={isCreator}
 							course={course}
 							code={findCourseCode(course.id)}
 							customizeButton={
 								isCreator
 									? () => {
-										setOpenCourseCustomize(true);
-									}
+											setOpenCourseCustomize(true);
+									  }
 									: null
 							}
 							changePublishDocument={ChangePublishDocument}
 							createDocumentModal={
 								isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
 									? () => {
-										setOpenDocumentCreate(true);
-									}
+											setOpenDocumentCreate(true);
+									  }
 									: null
 							}
 						/>
@@ -121,8 +116,7 @@ const CoursePage = () => {
 				}
 			]);
 		}
-		
-	}, [course,course?.documents]);
+	}, [course, course?.documents]);
 
 	useLayoutEffect(() => {
 		dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
