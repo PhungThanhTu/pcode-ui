@@ -15,11 +15,22 @@ interface CustomDialogProps {
 }
 const CustomDialog = (props: CustomDialogProps) => {
 	const { title, content, open, onCancel, onSave } = props;
+
+	var lines = content.split('\n');
+	var elements = lines.map((line, index) => {
+		return (
+			<Fragment key={index}>
+				{line}
+				<br />
+			</Fragment>
+		);
+	});
+
 	return (
 		<Dialog open={open}>
 			<DialogTitle>{title}</DialogTitle>
 			<DialogContent>
-				<DialogContentText>{content}</DialogContentText>
+				<DialogContentText>{elements}</DialogContentText>
 			</DialogContent>
 			<DialogActions>
 				<Fragment>

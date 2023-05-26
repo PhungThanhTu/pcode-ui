@@ -89,13 +89,13 @@ const documentSlice = createSlice({
 		fetchAllTestCases: (state, { payload }: PayloadAction<{ documentId: string }>) => {
 			state.documentTestCases = null;
 		},
-		fetchAllTestCasesSuccess: (state, { payload }: PayloadAction<GetAllTestCasesResponse>) => {
-			state.documentTestCases = payload.TestCases ? payload.TestCases : [];
+		fetchAllTestCasesSuccess: (state, { payload }: PayloadAction<Array<GetSingleTestCaseResponse>>) => {
+			state.documentTestCases = payload;
 		},
 		fetchAllTestCasesError: (state) => {
 			state.documentExercise = undefined;
 		},
-		fetchSingleTestCase: (state, { payload }: PayloadAction<{ documentId: string; order: number }>) => {},
+		fetchSingleTestCase: (state, { payload }: PayloadAction<{ documentId: string; testCaseId: number }>) => {},
 		fetchSingleTestCaseSuccess: (state, { payload }: PayloadAction<GetSingleTestCaseResponse>) => {},
 		fetchSingleTestCaseError: (state) => {},
 		createTestCase: (state, { payload }: PayloadAction<{ documentId: string; body: CreateTestCaseRequest }>) => {},
@@ -119,11 +119,14 @@ const documentSlice = createSlice({
 		},
 		updateTestCase: (
 			state,
-			{ payload }: PayloadAction<{ documentId: string; order: number; body: UpdateTestCaseRequest }>
+			{ payload }: PayloadAction<{ documentId: string; testCaseId: number; body: UpdateTestCaseRequest }>
 		) => {},
-		updateTestCaseSuccess: (state, { payload }: PayloadAction<{ order: number; body: UpdateTestCaseRequest }>) => {
-			let index = state.documentTestCases?.findIndex((item) => item.TestOrder === payload.order);
-			let item = state.documentTestCases?.filter((item) => item.TestOrder === payload.order)[0];
+		updateTestCaseSuccess: (
+			state,
+			{ payload }: PayloadAction<{ testCaseId: number; body: UpdateTestCaseRequest }>
+		) => {
+			let index = state.documentTestCases?.findIndex((item) => item.Id === payload.testCaseId);
+			let item = state.documentTestCases?.filter((item) => item.Id === payload.testCaseId)[0];
 
 			if (index !== -1 && index !== null && index !== undefined && item) {
 				let temp: GetSingleTestCaseResponse = {
@@ -135,9 +138,9 @@ const documentSlice = createSlice({
 			}
 		},
 		swapTestCase: (state, { payload }: PayloadAction<{ documentId: string; order1: number; order2: number }>) => {},
-		deleteTestCase: (state, { payload }: PayloadAction<{ documentId: string; order: number }>) => {},
-		deleteTestCaseSuccess: (state, { payload }: PayloadAction<{ order: number }>) => {
-			let index = state.documentTestCases?.findIndex((item) => item.TestOrder === payload.order);
+		deleteTestCase: (state, { payload }: PayloadAction<{ documentId: string; testCaseId: number }>) => {},
+		deleteTestCaseSuccess: (state, { payload }: PayloadAction<{ testCaseId: number }>) => {
+			let index = state.documentTestCases?.findIndex((item) => item.Id === payload.testCaseId);
 
 			if (index !== -1 && index !== null && index !== undefined) {
 				state.documentTestCases ? state.documentTestCases.splice(index, 1) : null;

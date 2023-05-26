@@ -119,7 +119,7 @@ export interface CreateTestCaseRequest {
 	visibility: boolean;
 }
 export interface CreateTestCaseResponse {
-	id: string;
+	id: number;
 	order: number;
 	input: string;
 	output: string;
@@ -129,7 +129,7 @@ export interface CreateTestCaseResponse {
 
 export interface GetSingleTestCaseResponse {
 	TestOrder: number;
-	Id: string;
+	Id: number;
 	input: string;
 	output: string;
 	scoreWeight: number;

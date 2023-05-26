@@ -37,7 +37,7 @@ import { Worker } from '@react-pdf-viewer/core';
 import TestCase from '@/components/Document/Tab/TestCase';
 import CustomDialog from '@/components/Custom/CustomDialog';
 import { JudgerId, createExerciseDefault } from '@/config';
-import { getApiDateFormat, parseToLocalDate } from '@/utils/convert';
+import { getApiDateFormat, getToday, parseToLocalDate } from '@/utils/convert';
 
 const DocumentPage = () => {
 	const params = useParams();
@@ -96,7 +96,9 @@ const DocumentPage = () => {
 		documentId: string
 	) => {
 		let exerciseForm: UpdateExerciseRequest = {
-			deadline: ExeriseForm.HaveDeadline ? getApiDateFormat(ExeriseForm.Deadline) : '',
+			deadline: ExeriseForm.HaveDeadline
+				? getApiDateFormat(ExeriseForm.Deadline)
+				: getApiDateFormat(new Date(getToday()).toISOString()),
 			haveDeadline: ExeriseForm.HaveDeadline,
 			manualPercentage: ExeriseForm.ManualPercentage,
 			memoryLimit: ExeriseForm.MemoryLimit,
@@ -122,15 +124,27 @@ const DocumentPage = () => {
 	//#endregion
 
 	//#region test cases
-	const onCreateTestCase = (documentId: string, form: CreateTestCaseRequest) => {
-		// dispatch(createTestCase({ body: form, documentId: documentId }));
+	const onCreateTestCase = (documentId: string, Form: CreateTestCaseRequest) => {
+		let form: CreateTestCaseRequest = {
+			input: Form.input,
+			output: Form.output,
+			scoreWeight: Form.scoreWeight,
+			visibility: Form.visibility
+		};
+		dispatch(createTestCase({ body: form, documentId: documentId }));
 	};
 
-	const onUpdateTestCase = (documentId: string, order: number, form: UpdateTestCaseRequest) => {
-		// dispatch(updateTestCase({ documentId: documentId, order: order, body: form }))
+	const onUpdateTestCase = (documentId: string, testCaseId: number, Form: UpdateTestCaseRequest) => {
+		let form: UpdateTestCaseRequest = {
+			input: Form.input,
+			output: Form.output,
+			scoreWeight: Form.scoreWeight,
+			visibility: Form.visibility
+		};
+		dispatch(updateTestCase({ documentId: documentId, testCaseId: testCaseId, body: form }));
 	};
-	const onDeleteTestCase = (documentId: string, order: number) => {
-		// dispatch(deleteTestCase({ documentId: documentId, order: order}))
+	const onDeleteTestCase = (documentId: string, testCaseId: number) => {
+		dispatch(deleteTestCase({ documentId: documentId, testCaseId: testCaseId }));
 	};
 	//#endregion
 	useEffect(() => {

@@ -11,3 +11,9 @@ export const componentStyle = {
 	backgroundColor: componentsBoxColor,
 	padding: '0.4rem'
 };
+export const centerPos = {
+	position: 'absolute',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%)'
+};

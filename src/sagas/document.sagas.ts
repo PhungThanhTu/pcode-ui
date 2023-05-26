@@ -13,6 +13,7 @@ import {
 	GetDocumentByIdResponse,
 	GetExerciseResponse,
 	GetSampleSourceCodeResponse,
+	GetSingleTestCaseResponse,
 	UpdateExerciseRequest,
 	UpdateSampleSourceCodeRequest,
 	UpdateTestCaseRequest
@@ -231,6 +232,7 @@ function* updateDocumentExerciseSaga(
 				);
 				if (data2) {
 					yield put(setLoading({ isLoading: false }));
+					yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('document exercise', '')));
 				}
 			} catch (error: any) {
 				console.log('saga update document exercise source  failed.');
@@ -270,11 +272,14 @@ function* fetchSampleSourceCodeSaga(action: PayloadAction<{ documentId: string; 
 function* fetchAllTestCasesSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
 		console.log('saga fetching document test case');
-		const document: AxiosResponse<GetAllTestCasesResponse> = yield call(
+		const document: AxiosResponse<Array<GetSingleTestCaseResponse>> = yield call(
 			documentApi.getAllTestCases,
 			action.payload.documentId
 		);
-		yield put(fetchAllTestCasesSuccess(document.data));
+		if (document.data) {
+			console.log(document.data, 'hello');
+			yield put(fetchAllTestCasesSuccess(document.data));
+		}
 	} catch (error: any) {
 		yield put(fetchAllTestCasesError());
 		yield put(setSnackbar(notificationMessage.ERROR('Fetch Test Cases failed.')));
@@ -304,7 +309,7 @@ function* createTestCaseSaga(action: PayloadAction<{ documentId: string; body: C
 	}
 }
 function* updateTestCaseSaga(
-	action: PayloadAction<{ documentId: string; order: number; body: UpdateTestCaseRequest }>
+	action: PayloadAction<{ documentId: string; testCaseId: number; body: UpdateTestCaseRequest }>
 ) {
 	try {
 		console.log('saga update test case');
@@ -312,14 +317,14 @@ function* updateTestCaseSaga(
 		const testcase: AxiosResponse<any> = yield call(
 			documentApi.updateTestCase,
 			action.payload.documentId,
-			action.payload.order,
+			action.payload.testCaseId,
 			action.payload.body
 		);
 
 		if (testcase) {
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('test case', '')));
-			yield put(updateTestCaseSuccess({ body: action.payload.body, order: action.payload.order }));
+			yield put(updateTestCaseSuccess({ body: action.payload.body, testCaseId: action.payload.testCaseId }));
 		}
 	} catch (error: any) {
 		console.log('saga update test case failed');
@@ -327,20 +332,20 @@ function* updateTestCaseSaga(
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('test case', '')));
 	}
 }
-function* deleteTestCaseSaga(action: PayloadAction<{ documentId: string; order: number }>) {
+function* deleteTestCaseSaga(action: PayloadAction<{ documentId: string; testCaseId: number }>) {
 	try {
 		console.log('saga delete test case');
 		yield put(setLoading({ isLoading: true }));
 		const testcase: AxiosResponse<any> = yield call(
 			documentApi.deleteTestCase,
 			action.payload.documentId,
-			action.payload.order
+			action.payload.testCaseId
 		);
 
 		if (testcase) {
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.DELETE_SUCCESS('test case')));
-			yield put(deleteTestCaseSuccess({ order: action.payload.order }));
+			yield put(deleteTestCaseSuccess({ testCaseId: action.payload.testCaseId }));
 		}
 	} catch (error: any) {
 		console.log('saga delete test case failed');
