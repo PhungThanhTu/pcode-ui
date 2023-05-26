@@ -16,6 +16,7 @@ const LayoutBoxSx = {
 };
 const BoxContentSx = {
 	overflowX: 'hidden',
+	overflowY: 'hidden',
 	height: '100%'
 };
 const BoxContainerSx = {};

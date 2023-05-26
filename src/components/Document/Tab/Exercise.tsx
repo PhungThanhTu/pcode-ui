@@ -21,8 +21,9 @@ import { LinearLoading } from '@/components/Loading';
 import CustomDialog from '@/components/Custom/CustomDialog';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
 import { getNextDay, parseToLocalDate } from '@/utils/convert';
-import { borderRadius } from '@/style/Variables';
+import { borderRadius, centerPos } from '@/style/Variables';
 import { BoxFieldSx } from '@/style/BoxSx';
+import { Typography } from '@mui/material';
 
 const BoxCreateSx = {
 	position: 'absolute',
@@ -142,16 +143,22 @@ const Exercise = (props: ExerciseProps) => {
 			{exercise === null ? (
 				<LinearLoading />
 			) : exercise === undefined ? (
-				<Box sx={BoxCreateSx}>
-					<CustomIconButton
-						onClick={() => {
-							setOpenCreateExerciseDialog(true);
-						}}
-						content="Create Exercise"
-						startIcon={<NoteAddIcon />}
-						variant="outlined"
-					/>
-				</Box>
+				isCreator ? (
+					<Box sx={BoxCreateSx}>
+						<CustomIconButton
+							onClick={() => {
+								setOpenCreateExerciseDialog(true);
+							}}
+							content="Create Exercise"
+							startIcon={<NoteAddIcon />}
+							variant="outlined"
+						/>
+					</Box>
+				) : (
+					<Typography sx={centerPos} variant="h5">
+						Exercise has not been created!
+					</Typography>
+				)
 			) : (
 				<DocumentTabLayout
 					childrenPosition={isCreator}
@@ -188,7 +195,6 @@ const Exercise = (props: ExerciseProps) => {
 											type="number"
 											name="runtimeLimit"
 											value={RuntimeLimit}
-											defaultValue={0}
 											onChange={onChange}
 										/>
 										<TextField

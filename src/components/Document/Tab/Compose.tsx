@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { GetDocumentByIdResponse } from '@/types/document.type';
 import { Fragment, useState, useEffect, useRef, ChangeEvent } from 'react';
-import { borderRadius, componentStyle, componentsBoxColor } from '@/style/Variables';
+import { borderRadius, centerPos, componentStyle, componentsBoxColor } from '@/style/Variables';
 import { CustomButton } from '@/components/Custom/CustomButton';
 import { CustomEditInput } from '@/components/Custom/CustomEditInput';
 
@@ -19,18 +19,19 @@ import { LinearLoading } from '@/components/Loading';
 const BoxContainerSx = {
 	height: '100%'
 };
-const BoxLeftSx = {
+const BoxRightSx = {
 	backgroundColor: `${componentsBoxColor}`,
 	height: '100%',
 	width: '100%',
 	borderRadius: borderRadius
 };
-const BoxRightSx = {
+const BoxLeftSx = {
 	border: `1px solid ${componentsBoxColor}`,
 	height: '100%',
 	width: '100%',
 	textAlign: 'center',
-	borderRadius: borderRadius
+	borderRadius: borderRadius,
+	position: 'relative'
 };
 const BoxPDFViewSx = {
 	overflow: 'auto',
@@ -140,6 +141,19 @@ const Compose = (props: EditorProps) => {
 						Type === 'PDF' ? (
 							<Fragment>
 								<Box sx={{ ...BoxLeftSx, ...componentStyle }}>
+									{PreviewPdfFile ? (
+										<MyPDFViewer source={PreviewPdfFile} />
+									) : document.Contents.length > 0 ? (
+										<Box sx={BoxPDFViewSx}>
+											<MyPDFViewer source={PreviewPdfFile ? PreviewPdfFile : documentContent} />
+										</Box>
+									) : (
+										<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
+											No contents to preview.
+										</Typography>
+									)}
+								</Box>
+								<Box sx={{ ...BoxRightSx, ...componentStyle }}>
 									<Stack
 										flexDirection="column"
 										width="100%"
@@ -194,18 +208,6 @@ const Compose = (props: EditorProps) => {
 											</Typography>
 										</Fragment>
 									</Stack>
-								</Box>
-								<Box sx={{ ...BoxRightSx, ...componentStyle }}>
-									{PreviewPdfFile ? (
-										<MyPDFViewer source={PreviewPdfFile} />
-									) : document.Contents.length > 0 ? (
-										<Box sx={BoxPDFViewSx}>
-											<MyPDFViewer source={PreviewPdfFile ? PreviewPdfFile : documentContent} />
-											{/* <Typography variant="subtitle1">File: {documentContent.size}</Typography> */}
-										</Box>
-									) : (
-										<Typography variant="h6">No contents to preview.</Typography>
-									)}
 								</Box>
 							</Fragment>
 						) : (

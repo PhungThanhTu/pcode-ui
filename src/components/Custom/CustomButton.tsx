@@ -53,6 +53,7 @@ interface CustomOnlyIconButtonProps {
 	variant?: any;
 	color?: any;
 	onClick: Function;
+	form?: string;
 }
 export const CustomOnlyIconButton = (props: CustomOnlyIconButtonProps) => (
 	<IconButton
@@ -61,6 +62,7 @@ export const CustomOnlyIconButton = (props: CustomOnlyIconButtonProps) => (
 		onClick={(e) => {
 			props.onClick(e);
 		}}
+		form={props.form}
 	>
 		{props.children}
 	</IconButton>

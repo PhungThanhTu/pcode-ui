@@ -9,16 +9,8 @@ import { Document } from '@/types/document.type';
 import { borderColor, borderRadius } from '@/style/Variables';
 import { Fragment, MouseEvent } from 'react';
 import { CustomOnlyIconButton } from '../Custom/CustomButton';
+import { BoxItemSx } from '@/style/BoxSx';
 
-const BoxSx = {
-	border: `1px solid ${borderColor}`,
-	width: '100%',
-	padding: '1.5rem',
-	borderRadius: borderRadius,
-	boxShadow: '0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15)',
-	cursor: 'pointer',
-	display: 'flex'
-};
 interface DocumentItemProps {
 	document: Document;
 	publishDocument: Function;
@@ -28,7 +20,7 @@ export const DocumentItem = (props: DocumentItemProps) => {
 	const { document, publishDocument, isCreator } = props;
 
 	return (
-		<Box sx={BoxSx}>
+		<Box sx={BoxItemSx}>
 			<Stack width="100%">
 				<Typography variant="h5">{document.Title}</Typography>
 				{document.DocumentDescription ? (
