@@ -5,7 +5,6 @@ export interface DocumentContent {
 	DocumentId: string;
 	ContentBody: string;
 }
-
 export interface Document {
 	Id: string;
 	Title: string;
@@ -13,12 +12,37 @@ export interface Document {
 	HasExercise: boolean;
 	IsPublic: boolean;
 }
+export interface Submission {
+	Id: string;
+	ExerciseId: string;
+	ProgrammingLanguageId: number;
+	SourceCode: string;
+	AutomatedScore: number;
+	Pending: boolean;
+	Choice: boolean;
+	TimeCreated: string;
+}
+export interface TestResult {
+	SubmissionId: string;
+	TestId: number;
+	Time: number;
+	Memory: number;
+	ExitCode: number;
+	Deadline: string;
+	Input: string;
+	Output: string;
+	ExpectedOutput: string;
+	RunStatus: number;
+}
+
 export interface DocumentState {
 	document?: GetDocumentByIdResponse | null;
 	documentContent?: any | null;
 	documentExercise?: GetExerciseResponse | null;
 	sampleSourceCode?: GetSampleSourceCodeResponse | null;
 	documentTestCases?: Array<GetSingleTestCaseResponse> | null;
+	documentSubmissions?: Array<Submission> | null;
+	documentSingleSubmission?: GetSingleSubmissionResponse | null;
 	loading: boolean;
 }
 // API interface
@@ -109,9 +133,6 @@ export interface UpdateSampleSourceCodeResponse {
 
 //#region test cases
 
-export interface GetAllTestCasesResponse {
-	TestCases: Array<GetSingleTestCaseResponse>;
-}
 export interface CreateTestCaseRequest {
 	input: string;
 	output: string;
@@ -146,3 +167,35 @@ export interface SwapTestCaseOrderRequest {
 	TestOrder2: number;
 }
 //#endregion
+
+//#region document submission
+
+export interface CreateSubmissionRequest {
+	programmingLanguageId: number;
+	sourceCode: string;
+}
+
+export interface CreateSubmissionResponse {
+	id: string;
+	programmingLanguageId: number;
+	sourceCode: string;
+}
+
+export interface GetSingleSubmissionResponse {
+	Id: string;
+	ExerciseId: string;
+	ProgrammingLanguageId: number;
+	SourceCode: string;
+	AutomatedScore: number;
+	Pending: boolean;
+	Choice: boolean;
+	TimeCreated: string;
+	ManualScore: number;
+	Score: number;
+	testResults: Array<TestResult>;
+}
+export interface SubmissionActionRequest {
+	documentId: string;
+	submissionId: string;
+}
+//endregion

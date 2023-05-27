@@ -14,10 +14,15 @@ import { getDocument } from '@/selectors/document.selector';
 import {
 	createDocumentContent,
 	createDocumentExercise,
+	createSubmission,
 	createTestCase,
 	deleteTestCase,
+	fetchAllSubmissions,
 	fetchDocumentById,
+	fetchDocumentByIdWithExercise,
 	fetchSampleSourceCode,
+	fetchSingleSubmission,
+	markSubmission,
 	resetDocumentContent,
 	updateDocumentExercise,
 	updateTestCase
@@ -27,8 +32,11 @@ import { usePDFFileReader } from '@/hook/useFileReader';
 import {
 	CreateDocumentContentRequest,
 	CreateExerciseRequest,
+	CreateSubmissionRequest,
 	CreateTestCaseRequest,
 	GetExerciseResponse,
+	GetSampleSourceCodeResponse,
+	SubmissionActionRequest,
 	UpdateExerciseRequest,
 	UpdateSampleSourceCodeRequest,
 	UpdateTestCaseRequest
@@ -38,6 +46,7 @@ import TestCase from '@/components/Document/Tab/TestCase';
 import CustomDialog from '@/components/Custom/CustomDialog';
 import { JudgerId, createExerciseDefault } from '@/config';
 import { getApiDateFormat, getToday, parseToLocalDate } from '@/utils/convert';
+import Submission from '@/components/Document/Tab/Submission';
 
 const DocumentPage = () => {
 	const params = useParams();
@@ -120,7 +129,6 @@ const DocumentPage = () => {
 		dispatch(fetchSampleSourceCode({ documentId: documentId, type: type }));
 	};
 
-	const onSubmit = () => {};
 	//#endregion
 
 	//#region test cases
@@ -135,6 +143,7 @@ const DocumentPage = () => {
 	};
 
 	const onUpdateTestCase = (documentId: string, testCaseId: number, Form: UpdateTestCaseRequest) => {
+		console.log(Form, 'hello');
 		let form: UpdateTestCaseRequest = {
 			input: Form.input,
 			output: Form.output,
@@ -146,6 +155,26 @@ const DocumentPage = () => {
 	const onDeleteTestCase = (documentId: string, testCaseId: number) => {
 		dispatch(deleteTestCase({ documentId: documentId, testCaseId: testCaseId }));
 	};
+	//#endregion
+
+	//#region submissions
+
+	const onFetchSingleSubmission = (Ids: SubmissionActionRequest) => {
+		dispatch(fetchSingleSubmission(Ids));
+	};
+	const onCreateSubmission = (Source: UpdateSampleSourceCodeRequest, documentId: string) => {
+		let form: CreateSubmissionRequest = {
+			programmingLanguageId: Source.type,
+			sourceCode: Source.sampleSourceCode
+		};
+		dispatch(createSubmission({ documentId: documentId, body: form }));
+	};
+
+	const onMarkSubmission = (Ids: SubmissionActionRequest) => {
+		dispatch(markSubmission(Ids));
+	};
+
+	const onDeleteSubmission = (Ids: SubmissionActionRequest) => {};
 	//#endregion
 	useEffect(() => {
 		if (!document) {
@@ -251,7 +280,13 @@ const DocumentPage = () => {
 						},
 						{
 							title: 'Submission',
-							element: <></>
+							element: (
+								<Submission
+									document={document}
+									onMark={onMarkSubmission}
+									onSelected={onFetchSingleSubmission}
+								/>
+							)
 						},
 						{
 							title: 'Exercise',
@@ -263,6 +298,7 @@ const DocumentPage = () => {
 									}}
 									document={document}
 									isCreator={false}
+									onSubmit={onCreateSubmission}
 									onGetSampleSourceCode={onGetSampleSourceCode}
 								/>
 							)
@@ -288,6 +324,8 @@ const DocumentPage = () => {
 
 	useLayoutEffect(() => {
 		dispatch(fetchDocumentById({ id: params.documentId ? params.documentId : '' }));
+		dispatch(fetchDocumentByIdWithExercise({ documentId: params.documentId ? params.documentId : '' }));
+		dispatch(fetchAllSubmissions({ documentId: params.documentId ? params.documentId : '' }));
 	}, []);
 
 	return loading ? (

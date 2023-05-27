@@ -14,8 +14,8 @@ import { GetDocumentByIdResponse, GetSingleTestCaseResponse } from '@/types/docu
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllTestCases } from '@/slices/document.slice';
-import { getDocumentTestCases } from '@/selectors/document.selector';
-import TestCaseItem from '../TestCaseItem';
+import { getDocumentExercise, getDocumentTestCases } from '@/selectors/document.selector';
+import DocumentTestCaseItem from '../DocumentTestCaseItem';
 import { LinearLoading } from '@/components/Loading';
 import CustomDialog from '@/components/Custom/CustomDialog';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
@@ -38,6 +38,7 @@ const TestCase = (props: TestCaseProps) => {
 
 	const dispatch = useDispatch();
 	const testCases = useSelector(getDocumentTestCases);
+	const exercise = useSelector(getDocumentExercise);
 
 	const InitialTestCaseForm: GetSingleTestCaseResponse = {
 		Id: 1,
@@ -70,7 +71,7 @@ const TestCase = (props: TestCaseProps) => {
 		} else {
 			setTestCaseForm({
 				...TestCaseForm,
-				[e.target.name]: e.target.checked
+				[e.target.name]: e.target.value
 			});
 		}
 	};
@@ -108,9 +109,9 @@ const TestCase = (props: TestCaseProps) => {
 		<Fragment>
 			{testCases === null ? (
 				<LinearLoading />
-			) : testCases === undefined ? (
+			) : exercise === undefined || testCases === undefined ? (
 				<Typography sx={centerPos} variant="h5">
-					Must have Exercise!
+					Cannot create Test Cases without Exercises!
 				</Typography>
 			) : (
 				<DocumentTabLayout
@@ -210,7 +211,7 @@ const TestCase = (props: TestCaseProps) => {
 								{testCases && testCases.length > 0 ? (
 									testCases.map((item, index) => {
 										return (
-											<TestCaseItem
+											<DocumentTestCaseItem
 												key={index}
 												item={item}
 												index={item.TestOrder}

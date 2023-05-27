@@ -11,11 +11,15 @@ import SendIcon from '@mui/icons-material/Send';
 
 import { CodeEditor } from '@/components/CodeEditor';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
-import { GetDocumentByIdResponse, GetExerciseResponse, UpdateSampleSourceCodeRequest } from '@/types/document.type';
+import {
+	CreateSubmissionRequest,
+	GetDocumentByIdResponse,
+	GetExerciseResponse,
+	UpdateSampleSourceCodeRequest
+} from '@/types/document.type';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import Content, { PreviewProps } from './Content';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDocumentByIdWithExercise } from '@/slices/document.slice';
 import { getDocumentExercise } from '@/selectors/document.selector';
 import { LinearLoading } from '@/components/Loading';
 import CustomDialog from '@/components/Custom/CustomDialog';
@@ -134,9 +138,9 @@ const Exercise = (props: ExerciseProps) => {
 		}
 	}, [exercise]);
 
-	useEffect(() => {
-		dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
-	}, []);
+	// useEffect(() => {
+	// 	dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
+	// }, []);
 
 	return (
 		<Fragment>
@@ -283,7 +287,6 @@ const Exercise = (props: ExerciseProps) => {
 													type="datetime-local"
 													name="deadline"
 													onChange={onChange}
-													// value={new Date(parseToLocalDate(Deadline)).toISOString()}
 													value={parseToLocalDate(Deadline)}
 												/>
 											}
@@ -309,7 +312,6 @@ const Exercise = (props: ExerciseProps) => {
 									  };
 							}}
 							endIcon={<SaveIcon />}
-							// loading={loading}
 							loadingPosition="end"
 							variant="contained"
 						>
@@ -322,9 +324,14 @@ const Exercise = (props: ExerciseProps) => {
 							sx={{
 								borderRadius: `0 0 ${borderRadius} ${borderRadius}`
 							}}
-							// onClick={handleClick}
+							onClick={() => {
+								onSubmit
+									? onSubmit(Source, document.Id)
+									: () => {
+											console.log('Submit Error.');
+									  };
+							}}
 							endIcon={<SendIcon />}
-							// loading={loading}
 							loadingPosition="end"
 							variant="contained"
 						>

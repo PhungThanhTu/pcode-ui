@@ -7,13 +7,16 @@ import {
 	CreateDocumentRequest,
 	CreateDocumentResponse,
 	CreateExerciseRequest,
+	CreateSubmissionRequest,
 	CreateTestCaseRequest,
 	CreateTestCaseResponse,
-	GetAllTestCasesResponse,
 	GetDocumentByIdResponse,
 	GetExerciseResponse,
 	GetSampleSourceCodeResponse,
+	GetSingleSubmissionResponse,
 	GetSingleTestCaseResponse,
+	Submission,
+	SubmissionActionRequest,
 	UpdateExerciseRequest,
 	UpdateSampleSourceCodeRequest,
 	UpdateTestCaseRequest
@@ -23,10 +26,16 @@ import {
 	createDocument,
 	createDocumentContent,
 	createDocumentExercise,
+	createSubmission,
 	createTestCase,
 	createTestCaseSuccess,
+	deleteSubmission,
+	deleteSubmissionSuccess,
 	deleteTestCase,
 	deleteTestCaseSuccess,
+	fetchAllSubmissions,
+	fetchAllSubmissionsError,
+	fetchAllSubmissionsSuccess,
 	fetchAllTestCases,
 	fetchAllTestCasesError,
 	fetchAllTestCasesSuccess,
@@ -40,6 +49,11 @@ import {
 	fetchSampleSourceCode,
 	fetchSampleSourceCodeError,
 	fetchSampleSourceCodeSuccess,
+	fetchSingleSubmission,
+	fetchSingleSubmissionError,
+	fetchSingleSubmissionSuccess,
+	markSubmission,
+	markSubmissionSuccess,
 	resetDocumentContent,
 	updateDocumentExercise,
 	updateTestCase,
@@ -272,17 +286,15 @@ function* fetchSampleSourceCodeSaga(action: PayloadAction<{ documentId: string; 
 function* fetchAllTestCasesSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
 		console.log('saga fetching document test case');
-		const document: AxiosResponse<Array<GetSingleTestCaseResponse>> = yield call(
+		const testcases: AxiosResponse<Array<GetSingleTestCaseResponse>> = yield call(
 			documentApi.getAllTestCases,
 			action.payload.documentId
 		);
-		if (document.data) {
-			console.log(document.data, 'hello');
-			yield put(fetchAllTestCasesSuccess(document.data));
+		if (testcases.data) {
+			yield put(fetchAllTestCasesSuccess(testcases.data));
 		}
 	} catch (error: any) {
 		yield put(fetchAllTestCasesError());
-		yield put(setSnackbar(notificationMessage.ERROR('Fetch Test Cases failed.')));
 		console.log('saga fetch document test cases failed');
 	}
 }
@@ -355,6 +367,95 @@ function* deleteTestCaseSaga(action: PayloadAction<{ documentId: string; testCas
 }
 //#endregion
 
+//region document submission
+function* fetchAllSubmissionsSaga(action: PayloadAction<{ documentId: string }>) {
+	try {
+		console.log('saga fetching document submissions');
+		const submission: AxiosResponse<Array<Submission>> = yield call(
+			documentApi.getAllSubmissions,
+			action.payload.documentId
+		);
+		if (submission.data) {
+			yield put(fetchAllSubmissionsSuccess(submission.data));
+		}
+	} catch (error: any) {
+		yield put(fetchAllSubmissionsError());
+		console.log('saga fetch document submissions failed');
+	}
+}
+function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionRequest>) {
+	try {
+		console.log('saga fetching document submission');
+		const submission: AxiosResponse<GetSingleSubmissionResponse> = yield call(
+			documentApi.getSingleSubmission,
+			action.payload
+		);
+		if (submission.data) {
+			yield put(fetchSingleSubmissionSuccess(submission.data));
+		}
+	} catch (error: any) {
+		yield put(fetchSingleSubmissionError());
+		console.log('saga fetch document submission failed');
+	}
+}
+function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>) {
+	try {
+		console.log('saga create submission');
+		yield put(setLoading({ isLoading: true }));
+
+		const submission: AxiosResponse<CreateTestCaseResponse> = yield call(
+			documentApi.createSubmission,
+			action.payload.documentId,
+			action.payload.body
+		);
+
+		if (submission.data) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('submission')));
+			yield put(fetchAllSubmissions({ documentId: action.payload.documentId }));
+		}
+	} catch (error: any) {
+		console.log('saga create submission failed');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.CREATE_FAIL('submission', '')));
+	}
+}
+function* deleteSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
+	try {
+		console.log('saga delete submission');
+		yield put(setLoading({ isLoading: true }));
+		const submission: AxiosResponse<any> = yield call(documentApi.deleteSubmission, action.payload);
+
+		if (submission) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(setSnackbar(notificationMessage.DELETE_SUCCESS('submission')));
+			yield put(deleteSubmissionSuccess(submission.data));
+		}
+	} catch (error: any) {
+		console.log('saga delete test case failed');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.DELETE_FAIL('test case', '')));
+	}
+}
+function* markSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
+	try {
+		console.log('saga mark submission');
+		yield put(setLoading({ isLoading: true }));
+		const submission: AxiosResponse<any> = yield call(documentApi.markSubmission, action.payload);
+
+		if (submission) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('submission', 'Submission is marked')));
+			yield put(markSubmissionSuccess(action.payload));
+		}
+	} catch (error: any) {
+		console.log('saga mark submission failed');
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('submission', '!')));
+	}
+}
+//endregion
+
 export function* watchDocument() {
 	yield takeLatest(fetchDocumentById.type, fetchDocumentByIdSaga);
 	yield takeLatest(createDocument.type, createDocumentSaga);
@@ -369,4 +470,9 @@ export function* watchDocument() {
 	yield takeLatest(createTestCase.type, createTestCaseSaga);
 	yield takeLatest(updateTestCase.type, updateTestCaseSaga);
 	yield takeLatest(deleteTestCase.type, deleteTestCaseSaga);
+	yield takeLatest(fetchAllSubmissions.type, fetchAllSubmissionsSaga);
+	yield takeLatest(fetchSingleSubmission.type, fetchSingleSubmissionsSaga);
+	yield takeLatest(createSubmission.type, createSubmissionSaga);
+	yield takeLatest(deleteSubmission.type, deleteSubmissionSaga);
+	yield takeLatest(markSubmission.type, markSubmissionSaga);
 }
