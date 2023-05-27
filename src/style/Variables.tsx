@@ -12,6 +12,8 @@ export const componentStyle = {
 	padding: '0.4rem'
 };
 export const centerPos = {
+	textAlign: 'center',
+	display: 'block',
 	position: 'absolute',
 	top: '50%',
 	left: '50%',

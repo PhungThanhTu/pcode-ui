@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import MyPDFViewer from '@/components/MyPDFViewer';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { BoxNotFoundSx } from '@/style/BoxSx';
-import { componentStyle } from '@/style/Variables';
+import { centerPos, componentStyle } from '@/style/Variables';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 
 const BoxViewSx = {
@@ -52,7 +52,9 @@ const Content = (props: PreviewProps) => {
 	} else {
 		return (
 			<Box sx={BoxNotFoundSx}>
-				<Typography variant="h5">No content/file/markdown to view.</Typography>
+				<Typography sx={{ ...centerPos, width: 'fit-content' }} variant="h5">
+					No pdf/markdown to view.
+				</Typography>
 			</Box>
 		);
 	}

@@ -11,11 +11,14 @@ import {
 	UpdateExerciseRequest,
 	UpdateSampleSourceCodeResponse,
 	UpdateSampleSourceCodeRequest,
-	GetAllTestCasesResponse,
 	GetSingleTestCaseResponse,
 	CreateTestCaseResponse,
 	CreateTestCaseRequest,
-	UpdateTestCaseRequest
+	UpdateTestCaseRequest,
+	CreateSubmissionRequest,
+	Submission,
+	SubmissionActionRequest,
+	GetSingleSubmissionResponse
 } from '@/types/document.type';
 
 const documentApi = {
@@ -101,19 +104,22 @@ const documentApi = {
 		return result;
 	},
 	getAllTestCases: async (documentId: string) => {
-		const result: AxiosResponse<GetAllTestCasesResponse> = await protectedApi.get(
+		const result: AxiosResponse<Array<GetSingleTestCaseResponse>> = await protectedApi.get(
 			`/document/${documentId}/testcase`
 		);
 		return result;
 	},
-	getSingleTestCase: async (documentId: string, order: number) => {
+	getSingleTestCase: async (documentId: string, testCaseId: number) => {
 		const result: AxiosResponse<GetSingleTestCaseResponse> = await protectedApi.get(
-			`/document/${documentId}/testcase/${order}`
+			`/document/${documentId}/testcase/${testCaseId}`
 		);
 		return result;
 	},
-	updateTestCase: async (documentId: string, order: number, body: UpdateTestCaseRequest) => {
-		const result: AxiosResponse<any> = await protectedApi.patch(`/document/${documentId}/testcase/${order}`);
+	updateTestCase: async (documentId: string, testCaseId: number, body: UpdateTestCaseRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.patch(
+			`/document/${documentId}/testcase/${testCaseId}`,
+			body
+		);
 		return result;
 	},
 	swapTestCase: async (documentId: string, order1: number, order2: number) => {
@@ -122,8 +128,40 @@ const documentApi = {
 		);
 		return result;
 	},
-	deleteTestCase: async (documentId: string, order: number) => {
-		const result: AxiosResponse<any> = await protectedApi.delete(`/document/${documentId}/testcase/${order}`);
+	deleteTestCase: async (documentId: string, testCaseId: number) => {
+		const result: AxiosResponse<any> = await protectedApi.delete(`/document/${documentId}/testcase/${testCaseId}`);
+		return result;
+	},
+	createSubmission: async (documentId: string, body: CreateSubmissionRequest) => {
+		let temp = {
+			sourceCode: body.sourceCode
+		};
+		const result: AxiosResponse<CreateTestCaseResponse> = await protectedApi.post(
+			`/document/${documentId}/submission/?programmingLanguage=${body.programmingLanguageId}`,
+			temp
+		);
+		return result;
+	},
+	getAllSubmissions: async (documentId: string) => {
+		const result: AxiosResponse<Array<Submission>> = await protectedApi.get(`/document/${documentId}/submission`);
+		return result;
+	},
+	getSingleSubmission: async (Ids: SubmissionActionRequest) => {
+		const result: AxiosResponse<GetSingleSubmissionResponse> = await protectedApi.get(
+			`/document/${Ids.documentId}/submission/${Ids.submissionId}`
+		);
+		return result;
+	},
+	markSubmission: async (Ids: SubmissionActionRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.post(
+			`/document/${Ids.documentId}/submission/${Ids.submissionId}/mark`
+		);
+		return result;
+	},
+	deleteSubmission: async (Ids: SubmissionActionRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.delete(
+			`/document/${Ids.documentId}/submission/${Ids.documentId}`
+		);
 		return result;
 	}
 };

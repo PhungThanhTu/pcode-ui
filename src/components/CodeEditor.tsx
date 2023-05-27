@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSampleSourceCode } from '@/selectors/document.selector';
 import { GetDocumentByIdResponse } from '@/types/document.type';
+import { borderRadius } from '@/style/Variables';
 
 interface CodeEditorProps {
 	document?: GetDocumentByIdResponse;
@@ -69,7 +70,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	}, [sourceCode]);
 
 	return (
-		<Stack minHeight="inherit">
+		<Stack minHeight="inherit" sx={{ '*': { borderRadius: borderRadius } }}>
 			<Stack flexDirection="row" columnGap={1} justifyContent="space-around">
 				<Stack justifyContent="center" alignItems="center" paddingLeft="10px">
 					<Typography variant="subtitle1">Language</Typography>
@@ -106,6 +107,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 			</Stack>
 			<Box sx={{ flex: 1, paddingTop: '5px' }}>
 				<Editor
+					className="code"
 					options={{ readOnly: Read, theme: Theme }}
 					language={Language === '1' ? 'c' : 'cpp'}
 					height={640}
