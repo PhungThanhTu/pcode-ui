@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
 	Course,
+	CourseScore,
 	CoursesState,
 	CourseState,
 	CreateCourseRequest,
@@ -15,6 +16,7 @@ export const initialCoursesState: CoursesState = {
 };
 export const initialCourseState: CourseState = {
 	course: undefined,
+	courseScore: undefined,
 	loading: false
 };
 const coursesSlice = createSlice({
@@ -24,9 +26,9 @@ const coursesSlice = createSlice({
 		fetchCourses: (state) => {
 			state.loading = true;
 		},
-		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => {},
-		renameCourse: (state, { payload }: PayloadAction<Course>) => {},
-		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => {},
+		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => { },
+		renameCourse: (state, { payload }: PayloadAction<Course>) => { },
+		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => { },
 		createCourseSuccess: (state, { payload }: PayloadAction<CreateCourseResponse>) => {
 			let Course: Course = {
 				id: payload.id,
@@ -65,6 +67,15 @@ const courseSlice = createSlice({
 			state.course = null;
 			state.loading = false;
 		},
+		fetchCourseScoreById: (state, { payload }: PayloadAction<{ courseId: string }>) => {
+			state.courseScore = null;
+		},
+		fetchCourseScoreByIdSuccess: (state, { payload }: PayloadAction<Array<CourseScore>>) => {
+			state.courseScore = payload;
+		},
+		fetchCourseScoreByIdError: (state) => {
+			state.courseScore = undefined;
+		},
 		changePublishDocumentSuccess: (state, { payload }: PayloadAction<{ documentId: string; status: number }>) => {
 			const documentIndex = state.course?.documents.findIndex((item) => item.Id === payload.documentId);
 			if (documentIndex !== -1 && documentIndex !== null && documentIndex !== undefined) {
@@ -75,7 +86,7 @@ const courseSlice = createSlice({
 });
 export const { fetchCourses, createCourse, renameCourse, joinCourse, fetchCoursesSuccess, fetchCoursesError } =
 	coursesSlice.actions;
-export const { fetchCourseById, fetchCourseByIdError, fetchCourseByIdSuccess, changePublishDocumentSuccess } =
+export const { fetchCourseById, fetchCourseByIdError, fetchCourseByIdSuccess, changePublishDocumentSuccess ,fetchCourseScoreById,fetchCourseScoreByIdError,fetchCourseScoreByIdSuccess} =
 	courseSlice.actions;
 
 export const coursesReducer = coursesSlice.reducer;

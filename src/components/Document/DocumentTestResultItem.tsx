@@ -17,7 +17,7 @@ interface TestResultItemProps {
 	index: number;
 }
 
-const TestResultItem = (props: TestResultItemProps) => {
+const DocumentTestResultItem = (props: TestResultItemProps) => {
 	const { item, index } = props;
 
 	return (
@@ -41,4 +41,4 @@ const TestResultItem = (props: TestResultItemProps) => {
 	);
 };
 
-export default TestResultItem;
+export default DocumentTestResultItem;

@@ -16,11 +16,15 @@ import {
 	Submission,
 	UpdateExerciseRequest,
 	UpdateSampleSourceCodeRequest,
-	UpdateTestCaseRequest
+	UpdateTestCaseRequest,
+	SubmissionManage,
+	ScoreSubmissionRequest,
+	ScoreSubmissionResponse
 } from '@/types/document.type';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export const initialDocumentState: DocumentState = {
+
 	document: undefined,
 	documentContent: undefined,
 	documentExercise: undefined,
@@ -28,6 +32,7 @@ export const initialDocumentState: DocumentState = {
 	documentTestCases: undefined,
 	documentSingleSubmission: undefined,
 	documentSubmissions: undefined,
+	documentSubmissionsManage: undefined,
 	loading: false
 };
 
@@ -73,14 +78,14 @@ const documentSlice = createSlice({
 		fetchSampleSourceCodeError: (state) => {
 			state.sampleSourceCode = undefined;
 		},
-		createDocument: (state, { payload }: PayloadAction<CreateDocumentRequest>) => {},
-		createDocumentContent: (state, { payload }: PayloadAction<CreateDocumentContentRequest>) => {},
+		createDocument: (state, { payload }: PayloadAction<CreateDocumentRequest>) => { },
+		createDocumentContent: (state, { payload }: PayloadAction<CreateDocumentContentRequest>) => { },
 		createDocumentExercise: (
 			state,
 			{ payload }: PayloadAction<{ body: CreateExerciseRequest; documentId: string }>
-		) => {},
-		resetDocumentContent: (state, { payload }: PayloadAction<{ documentId: string }>) => {},
-		changePublishDocument: (state, { payload }: PayloadAction<{ documentId: string; status: number }>) => {},
+		) => { },
+		resetDocumentContent: (state, { payload }: PayloadAction<{ documentId: string }>) => { },
+		changePublishDocument: (state, { payload }: PayloadAction<{ documentId: string; status: number }>) => { },
 		updateDocumentExercise: (
 			state,
 			{
@@ -90,7 +95,7 @@ const documentSlice = createSlice({
 				documentId: string;
 				SourceBody: UpdateSampleSourceCodeRequest;
 			}>
-		) => {},
+		) => { },
 		fetchAllTestCases: (state, { payload }: PayloadAction<{ documentId: string }>) => {
 			state.documentTestCases = null;
 		},
@@ -100,10 +105,10 @@ const documentSlice = createSlice({
 		fetchAllTestCasesError: (state) => {
 			state.documentExercise = undefined;
 		},
-		fetchSingleTestCase: (state, { payload }: PayloadAction<{ documentId: string; testCaseId: number }>) => {},
-		fetchSingleTestCaseSuccess: (state, { payload }: PayloadAction<GetSingleTestCaseResponse>) => {},
-		fetchSingleTestCaseError: (state) => {},
-		createTestCase: (state, { payload }: PayloadAction<{ documentId: string; body: CreateTestCaseRequest }>) => {},
+		fetchSingleTestCase: (state, { payload }: PayloadAction<{ documentId: string; testCaseId: number }>) => { },
+		fetchSingleTestCaseSuccess: (state, { payload }: PayloadAction<GetSingleTestCaseResponse>) => { },
+		fetchSingleTestCaseError: (state) => { },
+		createTestCase: (state, { payload }: PayloadAction<{ documentId: string; body: CreateTestCaseRequest }>) => { },
 		createTestCaseSuccess: (state, { payload }: PayloadAction<CreateTestCaseResponse>) => {
 			let temp: GetSingleTestCaseResponse = {
 				...payload,
@@ -115,7 +120,7 @@ const documentSlice = createSlice({
 		updateTestCase: (
 			state,
 			{ payload }: PayloadAction<{ documentId: string; testCaseId: number; body: UpdateTestCaseRequest }>
-		) => {},
+		) => { },
 		updateTestCaseSuccess: (
 			state,
 			{ payload }: PayloadAction<{ testCaseId: number; body: UpdateTestCaseRequest }>
@@ -132,8 +137,8 @@ const documentSlice = createSlice({
 				state.documentTestCases ? (state.documentTestCases[index] = temp) : null;
 			}
 		},
-		swapTestCase: (state, { payload }: PayloadAction<{ documentId: string; order1: number; order2: number }>) => {},
-		deleteTestCase: (state, { payload }: PayloadAction<{ documentId: string; testCaseId: number }>) => {},
+		swapTestCase: (state, { payload }: PayloadAction<{ documentId: string; order1: number; order2: number }>) => { },
+		deleteTestCase: (state, { payload }: PayloadAction<{ documentId: string; testCaseId: number }>) => { },
 		deleteTestCaseSuccess: (state, { payload }: PayloadAction<{ testCaseId: number }>) => {
 			let index = state.documentTestCases?.findIndex((item) => item.Id === payload.testCaseId);
 
@@ -144,15 +149,26 @@ const documentSlice = createSlice({
 		createSubmission: (
 			state,
 			{ payload }: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>
-		) => {},
+		) => { },
 		fetchAllSubmissions: (state, { payload }: PayloadAction<{ documentId: string }>) => {
 			state.documentSubmissions = null;
 		},
 		fetchAllSubmissionsSuccess: (state, { payload }: PayloadAction<Array<Submission>>) => {
 			state.documentSubmissions = payload;
+			state.documentSubmissionsManage = undefined;
 		},
 		fetchAllSubmissionsError: (state) => {
 			state.documentSubmissions = undefined;
+		},
+		fetchAllSubmissionsManage: (state, { payload }: PayloadAction<{ documentId: string }>) => {
+			state.documentSubmissionsManage = null;
+		},
+		fetchAllSubmissionsManageSuccess: (state, { payload }: PayloadAction<Array<SubmissionManage>>) => {
+			state.documentSubmissions = undefined;
+			state.documentSubmissionsManage = payload;
+		},
+		fetchAllSubmissionsManageError: (state) => {
+			state.documentSubmissionsManage = undefined;
 		},
 		fetchSingleSubmission: (state, { payload }: PayloadAction<{ submissionId: string }>) => {
 			state.documentSingleSubmission = null;
@@ -163,7 +179,7 @@ const documentSlice = createSlice({
 		fetchSingleSubmissionError: (state) => {
 			state.documentSingleSubmission = undefined;
 		},
-		markSubmission: (state, { payload }: PayloadAction<SubmissionActionRequest>) => {},
+		markSubmission: (state, { payload }: PayloadAction<SubmissionActionRequest>) => { },
 		markSubmissionSuccess: (state, { payload }: PayloadAction<SubmissionActionRequest>) => {
 			if (state.documentSubmissions && state.documentSubmissions.length > 0) {
 				let index = state.documentSubmissions.findIndex((item) => item.Id === payload.submissionId);
@@ -179,13 +195,17 @@ const documentSlice = createSlice({
 				}
 			}
 		},
-		deleteSubmission: (state, { payload }: PayloadAction<SubmissionActionRequest>) => {},
+		deleteSubmission: (state, { payload }: PayloadAction<SubmissionActionRequest>) => { },
 		deleteSubmissionSuccess: (state, { payload }: PayloadAction<SubmissionActionRequest>) => {
 			let index = state.documentSubmissions?.findIndex((item) => item.Id === payload.submissionId);
 
 			if (index !== -1 && index !== null && index !== undefined) {
 				state.documentSubmissions ? state.documentSubmissions.splice(index, 1) : null;
 			}
+		},
+		scoreSubmissionManage: (state, { payload }: PayloadAction<ScoreSubmissionRequest>) => { },
+		scoreSubmissionManageSuccess: (state, { payload }: PayloadAction<ScoreSubmissionResponse>) => {
+
 		}
 	}
 });
@@ -226,10 +246,15 @@ export const {
 	fetchAllSubmissions,
 	fetchAllSubmissionsSuccess,
 	fetchAllSubmissionsError,
+	fetchAllSubmissionsManage,
+	fetchAllSubmissionsManageSuccess,
+	fetchAllSubmissionsManageError,
 	fetchSingleSubmission,
 	fetchSingleSubmissionSuccess,
 	fetchSingleSubmissionError,
 	markSubmission,
-	markSubmissionSuccess
+	markSubmissionSuccess,
+	scoreSubmissionManage,
+	scoreSubmissionManageSuccess
 } = documentSlice.actions;
 export default documentSlice.reducer;

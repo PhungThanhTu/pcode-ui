@@ -14,6 +14,7 @@ const LinkItemSx = {
 	width: '100%'
 };
 const ListItems = (props: ListItemsProps) => {
+	
 	const { pathname } = useLocation();
 	const { list, publishDocument, isCreator } = props;
 

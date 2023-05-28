@@ -7,19 +7,21 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
 import { getSampleSourceCode } from '@/selectors/document.selector';
-import { GetDocumentByIdResponse } from '@/types/document.type';
 import { borderRadius } from '@/style/Variables';
 
 interface CodeEditorProps {
-	document?: GetDocumentByIdResponse;
+
+	documentId: string;
 	onGetSampleSourceCode: Function;
-	isCreator: boolean;
+	isCreator?: boolean;
 	getSource: Function;
+	readOnly?: boolean;
 }
 export const CodeEditor = (props: CodeEditorProps) => {
-	const { document, isCreator, onGetSampleSourceCode, getSource } = props;
+
+	const { documentId, onGetSampleSourceCode, getSource, readOnly } = props;
 
 	const initial = '// Input your code here';
 	const loading = 'Loading...';
@@ -28,7 +30,6 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		// Monaco Editor is initialized and ready to use
 	});
 
-	const dispatch = useDispatch();
 	const sourceCode = useSelector(getSampleSourceCode);
 
 	const [Language, setLanguage] = useState('1');
@@ -39,22 +40,27 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	const onChange = (event: SelectChangeEvent) => {
 		let type = event.target.value;
 		setLanguage(type as string);
-		onGetSampleSourceCode(document?.Id, Number(type));
+		onGetSampleSourceCode(documentId, Number(type));
 		getSource(Value, Number(type));
 	};
+
 	const onThemeChange = (event: SelectChangeEvent) => {
 		let type = event.target.value;
 		setTheme(type as string);
 	};
+
 	const onValueChange = (value: string | undefined) => {
 		setValue(value ? value : '');
 		getSource(value, Number(Language));
 	};
+
 	useEffect(() => {
-		onGetSampleSourceCode(document?.Id, Number(Language));
+		if (!readOnly)
+			onGetSampleSourceCode(documentId, Number(Language));
 	}, []);
 
 	useEffect(() => {
+
 		if (sourceCode && Object.keys(sourceCode).length > 0) {
 			setRead(false);
 			setValue(sourceCode.sourceCode);
@@ -67,6 +73,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 			getSource(initial, Language);
 			setRead(false);
 		}
+
 	}, [sourceCode]);
 
 	return (
@@ -76,7 +83,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 					<Typography variant="subtitle1">Language</Typography>
 				</Stack>
 				<Box width="40%">
-					<FormControl fullWidth>
+					<FormControl fullWidth disabled={readOnly}>
 						<Select
 							value={Language}
 							onChange={onChange}
@@ -108,7 +115,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 			<Box sx={{ flex: 1, paddingTop: '5px' }}>
 				<Editor
 					className="code"
-					options={{ readOnly: Read, theme: Theme }}
+					options={{ readOnly: Read || readOnly, theme: Theme }}
 					language={Language === '1' ? 'c' : 'cpp'}
 					height={640}
 					value={Value}

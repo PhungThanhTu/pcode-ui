@@ -22,6 +22,20 @@ export interface Submission {
 	Choice: boolean;
 	TimeCreated: string;
 }
+export interface SubmissionManage {
+	UserId: string,
+	FullName: string,
+	UserName: string,
+	Avatar: string,
+	SubmissionId: string,
+	AutomatecScore: number,
+	ManualScore: number,
+	ProgrammingLanguageId: number,
+	SourceCode: string,
+	Pending: boolean,
+	Score: number,
+	TimeCreated: string
+}
 export interface TestResult {
 	SubmissionId: string;
 	TestId: number;
@@ -34,6 +48,9 @@ export interface TestResult {
 	ExpectedOutput: string;
 	RunStatus: number;
 }
+export interface DocumentScore {
+
+}
 
 export interface DocumentState {
 	document?: GetDocumentByIdResponse | null;
@@ -42,6 +59,7 @@ export interface DocumentState {
 	sampleSourceCode?: GetSampleSourceCodeResponse | null;
 	documentTestCases?: Array<GetSingleTestCaseResponse> | null;
 	documentSubmissions?: Array<Submission> | null;
+	documentSubmissionsManage?: Array<SubmissionManage> | null;
 	documentSingleSubmission?: GetSingleSubmissionResponse | null;
 	loading: boolean;
 }
@@ -194,8 +212,18 @@ export interface GetSingleSubmissionResponse {
 	Score: number;
 	testResults: Array<TestResult>;
 }
+export interface ScoreSubmissionRequest {
+	score: number;
+	Ids: SubmissionActionRequest;
+}
+export interface ScoreSubmissionResponse {
+	score: number;
+	submissionId: string;
+}
+
 export interface SubmissionActionRequest {
 	documentId: string;
 	submissionId: string;
 }
+
 //endregion
