@@ -18,12 +18,15 @@ import {
 	createTestCase,
 	deleteTestCase,
 	fetchAllSubmissions,
+	fetchAllSubmissionsManage,
+	fetchAllTestCases,
 	fetchDocumentById,
 	fetchDocumentByIdWithExercise,
 	fetchSampleSourceCode,
 	fetchSingleSubmission,
 	markSubmission,
 	resetDocumentContent,
+	scoreSubmissionManage,
 	updateDocumentExercise,
 	updateTestCase
 } from '@/slices/document.slice';
@@ -31,11 +34,10 @@ import {
 import { usePDFFileReader } from '@/hook/useFileReader';
 import {
 	CreateDocumentContentRequest,
-	CreateExerciseRequest,
 	CreateSubmissionRequest,
 	CreateTestCaseRequest,
 	GetExerciseResponse,
-	GetSampleSourceCodeResponse,
+	ScoreSubmissionRequest,
 	SubmissionActionRequest,
 	UpdateExerciseRequest,
 	UpdateSampleSourceCodeRequest,
@@ -48,12 +50,14 @@ import { JudgerId, createExerciseDefault } from '@/config';
 import { getApiDateFormat, getToday, parseToLocalDate } from '@/utils/convert';
 import Submission from '@/components/Document/Tab/Submission';
 
+
 const DocumentPage = () => {
+
 	const params = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const UserProfile = useSelector(getProfile);
+	const userProfile = useSelector(getProfile);
 	const { document, loading, documentContent } = useSelector(getDocument);
 
 	const [Tabs, setTabs] = useState<TabElement[]>([]);
@@ -143,7 +147,7 @@ const DocumentPage = () => {
 	};
 
 	const onUpdateTestCase = (documentId: string, testCaseId: number, Form: UpdateTestCaseRequest) => {
-		console.log(Form, 'hello');
+
 		let form: UpdateTestCaseRequest = {
 			input: Form.input,
 			output: Form.output,
@@ -159,31 +163,43 @@ const DocumentPage = () => {
 
 	//#region submissions
 
-	const onFetchSingleSubmission = (Ids: SubmissionActionRequest) => {
-		dispatch(fetchSingleSubmission(Ids));
+	const onFetchSingleSubmission = (Request: SubmissionActionRequest) => {
+		dispatch(fetchSingleSubmission(Request));
 	};
-	const onCreateSubmission = (Source: UpdateSampleSourceCodeRequest, documentId: string) => {
+	const onCreateSubmission = (Request: UpdateSampleSourceCodeRequest, documentId: string) => {
+
 		let form: CreateSubmissionRequest = {
-			programmingLanguageId: Source.type,
-			sourceCode: Source.sampleSourceCode
+			programmingLanguageId: Request.type,
+			sourceCode: Request.sampleSourceCode
 		};
 		dispatch(createSubmission({ documentId: documentId, body: form }));
 	};
 
-	const onMarkSubmission = (Ids: SubmissionActionRequest) => {
-		dispatch(markSubmission(Ids));
+	const onMarkSubmission = (Request : SubmissionActionRequest) => {
+		dispatch(markSubmission(Request));
 	};
 
-	const onDeleteSubmission = (Ids: SubmissionActionRequest) => {};
+	const onScoreSubmission = (Request: ScoreSubmissionRequest) => {
+
+		dispatch(scoreSubmissionManage({ Ids: Request.Ids, score: Request.score }))
+	}
+	const onDeleteSubmission = (Request: SubmissionActionRequest) => { };
+
 	//#endregion
+
 	useEffect(() => {
 		if (!document) {
 			// dispatch(fetchDocumentById({ id: params.documentId ? params.documentId : '' }));
 		} else if (document === null) {
 			navigate(-1);
 		} else {
-			if (UserProfile?.id === document.CreatorId) {
+			if (userProfile?.id === document.CreatorId) {
 				if (document.HasExercise) {
+
+					dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
+					dispatch(fetchAllTestCases({ documentId: document.Id }));
+					dispatch(fetchAllSubmissionsManage({ documentId: document.Id }))
+
 					setTabs([
 						{
 							title: 'Compose',
@@ -235,6 +251,18 @@ const DocumentPage = () => {
 									onDelete={onDeleteTestCase}
 								/>
 							)
+						},
+						{
+							title: 'Submission',
+							element: (
+								<Submission
+									isCreator={true}
+									document={document}
+									onSelected={() => { }}
+									onScore={() => { }}
+
+								/>
+							)
 						}
 					]);
 				} else {
@@ -267,6 +295,10 @@ const DocumentPage = () => {
 				}
 			} else {
 				if (document.HasExercise) {
+
+					dispatch(fetchAllSubmissions({ documentId: document.Id }));
+					dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
+
 					setTabs([
 						{
 							title: 'Content',
@@ -282,6 +314,7 @@ const DocumentPage = () => {
 							title: 'Submission',
 							element: (
 								<Submission
+									isCreator={false}
 									document={document}
 									onMark={onMarkSubmission}
 									onSelected={onFetchSingleSubmission}
@@ -324,8 +357,6 @@ const DocumentPage = () => {
 
 	useLayoutEffect(() => {
 		dispatch(fetchDocumentById({ id: params.documentId ? params.documentId : '' }));
-		dispatch(fetchDocumentByIdWithExercise({ documentId: params.documentId ? params.documentId : '' }));
-		dispatch(fetchAllSubmissions({ documentId: params.documentId ? params.documentId : '' }));
 	}, []);
 
 	return loading ? (

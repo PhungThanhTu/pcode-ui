@@ -18,7 +18,9 @@ interface GeneralProps {
 	isCreator: boolean;
 }
 const General = (props: GeneralProps) => {
+
 	const { course, customizeButton, code, createDocumentModal, changePublishDocument, isCreator } = props;
+
 
 	return (
 		<TabLayout

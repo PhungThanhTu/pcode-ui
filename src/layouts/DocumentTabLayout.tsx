@@ -11,7 +11,8 @@ const BoxLeftSx = {
 	width: '100%',
 	borderRadius: borderRadius,
 	padding: '5px',
-	position: 'relative'
+	position: 'relative',
+	flexGrow: 1,
 };
 const BoxRightSx = {
 	backgroundColor: `${componentsBoxColor}`,
@@ -20,7 +21,8 @@ const BoxRightSx = {
 	width: '100%',
 	borderRadius: borderRadius,
 	padding: '5px',
-	position: 'relative'
+	position: 'relative',
+	flexGrow: 1,
 };
 const BoxChildRightSx = {
 	position: 'absolute',

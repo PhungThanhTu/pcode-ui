@@ -12,6 +12,14 @@ export interface Course {
 	courseSubject: string;
 }
 
+export interface CourseScore {
+	UserId: string,
+	Username: string,
+	FullName: string,
+	Email: string,
+	Score: number
+}
+
 export interface JoinCourse {
 	Code: string;
 }
@@ -21,8 +29,10 @@ export interface CoursesState {
 }
 export interface CourseState {
 	course?: GetCourseByIdResponse | null;
+	courseScore? : Array<CourseScore> | null
 	loading: boolean;
 }
+
 
 // API interface
 export interface GetCourseByIdResponse {
@@ -32,8 +42,11 @@ export interface GetCourseByIdResponse {
 	courseTheme: string;
 	documents: Array<Document>;
 }
+export interface RenameCourseRequest {
+	id: string;
+	title: string;
+}
 
-// API interface
 export interface CreateCourseRequest {
 	title: string;
 	theme?: string | null | undefined;
@@ -48,3 +61,4 @@ export interface CreateCourseResponse {
 	courseTheme: string;
 	CreatorName: string;
 }
+

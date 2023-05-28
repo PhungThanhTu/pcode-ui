@@ -6,3 +6,4 @@ export const getDocumentTestCases = (state: RootState) => state.document.documen
 export const getSampleSourceCode = (state: RootState) => state.document.sampleSourceCode;
 export const getDocumentSubssions = (state: RootState) => state.document.documentSubmissions;
 export const getDocumentSingleSubssion = (state: RootState) => state.document.documentSingleSubmission;
+export const getDocumentSubmissionsManage = (state: RootState) => state.document.documentSubmissionsManage;

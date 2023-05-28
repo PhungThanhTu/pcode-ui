@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import protectedApi from './protectedApi';
-import { Course, CreateCourseRequest, CreateCourseResponse, GetCourseByIdResponse } from '@/types/course.type';
+import { Course, CourseScore, CreateCourseRequest, CreateCourseResponse, GetCourseByIdResponse, RenameCourseRequest } from '@/types/course.type';
 
 const courseApi = {
 	getAllCourses: async () => {
@@ -11,21 +11,25 @@ const courseApi = {
 		const result: AxiosResponse<Course> = await protectedApi.get(`/course/info/${code}`);
 		return result;
 	},
-	getCourseById: async (id: string) => {
-		const result: AxiosResponse<GetCourseByIdResponse> = await protectedApi.get(`/course/${id}`);
+	getCourseById: async (courseId: string) => {
+		const result: AxiosResponse<GetCourseByIdResponse> = await protectedApi.get(`/course/${courseId}`);
+		return result;
+	},
+	getCourseScoreById: async (courseId: string) => {
+		const result: AxiosResponse<Array<CourseScore>> = await protectedApi.get(`/course/${courseId}/score`);
 		return result;
 	},
 
-	joinCourse: async (code: string) => {
-		const result: any = await protectedApi.post(`/course/join/${code}`);
+	joinCourse: async (courseCode: string) => {
+		const result: any = await protectedApi.post(`/course/join/${courseCode}`);
 		return result;
 	},
-	createCourse: async (body: CreateCourseRequest) => {
-		const result: AxiosResponse<CreateCourseResponse> = await protectedApi.post('/course', body);
+	createCourse: async (request: CreateCourseRequest) => {
+		const result: AxiosResponse<CreateCourseResponse> = await protectedApi.post('/course', request);
 		return result;
 	},
-	renameCourse: async (body: Course) => {
-		const result: any = await protectedApi.put(`/course/${body.id}`, body.title);
+	renameCourse: async (request: RenameCourseRequest) => {
+		const result: any = await protectedApi.put(`/course/${request.id}`, request.title);
 		return result;
 	}
 };

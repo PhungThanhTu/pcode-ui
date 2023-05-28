@@ -15,8 +15,11 @@ import {
 	GetSampleSourceCodeResponse,
 	GetSingleSubmissionResponse,
 	GetSingleTestCaseResponse,
+	ScoreSubmissionRequest,
+	ScoreSubmissionResponse,
 	Submission,
 	SubmissionActionRequest,
+	SubmissionManage,
 	UpdateExerciseRequest,
 	UpdateSampleSourceCodeRequest,
 	UpdateTestCaseRequest
@@ -35,6 +38,9 @@ import {
 	deleteTestCaseSuccess,
 	fetchAllSubmissions,
 	fetchAllSubmissionsError,
+	fetchAllSubmissionsManage,
+	fetchAllSubmissionsManageError,
+	fetchAllSubmissionsManageSuccess,
 	fetchAllSubmissionsSuccess,
 	fetchAllTestCases,
 	fetchAllTestCasesError,
@@ -55,6 +61,8 @@ import {
 	markSubmission,
 	markSubmissionSuccess,
 	resetDocumentContent,
+	scoreSubmissionManage,
+	scoreSubmissionManageSuccess,
 	updateDocumentExercise,
 	updateTestCase,
 	updateTestCaseSuccess
@@ -368,9 +376,10 @@ function* deleteTestCaseSaga(action: PayloadAction<{ documentId: string; testCas
 //#endregion
 
 //region document submission
+
 function* fetchAllSubmissionsSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
-		console.log('saga fetching document submissions');
+
 		const submission: AxiosResponse<Array<Submission>> = yield call(
 			documentApi.getAllSubmissions,
 			action.payload.documentId
@@ -380,7 +389,22 @@ function* fetchAllSubmissionsSaga(action: PayloadAction<{ documentId: string }>)
 		}
 	} catch (error: any) {
 		yield put(fetchAllSubmissionsError());
-		console.log('saga fetch document submissions failed');
+
+	}
+}
+function* fetchAllSubmissionsManageSaga(action: PayloadAction<{ documentId: string }>) {
+	try {
+
+		const submission: AxiosResponse<Array<SubmissionManage>> = yield call(
+			documentApi.getAllSubmissionsManage,
+			action.payload.documentId
+		);
+		if (submission.data) {
+			yield put(fetchAllSubmissionsManageSuccess(submission.data));
+		}
+	} catch (error: any) {
+		yield put(fetchAllSubmissionsManageError());
+
 	}
 }
 function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionRequest>) {
@@ -400,7 +424,7 @@ function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionReque
 }
 function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>) {
 	try {
-		console.log('saga create submission');
+
 		yield put(setLoading({ isLoading: true }));
 
 		const submission: AxiosResponse<CreateTestCaseResponse> = yield call(
@@ -415,14 +439,14 @@ function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body:
 			yield put(fetchAllSubmissions({ documentId: action.payload.documentId }));
 		}
 	} catch (error: any) {
-		console.log('saga create submission failed');
+
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.CREATE_FAIL('submission', '')));
 	}
 }
 function* deleteSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
 	try {
-		console.log('saga delete submission');
+
 		yield put(setLoading({ isLoading: true }));
 		const submission: AxiosResponse<any> = yield call(documentApi.deleteSubmission, action.payload);
 
@@ -432,14 +456,15 @@ function* deleteSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
 			yield put(deleteSubmissionSuccess(submission.data));
 		}
 	} catch (error: any) {
-		console.log('saga delete test case failed');
+
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.DELETE_FAIL('test case', '')));
 	}
 }
+
 function* markSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
 	try {
-		console.log('saga mark submission');
+
 		yield put(setLoading({ isLoading: true }));
 		const submission: AxiosResponse<any> = yield call(documentApi.markSubmission, action.payload);
 
@@ -449,9 +474,26 @@ function* markSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
 			yield put(markSubmissionSuccess(action.payload));
 		}
 	} catch (error: any) {
-		console.log('saga mark submission failed');
+
 		yield put(setLoading({ isLoading: false }));
-		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('submission', '!')));
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('submission', '')));
+	}
+}
+function* scoreSubmissionManageSaga(action: PayloadAction<ScoreSubmissionRequest>) {
+	try {
+
+		yield put(setLoading({ isLoading: true }));
+		const response : AxiosResponse<ScoreSubmissionResponse> = yield call(documentApi.scoreSubmissionManage, action.payload);
+
+		if (response.data) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('submission', 'Submission is updated with new score')));
+			yield put(scoreSubmissionManageSuccess(response.data));
+		}
+	} catch (error: any) {
+
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('submission', '')));
 	}
 }
 //endregion
@@ -471,8 +513,10 @@ export function* watchDocument() {
 	yield takeLatest(updateTestCase.type, updateTestCaseSaga);
 	yield takeLatest(deleteTestCase.type, deleteTestCaseSaga);
 	yield takeLatest(fetchAllSubmissions.type, fetchAllSubmissionsSaga);
+	yield takeLatest(fetchAllSubmissionsManage.type, fetchAllSubmissionsManageSaga);
 	yield takeLatest(fetchSingleSubmission.type, fetchSingleSubmissionsSaga);
 	yield takeLatest(createSubmission.type, createSubmissionSaga);
 	yield takeLatest(deleteSubmission.type, deleteSubmissionSaga);
 	yield takeLatest(markSubmission.type, markSubmissionSaga);
+	yield takeLatest(scoreSubmissionManage.type, scoreSubmissionManageSaga);
 }

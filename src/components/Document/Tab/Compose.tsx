@@ -19,6 +19,7 @@ import { LinearLoading } from '@/components/Loading';
 const BoxContainerSx = {
 	height: '100%'
 };
+
 const BoxRightSx = {
 	backgroundColor: `${componentsBoxColor}`,
 	height: '100%',

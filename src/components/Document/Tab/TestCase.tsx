@@ -94,10 +94,6 @@ const TestCase = (props: TestCaseProps) => {
 	};
 
 	useEffect(() => {
-		dispatch(fetchAllTestCases({ documentId: document.Id }));
-	}, []);
-
-	useEffect(() => {
 		if (testCases && testCases.length > 0) {
 			setSeletedTestCase(1);
 			let item = FindTestCaseByOrder(1);

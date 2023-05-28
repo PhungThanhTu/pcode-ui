@@ -18,7 +18,8 @@ import {
 	CreateSubmissionRequest,
 	Submission,
 	SubmissionActionRequest,
-	GetSingleSubmissionResponse
+	GetSingleSubmissionResponse,
+	ScoreSubmissionRequest
 } from '@/types/document.type';
 
 const documentApi = {
@@ -26,28 +27,28 @@ const documentApi = {
 		const result: AxiosResponse<GetDocumentByIdResponse> = await protectedApi.get(`/document/${id}`);
 		return result;
 	},
-	createDocument: async (body: CreateDocumentRequest) => {
-		const result: AxiosResponse<CreateDocumentResponse> = await protectedApi.post('/document', body);
+	createDocument: async (request: CreateDocumentRequest) => {
+		const result: AxiosResponse<CreateDocumentResponse> = await protectedApi.post('/document', request);
 		return result;
 	},
-	createDocumentContent: async (body: CreateDocumentContentRequest) => {
-		if (body.contentTypeId === '1') {
-			var bodyFormData = new FormData();
-			bodyFormData.append('file', body.content);
-			bodyFormData.append('contentTypeId', '1');
+	createDocumentContent: async (request: CreateDocumentContentRequest) => {
+		if (request.contentTypeId === '1') {
+			let body = new FormData();
+			body.append('file', request.content);
+			body.append('contentTypeId', '1');
 
 			const result: AxiosResponse<any> = await protectedApi.post(
-				`/document/${body.documentId}/content`,
-				bodyFormData,
+				`/document/${request.documentId}/content`,
+				body,
 				{ headers: { 'Content-Type': 'multipart/form-data' } }
 			);
 			return result;
 		} else {
-			var tmp = {
-				content: body.content,
+			let body = {
+				content: request.content,
 				contentTypeId: 0
 			};
-			const result: AxiosResponse<any> = await protectedApi.post(`/document/${body.documentId}/content`, tmp);
+			const result: AxiosResponse<any> = await protectedApi.post(`/document/${request.documentId}/content`, body);
 			return result;
 		}
 	},
@@ -55,8 +56,8 @@ const documentApi = {
 		const result: AxiosResponse<any> = await protectedApi.post(`/document/${documentId}/publish?publish=${status}`);
 		return result;
 	},
-	updateDocument: async (id: string, body: UpdateDocumentRequest) => {
-		const result: AxiosResponse<any> = await protectedApi.patch(`/document/${id}`, body);
+	updateDocument: async (id: string, request: UpdateDocumentRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.patch(`/document/${id}`, request);
 		return result;
 	},
 	deleteDocument: async (id: string) => {
@@ -71,12 +72,12 @@ const documentApi = {
 		const result: AxiosResponse<any> = await protectedApi.get(`/media/${id}`, { responseType: 'blob' });
 		return result;
 	},
-	createExercise: async (documentId: string, body: CreateExerciseRequest) => {
-		const result: AxiosResponse<any> = await protectedApi.post(`/document/${documentId}/exercise`, body);
+	createExercise: async (documentId: string, request: CreateExerciseRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.post(`/document/${documentId}/exercise`, request);
 		return result;
 	},
-	updateExercise: async (documentId: string, body: UpdateExerciseRequest) => {
-		const result: AxiosResponse<any> = await protectedApi.patch(`/document/${documentId}/exercise`, body);
+	updateExercise: async (documentId: string, request: UpdateExerciseRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.patch(`/document/${documentId}/exercise`, request);
 		return result;
 	},
 	getExercise: async (documentId: string) => {
@@ -90,16 +91,20 @@ const documentApi = {
 		return result;
 	},
 	updateSampleSourceCode: async (documentId: string, type: number, sampleSourceCode: string) => {
+
+		let body = {
+			sampleSourceCode: sampleSourceCode
+		}
 		const result: AxiosResponse<UpdateSampleSourceCodeResponse> = await protectedApi.post(
 			`/document/${documentId}/exercise/sample?programmingLanguage=${type}`,
-			{ sampleSourceCode: sampleSourceCode }
+			body
 		);
 		return result;
 	},
-	createTestCase: async (documentId: string, body: CreateTestCaseRequest) => {
+	createTestCase: async (documentId: string, request: CreateTestCaseRequest) => {
 		const result: AxiosResponse<CreateTestCaseResponse> = await protectedApi.post(
 			`/document/${documentId}/testcase`,
-			body
+			request
 		);
 		return result;
 	},
@@ -115,10 +120,11 @@ const documentApi = {
 		);
 		return result;
 	},
-	updateTestCase: async (documentId: string, testCaseId: number, body: UpdateTestCaseRequest) => {
+	updateTestCase: async (documentId: string, testCaseId: number, request: UpdateTestCaseRequest) => {
+
 		const result: AxiosResponse<any> = await protectedApi.patch(
 			`/document/${documentId}/testcase/${testCaseId}`,
-			body
+			request
 		);
 		return result;
 	},
@@ -132,13 +138,13 @@ const documentApi = {
 		const result: AxiosResponse<any> = await protectedApi.delete(`/document/${documentId}/testcase/${testCaseId}`);
 		return result;
 	},
-	createSubmission: async (documentId: string, body: CreateSubmissionRequest) => {
-		let temp = {
-			sourceCode: body.sourceCode
+	createSubmission: async (documentId: string, request: CreateSubmissionRequest) => {
+		let body = {
+			sourceCode: request.sourceCode
 		};
 		const result: AxiosResponse<CreateTestCaseResponse> = await protectedApi.post(
-			`/document/${documentId}/submission/?programmingLanguage=${body.programmingLanguageId}`,
-			temp
+			`/document/${documentId}/submission/?programmingLanguage=${request.programmingLanguageId}`,
+			body
 		);
 		return result;
 	},
@@ -146,21 +152,36 @@ const documentApi = {
 		const result: AxiosResponse<Array<Submission>> = await protectedApi.get(`/document/${documentId}/submission`);
 		return result;
 	},
-	getSingleSubmission: async (Ids: SubmissionActionRequest) => {
+	getAllSubmissionsManage: async (documentId: string) => {
+		const result: AxiosResponse<Array<Submission>> = await protectedApi.get(`/document/${documentId}/submission/manage`);
+		return result;
+	},
+	getSingleSubmission: async (request: SubmissionActionRequest) => {
 		const result: AxiosResponse<GetSingleSubmissionResponse> = await protectedApi.get(
-			`/document/${Ids.documentId}/submission/${Ids.submissionId}`
+			`/document/${request.documentId}/submission/${request.submissionId}`
 		);
 		return result;
 	},
-	markSubmission: async (Ids: SubmissionActionRequest) => {
+	markSubmission: async (request: SubmissionActionRequest) => {
 		const result: AxiosResponse<any> = await protectedApi.post(
-			`/document/${Ids.documentId}/submission/${Ids.submissionId}/mark`
+			`/document/${request.documentId}/submission/${request.submissionId}/mark`
 		);
 		return result;
 	},
-	deleteSubmission: async (Ids: SubmissionActionRequest) => {
+	scoreSubmissionManage: async (request: ScoreSubmissionRequest) => {
+
+		let body = {
+			score: request.score
+		}
+		const result: AxiosResponse<any> = await protectedApi.post(
+			`/document/${request.Ids.documentId}/submission/${request.Ids.submissionId}/score`,
+			body
+		);
+		return result;
+	},
+	deleteSubmission: async (request: SubmissionActionRequest) => {
 		const result: AxiosResponse<any> = await protectedApi.delete(
-			`/document/${Ids.documentId}/submission/${Ids.documentId}`
+			`/document/${request.documentId}/submission/${request.documentId}`
 		);
 		return result;
 	}

@@ -12,14 +12,13 @@ import SendIcon from '@mui/icons-material/Send';
 import { CodeEditor } from '@/components/CodeEditor';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import {
-	CreateSubmissionRequest,
 	GetDocumentByIdResponse,
 	GetExerciseResponse,
 	UpdateSampleSourceCodeRequest
 } from '@/types/document.type';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import Content, { PreviewProps } from './Content';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getDocumentExercise } from '@/selectors/document.selector';
 import { LinearLoading } from '@/components/Loading';
 import CustomDialog from '@/components/Custom/CustomDialog';
@@ -56,7 +55,8 @@ interface ExerciseProps {
 }
 
 const Exercise = (props: ExerciseProps) => {
-	const dispatch = useDispatch();
+
+
 	const exercise = useSelector(getDocumentExercise);
 
 	const InitialUpdateExerciseForm: GetExerciseResponse = {
@@ -138,10 +138,6 @@ const Exercise = (props: ExerciseProps) => {
 		}
 	}, [exercise]);
 
-	// useEffect(() => {
-	// 	dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
-	// }, []);
-
 	return (
 		<Fragment>
 			{exercise === null ? (
@@ -169,7 +165,7 @@ const Exercise = (props: ExerciseProps) => {
 					title={document.Title}
 					left={
 						<CodeEditor
-							document={document}
+							documentId={document.Id}
 							isCreator={isCreator}
 							onGetSampleSourceCode={onGetSampleSourceCode}
 							getSource={getSource}
@@ -308,8 +304,8 @@ const Exercise = (props: ExerciseProps) => {
 								onUpdate
 									? onUpdate(ExerciseForm, Source, document.Id)
 									: () => {
-											console.log('Update Error');
-									  };
+										console.log('Update Error');
+									};
 							}}
 							endIcon={<SaveIcon />}
 							loadingPosition="end"
@@ -328,8 +324,8 @@ const Exercise = (props: ExerciseProps) => {
 								onSubmit
 									? onSubmit(Source, document.Id)
 									: () => {
-											console.log('Submit Error.');
-									  };
+										console.log('Submit Error.');
+									};
 							}}
 							endIcon={<SendIcon />}
 							loadingPosition="end"
@@ -351,8 +347,8 @@ const Exercise = (props: ExerciseProps) => {
 					onCreate
 						? onCreate(document.Id)
 						: () => {
-								console.log('null action : create Exercise');
-						  };
+							console.log('null action : create Exercise');
+						};
 					setOpenCreateExerciseDialog(false);
 				}}
 			/>
