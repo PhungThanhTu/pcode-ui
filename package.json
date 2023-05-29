@@ -12,6 +12,9 @@
     "prettier": "prettier --check \"src/**/(*.tsx|*.ts|*.css)\"",
     "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css)\""
   },
+  "overrides": {
+    "rollup": "2.74.1"
+  },
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
