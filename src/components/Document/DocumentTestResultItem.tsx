@@ -18,10 +18,11 @@ interface TestResultItemProps {
 }
 
 const DocumentTestResultItem = (props: TestResultItemProps) => {
+
 	const { item, index } = props;
 
 	return (
-		<Box>
+		<Box sx={{width: '100%'}}>
 			<Accordion>
 				<AccordionSummary expandIcon={<ExpandMoreIcon />} sx={TitleAccordionSx}>
 					<Typography>Test Case: {index}</Typography>

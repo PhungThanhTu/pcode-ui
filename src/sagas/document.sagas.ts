@@ -71,6 +71,8 @@ import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
 import { setLoading } from '@/slices/loading.slice';
 import { changePublishDocumentSuccess, fetchCourseById } from '@/slices/course.slice';
+import { navigateTo } from '@/slices/router.slice';
+import { useNavigate } from 'react-router-dom';
 
 //#region document
 function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
@@ -424,6 +426,7 @@ function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionReque
 }
 function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>) {
 	try {
+	
 
 		yield put(setLoading({ isLoading: true }));
 
@@ -437,6 +440,7 @@ function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body:
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('submission')));
 			yield put(fetchAllSubmissions({ documentId: action.payload.documentId }));
+		
 		}
 	} catch (error: any) {
 

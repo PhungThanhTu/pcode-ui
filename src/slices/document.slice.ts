@@ -150,6 +150,10 @@ const documentSlice = createSlice({
 			state,
 			{ payload }: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>
 		) => { },
+		createSubmissionSuccess: (
+			state,
+			{ payload }: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>
+		) => { },
 		fetchAllSubmissions: (state, { payload }: PayloadAction<{ documentId: string }>) => {
 			state.documentSubmissions = null;
 		},
@@ -205,7 +209,13 @@ const documentSlice = createSlice({
 		},
 		scoreSubmissionManage: (state, { payload }: PayloadAction<ScoreSubmissionRequest>) => { },
 		scoreSubmissionManageSuccess: (state, { payload }: PayloadAction<ScoreSubmissionResponse>) => {
+			if (state.documentSubmissionsManage && state.documentSubmissionsManage.length > 0) {
+				let index = state.documentSubmissionsManage.findIndex((item) => item.SubmissionId === payload.submissionId);
 
+				if (index !== -1 && index !== null && index !== undefined) {
+					state.documentSubmissionsManage[index].ManualScore = payload.score;
+				}
+			}
 		}
 	}
 });

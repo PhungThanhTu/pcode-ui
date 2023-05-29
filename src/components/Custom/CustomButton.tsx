@@ -54,6 +54,7 @@ interface CustomOnlyIconButtonProps {
 	color?: any;
 	onClick: Function;
 	form?: string;
+	disabled?: boolean;
 }
 export const CustomOnlyIconButton = (props: CustomOnlyIconButtonProps) => (
 	<IconButton
@@ -63,6 +64,7 @@ export const CustomOnlyIconButton = (props: CustomOnlyIconButtonProps) => (
 			props.onClick(e);
 		}}
 		form={props.form}
+		disabled={props.disabled}
 	>
 		{props.children}
 	</IconButton>

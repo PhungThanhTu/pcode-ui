@@ -32,6 +32,7 @@ const BoxChildRightSx = {
 	padding: '10px'
 };
 const BoxChildLeftSx = {
+	display: 'flex',
 	position: 'absolute',
 	bottom: 0,
 	left: 0,

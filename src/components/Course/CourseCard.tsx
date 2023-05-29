@@ -56,6 +56,7 @@ interface CourseCardProps {
 	course: Course;
 	onDirect: Function;
 }
+
 const CourseCard = (props: CourseCardProps) => {
 	const { course, onDirect } = props;
 
@@ -70,7 +71,7 @@ const CourseCard = (props: CourseCardProps) => {
 
 	const onCopy = async (e: MouseEvent<HTMLButtonElement>) => {
 		e.stopPropagation();
-		await navigator.clipboard.writeText(`localhost:3000/invitation/${course.Code}`);
+		await navigator.clipboard.writeText(`https://plp-dev.netlify.app/invitation/${course.Code}`);
 		setCopied(true);
 	};
 

@@ -5,11 +5,15 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
 import { useEffect, useState } from 'react';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getSampleSourceCode } from '@/selectors/document.selector';
 import { borderRadius } from '@/style/Variables';
+import { CustomOnlyIconButton } from './Custom/CustomButton';
+import Tooltip from '@mui/material/Tooltip';
+import { LocalStorageService } from '@/services/localStorageService';
 
 interface CodeEditorProps {
 
@@ -17,11 +21,14 @@ interface CodeEditorProps {
 	onGetSampleSourceCode: Function;
 	isCreator?: boolean;
 	getSource: Function;
+	source?: string;
 	readOnly?: boolean;
+	language?: number;
+	resetTempSource?: Function;
 }
 export const CodeEditor = (props: CodeEditorProps) => {
 
-	const { documentId, onGetSampleSourceCode, getSource, readOnly } = props;
+	const { documentId, onGetSampleSourceCode, getSource, readOnly, source, isCreator, language, resetTempSource } = props;
 
 	const initial = '// Input your code here';
 	const loading = 'Loading...';
@@ -30,16 +37,18 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		// Monaco Editor is initialized and ready to use
 	});
 
-	const sourceCode = useSelector(getSampleSourceCode);
+	const SampleSourceCode = useSelector(getSampleSourceCode);
 
 	const [Language, setLanguage] = useState('1');
 	const [Theme, setTheme] = useState('vs');
 	const [Value, setValue] = useState('');
 	const [Read, setRead] = useState(false);
+	const [isEditMode, setIsEditMode] = useState(false)
 
-	const onChange = (event: SelectChangeEvent) => {
+	const onLanguageChange = (event: SelectChangeEvent) => {
 		let type = event.target.value;
 		setLanguage(type as string);
+
 		onGetSampleSourceCode(documentId, Number(type));
 		getSource(Value, Number(type));
 	};
@@ -61,20 +70,43 @@ export const CodeEditor = (props: CodeEditorProps) => {
 
 	useEffect(() => {
 
-		if (sourceCode && Object.keys(sourceCode).length > 0) {
-			setRead(false);
-			setValue(sourceCode.sourceCode);
-			getSource(sourceCode.sourceCode, sourceCode.programmingLanguageId);
-		} else if (sourceCode === null) {
-			setValue(loading);
-			setRead(true);
-		} else if (sourceCode === undefined) {
-			setValue(initial);
-			getSource(initial, Language);
-			setRead(false);
+		if (!source) {
+			if (SampleSourceCode && Object.keys(SampleSourceCode).length > 0) {
+				setRead(false);
+				setValue(SampleSourceCode.sourceCode);
+				getSource(SampleSourceCode.sourceCode, SampleSourceCode.programmingLanguageId);
+			} else if (SampleSourceCode === null) {
+				setValue(loading);
+				setRead(true);
+			} else if (SampleSourceCode === undefined) {
+				setValue(initial);
+				getSource(initial, Language);
+				setRead(false);
+			}
 		}
+	}, [SampleSourceCode, isEditMode]);
 
-	}, [sourceCode]);
+	useEffect(() => {
+		if (source) {
+			setValue(source)
+			setIsEditMode(true)
+		}
+		if (language) {
+			setLanguage(language.toString())
+		}
+	}, [source])
+
+	// useEffect(() => {
+	// 	if (source) {
+	// 		setValue(source)
+	// 		setIsEditMode(true)
+	// 	}
+	// 	if (language) {
+	// 		setLanguage(language.toString())
+	// 	}
+	// }, [])
+
+
 
 	return (
 		<Stack minHeight="inherit" sx={{ '*': { borderRadius: borderRadius } }}>
@@ -82,17 +114,30 @@ export const CodeEditor = (props: CodeEditorProps) => {
 				<Stack justifyContent="center" alignItems="center" paddingLeft="10px">
 					<Typography variant="subtitle1">Language</Typography>
 				</Stack>
-				<Box width="40%">
-					<FormControl fullWidth disabled={readOnly}>
+				<Box width="40%" sx={{ display: 'flex' }}>
+					<FormControl fullWidth disabled={readOnly || isEditMode}>
 						<Select
 							value={Language}
-							onChange={onChange}
+							onChange={onLanguageChange}
 							sx={{ '.MuiSelect-select': { padding: '10px', paddingLeft: '5%' } }}
 						>
 							<MenuItem value={'1'}>C</MenuItem>
 							<MenuItem value={'2'}>C++</MenuItem>
 						</Select>
 					</FormControl>
+					<CustomOnlyIconButton
+						disabled={isCreator}
+						onClick={() => {
+
+							resetTempSource ? resetTempSource() : null
+							setIsEditMode(false);
+							LocalStorageService.clearCodeCache();
+
+						}}>
+						<Tooltip title="Reset for getting Sample Code">
+							<RestartAltOutlinedIcon />
+						</Tooltip>
+					</CustomOnlyIconButton>
 				</Box>
 				<Stack justifyContent="center" alignItems="center" paddingLeft="10px">
 					<Typography variant="subtitle1">Theme</Typography>

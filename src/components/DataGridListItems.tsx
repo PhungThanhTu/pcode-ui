@@ -1,61 +1,54 @@
-import {
-  DataGridPremium,
-  GridToolbar,
-  useGridApiRef,
-  useKeepGroupedColumnsHidden,
-} from '@mui/x-data-grid-premium';
+import { DataGrid, GridCallbackDetails, GridRowSelectionModel } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import { useDemoData } from '@mui/x-data-grid-generator';
+
+import { NameToField } from '@/utils/convert';
+import { useState } from 'react';
+
+
 
 interface DataGridListItemsProps {
-
+  rows: Array<any>;
+  columns: Array<string>;
+  onSelected: Function;
 }
 
-const DataGridListItems = (props :DataGridListItemsProps) => {
-  const { data, loading } = useDemoData({
-    dataSet: 'Commodity',
-    rowLength: 100,
-    editable: true,
-    visibleFields: [
-      'commodity',
-      'quantity',
-      'filledQuantity',
-      'status',
-      'isFilled',
-      'unitPrice',
-      'unitPriceCurrency',
-      'subTotal',
-      'feeRate',
-      'feeAmount',
-      'incoTerm',
-    ],
-  });
-  const apiRef = useGridApiRef();
-  const initialState = useKeepGroupedColumnsHidden({
-    apiRef,
-    initialState: {
-      ...data.initialState,
-      rowGrouping: {
-        ...data.initialState?.rowGrouping,
-        model: ['commodity'],
-      },
-      sorting: {
-        sortModel: [{ field: '__row_group_by_columns_group__', sort: 'asc' }],
-      },
-    },
-  });
+const DataGridListItems = (props: DataGridListItemsProps) => {
 
-  
+  const { rows, columns, onSelected } = props
+  const [LocalText, setLocalText] = useState('')
+
+  const Columns: Array<any> = columns && columns.length > 0 ? columns.map((item, index) => {
+
+    return {
+      field: NameToField(item, true),
+      headerName: item,
+      flex: item.toUpperCase().includes('SCORE') ? 0.2 : 1,
+      headerAlign: 'center',
+      align: 'center',
+    }
+  }) : []
+
+  const Rows: Array<any> = rows && rows.length > 0 ? rows.map((item, index) => {
+
+    let keyId = Object.keys(item)
+
+    if (keyId.includes('id'))
+      return item
+
+    return {
+      ...item,
+      'id': index
+    }
+  }) : []
+
   return (
-    <Box sx={{ height: 520, maxWidth: 718.5 }}>
-      <DataGridPremium
-        {...data}
-        sx={{maxWidth: 'inherit' ,height: '100%'}}
-        apiRef={apiRef}
-        loading={loading}
-        disableRowSelectionOnClick
-        initialState={initialState}
-        slots={{ toolbar: GridToolbar }}
+    <Box sx={{ height: '700px', width: '100%' }}>
+      <DataGrid
+
+        rows={Rows}
+        columns={Columns}
+        onRowClick={(params) => onSelected(params)}
+
       />
     </Box>
   )

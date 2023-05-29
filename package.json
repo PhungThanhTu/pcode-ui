@@ -13,14 +13,14 @@
     "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css)\""
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
     "@monaco-editor/react": "^4.4.6",
     "@mui/icons-material": "^5.11.0",
     "@mui/lab": "^5.0.0-alpha.125",
-    "@mui/material": "^5.11.16",
-    "@mui/x-data-grid-generator": "^6.5.0",
-    "@mui/x-data-grid-premium": "^6.5.0",
+    "@mui/material": "^5.13.3",
+    "@mui/styled-engine-sc": "^5.12.0",
+    "@mui/x-data-grid": "^6.5.0",
     "@react-oauth/google": "^0.6.1",
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",
@@ -35,7 +35,8 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.1",
     "redux-persist": "^6.0.0",
-    "redux-saga": "^1.2.2"
+    "redux-saga": "^1.2.2",
+    "styled-components": "^5.3.11"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
