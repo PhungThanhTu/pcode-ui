@@ -8,6 +8,7 @@ import {
 	CreateDocumentResponse,
 	CreateExerciseRequest,
 	CreateSubmissionRequest,
+	CreateSubmissionResponse,
 	CreateTestCaseRequest,
 	CreateTestCaseResponse,
 	GetDocumentByIdResponse,
@@ -426,21 +427,21 @@ function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionReque
 }
 function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>) {
 	try {
-	
+
 
 		yield put(setLoading({ isLoading: true }));
 
-		const submission: AxiosResponse<CreateTestCaseResponse> = yield call(
+		const submission: AxiosResponse<CreateSubmissionResponse> = yield call(
 			documentApi.createSubmission,
 			action.payload.documentId,
 			action.payload.body
 		);
 
 		if (submission.data) {
+			console.log(submission.data);
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('submission')));
 			yield put(fetchAllSubmissions({ documentId: action.payload.documentId }));
-		
 		}
 	} catch (error: any) {
 
@@ -487,7 +488,7 @@ function* scoreSubmissionManageSaga(action: PayloadAction<ScoreSubmissionRequest
 	try {
 
 		yield put(setLoading({ isLoading: true }));
-		const response : AxiosResponse<ScoreSubmissionResponse> = yield call(documentApi.scoreSubmissionManage, action.payload);
+		const response: AxiosResponse<ScoreSubmissionResponse> = yield call(documentApi.scoreSubmissionManage, action.payload);
 
 		if (response.data) {
 			yield put(setLoading({ isLoading: false }));
