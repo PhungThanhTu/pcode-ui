@@ -18,7 +18,9 @@ const routerSlice: any = createSlice({
 	name: 'router',
 	initialState,
 	reducers: {
-		navigateTo: (state, { payload }: PayloadAction<NavigationActionPayload>) => {}
+		navigateTo: (state, { payload }: PayloadAction<NavigationActionPayload>) => {
+			
+		}
 	}
 });
 

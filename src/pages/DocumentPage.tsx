@@ -11,6 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 import { getDocument } from '@/selectors/document.selector';
+
 import {
 	createDocumentContent,
 	createDocumentExercise,
@@ -49,6 +50,8 @@ import CustomDialog from '@/components/Custom/CustomDialog';
 import { JudgerId, createExerciseDefault } from '@/config';
 import { getApiDateFormat, getToday, parseToLocalDate } from '@/utils/convert';
 import Submission from '@/components/Document/Tab/Submission';
+import { LocalStorageService } from '@/services/localStorageService';
+
 
 
 const DocumentPage = () => {
@@ -172,15 +175,16 @@ const DocumentPage = () => {
 			programmingLanguageId: Request.type,
 			sourceCode: Request.sampleSourceCode
 		};
+
+		LocalStorageService.setCodeCache(form)
+
 		dispatch(createSubmission({ documentId: documentId, body: form }));
 	};
 
-	const onMarkSubmission = (Request : SubmissionActionRequest) => {
+	const onMarkSubmission = (Request: SubmissionActionRequest) => {
 		dispatch(markSubmission(Request));
 	};
-
 	const onScoreSubmission = (Request: ScoreSubmissionRequest) => {
-
 		dispatch(scoreSubmissionManage({ Ids: Request.Ids, score: Request.score }))
 	}
 	const onDeleteSubmission = (Request: SubmissionActionRequest) => { };
@@ -259,7 +263,7 @@ const DocumentPage = () => {
 									isCreator={true}
 									document={document}
 									onSelected={() => { }}
-									onScore={() => { }}
+									onScore={onScoreSubmission}
 
 								/>
 							)
@@ -301,6 +305,21 @@ const DocumentPage = () => {
 
 					setTabs([
 						{
+							title: 'Exercise',
+							element: (
+								<Exercise
+									content={{
+										source: documentContent,
+										type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3
+									}}
+									document={document}
+									isCreator={false}
+									onSubmit={onCreateSubmission}
+									onGetSampleSourceCode={onGetSampleSourceCode}
+								/>
+							)
+						},
+						{
 							title: 'Content',
 							element: (
 								<Content
@@ -318,21 +337,6 @@ const DocumentPage = () => {
 									document={document}
 									onMark={onMarkSubmission}
 									onSelected={onFetchSingleSubmission}
-								/>
-							)
-						},
-						{
-							title: 'Exercise',
-							element: (
-								<Exercise
-									content={{
-										source: documentContent,
-										type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3
-									}}
-									document={document}
-									isCreator={false}
-									onSubmit={onCreateSubmission}
-									onGetSampleSourceCode={onGetSampleSourceCode}
 								/>
 							)
 						}

@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { AuthenticationTokens } from '../types';
-import { TokenService } from '../utils/tokenService';
+import { TokenService } from '../services/tokenService';
 import authApi from './authApi';
 
 const baseUrl = import.meta.env.VITE_BACKEND_ENDPOINT;

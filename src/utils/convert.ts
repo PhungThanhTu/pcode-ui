@@ -1,8 +1,19 @@
-import { useTabContext } from '@mui/lab';
+
 
 export const labelToProperty = (str: String) => {
 	let tmp = str.trim().split(' ');
 	tmp[0] = tmp[0].toLowerCase();
+
+	return tmp.join('');
+};
+export const NameToField = (name: string, upper: boolean) => {
+
+	let tmp = name.trim().split(' ');
+
+	if (upper)
+		tmp[0] = tmp[0].charAt(0).toUpperCase() + tmp[0].substring(1)
+	else
+		tmp[0] = tmp[0].toLowerCase();
 
 	return tmp.join('');
 };

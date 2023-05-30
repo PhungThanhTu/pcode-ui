@@ -93,8 +93,8 @@ const CoursePage = () => {
 
 	useEffect(() => {
 		if (!course) {
-			dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
-			dispatch(fetchCourses());
+			// dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
+			
 		} else if (course === null) {
 			navigate(-1);
 		} else {
@@ -106,7 +106,7 @@ const CoursePage = () => {
 
 			setTabs([
 				{
-					title: 'General',
+					title: 'Document',
 					element: (
 						<General
 							isCreator={isCreator}
@@ -167,6 +167,7 @@ const CoursePage = () => {
 	}, [course, course?.documents]);
 
 	useLayoutEffect(() => {
+		dispatch(fetchCourses());
 		dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
 	}, []);
 

@@ -12,6 +12,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { CodeEditor } from '@/components/CodeEditor';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import {
+	CreateSubmissionRequest,
 	GetDocumentByIdResponse,
 	GetExerciseResponse,
 	UpdateSampleSourceCodeRequest
@@ -27,6 +28,7 @@ import { getNextDay, parseToLocalDate } from '@/utils/convert';
 import { borderRadius, centerPos } from '@/style/Variables';
 import { BoxFieldSx } from '@/style/BoxSx';
 import { Typography } from '@mui/material';
+import { LocalStorageService } from '@/services/localStorageService';
 
 const BoxCreateSx = {
 	position: 'absolute',
@@ -81,6 +83,7 @@ const Exercise = (props: ExerciseProps) => {
 	const [DeadlineCheck, setDeadlineCheck] = useState(false);
 	const [StrictDeadlineCheck, setStrictDeadlineCheck] = useState(false);
 	const [OpenCreateExerciseDialog, setOpenCreateExerciseDialog] = useState(false);
+	const [TempSource, setTempSource] = useState<CreateSubmissionRequest>()
 
 	const {
 		ManualPercentage,
@@ -138,6 +141,13 @@ const Exercise = (props: ExerciseProps) => {
 		}
 	}, [exercise]);
 
+	useEffect(() => {
+		let tempsource = LocalStorageService.getCodeCache()
+
+		if (tempsource) {
+			setTempSource({ ...tempsource })
+		}
+	}, [])
 	return (
 		<Fragment>
 			{exercise === null ? (
@@ -165,10 +175,13 @@ const Exercise = (props: ExerciseProps) => {
 					title={document.Title}
 					left={
 						<CodeEditor
+							source={TempSource?.sourceCode}
 							documentId={document.Id}
 							isCreator={isCreator}
 							onGetSampleSourceCode={onGetSampleSourceCode}
 							getSource={getSource}
+							language={TempSource?.programmingLanguageId}
+							resetTempSource={() => { setTempSource(undefined) }}
 						/>
 					}
 					right={
@@ -322,10 +335,20 @@ const Exercise = (props: ExerciseProps) => {
 							}}
 							onClick={() => {
 								onSubmit
-									? onSubmit(Source, document.Id)
+									?
+									onSubmit(Source, document.Id)
+
 									: () => {
 										console.log('Submit Error.');
 									};
+
+								let temp = {
+									programmingLanguageId: Source.type,
+									sourceCode: Source.sampleSourceCode
+
+								}
+								LocalStorageService.setCodeCache(temp)
+								setTempSource(temp)
 							}}
 							endIcon={<SendIcon />}
 							loadingPosition="end"

@@ -8,6 +8,7 @@ import {
 	CreateDocumentResponse,
 	CreateExerciseRequest,
 	CreateSubmissionRequest,
+	CreateSubmissionResponse,
 	CreateTestCaseRequest,
 	CreateTestCaseResponse,
 	GetDocumentByIdResponse,
@@ -71,6 +72,8 @@ import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
 import { setLoading } from '@/slices/loading.slice';
 import { changePublishDocumentSuccess, fetchCourseById } from '@/slices/course.slice';
+import { navigateTo } from '@/slices/router.slice';
+import { useNavigate } from 'react-router-dom';
 
 //#region document
 function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
@@ -425,14 +428,15 @@ function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionReque
 function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>) {
 	try {
 
+
 		yield put(setLoading({ isLoading: true }));
 
-		const submission: AxiosResponse<CreateTestCaseResponse> = yield call(
+		const submission: AxiosResponse<CreateSubmissionResponse> = yield call(
 			documentApi.createSubmission,
 			action.payload.documentId,
 			action.payload.body
 		);
-		
+
 		if (submission.data) {
 			console.log(submission.data);
 			yield put(setLoading({ isLoading: false }));
@@ -445,6 +449,7 @@ function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body:
 				})
 			);
 		}
+
 	} catch (error: any) {
 
 		yield put(setLoading({ isLoading: false }));
@@ -490,7 +495,7 @@ function* scoreSubmissionManageSaga(action: PayloadAction<ScoreSubmissionRequest
 	try {
 
 		yield put(setLoading({ isLoading: true }));
-		const response : AxiosResponse<ScoreSubmissionResponse> = yield call(documentApi.scoreSubmissionManage, action.payload);
+		const response: AxiosResponse<ScoreSubmissionResponse> = yield call(documentApi.scoreSubmissionManage, action.payload);
 
 		if (response.data) {
 			yield put(setLoading({ isLoading: false }));
