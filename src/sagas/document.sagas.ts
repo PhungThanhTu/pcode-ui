@@ -442,7 +442,14 @@ function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body:
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('submission')));
 			yield put(fetchAllSubmissions({ documentId: action.payload.documentId }));
+			yield put(
+				markSubmission({
+					documentId: action.payload.documentId,
+					submissionId: submission.data.id.toString()
+				})
+			);
 		}
+
 	} catch (error: any) {
 
 		yield put(setLoading({ isLoading: false }));
