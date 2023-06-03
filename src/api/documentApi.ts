@@ -21,6 +21,7 @@ import {
 	GetSingleSubmissionResponse,
 	ScoreSubmissionRequest
 } from '@/types/document.type';
+import { contentTypeId } from '@/config';
 
 const documentApi = {
 	getDocumentById: async (id: string) => {
@@ -32,10 +33,11 @@ const documentApi = {
 		return result;
 	},
 	createDocumentContent: async (request: CreateDocumentContentRequest) => {
-		if (request.contentTypeId === '1') {
+		if (request.contentTypeId === contentTypeId.pdf) {
+
 			let body = new FormData();
 			body.append('file', request.content);
-			body.append('contentTypeId', '1');
+			body.append('contentTypeId', contentTypeId.pdf.toString());
 
 			const result: AxiosResponse<any> = await protectedApi.post(
 				`/document/${request.documentId}/content`,
@@ -46,7 +48,7 @@ const documentApi = {
 		} else {
 			let body = {
 				content: request.content,
-				contentTypeId: 0
+				contentTypeId: contentTypeId.markDown
 			};
 			const result: AxiosResponse<any> = await protectedApi.post(`/document/${request.documentId}/content`, body);
 			return result;

@@ -6,6 +6,7 @@ export const labelToProperty = (str: String) => {
 
 	return tmp.join('');
 };
+
 export const NameToField = (name: string, upper: boolean) => {
 
 	let tmp = name.trim().split(' ');

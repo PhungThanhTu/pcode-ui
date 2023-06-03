@@ -15,6 +15,7 @@ import MyPDFViewer from '@/components/MyPDFViewer';
 import MarkdownEditor from '@uiw/react-markdown-editor';
 import { cancelButton } from '@/style/ButtonSx';
 import { LinearLoading } from '@/components/Loading';
+import { contentTypeId } from '@/config';
 
 const BoxContainerSx = {
 	height: '100%'
@@ -66,6 +67,7 @@ interface EditorProps {
 }
 
 const Compose = (props: EditorProps) => {
+
 	const { document, documentContent, onChange, onCreate, onReset } = props;
 
 	const NFC = 'No file chosen';
@@ -101,7 +103,7 @@ const Compose = (props: EditorProps) => {
 	};
 
 	const onCancelFileChange = () => {
-		setPreviewPdfFile(undefined);
+		setPreviewPdfFile(null);
 		setIsFileUploaded(NFC);
 		if (fileRef.current) {
 			fileRef.current.value = '';
@@ -111,7 +113,7 @@ const Compose = (props: EditorProps) => {
 	useEffect(() => {
 		if (documentContent || document.Contents.length > 0) {
 			setIsSetUp(true);
-			if (document.Contents[0].ContentTypeId === 1) setType('PDF');
+			if (document.Contents[0].ContentTypeId === contentTypeId.pdf) setType('PDF');
 			else {
 				setType('Markdown');
 				setMarkdownValue(document.Contents[0].ContentBody);
@@ -121,7 +123,7 @@ const Compose = (props: EditorProps) => {
 			setType('PDF');
 		}
 	}, [document, documentContent]);
-
+	
 	return (
 		<Box sx={BoxContainerSx}>
 			<Stack flexDirection="column" rowGap={1} height="100%">
@@ -142,17 +144,30 @@ const Compose = (props: EditorProps) => {
 						Type === 'PDF' ? (
 							<Fragment>
 								<Box sx={{ ...BoxLeftSx, ...componentStyle }}>
-									{PreviewPdfFile ? (
-										<MyPDFViewer source={PreviewPdfFile} />
-									) : document.Contents.length > 0 ? (
-										<Box sx={BoxPDFViewSx}>
-											<MyPDFViewer source={PreviewPdfFile ? PreviewPdfFile : documentContent} />
-										</Box>
-									) : (
-										<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
-											No contents to preview.
-										</Typography>
-									)}
+									{
+										PreviewPdfFile ?
+
+											<MyPDFViewer source={PreviewPdfFile} />
+											:
+											document.Contents.length > 0 ?
+												<Box sx={BoxPDFViewSx}>
+													{
+
+														documentContent ?
+															<MyPDFViewer source={PreviewPdfFile ? PreviewPdfFile : documentContent} />
+															:
+															<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
+																No contents to preview.
+															</Typography>
+													}
+
+												</Box>
+												:
+												<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
+													No contents to preview.
+												</Typography>
+
+									}
 								</Box>
 								<Box sx={{ ...BoxRightSx, ...componentStyle }}>
 									<Stack
@@ -190,7 +205,7 @@ const Compose = (props: EditorProps) => {
 													isNotDisplay={true}
 													label=""
 													value={''}
-													onChange={() => {}}
+													onChange={() => { }}
 													onCancel={onCancelFileChange}
 													onSave={() => {
 														onCreate(Type, PreviewPdfFile);

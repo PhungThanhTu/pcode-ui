@@ -4,6 +4,7 @@ import documentApi from '@/api/documentApi';
 import { AxiosResponse } from 'axios';
 import {
 	CreateDocumentContentRequest,
+	CreateDocumentContentResponse,
 	CreateDocumentRequest,
 	CreateDocumentResponse,
 	CreateExerciseRequest,
@@ -29,6 +30,7 @@ import {
 	changePublishDocument,
 	createDocument,
 	createDocumentContent,
+	createDocumentContentSuccess,
 	createDocumentExercise,
 	createSubmission,
 	createTestCase,
@@ -49,10 +51,11 @@ import {
 	fetchDocumentById,
 	fetchDocumentByIdError,
 	fetchDocumentByIdSuccess,
+	fetchDocumentByIdWithContentError,
 	fetchDocumentByIdWithContentSuccess,
-	fetchDocumentByIdWithExercise,
-	fetchDocumentByIdWithExerciseError,
-	fetchDocumentByIdWithExerciseSuccess,
+	fetchExercise,
+	fetchExerciseError,
+	fetchExerciseSuccess,
 	fetchSampleSourceCode,
 	fetchSampleSourceCodeError,
 	fetchSampleSourceCodeSuccess,
@@ -62,6 +65,7 @@ import {
 	markSubmission,
 	markSubmissionSuccess,
 	resetDocumentContent,
+	resetDocumentContentSuccess,
 	scoreSubmissionManage,
 	scoreSubmissionManageSuccess,
 	updateDocumentExercise,
@@ -72,40 +76,48 @@ import { setSnackbar } from '@/slices/snackbar.slice';
 import notificationMessage from '@/utils/notificationMessage';
 import { setLoading } from '@/slices/loading.slice';
 import { changePublishDocumentSuccess, fetchCourseById } from '@/slices/course.slice';
-import { navigateTo } from '@/slices/router.slice';
-import { useNavigate } from 'react-router-dom';
+import { contentTypeId } from '@/config';
+
 
 //#region document
 function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 	try {
-		console.log('saga fetching document by id');
+
 		const document: AxiosResponse<GetDocumentByIdResponse> = yield call(
 			documentApi.getDocumentById,
 			action.payload.id
 		);
 		if (document.data.Contents.length > 0) {
-			if (document.data.Contents[0].ContentTypeId != 0) {
-				const file: AxiosResponse<any> = yield call(
-					documentApi.getMedia,
-					document.data.Contents[0].ContentBody
-				);
-				let temp = new Blob([file.data], { type: 'application/pdf' });
-				yield put(fetchDocumentByIdWithContentSuccess({ document: document.data, documentContent: temp }));
-			} else {
-				yield put(
-					fetchDocumentByIdWithContentSuccess({
-						document: document.data,
-						documentContent: document.data.Contents[0].ContentBody
-					})
-				);
+			try {
+				if (document.data.Contents[0].ContentTypeId != contentTypeId.markDown) {
+
+					const file: AxiosResponse<any> = yield call(
+						documentApi.getMedia,
+						document.data.Contents[0].ContentBody
+					);
+
+					let content = new Blob([file.data], { type: 'application/pdf' });
+					yield put(fetchDocumentByIdWithContentSuccess({ documentContent: content }));
+
+				} else {
+					yield put(
+						fetchDocumentByIdWithContentSuccess({
+							documentContent: document.data.Contents[0].ContentBody
+						})
+					);
+				}
 			}
-		} else {
-			yield put(fetchDocumentByIdSuccess(document.data));
+			catch {
+				yield put(fetchDocumentByIdWithContentError());
+				yield put(setSnackbar(notificationMessage.ERROR('Invalid document content id or document content does not exist.')));
+			}
+
 		}
+		yield put(fetchDocumentByIdSuccess(document.data));
+
 	} catch (error: any) {
 		yield put(fetchDocumentByIdError());
 		yield put(setSnackbar(notificationMessage.ERROR('Invalid document id or document does not exist.')));
-		console.log('saga fetch course by id failed');
 	}
 }
 function* createDocumentSaga(action: PayloadAction<CreateDocumentRequest>) {
@@ -161,33 +173,36 @@ function* changePublishDocumentSaga(action: PayloadAction<{ documentId: string; 
 //#region document content
 function* createDocumentContentSaga(action: PayloadAction<CreateDocumentContentRequest>) {
 	try {
-		console.log('saga create/update document content');
-		yield put(setLoading({ isLoading: true }));
-		const data: AxiosResponse<any> = yield call(documentApi.createDocumentContent, action.payload);
 
-		if (data) {
+		yield put(setLoading({ isLoading: true }));
+
+		const response: AxiosResponse<CreateDocumentContentResponse> = yield call(documentApi.createDocumentContent, action.payload);
+
+		if (response) {
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('document content', '')));
+			yield put(createDocumentContentSuccess({ content: action.payload.content, documentContent: response.data }));
 		}
-		yield put(fetchDocumentById({ id: action.payload.documentId }));
+
+
 	} catch (error: any) {
-		console.log('saga create/update document content failed');
+
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('document content', '')));
 	}
 }
 function* resetDocumentContentSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
-		console.log('saga delete document content');
+
 		yield put(setLoading({ isLoading: true }));
 		const data: AxiosResponse<any> = yield call(documentApi.deleteDocumentContent, action.payload.documentId);
 		if (data) {
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.DELETE_SUCCESS('document content')));
+			yield put(resetDocumentContentSuccess())
 		}
-		yield put(fetchDocumentById({ id: action.payload.documentId }));
+
 	} catch (error: any) {
-		console.log('saga reset document content failed');
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.ERROR('Reset document content failed, please try again!.')));
 	}
@@ -195,18 +210,18 @@ function* resetDocumentContentSaga(action: PayloadAction<{ documentId: string }>
 //#endregion
 
 //#region document exercise
-function* fetchDocumentByIdWithExerciseSaga(action: PayloadAction<{ documentId: string }>) {
+function* fetchExerciseSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
-		console.log('saga fetching document exercise by id');
+
 		const exercise: AxiosResponse<GetExerciseResponse> = yield call(
 			documentApi.getExercise,
 			action.payload.documentId
 		);
 		if (exercise.data) {
-			yield put(fetchDocumentByIdWithExerciseSuccess(exercise.data));
+			yield put(fetchExerciseSuccess(exercise.data));
 		}
 	} catch (error) {
-		yield put(fetchDocumentByIdWithExerciseError());
+		yield put(fetchExerciseError());
 	}
 }
 function* createDocumentExerciseSaga(action: PayloadAction<{ body: CreateExerciseRequest; documentId: string }>) {
@@ -223,7 +238,7 @@ function* createDocumentExerciseSaga(action: PayloadAction<{ body: CreateExercis
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('document exercsie')));
 		}
-		yield put(fetchDocumentByIdWithExercise({ documentId: action.payload.documentId }));
+		yield put(fetchExercise({ documentId: action.payload.documentId }));
 	} catch (error: any) {
 		console.log('saga create/update document exercise failed.');
 		yield put(setLoading({ isLoading: false }));
@@ -269,7 +284,7 @@ function* updateDocumentExerciseSaga(
 				);
 			}
 		}
-		yield put(fetchDocumentByIdWithExercise({ documentId: action.payload.documentId }));
+		yield put(fetchExercise({ documentId: action.payload.documentId }));
 	} catch (error: any) {
 		console.log('saga update document exercise failed.');
 		yield put(setLoading({ isLoading: false }));
@@ -515,7 +530,7 @@ export function* watchDocument() {
 	yield takeLatest(createDocument.type, createDocumentSaga);
 	yield takeLatest(createDocumentContent.type, createDocumentContentSaga);
 	yield takeLatest(resetDocumentContent.type, resetDocumentContentSaga);
-	yield takeLatest(fetchDocumentByIdWithExercise.type, fetchDocumentByIdWithExerciseSaga);
+	yield takeLatest(fetchExercise.type, fetchExerciseSaga);
 	yield takeLatest(createDocumentExercise.type, createDocumentExerciseSaga);
 	yield takeLatest(fetchSampleSourceCode.type, fetchSampleSourceCodeSaga);
 	yield takeLatest(changePublishDocument.type, changePublishDocumentSaga);

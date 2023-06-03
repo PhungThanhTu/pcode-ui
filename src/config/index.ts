@@ -7,3 +7,15 @@ export const createExerciseDefault = {
 	manualPercentage: 0,
 	judgerId: JudgerId
 };
+
+export const contentTypeId = {
+	markDown: 0,
+	pdf: 1,
+	file: 2
+};
+export const status = {
+	markDown: 0,
+	pdf: 1,
+	file: 2
+};
+

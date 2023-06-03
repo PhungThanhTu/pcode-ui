@@ -6,6 +6,7 @@ import MarkdownPreview from '@uiw/react-markdown-preview';
 import { BoxNotFoundSx } from '@/style/BoxSx';
 import { centerPos, componentStyle } from '@/style/Variables';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
+import { contentTypeId } from '@/config';
 
 const BoxViewSx = {
 	minHeight: '80vh',
@@ -21,10 +22,11 @@ export interface PreviewProps {
 }
 
 const Content = (props: PreviewProps) => {
+
 	const { source, type, title } = props;
 
 	if (source) {
-		if (type === 1)
+		if (type === contentTypeId.pdf)
 			return (
 				<DocumentTabLayout
 					title={title}

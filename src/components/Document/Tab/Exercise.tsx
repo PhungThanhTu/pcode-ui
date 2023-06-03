@@ -19,7 +19,7 @@ import {
 } from '@/types/document.type';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import Content, { PreviewProps } from './Content';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getDocumentExercise } from '@/selectors/document.selector';
 import { LinearLoading } from '@/components/Loading';
 import CustomDialog from '@/components/Custom/CustomDialog';
@@ -29,6 +29,7 @@ import { borderRadius, centerPos } from '@/style/Variables';
 import { BoxFieldSx } from '@/style/BoxSx';
 import { Typography } from '@mui/material';
 import { LocalStorageService } from '@/services/localStorageService';
+import { fetchExercise } from '@/slices/document.slice';
 
 const BoxCreateSx = {
 	position: 'absolute',
@@ -58,7 +59,7 @@ interface ExerciseProps {
 
 const Exercise = (props: ExerciseProps) => {
 
-
+	const dispatch = useDispatch();
 	const exercise = useSelector(getDocumentExercise);
 
 	const InitialUpdateExerciseForm: GetExerciseResponse = {
@@ -142,223 +143,231 @@ const Exercise = (props: ExerciseProps) => {
 	}, [exercise]);
 
 	useEffect(() => {
-		let tempsource = LocalStorageService.getCodeCache()
 
+		if (exercise === null) {
+			dispatch(fetchExercise({ documentId: document.Id }));
+		}
+
+		let tempsource = LocalStorageService.getCodeCache()
 		if (tempsource) {
 			setTempSource({ ...tempsource })
 		}
+
 	}, [])
+
 	return (
 		<Fragment>
-			{exercise === null ? (
-				<LinearLoading />
-			) : exercise === undefined ? (
-				isCreator ? (
-					<Box sx={BoxCreateSx}>
-						<CustomIconButton
-							onClick={() => {
-								setOpenCreateExerciseDialog(true);
-							}}
-							content="Create Exercise"
-							startIcon={<NoteAddIcon />}
-							variant="outlined"
-						/>
-					</Box>
-				) : (
-					<Typography sx={centerPos} variant="h5">
-						Exercise has not been created!
-					</Typography>
-				)
-			) : (
-				<DocumentTabLayout
-					childrenPosition={isCreator}
-					title={document.Title}
-					left={
-						<CodeEditor
-							source={TempSource?.sourceCode}
-							documentId={document.Id}
-							isCreator={isCreator}
-							onGetSampleSourceCode={onGetSampleSourceCode}
-							getSource={getSource}
-							language={TempSource?.programmingLanguageId}
-							resetTempSource={() => { setTempSource(undefined) }}
-						/>
-					}
-					right={
-						isCreator ? (
-							<Stack
-								flexDirection="column"
-								alignItems="flex-start"
-								justifyContent="flex-start"
-								rowGap="2"
-								minHeight="inherit"
-							>
-								<Stack
-									flexDirection="row"
-									alignItems="center"
-									justifyContent="center"
-									rowGap="2"
-									width="100%"
-								>
-									<Box sx={BoxFieldSx}>
-										<TextField
-											fullWidth
-											required
-											label="Runtime limit (ms):"
-											type="number"
-											name="runtimeLimit"
-											value={RuntimeLimit}
-											onChange={onChange}
-										/>
-										<TextField
-											fullWidth
-											required
-											label="Memory limit (bytes):"
-											type="number"
-											name="memoryLimit"
-											value={MemoryLimit}
-											onChange={onChange}
-										/>
-									</Box>
-								</Stack>
-								<Stack
-									flexDirection="row"
-									alignItems="center"
-									justifyContent="center"
-									rowGap="2"
-									width="100%"
-								>
-									<Box sx={BoxFieldSx}>
-										<TextField
-											fullWidth
-											required
-											label="Score Weight"
-											type="number"
-											name="scoreWeight"
-											value={ScoreWeight}
-											onChange={onChange}
-										/>
-										<TextField
-											fullWidth
-											required
-											label="Manual Percentage"
-											type="number"
-											name="manualPercentage"
-											value={ManualPercentage}
-											onChange={onChange}
-										/>
-									</Box>
-								</Stack>
-								<Box>
-									<FormGroup sx={FormGroupDeadlineSx}>
-										<FormControlLabel
-											control={
-												<Checkbox
-													name="haveDeadline"
-													checked={DeadlineCheck}
-													value={DeadlineCheck}
-													onChange={onChange}
-													onClick={() => {
-														setDeadlineCheck(!DeadlineCheck);
-														setStrictDeadlineCheck(false);
-													}}
-												/>
-											}
-											label="Deadline"
-										/>
-										<FormControlLabel
-											disabled={!DeadlineCheck}
-											control={
-												<Checkbox
-													name="strictDeadline"
-													checked={StrictDeadlineCheck && DeadlineCheck}
-													value={StrictDeadlineCheck}
-													onChange={onChange}
-													onClick={() => {
-														setStrictDeadlineCheck(!StrictDeadlineCheck);
-													}}
-												/>
-											}
-											label="Strict Deadline"
-										/>
-										<FormControlLabel
-											disabled={!DeadlineCheck}
-											labelPlacement="start"
-											label="Deadline"
-											sx={{
-												columnGap: 1
-											}}
-											control={
+			{
+				exercise === undefined ?
+					<LinearLoading />
+					:
+					exercise === null ?
+
+						isCreator ?
+							<Box sx={BoxCreateSx}>
+								<CustomIconButton
+									onClick={() => {
+										setOpenCreateExerciseDialog(true);
+									}}
+									content="Create Exercise"
+									startIcon={<NoteAddIcon />}
+									variant="outlined"
+								/>
+							</Box>
+							:
+							<Typography sx={centerPos} variant="h5">
+								Exercise has not been created!
+							</Typography>
+						:
+						<DocumentTabLayout
+							childrenPosition={isCreator}
+							title={document.Title}
+							left={
+								<CodeEditor
+									source={TempSource?.sourceCode}
+									documentId={document.Id}
+									isCreator={isCreator}
+									onGetSampleSourceCode={onGetSampleSourceCode}
+									getSource={getSource}
+									language={TempSource?.programmingLanguageId}
+									resetTempSource={() => { setTempSource(undefined) }}
+								/>
+							}
+							right={
+								isCreator ?
+									<Stack
+										flexDirection="column"
+										alignItems="flex-start"
+										justifyContent="flex-start"
+										rowGap="2"
+										minHeight="inherit"
+									>
+										<Stack
+											flexDirection="row"
+											alignItems="center"
+											justifyContent="center"
+											rowGap="2"
+											width="100%"
+										>
+											<Box sx={BoxFieldSx}>
 												<TextField
 													fullWidth
 													required
-													label="Deadline"
-													type="datetime-local"
-													name="deadline"
+													label="Runtime limit (ms):"
+													type="number"
+													name="runtimeLimit"
+													value={RuntimeLimit}
 													onChange={onChange}
-													value={parseToLocalDate(Deadline)}
 												/>
+												<TextField
+													fullWidth
+													required
+													label="Memory limit (bytes):"
+													type="number"
+													name="memoryLimit"
+													value={MemoryLimit}
+													onChange={onChange}
+												/>
+											</Box>
+										</Stack>
+										<Stack
+											flexDirection="row"
+											alignItems="center"
+											justifyContent="center"
+											rowGap="2"
+											width="100%"
+										>
+											<Box sx={BoxFieldSx}>
+												<TextField
+													fullWidth
+													required
+													label="Score Weight"
+													type="number"
+													name="scoreWeight"
+													value={ScoreWeight}
+													onChange={onChange}
+												/>
+												<TextField
+													fullWidth
+													required
+													label="Manual Percentage"
+													type="number"
+													name="manualPercentage"
+													value={ManualPercentage}
+													onChange={onChange}
+												/>
+											</Box>
+										</Stack>
+										<Box>
+											<FormGroup sx={FormGroupDeadlineSx}>
+												<FormControlLabel
+													control={
+														<Checkbox
+															name="haveDeadline"
+															checked={DeadlineCheck}
+															value={DeadlineCheck}
+															onChange={onChange}
+															onClick={() => {
+																setDeadlineCheck(!DeadlineCheck);
+																setStrictDeadlineCheck(false);
+															}}
+														/>
+													}
+													label="Deadline"
+												/>
+												<FormControlLabel
+													disabled={!DeadlineCheck}
+													control={
+														<Checkbox
+															name="strictDeadline"
+															checked={StrictDeadlineCheck && DeadlineCheck}
+															value={StrictDeadlineCheck}
+															onChange={onChange}
+															onClick={() => {
+																setStrictDeadlineCheck(!StrictDeadlineCheck);
+															}}
+														/>
+													}
+													label="Strict Deadline"
+												/>
+												<FormControlLabel
+													disabled={!DeadlineCheck}
+													labelPlacement="start"
+													label="Deadline"
+													sx={{
+														columnGap: 1
+													}}
+													control={
+														<TextField
+															fullWidth
+															label="Deadline"
+															type="datetime-local"
+															name="deadline"
+															onChange={onChange}
+															value={parseToLocalDate(Deadline)}
+														/>
+													}
+												/>
+											</FormGroup>
+										</Box>
+									</Stack>
+									:
+									<Content source={content?.source} title={''} type={content ? content.type : 3} />
+
+							}
+						>
+							{
+								isCreator ?
+									<LoadingButton
+										size="large"
+										fullWidth
+										sx={{ padding: '10px' }}
+										onClick={() => {
+											onUpdate
+												? onUpdate(ExerciseForm, Source, document.Id)
+												: () => {
+													console.log('Update Error');
+												};
+										}}
+										endIcon={<SaveIcon />}
+										loadingPosition="end"
+										variant="contained"
+									>
+										<span>Save</span>
+									</LoadingButton>
+									:
+									<LoadingButton
+										size="small"
+										fullWidth
+										sx={{
+											borderRadius: `0 0 ${borderRadius} ${borderRadius}`
+										}}
+										onClick={() => {
+											onSubmit
+												?
+												onSubmit(Source, document.Id)
+
+												: () => {
+													console.log('Submit Error.');
+												};
+
+											let temp = {
+												programmingLanguageId: Source.type,
+												sourceCode: Source.sampleSourceCode
+
 											}
-										/>
-									</FormGroup>
-								</Box>
-							</Stack>
-						) : (
-							<Content source={content?.source} title={''} type={content ? content.type : 3} />
-						)
-					}
-				>
-					{isCreator ? (
-						<LoadingButton
-							size="large"
-							fullWidth
-							sx={{ padding: '10px' }}
-							onClick={() => {
-								onUpdate
-									? onUpdate(ExerciseForm, Source, document.Id)
-									: () => {
-										console.log('Update Error');
-									};
-							}}
-							endIcon={<SaveIcon />}
-							loadingPosition="end"
-							variant="contained"
-						>
-							<span>Save</span>
-						</LoadingButton>
-					) : (
-						<LoadingButton
-							size="small"
-							fullWidth
-							sx={{
-								borderRadius: `0 0 ${borderRadius} ${borderRadius}`
-							}}
-							onClick={() => {
-								onSubmit
-									?
-									onSubmit(Source, document.Id)
-
-									: () => {
-										console.log('Submit Error.');
-									};
-
-								let temp = {
-									programmingLanguageId: Source.type,
-									sourceCode: Source.sampleSourceCode
-
-								}
-								LocalStorageService.setCodeCache(temp)
-								setTempSource(temp)
-							}}
-							endIcon={<SendIcon />}
-							loadingPosition="end"
-							variant="contained"
-						>
-							<span>Submit</span>
-						</LoadingButton>
-					)}
-				</DocumentTabLayout>
-			)}
+											LocalStorageService.setCodeCache(temp)
+											setTempSource(temp)
+										}}
+										endIcon={<SendIcon />}
+										loadingPosition="end"
+										variant="contained"
+									>
+										<span>Submit</span>
+									</LoadingButton>
+							}
+						</DocumentTabLayout>
+			}
 			<CustomDialog
 				open={OpenCreateExerciseDialog}
 				title="Create Exercise!"
