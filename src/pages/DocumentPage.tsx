@@ -22,7 +22,7 @@ import {
 	fetchAllSubmissionsManage,
 	fetchAllTestCases,
 	fetchDocumentById,
-	fetchDocumentByIdWithExercise,
+	fetchExercise,
 	fetchSampleSourceCode,
 	fetchSingleSubmission,
 	markSubmission,
@@ -47,7 +47,7 @@ import {
 import { Worker } from '@react-pdf-viewer/core';
 import TestCase from '@/components/Document/Tab/TestCase';
 import CustomDialog from '@/components/Custom/CustomDialog';
-import { JudgerId, createExerciseDefault } from '@/config';
+import { JudgerId, contentTypeId, createExerciseDefault } from '@/config';
 import { getApiDateFormat, getToday, parseToLocalDate } from '@/utils/convert';
 import Submission from '@/components/Document/Tab/Submission';
 import { LocalStorageService } from '@/services/localStorageService';
@@ -61,6 +61,7 @@ const DocumentPage = () => {
 	const dispatch = useDispatch();
 
 	const userProfile = useSelector(getProfile);
+
 	const { document, loading, documentContent } = useSelector(getDocument);
 
 	const [Tabs, setTabs] = useState<TabElement[]>([]);
@@ -79,14 +80,14 @@ const DocumentPage = () => {
 		if (type === 'PDF') {
 			let CreateDocumentContentForm: CreateDocumentContentRequest = {
 				content: content,
-				contentTypeId: '1',
+				contentTypeId: contentTypeId.pdf,
 				documentId: params.documentId ? params.documentId : ''
 			};
 			dispatch(createDocumentContent(CreateDocumentContentForm));
 		} else if (type === 'Markdown') {
 			let CreateDocumentContentForm: CreateDocumentContentRequest = {
 				content: content,
-				contentTypeId: '0',
+				contentTypeId: contentTypeId.markDown,
 				documentId: params.documentId ? params.documentId : ''
 			};
 			dispatch(createDocumentContent(CreateDocumentContentForm));
@@ -193,16 +194,14 @@ const DocumentPage = () => {
 
 	useEffect(() => {
 		if (!document) {
-			// dispatch(fetchDocumentById({ id: params.documentId ? params.documentId : '' }));
-		} else if (document === null) {
+
+		}
+		else if (document === null) {
 			navigate(-1);
-		} else {
+		} else if (document !== undefined) {
+
 			if (userProfile?.id === document.CreatorId) {
 				if (document.HasExercise) {
-
-					dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
-					dispatch(fetchAllTestCases({ documentId: document.Id }));
-					dispatch(fetchAllSubmissionsManage({ documentId: document.Id }))
 
 					setTabs([
 						{
@@ -300,9 +299,6 @@ const DocumentPage = () => {
 			} else {
 				if (document.HasExercise) {
 
-					dispatch(fetchAllSubmissions({ documentId: document.Id }));
-					dispatch(fetchDocumentByIdWithExercise({ documentId: document.Id }));
-
 					setTabs([
 						{
 							title: 'Exercise',
@@ -356,6 +352,7 @@ const DocumentPage = () => {
 					]);
 				}
 			}
+
 		}
 	}, [document]);
 
@@ -363,26 +360,26 @@ const DocumentPage = () => {
 		dispatch(fetchDocumentById({ id: params.documentId ? params.documentId : '' }));
 	}, []);
 
-	return loading ? (
+	return loading ?
 		<LinearLoading />
-	) : document ? (
-		<Fragment>
-			<Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js">
-				<CustomTab ListOfTabs={Tabs} />
-			</Worker>
-			<CustomDialog
-				title="Reset the content?"
-				content="This will reset (delete) and make the document content can be set up again!"
-				open={OpenDialog}
-				onCancel={() => setOpenDialog(false)}
-				onSave={() => {
-					onResetDocumentContent();
-				}}
-			/>
-		</Fragment>
-	) : (
-		<NotFound />
-	);
+		: document ?
+			<Fragment>
+				<Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js">
+					<CustomTab ListOfTabs={Tabs} />
+				</Worker>
+				<CustomDialog
+					title="Reset the content?"
+					content="This will reset (delete) and make the document content can be set up again!"
+					open={OpenDialog}
+					onCancel={() => setOpenDialog(false)}
+					onSave={() => {
+						onResetDocumentContent();
+					}}
+				/>
+			</Fragment>
+			:
+			<NotFound />
+		;
 };
 
 export default DocumentPage;

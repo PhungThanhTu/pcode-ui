@@ -19,20 +19,22 @@ import {
 	UpdateTestCaseRequest,
 	SubmissionManage,
 	ScoreSubmissionRequest,
-	ScoreSubmissionResponse
+	ScoreSubmissionResponse,
+	CreateDocumentContentResponse,
+	DocumentContent
 } from '@/types/document.type';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export const initialDocumentState: DocumentState = {
 
-	document: undefined,
-	documentContent: undefined,
-	documentExercise: undefined,
-	sampleSourceCode: undefined,
-	documentTestCases: undefined,
-	documentSingleSubmission: undefined,
-	documentSubmissions: undefined,
-	documentSubmissionsManage: undefined,
+	document: null,
+	documentContent: null,
+	documentExercise: null,
+	sampleSourceCode: null,
+	documentTestCases: null,
+	documentSingleSubmission: null,
+	documentSubmissions: null,
+	documentSubmissionsManage: null,
 	loading: false
 };
 
@@ -41,50 +43,80 @@ const documentSlice = createSlice({
 	initialState: initialDocumentState,
 	reducers: {
 		fetchDocumentById: (state, { payload }: PayloadAction<{ id: string }>) => {
+			
 			state.loading = true;
+			state.document = undefined;
+			state.documentContent = undefined;
+			state.documentSingleSubmission = null;
+			state.documentSubmissionsManage = null;
+			state.documentExercise = null;
+			state.documentSingleSubmission = null;
+			state.documentTestCases = null;
+			state.sampleSourceCode = null;
+
 		},
 		fetchDocumentByIdSuccess: (state, { payload }: PayloadAction<GetDocumentByIdResponse>) => {
 			state.document = payload;
 			state.loading = false;
-			state.documentContent = null;
+
+
 		},
 		fetchDocumentByIdWithContentSuccess: (
 			state,
-			{ payload }: PayloadAction<{ document: GetDocumentByIdResponse; documentContent: any }>
+			{ payload }: PayloadAction<{ documentContent: any }>
 		) => {
-			state.document = payload.document;
 			state.documentContent = payload.documentContent;
 			state.loading = false;
 		},
-		fetchDocumentByIdWithExercise: (state, { payload }: PayloadAction<{ documentId: string }>) => {
-			state.documentExercise = null;
+		fetchDocumentByIdWithContentError: (state) => {
+			state.documentContent = null;
+			state.loading = false;
 		},
-		fetchDocumentByIdWithExerciseSuccess: (state, { payload }: PayloadAction<GetExerciseResponse>) => {
+		fetchExercise: (state, { payload }: PayloadAction<{ documentId: string }>) => {
+			state.documentExercise = undefined;
+		},
+		fetchExerciseSuccess: (state, { payload }: PayloadAction<GetExerciseResponse>) => {
 			state.documentExercise = payload;
 		},
-		fetchDocumentByIdWithExerciseError: (state) => {
-			state.documentExercise = undefined;
+		fetchExerciseError: (state) => {
+			state.documentExercise = null;
 		},
 		fetchDocumentByIdError: (state) => {
 			state.document = null;
 			state.loading = false;
 		},
 		fetchSampleSourceCode: (state, { payload }: PayloadAction<{ documentId: string; type: number }>) => {
-			state.sampleSourceCode = null;
+			state.sampleSourceCode = undefined;
 		},
 		fetchSampleSourceCodeSuccess: (state, { payload }: PayloadAction<GetSampleSourceCodeResponse>) => {
-			state.sampleSourceCode = payload ? payload : undefined;
+			state.sampleSourceCode = payload ? payload : null;
 		},
 		fetchSampleSourceCodeError: (state) => {
-			state.sampleSourceCode = undefined;
+			state.sampleSourceCode = null;
 		},
 		createDocument: (state, { payload }: PayloadAction<CreateDocumentRequest>) => { },
 		createDocumentContent: (state, { payload }: PayloadAction<CreateDocumentContentRequest>) => { },
+		createDocumentContentSuccess: (state, { payload }: PayloadAction<{ documentContent: CreateDocumentContentResponse, content: any }>) => {
+			let documentContent: DocumentContent = {
+				ContentBody: payload.documentContent.contentBody,
+				ContentTypeId: payload.documentContent.contentTypeId,
+				DocumentId: payload.documentContent.documentId,
+				Id: payload.documentContent.contentId
+			}
+
+			state.document ? state.document.Contents[0] = documentContent : null;
+			state.documentContent = payload.content
+
+		},
 		createDocumentExercise: (
 			state,
 			{ payload }: PayloadAction<{ body: CreateExerciseRequest; documentId: string }>
 		) => { },
 		resetDocumentContent: (state, { payload }: PayloadAction<{ documentId: string }>) => { },
+		resetDocumentContentSuccess: (state) => {
+			state.documentContent = null;
+			state.document ? state.document.Contents = [] : null;
+		},
 		changePublishDocument: (state, { payload }: PayloadAction<{ documentId: string; status: number }>) => { },
 		updateDocumentExercise: (
 			state,
@@ -97,13 +129,13 @@ const documentSlice = createSlice({
 			}>
 		) => { },
 		fetchAllTestCases: (state, { payload }: PayloadAction<{ documentId: string }>) => {
-			state.documentTestCases = null;
+			state.documentTestCases = undefined;
 		},
 		fetchAllTestCasesSuccess: (state, { payload }: PayloadAction<Array<GetSingleTestCaseResponse>>) => {
 			state.documentTestCases = payload;
 		},
 		fetchAllTestCasesError: (state) => {
-			state.documentExercise = undefined;
+			state.documentExercise = null;
 		},
 		fetchSingleTestCase: (state, { payload }: PayloadAction<{ documentId: string; testCaseId: number }>) => { },
 		fetchSingleTestCaseSuccess: (state, { payload }: PayloadAction<GetSingleTestCaseResponse>) => { },
@@ -155,33 +187,33 @@ const documentSlice = createSlice({
 			{ payload }: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>
 		) => { },
 		fetchAllSubmissions: (state, { payload }: PayloadAction<{ documentId: string }>) => {
-			state.documentSubmissions = null;
+			state.documentSubmissions = undefined;
 		},
 		fetchAllSubmissionsSuccess: (state, { payload }: PayloadAction<Array<Submission>>) => {
 			state.documentSubmissions = payload;
-			state.documentSubmissionsManage = undefined;
-		},
-		fetchAllSubmissionsError: (state) => {
-			state.documentSubmissions = undefined;
-		},
-		fetchAllSubmissionsManage: (state, { payload }: PayloadAction<{ documentId: string }>) => {
 			state.documentSubmissionsManage = null;
 		},
+		fetchAllSubmissionsError: (state) => {
+			state.documentSubmissions = null;
+		},
+		fetchAllSubmissionsManage: (state, { payload }: PayloadAction<{ documentId: string }>) => {
+			state.documentSubmissionsManage = undefined;
+		},
 		fetchAllSubmissionsManageSuccess: (state, { payload }: PayloadAction<Array<SubmissionManage>>) => {
-			state.documentSubmissions = undefined;
+			state.documentSubmissions = null;
 			state.documentSubmissionsManage = payload;
 		},
 		fetchAllSubmissionsManageError: (state) => {
-			state.documentSubmissionsManage = undefined;
+			state.documentSubmissionsManage = null;
 		},
 		fetchSingleSubmission: (state, { payload }: PayloadAction<{ submissionId: string }>) => {
-			state.documentSingleSubmission = null;
+			state.documentSingleSubmission = undefined;
 		},
 		fetchSingleSubmissionSuccess: (state, { payload }: PayloadAction<GetSingleSubmissionResponse>) => {
 			state.documentSingleSubmission = payload;
 		},
 		fetchSingleSubmissionError: (state) => {
-			state.documentSingleSubmission = undefined;
+			state.documentSingleSubmission = null;
 		},
 		markSubmission: (state, { payload }: PayloadAction<SubmissionActionRequest>) => { },
 		markSubmissionSuccess: (state, { payload }: PayloadAction<SubmissionActionRequest>) => {
@@ -224,13 +256,16 @@ export const {
 	fetchDocumentById,
 	fetchDocumentByIdError,
 	fetchDocumentByIdSuccess,
-	fetchDocumentByIdWithExerciseSuccess,
-	fetchDocumentByIdWithExerciseError,
-	fetchDocumentByIdWithExercise,
+	fetchExerciseSuccess,
+	fetchExerciseError,
+	fetchExercise,
 	createDocument,
+	createDocumentContentSuccess,
 	fetchDocumentByIdWithContentSuccess,
+	fetchDocumentByIdWithContentError,
 	createDocumentContent,
 	resetDocumentContent,
+	resetDocumentContentSuccess,
 	createDocumentExercise,
 	fetchSampleSourceCode,
 	fetchSampleSourceCodeSuccess,
@@ -251,6 +286,7 @@ export const {
 	updateTestCaseSuccess,
 	swapTestCase,
 	createSubmission,
+	createSubmissionSuccess,
 	deleteSubmission,
 	deleteSubmissionSuccess,
 	fetchAllSubmissions,

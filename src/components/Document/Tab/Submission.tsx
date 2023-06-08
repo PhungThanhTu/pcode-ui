@@ -8,15 +8,16 @@ import { GridRowParams } from '@mui/x-data-grid/models/params/gridRowParams';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import { getDocumentSingleSubssion, getDocumentSubmissionsManage, getDocumentSubssions } from '@/selectors/document.selector';
 import { GetDocumentByIdResponse, SubmissionManage } from '@/types/document.type';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DocumentSubmissionItem from '../DocumentSubmissionItem';
 import { borderRadius, centerPos } from '@/style/Variables';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import DocumentTestResultItem from '../DocumentTestResultItem';
 import { CircleLoading } from '@/components/Loading';
 import { CodeEditor } from '@/components/CodeEditor';
 import DataGridListItems from '@/components/DataGridListItems';
 import TextField from '@mui/material/TextField';
+import { fetchAllSubmissions, fetchAllSubmissionsManage } from '@/slices/document.slice';
 
 
 
@@ -32,6 +33,7 @@ const Submission = (props: SubmissionProps) => {
 
 	const { document, onMark, onSelected, onScore, isCreator } = props;
 
+	const dispatch = useDispatch()
 	const [SelectedSubmissionManage, setSelectedSubmissionManage] = useState<SubmissionManage>()
 	const [ManualScore, setManualScore] = useState(0)
 	const [SourceCodeSubmissionManage, setSourceCodeSubmissionManage] = useState('')
@@ -45,6 +47,16 @@ const Submission = (props: SubmissionProps) => {
 	const submissions = useSelector(getDocumentSubssions);
 	const submission = useSelector(getDocumentSingleSubssion);
 	const submissionsmanage = useSelector(getDocumentSubmissionsManage);
+
+	useEffect(() => {
+		if (isCreator) {
+			if (submissionsmanage === null)
+				dispatch(fetchAllSubmissionsManage({ documentId: document.Id }))
+		}
+		else
+			dispatch(fetchAllSubmissions({ documentId: document.Id }))
+
+	}, [])
 
 
 	return (
@@ -114,50 +126,58 @@ const Submission = (props: SubmissionProps) => {
 							alignItems="center"
 							justifyContent="center"
 						>
-							{submissionsmanage && submissionsmanage.length > 0 ? (
+							{submissionsmanage && submissionsmanage.length > 0 ?
 								<DataGridListItems
 									rows={submissionsmanage}
 									columns={['Full Name', 'Automatec Score', 'Manual Score', 'Submission Id']}
 									onSelected={onSelectSubmissionManage} />
-							) : (
-								<></>
-							)}
+								:
+								null
+							}
 						</Stack>
 					</Box>
 					:
-					(
-						submission ? (
-							<Fragment>
-								<Typography sx={{ padding: '6px 8px', display: 'block' }}>
-									Selected submission: {submission.Id}
-								</Typography>
-								<Stack
-									padding="10%"
-									paddingTop="10%"
-									rowGap={2}
-									width="100%"
-									alignItems="center"
-									justifyContent="center"
-								>
-									{submission && submission.testResults.length > 0 ? (
-										submission.testResults.map((item, index) => {
-											return <DocumentTestResultItem key={index} index={index + 1} item={item} />;
-										})
-									) : (
-										<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
-											No test results complete.
-										</Typography>
-									)}
-								</Stack>
-							</Fragment>
-						) : submission === null ? (
-							<CircleLoading />
-						) : (
-							<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
-								Click view icon to see test result of submission.
-							</Typography>
-						)
-					)
+					<Fragment>
+						{
+							submission ?
+								<Fragment>
+									<Typography sx={{ padding: '6px 8px', display: 'block' }}>
+										Selected submission: {submission.Id}
+									</Typography>
+									<Stack
+										padding="10%"
+										paddingTop="10%"
+										rowGap={2}
+										width="100%"
+										alignItems="center"
+										justifyContent="center"
+									>
+										{
+											submission && submission.testResults.length > 0 ?
+												submission.testResults.map((item, index) => {
+													return <DocumentTestResultItem key={index} index={index + 1} item={item} />;
+												})
+												:
+												<Box sx={centerPos}>
+													<CircleLoading />
+												</Box>
+
+										}
+									</Stack>
+								</Fragment>
+								:
+								submission === undefined ?
+									<Box sx={centerPos}>
+										<CircleLoading />
+									</Box>
+									:
+									<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
+										Click view icon to see test result of submission.
+									</Typography>
+						}
+					</Fragment>
+
+
 			}
 		>
 			{

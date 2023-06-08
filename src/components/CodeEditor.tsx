@@ -75,10 +75,10 @@ export const CodeEditor = (props: CodeEditorProps) => {
 				setRead(false);
 				setValue(SampleSourceCode.sourceCode);
 				getSource(SampleSourceCode.sourceCode, SampleSourceCode.programmingLanguageId);
-			} else if (SampleSourceCode === null) {
+			} else if (SampleSourceCode === undefined) {
 				setValue(loading);
 				setRead(true);
-			} else if (SampleSourceCode === undefined) {
+			} else if (SampleSourceCode === null) {
 				setValue(initial);
 				getSource(initial, Language);
 				setRead(false);
@@ -95,18 +95,6 @@ export const CodeEditor = (props: CodeEditorProps) => {
 			setLanguage(language.toString())
 		}
 	}, [source])
-
-	// useEffect(() => {
-	// 	if (source) {
-	// 		setValue(source)
-	// 		setIsEditMode(true)
-	// 	}
-	// 	if (language) {
-	// 		setLanguage(language.toString())
-	// 	}
-	// }, [])
-
-
 
 	return (
 		<Stack minHeight="inherit" sx={{ '*': { borderRadius: borderRadius } }}>

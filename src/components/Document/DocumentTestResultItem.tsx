@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
 import { TestResult } from '@/types/document.type';
+import Stack from '@mui/material/Stack';
 
 const TitleAccordionSx = {
 	display: 'flex',
@@ -22,15 +23,20 @@ const DocumentTestResultItem = (props: TestResultItemProps) => {
 	const { item, index } = props;
 
 	return (
-		<Box sx={{width: '100%'}}>
+		<Box sx={{ width: '100%' }}>
 			<Accordion>
 				<AccordionSummary expandIcon={<ExpandMoreIcon />} sx={TitleAccordionSx}>
-					<Typography>Test Case: {index}</Typography>
-					{item.RunStatus === 1 ? (
-						<Typography color="green">Pass</Typography>
-					) : (
-						<Typography color="red">Fail</Typography>
-					)}
+					<Stack width="100%" flexDirection="row" alignContent="space-between">
+						<Typography>Test Case: {index}    </Typography>
+						{
+							item.RunStatus === 1 ?
+								<Typography color="green">Pass</Typography>
+								:
+								<Typography color="red">Fail</Typography>
+
+						}
+					</Stack>
+
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>Input: {item.Input}</Typography>

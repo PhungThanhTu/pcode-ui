@@ -48,9 +48,6 @@ export interface TestResult {
 	ExpectedOutput: string;
 	RunStatus: number;
 }
-export interface DocumentScore {
-
-}
 
 export interface DocumentState {
 	document?: GetDocumentByIdResponse | null;
@@ -97,10 +94,15 @@ export interface GetDocumentByIdResponse {
 
 export interface CreateDocumentContentRequest {
 	documentId: string;
-	contentTypeId: string;
+	contentTypeId: number;
 	content: any;
 }
-
+export interface CreateDocumentContentResponse {
+	contentId: string;
+	contentTypeId: number;
+	documentId: string;
+	contentBody: string;
+}
 //#endregion document content
 
 //#region exercise
