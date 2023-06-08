@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { Middleware, configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 
 import authSlice from '../slices/auth.slice';
@@ -16,6 +16,7 @@ import { watchCourse } from '@/sagas/course.sagas';
 import { watchDocument } from '@/sagas/document.sagas';
 
 const sagaMiddleware = createSagaMiddleware();
+
 
 export const store = configureStore({
 	reducer: {
@@ -37,6 +38,15 @@ sagaMiddleware.run(watchProfile);
 sagaMiddleware.run(watchCourse);
 sagaMiddleware.run(watchDocument);
 
+
 export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
+
+export const dispatchWithPromise = (dispatch: AppDispatch) => {
+	return (action: any) =>
+		new Promise<void>((resolve, reject) => {
+			dispatch(action);
+			resolve();
+		});
+}

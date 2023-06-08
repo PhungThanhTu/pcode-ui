@@ -51,6 +51,7 @@ import { JudgerId, contentTypeId, createExerciseDefault } from '@/config';
 import { getApiDateFormat, getToday, parseToLocalDate } from '@/utils/convert';
 import Submission from '@/components/Document/Tab/Submission';
 import { LocalStorageService } from '@/services/localStorageService';
+import { dispatchWithPromise, store } from '@/redux/store';
 
 
 
@@ -172,14 +173,18 @@ const DocumentPage = () => {
 	};
 	const onCreateSubmission = (Request: UpdateSampleSourceCodeRequest, documentId: string) => {
 
+
+
 		let form: CreateSubmissionRequest = {
 			programmingLanguageId: Request.type,
 			sourceCode: Request.sampleSourceCode
 		};
 
 		LocalStorageService.setCodeCache(form)
+		dispatch(createSubmission({ documentId: documentId, body: form }))
 
-		dispatch(createSubmission({ documentId: documentId, body: form }));
+
+
 	};
 
 	const onMarkSubmission = (Request: SubmissionActionRequest) => {
@@ -365,7 +370,7 @@ const DocumentPage = () => {
 		: document ?
 			<Fragment>
 				<Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js">
-					<CustomTab ListOfTabs={Tabs} />
+					<CustomTab listOfTabs={Tabs} />
 				</Worker>
 				<CustomDialog
 					title="Reset the content?"

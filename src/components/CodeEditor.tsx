@@ -15,6 +15,7 @@ import { CustomOnlyIconButton } from './Custom/CustomButton';
 import Tooltip from '@mui/material/Tooltip';
 import { LocalStorageService } from '@/services/localStorageService';
 
+
 interface CodeEditorProps {
 
 	documentId: string;
@@ -64,6 +65,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	};
 
 	useEffect(() => {
+
 		if (!readOnly)
 			onGetSampleSourceCode(documentId, Number(Language));
 	}, []);
@@ -87,9 +89,20 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	}, [SampleSourceCode, isEditMode]);
 
 	useEffect(() => {
+
 		if (source) {
+
+
 			setValue(source)
-			setIsEditMode(true)
+			if (isCreator) {
+				setIsEditMode(true)
+				setRead(true)
+			}
+			else {
+				setRead(false)
+				setIsEditMode(false)
+			}
+
 		}
 		if (language) {
 			setLanguage(language.toString())
@@ -118,9 +131,9 @@ export const CodeEditor = (props: CodeEditorProps) => {
 						onClick={() => {
 
 							resetTempSource ? resetTempSource() : null
-							setIsEditMode(false);
 							LocalStorageService.clearCodeCache();
-
+							setIsEditMode(false);
+							onGetSampleSourceCode(documentId, Number(language));
 						}}>
 						<Tooltip title="Reset for getting Sample Code">
 							<RestartAltOutlinedIcon />

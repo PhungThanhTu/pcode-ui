@@ -175,7 +175,7 @@ const CoursePage = () => {
 		<LinearLoading />
 	) : course ? (
 		<Fragment>
-			<CustomTab ListOfTabs={Tabs} />
+			<CustomTab listOfTabs={Tabs} />
 			<CourseCustomizeModal
 				open={OpenCourseCustomize}
 				close={() => {
