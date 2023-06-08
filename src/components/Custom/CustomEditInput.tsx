@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import styled from '@mui/material/styles/styled';
 
 import { useEffect, useState, Fragment } from 'react';
-import { labelToProperty } from '@/utils/convert';
+import { LabelToProperty } from '@/utils/convert';
 import { Tooltip } from '@mui/material';
 
 export const CustomEditIcon = styled(EditIcon)(({ theme }) => ({
@@ -38,7 +38,7 @@ export const CustomEditInput = (props: CustomEditInputProps) => {
 	const [isEdit, setIsEdit] = useState(false);
 
 	const { label, value, onChange, onSave, onCancel, isNotDisplay, isAvatarChange } = props;
-	const name = labelToProperty(props.label);
+	const name = LabelToProperty(props.label);
 
 	const RenderFields = () => {
 		if (isEdit) {

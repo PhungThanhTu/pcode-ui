@@ -7,7 +7,7 @@ interface PropsWithChildrenOnly {
 
 const AuthPageLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
 	const PageSx: SxProps = {
-		background: ` url(${'/src/assets/background2.png'})`,
+		background: ` url(${'../src/assets/background2.png'})`,
 		backgroundColor: '#0000000f',
 		backgroundBlendMode: 'soft-light',
 		width: '100%',

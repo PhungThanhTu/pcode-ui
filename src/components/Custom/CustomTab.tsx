@@ -8,7 +8,7 @@ import { useState, SyntheticEvent } from 'react';
 import { TabElement } from '@/types/utility.type';
 
 interface CustomTabProps {
-	ListOfTabs: Array<TabElement>;
+	listOfTabs: Array<TabElement>;
 }
 
 const BoxCustomTabSx = {
@@ -20,7 +20,8 @@ const BoxCustomTabSx = {
 };
 
 const CustomTab = (props: CustomTabProps) => {
-	const { ListOfTabs } = props;
+
+	const { listOfTabs: ListOfTabs } = props;
 
 	const [TabIndex, setTabIndex] = useState('1');
 

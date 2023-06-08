@@ -58,7 +58,6 @@ const Submission = (props: SubmissionProps) => {
 
 	}, [])
 
-
 	return (
 		<DocumentTabLayout
 			title={document.Title}
@@ -67,6 +66,7 @@ const Submission = (props: SubmissionProps) => {
 				isCreator ?
 					submissionsmanage && submissionsmanage.length > 0 && SelectedSubmissionManage ?
 						<CodeEditor
+							language={SelectedSubmissionManage.ProgrammingLanguageId}
 							source={SourceCodeSubmissionManage}
 							readOnly={true}
 							isCreator={isCreator}
@@ -140,7 +140,7 @@ const Submission = (props: SubmissionProps) => {
 					<Fragment>
 						{
 							submission ?
-								<Fragment>
+								<Box sx={{ overflow: 'auto', maxHeight: '600px', minHeight: 'inherit' }}>
 									<Typography sx={{ padding: '6px 8px', display: 'block' }}>
 										Selected submission: {submission.Id}
 									</Typography>
@@ -150,12 +150,15 @@ const Submission = (props: SubmissionProps) => {
 										rowGap={2}
 										width="100%"
 										alignItems="center"
+
 										justifyContent="center"
 									>
 										{
 											submission && submission.testResults.length > 0 ?
+
 												submission.testResults.map((item, index) => {
 													return <DocumentTestResultItem key={index} index={index + 1} item={item} />;
+
 												})
 												:
 												<Box sx={centerPos}>
@@ -164,7 +167,7 @@ const Submission = (props: SubmissionProps) => {
 
 										}
 									</Stack>
-								</Fragment>
+								</Box>
 								:
 								submission === undefined ?
 									<Box sx={centerPos}>

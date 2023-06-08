@@ -1,6 +1,7 @@
+import { TestResultStatus } from "@/config";
 
 
-export const labelToProperty = (str: String) => {
+export const LabelToProperty = (str: String) => {
 	let tmp = str.trim().split(' ');
 	tmp[0] = tmp[0].toLowerCase();
 
@@ -97,3 +98,14 @@ export const getApiDateFormat = (date: string) => {
 	let temp = date.replace('T', ' ').replace('.000Z', '');
 	return temp.substring(0, 16);
 };
+
+
+
+export const TestResultStatusToMessage = (status: number) => {
+
+	const testResulStatus = Object.values(TestResultStatus)
+
+	let result = testResulStatus.filter(item => item.status === status)[0]
+	
+	return result? result.message : 'No Status'
+}

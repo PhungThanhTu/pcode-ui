@@ -72,7 +72,6 @@ function* joinCourseSaga(action: PayloadAction<JoinCourse>) {
 		yield call(courseApi.joinCourse, action.payload.Code);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('course', 'Join Succesfully')));
 		yield put(fetchCourses());
-		yield;
 	} catch (error: any) {
 
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('course', 'Cannot Join Course')));

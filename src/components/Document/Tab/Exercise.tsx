@@ -184,13 +184,14 @@ const Exercise = (props: ExerciseProps) => {
 							title={document.Title}
 							left={
 								<CodeEditor
-									source={TempSource?.sourceCode}
+								
+									source={TempSource ? TempSource.sourceCode : ''}
 									documentId={document.Id}
 									isCreator={isCreator}
 									onGetSampleSourceCode={onGetSampleSourceCode}
 									getSource={getSource}
 									language={TempSource?.programmingLanguageId}
-									resetTempSource={() => { setTempSource(undefined) }}
+									resetTempSource={() => { setTempSource({ programmingLanguageId: 1, sourceCode: '' }) }}
 								/>
 							}
 							right={

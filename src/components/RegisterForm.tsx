@@ -2,14 +2,31 @@ import { Box, Divider, Link, TextField, Typography, CircularProgress, Stack } fr
 
 import AuthFormLayout from '../layouts/AuthFormLayout';
 
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { CustomButton } from '@/components/Custom/CustomButton';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { requestRegister } from '../slices/register.slice';
 import { getRegister } from '../selectors/register.selector';
+import { ValidEmail } from '@/utils/regex';
+import { Blue } from '@/style/Variables';
 
+const BoxFieldSx = {
+	marginBottom: '5px',
+	marginTop: '5px',
+	width: '100%'
+}
+const BoxFormSx = {
+	width: "100%",
+	height: "100%",
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: "center",
+	justifyContent: "center",
+	padding: "5px 10px"
+}
 export const RegisterForm = () => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	const { loading, success, error } = useSelector(getRegister);
@@ -22,23 +39,10 @@ export const RegisterForm = () => {
 		email: ''
 	};
 
-	useEffect(() => {
-		if (success) {
-			setMetaRegister({
-				status: 'success',
-				message: 'Registered successfully'
-			});
-		}
-		if (error) {
-			setMetaRegister({
-				status: 'error',
-				message: 'Registered failed'
-			});
-		}
-	}, [success, error]);
+
 
 	function isValidEmail(email: string) {
-		return /\S+@\S+\.\S+/.test(email);
+		return ValidEmail.test(email)
 	}
 
 	const [registerState, setRegisterState] = useState(initialRegisterState);
@@ -154,7 +158,12 @@ export const RegisterForm = () => {
 		setRegisterError(tempRegisterError);
 	};
 
-	const onRegister = (e: ChangeEvent<HTMLButtonElement>) => {
+	const onRegister = async (e: FormEvent<HTMLFormElement>) => {
+
+		e.preventDefault();
+		e.stopPropagation();
+
+
 		const hasNoError =
 			registerError.email === '' &&
 			registerError.fullName === '' &&
@@ -169,81 +178,97 @@ export const RegisterForm = () => {
 				message: invalidValue
 			});
 		} else {
-			dispatch(
-				requestRegister({
-					username: registerState.username,
-					password: registerState.password,
-					fullName: registerState.fullName,
-					email: registerState.email
-				})
-			);
+			dispatch(requestRegister({
+				username: registerState.username,
+				password: registerState.password,
+				fullName: registerState.fullName,
+				email: registerState.email
+			}))
+
 		}
 	};
 
+	useEffect(() => {
+		if (success) {
+			setMetaRegister({
+				status: 'success',
+				message: 'Registered successfully'
+			});
+			setTimeout(() => {
+				navigate('/login')
+			}, 2000)
+		} else if (error) {
+			setMetaRegister({
+				status: 'error',
+				message: 'Registered failed'
+			});
+		}
+	}, [success, error]);
+
+
 	return (
 		<AuthFormLayout>
-			<Stack width="100%" direction="column" alignItems="center" justifyContent="center" padding="20px 14px 5px">
-				<Box sx={{ paddingBottom: '20px' }}>
-					<Typography variant="h4"> Create an account</Typography>
+			<Box sx={BoxFormSx} component="form" onSubmit={(e) => { onRegister(e) }}>
+				<Box sx={{ marginBottom: '20px' }}>
+					<Typography variant="h4">Create an account</Typography>
 				</Box>
-				<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
+				<Box sx={BoxFieldSx}>
 					<TextField
+						fullWidth
 						onChange={onUsernameChange}
 						required
 						label="Username"
 						aria-label="username"
 						value={registerState.username}
-						helperText={registerError.username}
 						type="text"
-						error={registerError.username !== ''}
+
 					/>
 				</Box>
-				<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
+				<Box sx={BoxFieldSx}>
 					<TextField
+						fullWidth
 						required
 						label="Password"
 						aria-label="password"
 						value={registerState.password}
-						helperText={registerError.password}
-						error={registerError.password !== ''}
+
 						onChange={onPasswordChange}
 						type="password"
 					/>
 				</Box>
-				<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
+				<Box sx={BoxFieldSx}>
 					<TextField
+						fullWidth
 						required
 						label="Retype password"
 						aria-label="rePassword"
 						value={registerState.rePassword}
-						error={registerError.rePassword !== ''}
-						helperText={registerError.rePassword}
+
 						onChange={onRePasswordChange}
 						type="password"
 					/>
 				</Box>
-				<Box sx={{ paddingBottom: '5px', paddingTop: '5px', width: 1, display: 'grid' }}>
+				<Box sx={BoxFieldSx}>
 					<TextField
+						fullWidth
 						required
 						label="Full Name"
 						aria-label="fullName"
 						onChange={onFullNameChange}
 						value={registerState.fullName}
-						error={registerError.fullName !== ''}
-						helperText={registerError.fullName}
 						type="text"
 					/>
 				</Box>
-				<Box sx={{ paddingBottom: '15px', paddingTop: '5px', width: 1, display: 'grid' }}>
+				<Box sx={{ ...BoxFieldSx, marginBottom: '15px' }}>
 					<TextField
+						fullWidth
 						required
 						label="Email"
 						aria-label="email"
 						onChange={onEmailChange}
 						value={registerState.email}
 						type="email"
-						error={registerError.email !== ''}
-						helperText={registerError.email}
+
 					/>
 				</Box>
 				{metaRegister.status === 'error' ? (
@@ -251,7 +276,7 @@ export const RegisterForm = () => {
 						{metaRegister.message}
 					</Typography>
 				) : metaRegister.status === 'success' ? (
-					<Typography variant="h4" fontSize={14} color="blue">
+					<Typography variant="h4" fontSize={14} color={`${Blue[500]}`}>
 						{metaRegister.message}
 					</Typography>
 				) : (
@@ -264,14 +289,14 @@ export const RegisterForm = () => {
 							<CircularProgress />
 						</Box>
 					) : (
-						<CustomButton content="Create account" onClick={onRegister} />
+						<CustomButton type="submit" content="Create account" />
 					)}
 				</Box>
 				<Typography fontSize={16}>Already have an account</Typography>
 				<Link component={RouterLink} to="/login" underline="none" variant="h4" fontSize={16}>
 					Login
 				</Link>
-			</Stack>
+			</Box>
 		</AuthFormLayout>
 	);
 };

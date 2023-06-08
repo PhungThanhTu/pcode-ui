@@ -6,6 +6,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
 import { TestResult } from '@/types/document.type';
 import Stack from '@mui/material/Stack';
+import { TestResultStatus } from '@/config';
+import { TestResultStatusToMessage } from '@/utils/convert';
 
 const TitleAccordionSx = {
 	display: 'flex',
@@ -26,13 +28,13 @@ const DocumentTestResultItem = (props: TestResultItemProps) => {
 		<Box sx={{ width: '100%' }}>
 			<Accordion>
 				<AccordionSummary expandIcon={<ExpandMoreIcon />} sx={TitleAccordionSx}>
-					<Stack width="100%" flexDirection="row" alignContent="space-between">
+					<Stack width="100%" flexDirection="row" alignContent="space-between" columnGap={2}>
 						<Typography>Test Case: {index}    </Typography>
 						{
-							item.RunStatus === 1 ?
+							item.RunStatus === TestResultStatus.Accepted.status ?
 								<Typography color="green">Pass</Typography>
 								:
-								<Typography color="red">Fail</Typography>
+								<Typography color="red">{TestResultStatusToMessage(item.RunStatus)}</Typography>
 
 						}
 					</Stack>
