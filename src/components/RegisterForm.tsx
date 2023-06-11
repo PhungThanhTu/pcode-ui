@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { requestRegister } from '../slices/register.slice';
 import { getRegister } from '../selectors/register.selector';
 import { ValidEmail } from '@/utils/regex';
-import { Blue } from '@/style/Variables';
+import { Primary } from '@/style/Colors';
 
 const BoxFieldSx = {
 	marginBottom: '5px',
@@ -276,7 +276,7 @@ export const RegisterForm = () => {
 						{metaRegister.message}
 					</Typography>
 				) : metaRegister.status === 'success' ? (
-					<Typography variant="h4" fontSize={14} color={`${Blue[500]}`}>
+					<Typography variant="h4" fontSize={14} color={`${Primary["main"]}`}>
 						{metaRegister.message}
 					</Typography>
 				) : (

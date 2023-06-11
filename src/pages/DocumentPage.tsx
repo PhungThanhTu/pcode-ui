@@ -48,10 +48,9 @@ import { Worker } from '@react-pdf-viewer/core';
 import TestCase from '@/components/Document/Tab/TestCase';
 import CustomDialog from '@/components/Custom/CustomDialog';
 import { JudgerId, contentTypeId, createExerciseDefault } from '@/config';
-import { getApiDateFormat, getToday, parseToLocalDate } from '@/utils/convert';
+import { getApiDateFormat, getToday } from '@/utils/convert';
 import Submission from '@/components/Document/Tab/Submission';
 import { LocalStorageService } from '@/services/localStorageService';
-import { dispatchWithPromise, store } from '@/redux/store';
 
 
 
@@ -113,9 +112,10 @@ const DocumentPage = () => {
 		sourceForm: UpdateSampleSourceCodeRequest,
 		documentId: string
 	) => {
+		console.log(ExeriseForm.Deadline,'cc')
 		let exerciseForm: UpdateExerciseRequest = {
 			deadline: ExeriseForm.HaveDeadline
-				? getApiDateFormat(ExeriseForm.Deadline)
+				? getApiDateFormat(new Date(ExeriseForm.Deadline).toISOString())
 				: getApiDateFormat(new Date(getToday()).toISOString()),
 			haveDeadline: ExeriseForm.HaveDeadline,
 			manualPercentage: ExeriseForm.ManualPercentage,

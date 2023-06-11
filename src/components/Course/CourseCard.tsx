@@ -64,14 +64,15 @@ const CourseCard = (props: CourseCardProps) => {
 
 	const Sx = course.courseTheme
 		? {
-				...CardHeaderSx,
-				backgroundImage: `url(${course.courseTheme})`
-		  }
+			...CardHeaderSx,
+			backgroundImage: `url(${course.courseTheme})`
+		}
 		: CardHeaderSx;
 
 	const onCopy = async (e: MouseEvent<HTMLButtonElement>) => {
 		e.stopPropagation();
-		await navigator.clipboard.writeText(`https://plp-dev.netlify.app/invitation/${course.Code}`);
+		const host = window.location.host
+		await navigator.clipboard.writeText(`${host}/invitation/${course.Code}`);
 		setCopied(true);
 	};
 

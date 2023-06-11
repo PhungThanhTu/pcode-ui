@@ -16,7 +16,7 @@ import { CreateCourseRequest } from '@/types/course.type';
 import { useImageFileReader } from '@/hook/useFileReader';
 import { useNavigate } from 'react-router';
 import { LinearLoading } from '@/components/Loading';
-import { validInvitationCode } from '@/utils/regex';
+import { ValidInvitationCode } from '@/utils/regex';
 
 const CoursesPage = () => {
 	let dispatch = useDispatch();
@@ -54,7 +54,7 @@ const CoursesPage = () => {
 	};
 	const onJoin = (e: FormEvent<HTMLFormElement>, code: string, error: Function) => {
 		e.preventDefault();
-		if (validInvitationCode.test(code)) navigate(`/invitation/${code}`);
+		if (ValidInvitationCode.test(code)) navigate(`/invitation/${code}`);
 		else error();
 	};
 	const onCourseDirect = (id: string) => {

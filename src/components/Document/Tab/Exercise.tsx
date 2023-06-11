@@ -84,6 +84,8 @@ const Exercise = (props: ExerciseProps) => {
 	const [DeadlineCheck, setDeadlineCheck] = useState(false);
 	const [StrictDeadlineCheck, setStrictDeadlineCheck] = useState(false);
 	const [OpenCreateExerciseDialog, setOpenCreateExerciseDialog] = useState(false);
+	const [TargetDeadline, setTargetDeadline] = useState(0)
+	const [DisableSubmission, setDisableSubmission] = useState(true)
 	const [TempSource, setTempSource] = useState<CreateSubmissionRequest>()
 
 	const {
@@ -132,15 +134,42 @@ const Exercise = (props: ExerciseProps) => {
 			setExerciseForm({ ...exercise });
 			setDeadlineCheck(exercise.HaveDeadline ? exercise.HaveDeadline : false);
 			setStrictDeadlineCheck(exercise.StrictDeadline ? exercise.StrictDeadline : false);
-			let temp = getNextDay();
+
+			let nextDay = getNextDay();
+
 			if (!exercise.Deadline) {
 				setExerciseForm({
 					...exercise,
-					Deadline: new Date(temp).toISOString()
+					Deadline: new Date(nextDay).toISOString()
 				});
 			}
+			else if (exercise.HaveDeadline) {
+
+				let now_in_mins = new Date().getTime()
+				let targetDate = new Date(exercise.Deadline).getTime()
+
+				if (targetDate < now_in_mins) {
+
+					setTargetDeadline(0)
+					if (exercise.StrictDeadline)
+						setDisableSubmission(true)
+					else
+						setDisableSubmission(false)
+				}
+				else
+					setTargetDeadline(targetDate)
+
+			}
+			else {
+				setDisableSubmission(false)
+			}
+
 		}
 	}, [exercise]);
+
+	useEffect(() => {
+
+	}, [])
 
 	useEffect(() => {
 
@@ -184,7 +213,7 @@ const Exercise = (props: ExerciseProps) => {
 							title={document.Title}
 							left={
 								<CodeEditor
-								
+									deadline={TargetDeadline}
 									source={TempSource ? TempSource.sourceCode : ''}
 									documentId={document.Id}
 									isCreator={isCreator}
@@ -337,6 +366,7 @@ const Exercise = (props: ExerciseProps) => {
 										<span>Save</span>
 									</LoadingButton>
 									:
+
 									<LoadingButton
 										size="small"
 										fullWidth
@@ -363,6 +393,7 @@ const Exercise = (props: ExerciseProps) => {
 										endIcon={<SendIcon />}
 										loadingPosition="end"
 										variant="contained"
+										disabled={DisableSubmission}
 									>
 										<span>Submit</span>
 									</LoadingButton>
