@@ -10,10 +10,11 @@ import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getSampleSourceCode } from '@/selectors/document.selector';
-import { borderRadius } from '@/style/Variables';
+import { borderRadius, centerPos, flexBox } from '@/style/Variables';
 import { CustomOnlyIconButton } from './Custom/CustomButton';
 import Tooltip from '@mui/material/Tooltip';
 import { LocalStorageService } from '@/services/localStorageService';
+import CountdownTimer from './Countdown';
 
 
 interface CodeEditorProps {
@@ -26,10 +27,11 @@ interface CodeEditorProps {
 	readOnly?: boolean;
 	language?: number;
 	resetTempSource?: Function;
+	deadline?: number;
 }
 export const CodeEditor = (props: CodeEditorProps) => {
 
-	const { documentId, onGetSampleSourceCode, getSource, readOnly, source, isCreator, language, resetTempSource } = props;
+	const { documentId, onGetSampleSourceCode, getSource, readOnly, source, isCreator, language, resetTempSource, deadline } = props;
 
 	const initial = '// Input your code here';
 	const loading = 'Loading...';
@@ -109,13 +111,27 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		}
 	}, [source])
 
+
+
 	return (
 		<Stack minHeight="inherit" sx={{ '*': { borderRadius: borderRadius } }}>
-			<Stack flexDirection="row" columnGap={1} justifyContent="space-around">
-				<Stack justifyContent="center" alignItems="center" paddingLeft="10px">
-					<Typography variant="subtitle1">Language</Typography>
-				</Stack>
-				<Box width="40%" sx={{ display: 'flex' }}>
+			<Stack flexDirection="row" columnGap={0.5} justifyContent="flex-start">
+
+				<Box width="30%" sx={{ flexGrow: 1 }}>
+					<FormControl fullWidth>
+						<Select
+							value={Theme}
+							onChange={onThemeChange}
+							sx={{ '.MuiSelect-select': { padding: '10px', paddingLeft: '5%' } }}
+						>
+							<MenuItem value={'vs'}>Visual Studio</MenuItem>
+							<MenuItem value={'vs-dark'}>Visual Studio Dark</MenuItem>
+							<MenuItem value={'hc-black'}>High Contrast Dark</MenuItem>
+							<MenuItem value={'hc-light'}>High Contrast Light</MenuItem>
+						</Select>
+					</FormControl>
+				</Box >
+				<Box width="20%" sx={{ display: 'flex', flexGrow: 1 }}>
 					<FormControl fullWidth disabled={readOnly || isEditMode}>
 						<Select
 							value={Language}
@@ -140,23 +156,22 @@ export const CodeEditor = (props: CodeEditorProps) => {
 						</Tooltip>
 					</CustomOnlyIconButton>
 				</Box>
-				<Stack justifyContent="center" alignItems="center" paddingLeft="10px">
-					<Typography variant="subtitle1">Theme</Typography>
-				</Stack>
-				<Box width="40%">
-					<FormControl fullWidth>
-						<Select
-							value={Theme}
-							onChange={onThemeChange}
-							sx={{ '.MuiSelect-select': { padding: '10px', paddingLeft: '5%' } }}
-						>
-							<MenuItem value={'vs'}>Visual Studio</MenuItem>
-							<MenuItem value={'vs-dark'}>Visual Studio Dark</MenuItem>
-							<MenuItem value={'hc-black'}>High Contrast Dark</MenuItem>
-							<MenuItem value={'hc-light'}>High Contrast Light</MenuItem>
-						</Select>
-					</FormControl>
-				</Box>
+
+				{
+					!isCreator ?
+						deadline || deadline === 0 ?
+							<Box sx={{ flexGrow: 1 }} >
+								<Box sx={flexBox('center', 'center', 'row')}>
+									<Box sx={flexBox('center', 'center', 'row')} >Deadline:</Box>
+									<CountdownTimer targetDate={deadline} />
+								</Box>
+							</Box>
+							: null
+						: null
+				}
+
+
+
 			</Stack>
 			<Box sx={{ flex: 1, paddingTop: '5px' }}>
 				<Editor

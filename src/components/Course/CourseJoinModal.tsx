@@ -45,7 +45,7 @@ const CourseJoinModal = (props: CourseJoinModalProps) => {
 							error={Error}
 							helperText={
 								Error
-									? 'Requires 5 characters and right code format (random either digit/upper/lower).'
+									? 'Requires only 5 characters.'
 									: ''
 							}
 							onChange={onChange}

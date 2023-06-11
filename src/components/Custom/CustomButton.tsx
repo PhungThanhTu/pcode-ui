@@ -4,12 +4,12 @@ import IconButton from '@mui/material/IconButton';
 import { SxProps } from '@mui/material';
 
 import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled';
-import { Blue } from '@/style/Variables';
+import { Primary } from '@/style/Colors';
 
 export const StyledUnstyledButton = styled(ButtonUnstyled)`
 	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 	font-weight: bold;
-	background-color: ${Blue[500]};
+	background-color: ${Primary["main"]};
 	padding: 12px 24px;
 	border-radius: 5px;
 	color: white;
@@ -18,11 +18,11 @@ export const StyledUnstyledButton = styled(ButtonUnstyled)`
 	border: none;
 
 	&:hover {
-		background-color: ${Blue[600]};
+		background-color: ${Primary["dark"]};
 	}
 
 	&.${buttonUnstyledClasses.active} {
-		background-color: ${Blue[700]};
+		background-color: ${Primary["dark"]};
 	}
 
 	&.${buttonUnstyledClasses.focusVisible} {
