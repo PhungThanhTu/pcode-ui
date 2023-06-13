@@ -17,9 +17,10 @@ import { CreateDocumentRequest, Document } from '@/types/document.type';
 import { changePublishDocument, createDocument } from '@/slices/document.slice';
 import { GetCourseByIdResponse } from '@/types/course.type';
 import ScoreBoard from '@/components/Course/Tab/ScoreBoard';
+import { getCourseTabIndex, getCourseTabs } from '@/selectors/tab.selector';
+import { setCourseTabIndex, setCourseTabs } from '@/slices/tab.slice';
 
 const CoursePage = () => {
-
 	const params = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -35,7 +36,9 @@ const CoursePage = () => {
 	const { courses } = useSelector(getCourses);
 	const { course, loading } = useSelector(getCourse);
 
-	const [Tabs, setTabs] = useState<TabElement[]>([]);
+	const tabs = useSelector(getCourseTabs);
+	const tabIndex = useSelector(getCourseTabIndex);
+
 	const [CreateDocumentForm, setCreateDocumentForm] = useState<CreateDocumentRequest>(InitialForm);
 	const [OpenCourseCustomize, setOpenCourseCustomize] = useState(false);
 	const [OpenDocumentCreate, setOpenDocumentCreate] = useState(false);
@@ -52,19 +55,19 @@ const CoursePage = () => {
 		let isCreator = found?.CreatorId === creatorId;
 		return isCreator;
 	};
-
+	const setTabIndex = (index: string) => {
+		dispatch(setCourseTabIndex(index));
+	};
 	//true: has Exercise - false: no Exercise
 	const getDocumentsByType = (list: Array<Document>, type: boolean) => {
+		let result = list.filter((item) => {
+			return item.HasExercise === type;
+		});
 
-		let result = list.filter(item => {
-			return item.HasExercise === type
-		})
+		if (result && result.length > 0) return result;
 
-		if (result && result.length > 0)
-			return result;
-
-		return []
-	}
+		return [];
+	};
 	const onCreateDocument = (form: CreateDocumentRequest) => {
 		setOpenDocumentCreate(false);
 		setCreateDocumentForm(InitialForm);
@@ -94,75 +97,78 @@ const CoursePage = () => {
 	useEffect(() => {
 		if (!course) {
 			// dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
-			
 		} else if (course === null) {
 			navigate(-1);
 		} else {
-
 			let isCreator = isCourseCreator(course.id, UserProfile ? UserProfile.id : '');
 
-			let courseGeneral: GetCourseByIdResponse = { ...course, documents: getDocumentsByType(course.documents, false) }
-			let courseExercise: GetCourseByIdResponse = { ...course, documents: getDocumentsByType(course.documents, true) }
+			let courseGeneral: GetCourseByIdResponse = {
+				...course,
+				documents: getDocumentsByType(course.documents, false)
+			};
+			let courseExercise: GetCourseByIdResponse = {
+				...course,
+				documents: getDocumentsByType(course.documents, true)
+			};
 
-			setTabs([
-				{
-					title: 'Document',
-					element: (
-						<General
-							isCreator={isCreator}
-							course={courseGeneral}
-							code={findCourseCode(courseGeneral.id)}
-							customizeButton={
-								isCreator
-									? () => {
-										setOpenCourseCustomize(true);
-									}
-									: null
-							}
-							changePublishDocument={ChangePublishDocument}
-							createDocumentModal={
-								isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
-									? () => {
-										setOpenDocumentCreate(true);
-									}
-									: null
-							}
-						/>
-					)
-				},
-				{
-					title: 'Exercise',
-					element: (
-						<Exercise
-							isCreator={isCreator}
-							course={courseExercise}
-							code={findCourseCode(courseExercise.id)}
-							customizeButton={
-								isCreator
-									? () => {
-										setOpenCourseCustomize(true);
-									}
-									: null
-							}
-							changePublishDocument={ChangePublishDocument}
-							createDocumentModal={
-								isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
-									? () => {
-										setOpenDocumentCreate(true);
-									}
-									: null
-							}
-						/>
-					)
-				}, {
-					title: 'Score Board',
-					element: (
-						<ScoreBoard 
-						courseId={course.id}
-						/>
-					)
-				}
-			]);
+			dispatch(
+				setCourseTabs([
+					{
+						title: 'Document',
+						element: (
+							<General
+								isCreator={isCreator}
+								course={courseGeneral}
+								code={findCourseCode(courseGeneral.id)}
+								customizeButton={
+									isCreator
+										? () => {
+												setOpenCourseCustomize(true);
+										  }
+										: null
+								}
+								changePublishDocument={ChangePublishDocument}
+								createDocumentModal={
+									isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
+										? () => {
+												setOpenDocumentCreate(true);
+										  }
+										: null
+								}
+							/>
+						)
+					},
+					{
+						title: 'Exercise',
+						element: (
+							<Exercise
+								isCreator={isCreator}
+								course={courseExercise}
+								code={findCourseCode(courseExercise.id)}
+								customizeButton={
+									isCreator
+										? () => {
+												setOpenCourseCustomize(true);
+										  }
+										: null
+								}
+								changePublishDocument={ChangePublishDocument}
+								createDocumentModal={
+									isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
+										? () => {
+												setOpenDocumentCreate(true);
+										  }
+										: null
+								}
+							/>
+						)
+					},
+					{
+						title: 'Score Board',
+						element: <ScoreBoard courseId={course.id} />
+					}
+				])
+			);
 		}
 	}, [course, course?.documents]);
 
@@ -175,7 +181,7 @@ const CoursePage = () => {
 		<LinearLoading />
 	) : course ? (
 		<Fragment>
-			<CustomTab listOfTabs={Tabs} />
+			<CustomTab listOfTabs={tabs} tabIndex={tabIndex} setTabIndex={setTabIndex} />
 			<CourseCustomizeModal
 				open={OpenCourseCustomize}
 				close={() => {

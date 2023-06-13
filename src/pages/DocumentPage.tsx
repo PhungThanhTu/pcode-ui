@@ -3,14 +3,17 @@ import NotFound from '@/components/NotFound';
 import Compose from '@/components/Document/Tab/Compose';
 import Content from '@/components/Document/Tab/Content';
 import Exercise from '@/components/Document/Tab/Exercise';
+import Submission from '@/components/Document/Tab/Submission';
+import TestCase from '@/components/Document/Tab/TestCase';
+import CustomDialog from '@/components/Custom/CustomDialog';
 import { LinearLoading } from '@/components/Loading';
 
-import { TabElement } from '@/types/utility.type';
-import { useEffect, Fragment, useState, ChangeEvent, useLayoutEffect } from 'react';
+import { useEffect, Fragment, useState, ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 import { getDocument } from '@/selectors/document.selector';
+import { usePDFFileReader } from '@/hook/useFileReader';
 
 import {
 	createDocumentContent,
@@ -18,11 +21,7 @@ import {
 	createSubmission,
 	createTestCase,
 	deleteTestCase,
-	fetchAllSubmissions,
-	fetchAllSubmissionsManage,
-	fetchAllTestCases,
 	fetchDocumentById,
-	fetchExercise,
 	fetchSampleSourceCode,
 	fetchSingleSubmission,
 	markSubmission,
@@ -32,7 +31,6 @@ import {
 	updateTestCase
 } from '@/slices/document.slice';
 
-import { usePDFFileReader } from '@/hook/useFileReader';
 import {
 	CreateDocumentContentRequest,
 	CreateSubmissionRequest,
@@ -44,18 +42,15 @@ import {
 	UpdateSampleSourceCodeRequest,
 	UpdateTestCaseRequest
 } from '@/types/document.type';
+
 import { Worker } from '@react-pdf-viewer/core';
-import TestCase from '@/components/Document/Tab/TestCase';
-import CustomDialog from '@/components/Custom/CustomDialog';
 import { JudgerId, contentTypeId, createExerciseDefault } from '@/config';
 import { getApiDateFormat, getToday } from '@/utils/convert';
-import Submission from '@/components/Document/Tab/Submission';
 import { LocalStorageService } from '@/services/localStorageService';
-
-
+import { setDocumentTabIndex, setDocumentTabs } from '@/slices/tab.slice';
+import { getDocumentTabIndex, getDocumentTabs } from '@/selectors/tab.selector';
 
 const DocumentPage = () => {
-
 	const params = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -64,10 +59,16 @@ const DocumentPage = () => {
 
 	const { document, loading, documentContent } = useSelector(getDocument);
 
-	const [Tabs, setTabs] = useState<TabElement[]>([]);
+	const tabs = useSelector(getDocumentTabs);
+	const tabIndex = useSelector(getDocumentTabIndex);
+
 	const [OpenDialog, setOpenDialog] = useState(false);
 
 	const { PdfFile, getFile } = usePDFFileReader();
+
+	const SetTabIndex = (index: string) => {
+		dispatch(setDocumentTabIndex(index));
+	};
 
 	//#region document content
 	const onChangeDocumentContent = (e: ChangeEvent<HTMLInputElement>) => {
@@ -112,7 +113,6 @@ const DocumentPage = () => {
 		sourceForm: UpdateSampleSourceCodeRequest,
 		documentId: string
 	) => {
-		console.log(ExeriseForm.Deadline,'cc')
 		let exerciseForm: UpdateExerciseRequest = {
 			deadline: ExeriseForm.HaveDeadline
 				? getApiDateFormat(new Date(ExeriseForm.Deadline).toISOString())
@@ -152,7 +152,6 @@ const DocumentPage = () => {
 	};
 
 	const onUpdateTestCase = (documentId: string, testCaseId: number, Form: UpdateTestCaseRequest) => {
-
 		let form: UpdateTestCaseRequest = {
 			input: Form.input,
 			output: Form.output,
@@ -172,219 +171,215 @@ const DocumentPage = () => {
 		dispatch(fetchSingleSubmission(Request));
 	};
 	const onCreateSubmission = (Request: UpdateSampleSourceCodeRequest, documentId: string) => {
-
-
-
 		let form: CreateSubmissionRequest = {
 			programmingLanguageId: Request.type,
 			sourceCode: Request.sampleSourceCode
 		};
 
-		LocalStorageService.setCodeCache(form)
-		dispatch(createSubmission({ documentId: documentId, body: form }))
-
-
-
+		LocalStorageService.setCodeCache(form);
+		dispatch(createSubmission({ documentId: documentId, body: form }));
+		SetTabIndex('3');
 	};
 
 	const onMarkSubmission = (Request: SubmissionActionRequest) => {
 		dispatch(markSubmission(Request));
 	};
 	const onScoreSubmission = (Request: ScoreSubmissionRequest) => {
-		dispatch(scoreSubmissionManage({ Ids: Request.Ids, score: Request.score }))
-	}
-	const onDeleteSubmission = (Request: SubmissionActionRequest) => { };
+		dispatch(scoreSubmissionManage({ Ids: Request.Ids, score: Request.score }));
+	};
+	const onDeleteSubmission = (Request: SubmissionActionRequest) => {};
 
 	//#endregion
 
 	useEffect(() => {
 		if (!document) {
-
-		}
-		else if (document === null) {
+		} else if (document === null) {
 			navigate(-1);
 		} else if (document !== undefined) {
-
 			if (userProfile?.id === document.CreatorId) {
 				if (document.HasExercise) {
-
-					setTabs([
-						{
-							title: 'Compose',
-							element: (
-								<Compose
-									document={document}
-									documentContent={documentContent}
-									onChange={onChangeDocumentContent}
-									onCreate={onCreateDocumentContent}
-									onReset={() => {
-										setOpenDialog(true);
-									}}
-								/>
-							)
-						},
-						{
-							title: 'Content',
-							element: (
-								<Content
-									title={document.Title}
-									source={documentContent}
-									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
-								/>
-							)
-						},
-						{
-							title: 'Exercise',
-							element: (
-								<Exercise
-									isCreator={true}
-									document={document}
-									content={{
-										source: documentContent,
-										type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3
-									}}
-									onCreate={onCreateExercise}
-									onUpdate={onUpdateExercise}
-									onGetSampleSourceCode={onGetSampleSourceCode}
-								/>
-							)
-						},
-						{
-							title: 'TestCases',
-							element: (
-								<TestCase
-									document={document}
-									onCreate={onCreateTestCase}
-									onUpdate={onUpdateTestCase}
-									onDelete={onDeleteTestCase}
-								/>
-							)
-						},
-						{
-							title: 'Submission',
-							element: (
-								<Submission
-									isCreator={true}
-									document={document}
-									onSelected={() => { }}
-									onScore={onScoreSubmission}
-
-								/>
-							)
-						}
-					]);
+					dispatch(
+						setDocumentTabs([
+							{
+								title: 'Compose',
+								element: (
+									<Compose
+										document={document}
+										documentContent={documentContent}
+										onChange={onChangeDocumentContent}
+										onCreate={onCreateDocumentContent}
+										onReset={() => {
+											setOpenDialog(true);
+										}}
+									/>
+								)
+							},
+							{
+								title: 'Content',
+								element: (
+									<Content
+										title={document.Title}
+										source={documentContent}
+										type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
+									/>
+								)
+							},
+							{
+								title: 'Exercise',
+								element: (
+									<Exercise
+										isCreator={true}
+										document={document}
+										content={{
+											source: documentContent,
+											type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3
+										}}
+										onCreate={onCreateExercise}
+										onUpdate={onUpdateExercise}
+										onGetSampleSourceCode={onGetSampleSourceCode}
+									/>
+								)
+							},
+							{
+								title: 'TestCases',
+								element: (
+									<TestCase
+										document={document}
+										onCreate={onCreateTestCase}
+										onUpdate={onUpdateTestCase}
+										onDelete={onDeleteTestCase}
+									/>
+								)
+							},
+							{
+								title: 'Submission',
+								element: (
+									<Submission
+										isCreator={true}
+										document={document}
+										onSelected={() => {}}
+										onScore={onScoreSubmission}
+									/>
+								)
+							}
+						])
+					);
 				} else {
-					setTabs([
-						{
-							title: 'Composer',
-							element: (
-								<Compose
-									document={document}
-									documentContent={documentContent}
-									onChange={onChangeDocumentContent}
-									onCreate={onCreateDocumentContent}
-									onReset={() => {
-										setOpenDialog(true);
-									}}
-								/>
-							)
-						},
-						{
-							title: 'Content',
-							element: (
-								<Content
-									title={document.Title}
-									source={documentContent}
-									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
-								/>
-							)
-						}
-					]);
+					dispatch(
+						setDocumentTabs([
+							{
+								title: 'Composer',
+								element: (
+									<Compose
+										document={document}
+										documentContent={documentContent}
+										onChange={onChangeDocumentContent}
+										onCreate={onCreateDocumentContent}
+										onReset={() => {
+											setOpenDialog(true);
+										}}
+									/>
+								)
+							},
+							{
+								title: 'Content',
+								element: (
+									<Content
+										title={document.Title}
+										source={documentContent}
+										type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
+									/>
+								)
+							}
+						])
+					);
 				}
 			} else {
 				if (document.HasExercise) {
-
-					setTabs([
-						{
-							title: 'Exercise',
-							element: (
-								<Exercise
-									content={{
-										source: documentContent,
-										type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3
-									}}
-									document={document}
-									isCreator={false}
-									onSubmit={onCreateSubmission}
-									onGetSampleSourceCode={onGetSampleSourceCode}
-								/>
-							)
-						},
-						{
-							title: 'Content',
-							element: (
-								<Content
-									title={document.Title}
-									source={documentContent}
-									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
-								/>
-							)
-						},
-						{
-							title: 'Submission',
-							element: (
-								<Submission
-									isCreator={false}
-									document={document}
-									onMark={onMarkSubmission}
-									onSelected={onFetchSingleSubmission}
-								/>
-							)
-						}
-					]);
+					dispatch(
+						setDocumentTabs([
+							{
+								title: 'Exercise',
+								element: (
+									<Exercise
+										content={{
+											source: documentContent,
+											type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3
+										}}
+										document={document}
+										isCreator={false}
+										onSubmit={onCreateSubmission}
+										onGetSampleSourceCode={onGetSampleSourceCode}
+									/>
+								)
+							},
+							{
+								title: 'Content',
+								element: (
+									<Content
+										title={document.Title}
+										source={documentContent}
+										type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
+									/>
+								)
+							},
+							{
+								title: 'Submission',
+								element: (
+									<Submission
+										isCreator={false}
+										document={document}
+										onMark={onMarkSubmission}
+										onSelected={onFetchSingleSubmission}
+									/>
+								)
+							}
+						])
+					);
 				} else {
-					setTabs([
-						{
-							title: 'Content',
-							element: (
-								<Content
-									title={document.Title}
-									source={documentContent}
-									type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
-								/>
-							)
-						}
-					]);
+					dispatch(
+						setDocumentTabs([
+							{
+								title: 'Content',
+								element: (
+									<Content
+										title={document.Title}
+										source={documentContent}
+										type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
+									/>
+								)
+							}
+						])
+					);
 				}
 			}
-
 		}
 	}, [document]);
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		dispatch(fetchDocumentById({ id: params.documentId ? params.documentId : '' }));
 	}, []);
 
-	return loading ?
+	return loading ? (
 		<LinearLoading />
-		: document ?
-			<Fragment>
-				<Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js">
-					<CustomTab listOfTabs={Tabs} />
-				</Worker>
-				<CustomDialog
-					title="Reset the content?"
-					content="This will reset (delete) and make the document content can be set up again!"
-					open={OpenDialog}
-					onCancel={() => setOpenDialog(false)}
-					onSave={() => {
-						onResetDocumentContent();
-					}}
-				/>
-			</Fragment>
-			:
-			<NotFound />
-		;
+	) : document ? (
+		<Fragment>
+			<Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js">
+				<CustomTab listOfTabs={tabs} tabIndex={tabIndex} setTabIndex={SetTabIndex} />
+			</Worker>
+			<CustomDialog
+				title="Reset the content?"
+				content="This will reset (delete) and make the document content can be set up again!"
+				open={OpenDialog}
+				onCancel={() => setOpenDialog(false)}
+				onSave={() => {
+					onResetDocumentContent();
+				}}
+			/>
+		</Fragment>
+	) : (
+		<NotFound />
+	);
 };
 
 export default DocumentPage;

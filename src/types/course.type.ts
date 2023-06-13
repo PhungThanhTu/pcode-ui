@@ -13,15 +13,16 @@ export interface Course {
 }
 
 export interface CourseScore {
-	UserId: string,
-	Username: string,
-	FullName: string,
-	Email: string,
-	Score: number
+	UserId: string;
+	Username: string;
+	FullName: string;
+	Email: string;
+	Score: number;
 }
 
 export interface JoinCourse {
 	Code: string;
+	Navigate: Function;
 }
 export interface CoursesState {
 	courses?: Array<Course> | null;
@@ -29,10 +30,9 @@ export interface CoursesState {
 }
 export interface CourseState {
 	course?: GetCourseByIdResponse | null;
-	courseScore? : Array<CourseScore> | null
+	courseScore?: Array<CourseScore> | null;
 	loading: boolean;
 }
-
 
 // API interface
 export interface GetCourseByIdResponse {
@@ -61,4 +61,3 @@ export interface CreateCourseResponse {
 	courseTheme: string;
 	CreatorName: string;
 }
-

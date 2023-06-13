@@ -1,5 +1,4 @@
-import { TestResultStatus } from "@/config";
-
+import { TestResultStatus } from '@/config';
 
 export const LabelToProperty = (str: String) => {
 	let tmp = str.trim().split(' ');
@@ -9,13 +8,10 @@ export const LabelToProperty = (str: String) => {
 };
 
 export const NameToField = (name: string, upper: boolean) => {
-
 	let tmp = name.trim().split(' ');
 
-	if (upper)
-		tmp[0] = tmp[0].charAt(0).toUpperCase() + tmp[0].substring(1)
-	else
-		tmp[0] = tmp[0].toLowerCase();
+	if (upper) tmp[0] = tmp[0].charAt(0).toUpperCase() + tmp[0].substring(1);
+	else tmp[0] = tmp[0].toLowerCase();
 
 	return tmp.join('');
 };
@@ -35,7 +31,6 @@ export const positiveNumberWithMin = (number: number, min: number) => {
 
 export const parseToLocalDate = (date_UTC: string) => {
 	if (date_UTC) {
-		
 		// const dateTime = new Date(date_UTC);
 
 		// const year = dateTime.getUTCFullYear();
@@ -44,7 +39,7 @@ export const parseToLocalDate = (date_UTC: string) => {
 		// const hours = ('0' + dateTime.getUTCHours()).slice(-2);
 		// const minutes = ('0' + dateTime.getUTCMinutes()).slice(-2);
 		// const seconds = ('0' + dateTime.getUTCSeconds()).slice(-2);
-		
+
 		// const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
 		// return formattedDateTime
@@ -112,13 +107,10 @@ export const getApiDateFormat = (date: string) => {
 	return temp.substring(0, 16);
 };
 
-
-
 export const TestResultStatusToMessage = (status: number) => {
+	const testResulStatus = Object.values(TestResultStatus);
 
-	const testResulStatus = Object.values(TestResultStatus)
+	let result = testResulStatus.filter((item) => item.status === status)[0];
 
-	let result = testResulStatus.filter(item => item.status === status)[0]
-	
-	return result? result.message : 'No Status'
-}
+	return result ? result.message : 'No Status';
+};

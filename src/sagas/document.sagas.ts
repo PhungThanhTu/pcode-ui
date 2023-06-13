@@ -78,11 +78,9 @@ import { setLoading } from '@/slices/loading.slice';
 import { changePublishDocumentSuccess, fetchCourseById } from '@/slices/course.slice';
 import { contentTypeId } from '@/config';
 
-
 //#region document
 function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 	try {
-
 		const document: AxiosResponse<GetDocumentByIdResponse> = yield call(
 			documentApi.getDocumentById,
 			action.payload.id
@@ -90,7 +88,6 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 		if (document.data.Contents.length > 0) {
 			try {
 				if (document.data.Contents[0].ContentTypeId != contentTypeId.markDown) {
-
 					const file: AxiosResponse<any> = yield call(
 						documentApi.getMedia,
 						document.data.Contents[0].ContentBody
@@ -98,7 +95,6 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 
 					let content = new Blob([file.data], { type: 'application/pdf' });
 					yield put(fetchDocumentByIdWithContentSuccess({ documentContent: content }));
-
 				} else {
 					yield put(
 						fetchDocumentByIdWithContentSuccess({
@@ -106,15 +102,16 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 						})
 					);
 				}
-			}
-			catch {
+			} catch {
 				yield put(fetchDocumentByIdWithContentError());
-				yield put(setSnackbar(notificationMessage.ERROR('Invalid document content id or document content does not exist.')));
+				yield put(
+					setSnackbar(
+						notificationMessage.ERROR('Invalid document content id or document content does not exist.')
+					)
+				);
 			}
-
 		}
 		yield put(fetchDocumentByIdSuccess(document.data));
-
 	} catch (error: any) {
 		yield put(fetchDocumentByIdError());
 		yield put(setSnackbar(notificationMessage.ERROR('Invalid document id or document does not exist.')));
@@ -173,35 +170,34 @@ function* changePublishDocumentSaga(action: PayloadAction<{ documentId: string; 
 //#region document content
 function* createDocumentContentSaga(action: PayloadAction<CreateDocumentContentRequest>) {
 	try {
-
 		yield put(setLoading({ isLoading: true }));
 
-		const response: AxiosResponse<CreateDocumentContentResponse> = yield call(documentApi.createDocumentContent, action.payload);
+		const response: AxiosResponse<CreateDocumentContentResponse> = yield call(
+			documentApi.createDocumentContent,
+			action.payload
+		);
 
 		if (response) {
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('document content', '')));
-			yield put(createDocumentContentSuccess({ content: action.payload.content, documentContent: response.data }));
+			yield put(
+				createDocumentContentSuccess({ content: action.payload.content, documentContent: response.data })
+			);
 		}
-
-
 	} catch (error: any) {
-
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('document content', '')));
 	}
 }
 function* resetDocumentContentSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
-
 		yield put(setLoading({ isLoading: true }));
 		const data: AxiosResponse<any> = yield call(documentApi.deleteDocumentContent, action.payload.documentId);
 		if (data) {
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.DELETE_SUCCESS('document content')));
-			yield put(resetDocumentContentSuccess())
+			yield put(resetDocumentContentSuccess());
 		}
-
 	} catch (error: any) {
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.ERROR('Reset document content failed, please try again!.')));
@@ -212,7 +208,6 @@ function* resetDocumentContentSaga(action: PayloadAction<{ documentId: string }>
 //#region document exercise
 function* fetchExerciseSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
-
 		const exercise: AxiosResponse<GetExerciseResponse> = yield call(
 			documentApi.getExercise,
 			action.payload.documentId
@@ -226,7 +221,6 @@ function* fetchExerciseSaga(action: PayloadAction<{ documentId: string }>) {
 }
 function* createDocumentExerciseSaga(action: PayloadAction<{ body: CreateExerciseRequest; documentId: string }>) {
 	try {
-		console.log('saga create/update document exercise.');
 		yield put(setLoading({ isLoading: true }));
 		const data: AxiosResponse<any> = yield call(
 			documentApi.createExercise,
@@ -240,7 +234,6 @@ function* createDocumentExerciseSaga(action: PayloadAction<{ body: CreateExercis
 		}
 		yield put(fetchExercise({ documentId: action.payload.documentId }));
 	} catch (error: any) {
-		console.log('saga create/update document exercise failed.');
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.CREATE_FAIL('document content', 'Please, try again!')));
 	}
@@ -253,7 +246,6 @@ function* updateDocumentExerciseSaga(
 	}>
 ) {
 	try {
-		console.log('saga update document exercise');
 		yield put(setLoading({ isLoading: true }));
 		const data: AxiosResponse<any> = yield call(
 			documentApi.updateExercise,
@@ -393,11 +385,10 @@ function* deleteTestCaseSaga(action: PayloadAction<{ documentId: string; testCas
 }
 //#endregion
 
-//region document submission
+//#region document submission
 
 function* fetchAllSubmissionsSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
-
 		const submission: AxiosResponse<Array<Submission>> = yield call(
 			documentApi.getAllSubmissions,
 			action.payload.documentId
@@ -407,12 +398,10 @@ function* fetchAllSubmissionsSaga(action: PayloadAction<{ documentId: string }>)
 		}
 	} catch (error: any) {
 		yield put(fetchAllSubmissionsError());
-
 	}
 }
 function* fetchAllSubmissionsManageSaga(action: PayloadAction<{ documentId: string }>) {
 	try {
-
 		const submission: AxiosResponse<Array<SubmissionManage>> = yield call(
 			documentApi.getAllSubmissionsManage,
 			action.payload.documentId
@@ -422,12 +411,10 @@ function* fetchAllSubmissionsManageSaga(action: PayloadAction<{ documentId: stri
 		}
 	} catch (error: any) {
 		yield put(fetchAllSubmissionsManageError());
-
 	}
 }
 function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionRequest>) {
 	try {
-		console.log('saga fetching document submission');
 		const submission: AxiosResponse<GetSingleSubmissionResponse> = yield call(
 			documentApi.getSingleSubmission,
 			action.payload
@@ -437,13 +424,10 @@ function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionReque
 		}
 	} catch (error: any) {
 		yield put(fetchSingleSubmissionError());
-		console.log('saga fetch document submission failed');
 	}
 }
 function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>) {
 	try {
-
-
 		yield put(setLoading({ isLoading: true }));
 
 		const submission: AxiosResponse<CreateSubmissionResponse> = yield call(
@@ -453,7 +437,6 @@ function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body:
 		);
 
 		if (submission.data) {
-			console.log(submission.data);
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('submission')));
 			yield put(fetchAllSubmissions({ documentId: action.payload.documentId }));
@@ -464,16 +447,13 @@ function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body:
 				})
 			);
 		}
-
 	} catch (error: any) {
-
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.CREATE_FAIL('submission', '')));
 	}
 }
 function* deleteSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
 	try {
-
 		yield put(setLoading({ isLoading: true }));
 		const submission: AxiosResponse<any> = yield call(documentApi.deleteSubmission, action.payload);
 
@@ -483,7 +463,6 @@ function* deleteSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
 			yield put(deleteSubmissionSuccess(submission.data));
 		}
 	} catch (error: any) {
-
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.DELETE_FAIL('test case', '')));
 	}
@@ -491,7 +470,6 @@ function* deleteSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
 
 function* markSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
 	try {
-
 		yield put(setLoading({ isLoading: true }));
 		const submission: AxiosResponse<any> = yield call(documentApi.markSubmission, action.payload);
 
@@ -499,31 +477,34 @@ function* markSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('submission', 'Submission is marked')));
 			yield put(markSubmissionSuccess(action.payload));
+			yield put(fetchSingleSubmission(action.payload));
 		}
 	} catch (error: any) {
-
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('submission', '')));
 	}
 }
 function* scoreSubmissionManageSaga(action: PayloadAction<ScoreSubmissionRequest>) {
 	try {
-
 		yield put(setLoading({ isLoading: true }));
-		const response: AxiosResponse<ScoreSubmissionResponse> = yield call(documentApi.scoreSubmissionManage, action.payload);
+		const response: AxiosResponse<ScoreSubmissionResponse> = yield call(
+			documentApi.scoreSubmissionManage,
+			action.payload
+		);
 
 		if (response.data) {
 			yield put(setLoading({ isLoading: false }));
-			yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('submission', 'Submission is updated with new score')));
+			yield put(
+				setSnackbar(notificationMessage.UPDATE_SUCCESS('submission', 'Submission is updated with new score'))
+			);
 			yield put(scoreSubmissionManageSuccess(response.data));
 		}
 	} catch (error: any) {
-
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('submission', '')));
 	}
 }
-//endregion
+//#endregion
 
 export function* watchDocument() {
 	yield takeLatest(fetchDocumentById.type, fetchDocumentByIdSaga);

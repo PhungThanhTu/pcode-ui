@@ -22,5 +22,5 @@ export const flexBox = (alignItems: string, justifyContent: string, flexDirectio
 		alignItems: alignItems,
 		justifyContent: justifyContent,
 		height: '100%'
-	}
-}
+	};
+};

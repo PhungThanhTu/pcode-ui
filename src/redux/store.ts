@@ -1,4 +1,4 @@
-import { Middleware, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 
 import authSlice from '../slices/auth.slice';
@@ -8,6 +8,7 @@ import snackbarSlice from '@/slices/snackbar.slice';
 import { courseReducer, coursesReducer } from '@/slices/course.slice';
 import loadingSlice from '@/slices/loading.slice';
 import documentSlice from '@/slices/document.slice';
+import { documentTabReducer, courseTabReducer } from '@/slices/tab.slice';
 
 import { watchRegister } from '../sagas/register.saga';
 import { watchProfile } from '@/sagas/profile.sagas';
@@ -16,7 +17,6 @@ import { watchCourse } from '@/sagas/course.sagas';
 import { watchDocument } from '@/sagas/document.sagas';
 
 const sagaMiddleware = createSagaMiddleware();
-
 
 export const store = configureStore({
 	reducer: {
@@ -27,7 +27,9 @@ export const store = configureStore({
 		courses: coursesReducer,
 		course: courseReducer,
 		loading: loadingSlice,
-		document: documentSlice
+		document: documentSlice,
+		documentTab: documentTabReducer,
+		courseTab: courseTabReducer
 	},
 	middleware: [sagaMiddleware]
 });
@@ -38,15 +40,6 @@ sagaMiddleware.run(watchProfile);
 sagaMiddleware.run(watchCourse);
 sagaMiddleware.run(watchDocument);
 
-
 export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
-
-export const dispatchWithPromise = (dispatch: AppDispatch) => {
-	return (action: any) =>
-		new Promise<void>((resolve, reject) => {
-			dispatch(action);
-			resolve();
-		});
-}

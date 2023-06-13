@@ -81,9 +81,9 @@ export const LoginForm = () => {
 				}}
 			>
 				<Typography fontSize={16}>Don't have account</Typography>
-				{/* <Link component={RouterLink} to="/register" underline="none" variant="h4" fontSize={16}>
+				<Link component={RouterLink} to="/register" underline="none" variant="h4" fontSize={16}>
 					Create one
-				</Link> */}
+				</Link>
 			</Box>
 		</AuthFormLayout>
 	);

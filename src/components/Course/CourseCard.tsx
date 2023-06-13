@@ -64,14 +64,14 @@ const CourseCard = (props: CourseCardProps) => {
 
 	const Sx = course.courseTheme
 		? {
-			...CardHeaderSx,
-			backgroundImage: `url(${course.courseTheme})`
-		}
+				...CardHeaderSx,
+				backgroundImage: `url(${course.courseTheme})`
+		  }
 		: CardHeaderSx;
 
 	const onCopy = async (e: MouseEvent<HTMLButtonElement>) => {
 		e.stopPropagation();
-		const host = window.location.host
+		const host = window.location.host;
 		await navigator.clipboard.writeText(`${host}/invitation/${course.Code}`);
 		setCopied(true);
 	};

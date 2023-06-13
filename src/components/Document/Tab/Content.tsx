@@ -22,7 +22,6 @@ export interface PreviewProps {
 }
 
 const Content = (props: PreviewProps) => {
-
 	const { source, type, title } = props;
 
 	if (source) {

@@ -1,4 +1,4 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest, delay } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import { setSnackbar } from '@/slices/snackbar.slice';
@@ -39,7 +39,6 @@ function* fetchCoursesSaga() {
 
 function* createCourseSaga(action: PayloadAction<CreateCourseRequest>) {
 	try {
-
 		yield put(setLoading({ isLoading: true }));
 		const data: CreateCourseResponse = yield call(courseApi.createCourse, action.payload);
 
@@ -49,7 +48,6 @@ function* createCourseSaga(action: PayloadAction<CreateCourseRequest>) {
 		}
 		yield put(fetchCourses());
 	} catch (error: any) {
-
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.CREATE_FAIL('course', '')));
 	}
@@ -57,32 +55,29 @@ function* createCourseSaga(action: PayloadAction<CreateCourseRequest>) {
 
 function* renameCourseSaga(action: PayloadAction<Course>) {
 	try {
-
 		yield call(courseApi.renameCourse, action.payload);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('course', 'Rename Succesfully')));
 		yield put(fetchCourses());
 	} catch (error: any) {
-
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('course', 'Rename Fail')));
 	}
 }
 
 function* joinCourseSaga(action: PayloadAction<JoinCourse>) {
 	try {
+		yield delay(3000);
 		yield call(courseApi.joinCourse, action.payload.Code);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('course', 'Join Succesfully')));
 		yield put(fetchCourses());
+		yield action.payload.Navigate();
 	} catch (error: any) {
-
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('course', 'Cannot Join Course')));
 	}
 }
 function* fetchCourseByIdSaga(action: PayloadAction<{ id: string }>) {
 	try {
-
 		const course: AxiosResponse<GetCourseByIdResponse> = yield call(courseApi.getCourseById, action.payload.id);
 		yield put(fetchCourseByIdSuccess(course.data));
-
 	} catch (error: any) {
 		yield put(fetchCourseByIdError());
 		yield put(setSnackbar(notificationMessage.ERROR('Invalid course id or course does not exist.')));
@@ -90,12 +85,13 @@ function* fetchCourseByIdSaga(action: PayloadAction<{ id: string }>) {
 }
 function* fetchCourseScoreByIdSaga(action: PayloadAction<{ courseId: string }>) {
 	try {
-		const response: AxiosResponse<Array<CourseScore>> = yield call(courseApi.getCourseScoreById, action.payload.courseId);
+		const response: AxiosResponse<Array<CourseScore>> = yield call(
+			courseApi.getCourseScoreById,
+			action.payload.courseId
+		);
 		yield put(fetchCourseScoreByIdSuccess(response.data));
 	} catch (error: any) {
-
 		yield put(fetchCourseScoreByIdError());
-
 	}
 }
 export function* watchCourse() {

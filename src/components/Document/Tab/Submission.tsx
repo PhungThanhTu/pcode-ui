@@ -6,7 +6,11 @@ import SendIcon from '@mui/icons-material/Send';
 import { GridRowParams } from '@mui/x-data-grid/models/params/gridRowParams';
 
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
-import { getDocumentSingleSubssion, getDocumentSubmissionsManage, getDocumentSubssions } from '@/selectors/document.selector';
+import {
+	getDocumentSingleSubssion,
+	getDocumentSubmissionsManage,
+	getDocumentSubssions
+} from '@/selectors/document.selector';
 import { GetDocumentByIdResponse, SubmissionManage } from '@/types/document.type';
 import { useDispatch, useSelector } from 'react-redux';
 import DocumentSubmissionItem from '../DocumentSubmissionItem';
@@ -18,8 +22,7 @@ import { CodeEditor } from '@/components/CodeEditor';
 import DataGridListItems from '@/components/DataGridListItems';
 import TextField from '@mui/material/TextField';
 import { fetchAllSubmissions, fetchAllSubmissionsManage } from '@/slices/document.slice';
-
-
+import { useParams } from 'react-router-dom';
 
 interface SubmissionProps {
 	document: GetDocumentByIdResponse;
@@ -30,19 +33,20 @@ interface SubmissionProps {
 }
 
 const Submission = (props: SubmissionProps) => {
-
 	const { document, onMark, onSelected, onScore, isCreator } = props;
 
-	const dispatch = useDispatch()
-	const [SelectedSubmissionManage, setSelectedSubmissionManage] = useState<SubmissionManage>()
-	const [ManualScore, setManualScore] = useState(0)
-	const [SourceCodeSubmissionManage, setSourceCodeSubmissionManage] = useState('')
+	const params = useParams();
+	const dispatch = useDispatch();
+
+	const [SelectedSubmissionManage, setSelectedSubmissionManage] = useState<SubmissionManage>();
+	const [ManualScore, setManualScore] = useState(0);
+	const [SourceCodeSubmissionManage, setSourceCodeSubmissionManage] = useState('');
 
 	const onSelectSubmissionManage = (params: GridRowParams) => {
-		setSelectedSubmissionManage(params.row)
-		setManualScore(params.row.ManualScore ? params.row.ManualScore : 0)
-		setSourceCodeSubmissionManage(params.row.SourceCode ? params.row.SourceCode : ' ')
-	}
+		setSelectedSubmissionManage(params.row);
+		setManualScore(params.row.ManualScore ? params.row.ManualScore : 0);
+		setSourceCodeSubmissionManage(params.row.SourceCode ? params.row.SourceCode : ' ');
+	};
 
 	const submissions = useSelector(getDocumentSubssions);
 	const submission = useSelector(getDocumentSingleSubssion);
@@ -51,35 +55,32 @@ const Submission = (props: SubmissionProps) => {
 	useEffect(() => {
 		if (isCreator) {
 			if (submissionsmanage === null)
-				dispatch(fetchAllSubmissionsManage({ documentId: document.Id }))
-		}
-		else
-			dispatch(fetchAllSubmissions({ documentId: document.Id }))
-
-	}, [])
+				dispatch(fetchAllSubmissionsManage({ documentId: params.documentId ? params.documentId : '' }));
+		} else dispatch(fetchAllSubmissions({ documentId: params.documentId ? params.documentId : '' }));
+	}, []);
 
 	return (
 		<DocumentTabLayout
 			title={document.Title}
 			childrenPosition={false}
 			left={
-				isCreator ?
-					submissionsmanage && submissionsmanage.length > 0 && SelectedSubmissionManage ?
+				isCreator ? (
+					submissionsmanage && submissionsmanage.length > 0 && SelectedSubmissionManage ? (
 						<CodeEditor
 							language={SelectedSubmissionManage.ProgrammingLanguageId}
 							source={SourceCodeSubmissionManage}
 							readOnly={true}
 							isCreator={isCreator}
 							documentId={document.Id}
-							onGetSampleSourceCode={() => { }}
-							getSource={() => { }}
+							onGetSampleSourceCode={() => {}}
+							getSource={() => {}}
 						/>
-						:
+					) : (
 						<Typography sx={centerPos} variant="subtitle1">
 							Choose one submission for manually scoring.
 						</Typography>
-
-					:
+					)
+				) : (
 					<Box sx={{ overflow: 'auto', maxHeight: '600px', minHeight: 'inherit' }}>
 						<Typography variant="subtitle1">
 							Please note that the score displaying is the score provided by automated judging system, not
@@ -103,9 +104,7 @@ const Submission = (props: SubmissionProps) => {
 												onSelected({ documentId: document.Id, submissionId: item.Id });
 											}}
 											onMark={() => {
-												if (onMark)
-													onMark({ documentId: document.Id, submissionId: item.Id });
-
+												if (onMark) onMark({ documentId: document.Id, submissionId: item.Id });
 											}}
 										/>
 									);
@@ -115,119 +114,109 @@ const Submission = (props: SubmissionProps) => {
 							)}
 						</Stack>
 					</Box>
+				)
 			}
 			right={
-				isCreator ?
+				isCreator ? (
 					<Box sx={{ overflow: 'auto', maxHeight: '600px', minHeight: 'inherit' }}>
-						<Stack
-
-							rowGap={2}
-							width="100%"
-							alignItems="center"
-							justifyContent="center"
-						>
-							{submissionsmanage && submissionsmanage.length > 0 ?
+						<Stack rowGap={2} width="100%" alignItems="center" justifyContent="center">
+							{submissionsmanage && submissionsmanage.length > 0 ? (
 								<DataGridListItems
 									rows={submissionsmanage}
 									columns={['Full Name', 'Automatec Score', 'Manual Score', 'Submission Id']}
-									onSelected={onSelectSubmissionManage} />
-								:
-								null
-							}
+									onSelected={onSelectSubmissionManage}
+								/>
+							) : null}
 						</Stack>
 					</Box>
-					:
+				) : (
 					<Fragment>
-						{
-							submission ?
-								<Box sx={{ overflow: 'auto', maxHeight: '600px', minHeight: 'inherit' }}>
-									<Typography sx={{ padding: '6px 8px', display: 'block' }}>
-										Selected submission: {submission.Id}
-									</Typography>
-									<Stack
-										padding="10%"
-										paddingTop="10%"
-										rowGap={2}
-										width="100%"
-										alignItems="center"
-
-										justifyContent="center"
-									>
-										{
-											submission && submission.testResults.length > 0 ?
-
-												submission.testResults.map((item, index) => {
-													return <DocumentTestResultItem key={index} index={index + 1} item={item} />;
-
-												})
-												:
-												<Box sx={centerPos}>
-													<CircleLoading />
-												</Box>
-
-										}
-									</Stack>
-								</Box>
-								:
-								submission === undefined ?
-									<Box sx={centerPos}>
-										<CircleLoading />
-									</Box>
-									:
-									<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
-										Click view icon to see test result of submission.
-									</Typography>
-						}
+						{submission ? (
+							<Box sx={{ overflow: 'auto', maxHeight: '600px', minHeight: 'inherit' }}>
+								<Typography sx={{ padding: '6px 8px', display: 'block' }}>
+									Selected submission: {submission.Id}
+								</Typography>
+								<Stack
+									padding="10%"
+									paddingTop="10%"
+									rowGap={2}
+									width="100%"
+									alignItems="center"
+									justifyContent="center"
+								>
+									{submission && submission.testResults.length > 0 ? (
+										submission.testResults.map((item, index) => {
+											return <DocumentTestResultItem key={index} index={index + 1} item={item} />;
+										})
+									) : (
+										<Box sx={centerPos}>
+											<CircleLoading />
+										</Box>
+									)}
+								</Stack>
+							</Box>
+						) : submission === undefined ? (
+							<Box sx={centerPos}>
+								<CircleLoading />
+							</Box>
+						) : (
+							<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
+								Click view icon to see test result of submission.
+							</Typography>
+						)}
 					</Fragment>
-
-
+				)
 			}
 		>
-			{
-				isCreator ?
-					submissionsmanage && submissionsmanage.length > 0 && SelectedSubmissionManage ?
-						<Fragment>
-							<TextField
-								fullWidth
-								required
-								value={ManualScore}
-								onChange={(e) => { setManualScore(Number(e.target.value)) }}
-								label="Score: "
-								type="number"
-								name="score"
-								size='small'
-								sx={{
-									'.MuiInputBase-root': {
-										borderRadius: `0 0 0 ${borderRadius}`
-									}
-								}}
-							/>
-							<LoadingButton
-								size="small"
-								fullWidth
-								sx={{
-									borderRadius: `0 0 ${borderRadius} 0`
-								}}
-								onClick={() => {
-									onScore
-										? onScore({ score: ManualScore, Ids: { documentId: document.Id, submissionId: SelectedSubmissionManage.SubmissionId } })
-										: () => {
+			{isCreator ? (
+				submissionsmanage && submissionsmanage.length > 0 && SelectedSubmissionManage ? (
+					<Fragment>
+						<TextField
+							fullWidth
+							required
+							value={ManualScore}
+							onChange={(e) => {
+								setManualScore(Number(e.target.value));
+							}}
+							label="Score: "
+							type="number"
+							name="score"
+							size="small"
+							sx={{
+								'.MuiInputBase-root': {
+									borderRadius: `0 0 0 ${borderRadius}`,
+									backgroundColor: 'white'
+								}
+							}}
+						/>
+						<LoadingButton
+							size="small"
+							fullWidth
+							sx={{
+								borderRadius: `0 0 ${borderRadius} 0`
+							}}
+							onClick={() => {
+								onScore
+									? onScore({
+											score: ManualScore,
+											Ids: {
+												documentId: document.Id,
+												submissionId: SelectedSubmissionManage.SubmissionId
+											}
+									  })
+									: () => {
 											console.log('Submit Error.');
-										};
-								}}
-								endIcon={<SendIcon />}
-								loadingPosition="end"
-								variant="contained"
-							>
-								<span>Submit</span>
-							</LoadingButton>
-						</Fragment>
-
-						:
-						null
-					:
-					null
-			}
+									  };
+							}}
+							endIcon={<SendIcon />}
+							loadingPosition="end"
+							variant="contained"
+						>
+							<span>Submit</span>
+						</LoadingButton>
+					</Fragment>
+				) : null
+			) : null}
 		</DocumentTabLayout>
 	);
 };

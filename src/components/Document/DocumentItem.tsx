@@ -17,7 +17,6 @@ interface DocumentItemProps {
 	isCreator: boolean;
 }
 export const DocumentItem = (props: DocumentItemProps) => {
-	
 	const { document, publishDocument, isCreator } = props;
 
 	return (

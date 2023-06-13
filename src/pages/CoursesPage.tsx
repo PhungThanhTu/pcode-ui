@@ -96,7 +96,7 @@ const CoursesPage = () => {
 				<LinearLoading />
 			) : (
 				<Grid
-					width="100% !important" 
+					width="100% !important"
 					container
 					rowSpacing={2}
 					columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }}

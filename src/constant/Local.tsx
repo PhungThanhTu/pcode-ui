@@ -1,1 +1,1 @@
-export const codeCache = "codeCache"
+export const codeCache = 'codeCache';

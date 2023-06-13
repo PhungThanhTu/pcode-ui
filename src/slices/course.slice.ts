@@ -10,11 +10,11 @@ import {
 	JoinCourse
 } from '@/types/course.type';
 
-export const initialCoursesState: CoursesState = {
+const initialCoursesState: CoursesState = {
 	courses: undefined,
 	loading: false
 };
-export const initialCourseState: CourseState = {
+const initialCourseState: CourseState = {
 	course: undefined,
 	courseScore: undefined,
 	loading: false
@@ -26,9 +26,9 @@ const coursesSlice = createSlice({
 		fetchCourses: (state) => {
 			state.loading = true;
 		},
-		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => { },
-		renameCourse: (state, { payload }: PayloadAction<Course>) => { },
-		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => { },
+		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => {},
+		renameCourse: (state, { payload }: PayloadAction<Course>) => {},
+		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => {},
 		createCourseSuccess: (state, { payload }: PayloadAction<CreateCourseResponse>) => {
 			let Course: Course = {
 				id: payload.id,
@@ -86,8 +86,15 @@ const courseSlice = createSlice({
 });
 export const { fetchCourses, createCourse, renameCourse, joinCourse, fetchCoursesSuccess, fetchCoursesError } =
 	coursesSlice.actions;
-export const { fetchCourseById, fetchCourseByIdError, fetchCourseByIdSuccess, changePublishDocumentSuccess ,fetchCourseScoreById,fetchCourseScoreByIdError,fetchCourseScoreByIdSuccess} =
-	courseSlice.actions;
+export const {
+	fetchCourseById,
+	fetchCourseByIdError,
+	fetchCourseByIdSuccess,
+	changePublishDocumentSuccess,
+	fetchCourseScoreById,
+	fetchCourseScoreByIdError,
+	fetchCourseScoreByIdSuccess
+} = courseSlice.actions;
 
 export const coursesReducer = coursesSlice.reducer;
 export const courseReducer = courseSlice.reducer;

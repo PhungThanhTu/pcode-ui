@@ -23,18 +23,18 @@ export interface Submission {
 	TimeCreated: string;
 }
 export interface SubmissionManage {
-	UserId: string,
-	FullName: string,
-	UserName: string,
-	Avatar: string,
-	SubmissionId: string,
-	AutomatecScore: number,
-	ManualScore: number,
-	ProgrammingLanguageId: number,
-	SourceCode: string,
-	Pending: boolean,
-	Score: number,
-	TimeCreated: string
+	UserId: string;
+	FullName: string;
+	UserName: string;
+	Avatar: string;
+	SubmissionId: string;
+	AutomatecScore: number;
+	ManualScore: number;
+	ProgrammingLanguageId: number;
+	SourceCode: string;
+	Pending: boolean;
+	Score: number;
+	TimeCreated: string;
 }
 export interface TestResult {
 	SubmissionId: string;

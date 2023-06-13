@@ -9,7 +9,7 @@ import { Primary } from '@/style/Colors';
 export const StyledUnstyledButton = styled(ButtonUnstyled)`
 	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 	font-weight: bold;
-	background-color: ${Primary["main"]};
+	background-color: ${Primary['main']};
 	padding: 12px 24px;
 	border-radius: 5px;
 	color: white;
@@ -18,11 +18,11 @@ export const StyledUnstyledButton = styled(ButtonUnstyled)`
 	border: none;
 
 	&:hover {
-		background-color: ${Primary["dark"]};
+		background-color: ${Primary['dark']};
 	}
 
 	&.${buttonUnstyledClasses.active} {
-		background-color: ${Primary["dark"]};
+		background-color: ${Primary['dark']};
 	}
 
 	&.${buttonUnstyledClasses.focusVisible} {

@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserProfile } from '@/types/auth.type';
 import { AuthState, UserCredentials } from '../types';
+import { LocalStorageService } from '@/services/localStorageService';
 
-export const initialState: AuthState = {
+const initialState: AuthState = {
 	loading: false,
 	error: undefined,
 	profile: undefined
@@ -30,6 +31,7 @@ const authSlice = createSlice({
 			state.loading = true;
 			state.error = undefined;
 			state.profile = null;
+			LocalStorageService.clearCodeCache();
 		},
 		logoutSuccess: (state) => {
 			state.loading = false;

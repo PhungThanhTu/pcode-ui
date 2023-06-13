@@ -21,7 +21,6 @@ interface TestResultItemProps {
 }
 
 const DocumentTestResultItem = (props: TestResultItemProps) => {
-
 	const { item, index } = props;
 
 	return (
@@ -29,16 +28,13 @@ const DocumentTestResultItem = (props: TestResultItemProps) => {
 			<Accordion>
 				<AccordionSummary expandIcon={<ExpandMoreIcon />} sx={TitleAccordionSx}>
 					<Stack width="100%" flexDirection="row" alignContent="space-between" columnGap={2}>
-						<Typography>Test Case: {index}    </Typography>
-						{
-							item.RunStatus === TestResultStatus.Accepted.status ?
-								<Typography color="green">Pass</Typography>
-								:
-								<Typography color="red">{TestResultStatusToMessage(item.RunStatus)}</Typography>
-
-						}
+						<Typography>Test Case: {index} </Typography>
+						{item.RunStatus === TestResultStatus.Accepted.status ? (
+							<Typography color="green">Pass</Typography>
+						) : (
+							<Typography color="red">{TestResultStatusToMessage(item.RunStatus)}</Typography>
+						)}
 					</Stack>
-
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>Input: {item.Input}</Typography>
