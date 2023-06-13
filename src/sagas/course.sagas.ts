@@ -65,7 +65,6 @@ function* renameCourseSaga(action: PayloadAction<Course>) {
 
 function* joinCourseSaga(action: PayloadAction<JoinCourse>) {
 	try {
-		yield delay(3000);
 		yield call(courseApi.joinCourse, action.payload.Code);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('course', 'Join Succesfully')));
 		yield put(fetchCourses());

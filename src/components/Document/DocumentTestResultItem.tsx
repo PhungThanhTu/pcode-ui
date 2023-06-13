@@ -39,7 +39,7 @@ const DocumentTestResultItem = (props: TestResultItemProps) => {
 				<AccordionDetails>
 					<Typography>Input: {item.Input}</Typography>
 					<Typography>Expected Output: {item.ExpectedOutput}</Typography>
-					<Typography>Atuacl Output: {item.Output}</Typography>
+					<Typography>Actual Output: {item.Output}</Typography>
 				</AccordionDetails>
 			</Accordion>
 		</Box>

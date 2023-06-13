@@ -6,7 +6,6 @@ import PublishIcon from '@mui/icons-material/Publish';
 import Tooltip from '@mui/material/Tooltip';
 
 import { Document } from '@/types/document.type';
-import { borderColor, borderRadius } from '@/style/Variables';
 import { Fragment, MouseEvent } from 'react';
 import { CustomOnlyIconButton } from '../Custom/CustomButton';
 import { BoxItemSx } from '@/style/BoxSx';
