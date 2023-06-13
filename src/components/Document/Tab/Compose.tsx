@@ -67,7 +67,6 @@ interface EditorProps {
 }
 
 const Compose = (props: EditorProps) => {
-
 	const { document, documentContent, onChange, onCreate, onReset } = props;
 
 	const NFC = 'No file chosen';
@@ -123,7 +122,7 @@ const Compose = (props: EditorProps) => {
 			setType('PDF');
 		}
 	}, [document, documentContent]);
-	
+
 	return (
 		<Box sx={BoxContainerSx}>
 			<Stack flexDirection="column" rowGap={1} height="100%">
@@ -144,30 +143,25 @@ const Compose = (props: EditorProps) => {
 						Type === 'PDF' ? (
 							<Fragment>
 								<Box sx={{ ...BoxLeftSx, ...componentStyle }}>
-									{
-										PreviewPdfFile ?
-
-											<MyPDFViewer source={PreviewPdfFile} />
-											:
-											document.Contents.length > 0 ?
-												<Box sx={BoxPDFViewSx}>
-													{
-
-														documentContent ?
-															<MyPDFViewer source={PreviewPdfFile ? PreviewPdfFile : documentContent} />
-															:
-															<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
-																No contents to preview.
-															</Typography>
-													}
-
-												</Box>
-												:
+									{PreviewPdfFile ? (
+										<MyPDFViewer source={PreviewPdfFile} />
+									) : document.Contents.length > 0 ? (
+										<Box sx={BoxPDFViewSx}>
+											{documentContent ? (
+												<MyPDFViewer
+													source={PreviewPdfFile ? PreviewPdfFile : documentContent}
+												/>
+											) : (
 												<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
 													No contents to preview.
 												</Typography>
-
-									}
+											)}
+										</Box>
+									) : (
+										<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
+											No contents to preview.
+										</Typography>
+									)}
 								</Box>
 								<Box sx={{ ...BoxRightSx, ...componentStyle }}>
 									<Stack
@@ -205,7 +199,7 @@ const Compose = (props: EditorProps) => {
 													isNotDisplay={true}
 													label=""
 													value={''}
-													onChange={() => { }}
+													onChange={() => {}}
 													onCancel={onCancelFileChange}
 													onSave={() => {
 														onCreate(Type, PreviewPdfFile);

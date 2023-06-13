@@ -15,16 +15,16 @@ const BoxFieldSx = {
 	marginBottom: '5px',
 	marginTop: '5px',
 	width: '100%'
-}
+};
 const BoxFormSx = {
-	width: "100%",
-	height: "100%",
+	width: '100%',
+	height: '100%',
 	display: 'flex',
 	flexDirection: 'column',
-	alignItems: "center",
-	justifyContent: "center",
-	padding: "5px 10px"
-}
+	alignItems: 'center',
+	justifyContent: 'center',
+	padding: '5px 10px'
+};
 export const RegisterForm = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -39,10 +39,8 @@ export const RegisterForm = () => {
 		email: ''
 	};
 
-
-
 	function isValidEmail(email: string) {
-		return ValidEmail.test(email)
+		return ValidEmail.test(email);
 	}
 
 	const [registerState, setRegisterState] = useState(initialRegisterState);
@@ -159,10 +157,8 @@ export const RegisterForm = () => {
 	};
 
 	const onRegister = async (e: FormEvent<HTMLFormElement>) => {
-
 		e.preventDefault();
 		e.stopPropagation();
-
 
 		const hasNoError =
 			registerError.email === '' &&
@@ -178,13 +174,14 @@ export const RegisterForm = () => {
 				message: invalidValue
 			});
 		} else {
-			dispatch(requestRegister({
-				username: registerState.username,
-				password: registerState.password,
-				fullName: registerState.fullName,
-				email: registerState.email
-			}))
-
+			dispatch(
+				requestRegister({
+					username: registerState.username,
+					password: registerState.password,
+					fullName: registerState.fullName,
+					email: registerState.email
+				})
+			);
 		}
 	};
 
@@ -195,8 +192,8 @@ export const RegisterForm = () => {
 				message: 'Registered successfully'
 			});
 			setTimeout(() => {
-				navigate('/login')
-			}, 2000)
+				navigate('/login');
+			}, 2000);
 		} else if (error) {
 			setMetaRegister({
 				status: 'error',
@@ -205,10 +202,15 @@ export const RegisterForm = () => {
 		}
 	}, [success, error]);
 
-
 	return (
 		<AuthFormLayout>
-			<Box sx={BoxFormSx} component="form" onSubmit={(e) => { onRegister(e) }}>
+			<Box
+				sx={BoxFormSx}
+				component="form"
+				onSubmit={(e) => {
+					onRegister(e);
+				}}
+			>
 				<Box sx={{ marginBottom: '20px' }}>
 					<Typography variant="h4">Create an account</Typography>
 				</Box>
@@ -221,7 +223,6 @@ export const RegisterForm = () => {
 						aria-label="username"
 						value={registerState.username}
 						type="text"
-
 					/>
 				</Box>
 				<Box sx={BoxFieldSx}>
@@ -231,7 +232,6 @@ export const RegisterForm = () => {
 						label="Password"
 						aria-label="password"
 						value={registerState.password}
-
 						onChange={onPasswordChange}
 						type="password"
 					/>
@@ -243,7 +243,6 @@ export const RegisterForm = () => {
 						label="Retype password"
 						aria-label="rePassword"
 						value={registerState.rePassword}
-
 						onChange={onRePasswordChange}
 						type="password"
 					/>
@@ -268,7 +267,6 @@ export const RegisterForm = () => {
 						onChange={onEmailChange}
 						value={registerState.email}
 						type="email"
-
 					/>
 				</Box>
 				{metaRegister.status === 'error' ? (
@@ -276,7 +274,7 @@ export const RegisterForm = () => {
 						{metaRegister.message}
 					</Typography>
 				) : metaRegister.status === 'success' ? (
-					<Typography variant="h4" fontSize={14} color={`${Primary["main"]}`}>
+					<Typography variant="h4" fontSize={14} color={`${Primary['main']}`}>
 						{metaRegister.message}
 					</Typography>
 				) : (

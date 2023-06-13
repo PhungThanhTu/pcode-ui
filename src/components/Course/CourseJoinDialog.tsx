@@ -13,12 +13,10 @@ import { Course } from '@/types/course.type';
 import { useDispatch } from 'react-redux';
 import { CircleLoading } from '@/components/Loading';
 import { joinCourse } from '@/slices/course.slice';
-import { AppDispatch, dispatchWithPromise, store } from '@/redux/store';
 
 const CourseDialog = () => {
-
 	const navigate = useNavigate();
-
+	const dispatch = useDispatch();
 
 	const { code } = useParams();
 
@@ -32,15 +30,14 @@ const CourseDialog = () => {
 	};
 
 	const handleJoinCourse = async (id: string) => {
-
-		const dispatch = dispatchWithPromise(store.dispatch);
-
-		try {
-			await dispatch(joinCourse({ Code: code ? code : '' })).finally(() => { navigate(`/course/${id}`); });
-		} catch (error) {
-			console.error('Error dispatching joinCourse action:', error);
-		}
-
+		dispatch(
+			joinCourse({
+				Code: code ? code : '',
+				Navigate: () => {
+					navigate(`/course/${id}`);
+				}
+			})
+		);
 	};
 
 	useEffect(() => {

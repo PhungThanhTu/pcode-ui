@@ -34,7 +34,6 @@ const documentApi = {
 	},
 	createDocumentContent: async (request: CreateDocumentContentRequest) => {
 		if (request.contentTypeId === contentTypeId.pdf) {
-
 			let body = new FormData();
 			body.append('file', request.content);
 			body.append('contentTypeId', contentTypeId.pdf.toString());
@@ -93,10 +92,9 @@ const documentApi = {
 		return result;
 	},
 	updateSampleSourceCode: async (documentId: string, type: number, sampleSourceCode: string) => {
-
 		let body = {
 			sampleSourceCode: sampleSourceCode
-		}
+		};
 		const result: AxiosResponse<UpdateSampleSourceCodeResponse> = await protectedApi.post(
 			`/document/${documentId}/exercise/sample?programmingLanguage=${type}`,
 			body
@@ -123,7 +121,6 @@ const documentApi = {
 		return result;
 	},
 	updateTestCase: async (documentId: string, testCaseId: number, request: UpdateTestCaseRequest) => {
-
 		const result: AxiosResponse<any> = await protectedApi.patch(
 			`/document/${documentId}/testcase/${testCaseId}`,
 			request
@@ -155,7 +152,9 @@ const documentApi = {
 		return result;
 	},
 	getAllSubmissionsManage: async (documentId: string) => {
-		const result: AxiosResponse<Array<Submission>> = await protectedApi.get(`/document/${documentId}/submission/manage`);
+		const result: AxiosResponse<Array<Submission>> = await protectedApi.get(
+			`/document/${documentId}/submission/manage`
+		);
 		return result;
 	},
 	getSingleSubmission: async (request: SubmissionActionRequest) => {
@@ -171,10 +170,9 @@ const documentApi = {
 		return result;
 	},
 	scoreSubmissionManage: async (request: ScoreSubmissionRequest) => {
-
 		let body = {
 			score: request.score
-		}
+		};
 		const result: AxiosResponse<any> = await protectedApi.post(
 			`/document/${request.Ids.documentId}/submission/${request.Ids.submissionId}/score`,
 			body

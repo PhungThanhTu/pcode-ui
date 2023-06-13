@@ -43,11 +43,7 @@ const CourseJoinModal = (props: CourseJoinModalProps) => {
 							required
 							variant="standard"
 							error={Error}
-							helperText={
-								Error
-									? 'Requires only 5 characters.'
-									: ''
-							}
+							helperText={Error ? 'Requires only 5 characters.' : ''}
 							onChange={onChange}
 						/>
 						<Stack

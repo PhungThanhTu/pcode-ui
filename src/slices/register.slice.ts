@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RegisterRequest, RegisterState } from '@/types/register.type';
 
-export const initialState: RegisterState = {
+const initialState: RegisterState = {
 	loading: false,
 	success: false,
 	error: undefined

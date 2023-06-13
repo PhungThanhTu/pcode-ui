@@ -28,5 +28,4 @@ export const TestResultStatus = {
 	MemoryLimitExceeded: { status: 5, message: 'MemoryLimit Exceeded' },
 	TimeLimitExceeded: { status: 6, message: 'TimeLimit Exceeded' },
 	Others: { status: 7, message: 'Others' }
-}
-
+};

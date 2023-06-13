@@ -34,7 +34,6 @@ function* logoutSaga() {
 
 function* fetchProfileSaga() {
 	try {
-
 		const profile: AxiosResponse<UserProfile> = yield call(authApi.getProfile);
 		yield put(loginSuccess(profile.data));
 	} catch (error: any) {

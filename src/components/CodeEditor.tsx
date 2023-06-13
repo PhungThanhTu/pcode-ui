@@ -4,21 +4,18 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getSampleSourceCode } from '@/selectors/document.selector';
-import { borderRadius, centerPos, flexBox } from '@/style/Variables';
+import { borderRadius, flexBox } from '@/style/Variables';
 import { CustomOnlyIconButton } from './Custom/CustomButton';
 import Tooltip from '@mui/material/Tooltip';
 import { LocalStorageService } from '@/services/localStorageService';
 import CountdownTimer from './Countdown';
 
-
 interface CodeEditorProps {
-
 	documentId: string;
 	onGetSampleSourceCode: Function;
 	isCreator?: boolean;
@@ -27,11 +24,20 @@ interface CodeEditorProps {
 	readOnly?: boolean;
 	language?: number;
 	resetTempSource?: Function;
-	deadline?: number;
+	deadline?: number | null;
 }
 export const CodeEditor = (props: CodeEditorProps) => {
-
-	const { documentId, onGetSampleSourceCode, getSource, readOnly, source, isCreator, language, resetTempSource, deadline } = props;
+	const {
+		documentId,
+		onGetSampleSourceCode,
+		getSource,
+		readOnly,
+		source,
+		isCreator,
+		language,
+		resetTempSource,
+		deadline
+	} = props;
 
 	const initial = '// Input your code here';
 	const loading = 'Loading...';
@@ -46,7 +52,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	const [Theme, setTheme] = useState('vs');
 	const [Value, setValue] = useState('');
 	const [Read, setRead] = useState(false);
-	const [isEditMode, setIsEditMode] = useState(false)
+	const [isEditMode, setIsEditMode] = useState(false);
 
 	const onLanguageChange = (event: SelectChangeEvent) => {
 		let type = event.target.value;
@@ -67,13 +73,10 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	};
 
 	useEffect(() => {
-
-		if (!readOnly)
-			onGetSampleSourceCode(documentId, Number(Language));
+		if (!readOnly) onGetSampleSourceCode(documentId, Number(Language));
 	}, []);
 
 	useEffect(() => {
-
 		if (!source) {
 			if (SampleSourceCode && Object.keys(SampleSourceCode).length > 0) {
 				setRead(false);
@@ -91,32 +94,24 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	}, [SampleSourceCode, isEditMode]);
 
 	useEffect(() => {
-
 		if (source) {
-
-
-			setValue(source)
+			setValue(source);
 			if (isCreator) {
-				setIsEditMode(true)
-				setRead(true)
+				setIsEditMode(true);
+				setRead(true);
+			} else {
+				setRead(false);
+				setIsEditMode(false);
 			}
-			else {
-				setRead(false)
-				setIsEditMode(false)
-			}
-
 		}
 		if (language) {
-			setLanguage(language.toString())
+			setLanguage(language.toString());
 		}
-	}, [source])
-
-
+	}, [source]);
 
 	return (
 		<Stack minHeight="inherit" sx={{ '*': { borderRadius: borderRadius } }}>
 			<Stack flexDirection="row" columnGap={0.5} justifyContent="flex-start">
-
 				<Box width="30%" sx={{ flexGrow: 1 }}>
 					<FormControl fullWidth>
 						<Select
@@ -130,7 +125,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 							<MenuItem value={'hc-light'}>High Contrast Light</MenuItem>
 						</Select>
 					</FormControl>
-				</Box >
+				</Box>
 				<Box width="20%" sx={{ display: 'flex', flexGrow: 1 }}>
 					<FormControl fullWidth disabled={readOnly || isEditMode}>
 						<Select
@@ -145,33 +140,28 @@ export const CodeEditor = (props: CodeEditorProps) => {
 					<CustomOnlyIconButton
 						disabled={isCreator}
 						onClick={() => {
-
-							resetTempSource ? resetTempSource() : null
+							resetTempSource ? resetTempSource() : null;
 							LocalStorageService.clearCodeCache();
 							setIsEditMode(false);
 							onGetSampleSourceCode(documentId, Number(language));
-						}}>
+						}}
+					>
 						<Tooltip title="Reset for getting Sample Code">
 							<RestartAltOutlinedIcon />
 						</Tooltip>
 					</CustomOnlyIconButton>
 				</Box>
 
-				{
-					!isCreator ?
-						deadline || deadline === 0 ?
-							<Box sx={{ flexGrow: 1 }} >
-								<Box sx={flexBox('center', 'center', 'row')}>
-									<Box sx={flexBox('center', 'center', 'row')} >Deadline:</Box>
-									<CountdownTimer targetDate={deadline} />
-								</Box>
+				{!isCreator ? (
+					deadline || deadline === 0 ? (
+						<Box sx={{ flexGrow: 1 }}>
+							<Box sx={flexBox('center', 'center', 'row')}>
+								<Box sx={flexBox('center', 'center', 'row')}>Deadline:</Box>
+								<CountdownTimer targetDate={deadline} />
 							</Box>
-							: null
-						: null
-				}
-
-
-
+						</Box>
+					) : null
+				) : null}
 			</Stack>
 			<Box sx={{ flex: 1, paddingTop: '5px' }}>
 				<Editor

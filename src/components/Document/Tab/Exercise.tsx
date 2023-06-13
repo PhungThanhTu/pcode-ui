@@ -30,6 +30,7 @@ import { BoxFieldSx } from '@/style/BoxSx';
 import { Typography } from '@mui/material';
 import { LocalStorageService } from '@/services/localStorageService';
 import { fetchExercise } from '@/slices/document.slice';
+import { useParams } from 'react-router-dom';
 
 const BoxCreateSx = {
 	position: 'absolute',
@@ -58,7 +59,7 @@ interface ExerciseProps {
 }
 
 const Exercise = (props: ExerciseProps) => {
-
+	const params = useParams();
 	const dispatch = useDispatch();
 	const exercise = useSelector(getDocumentExercise);
 
@@ -84,9 +85,9 @@ const Exercise = (props: ExerciseProps) => {
 	const [DeadlineCheck, setDeadlineCheck] = useState(false);
 	const [StrictDeadlineCheck, setStrictDeadlineCheck] = useState(false);
 	const [OpenCreateExerciseDialog, setOpenCreateExerciseDialog] = useState(false);
-	const [TargetDeadline, setTargetDeadline] = useState(0)
-	const [DisableSubmission, setDisableSubmission] = useState(true)
-	const [TempSource, setTempSource] = useState<CreateSubmissionRequest>()
+	const [TargetDeadline, setTargetDeadline] = useState<number | null>(0);
+	const [DisableSubmission, setDisableSubmission] = useState(true);
+	const [TempSource, setTempSource] = useState<CreateSubmissionRequest>();
 
 	const {
 		ManualPercentage,
@@ -142,264 +143,245 @@ const Exercise = (props: ExerciseProps) => {
 					...exercise,
 					Deadline: new Date(nextDay).toISOString()
 				});
-			}
-			else if (exercise.HaveDeadline) {
-
-				let now_in_mins = new Date().getTime()
-				let targetDate = new Date(exercise.Deadline).getTime()
+			} else if (exercise.HaveDeadline) {
+				let now_in_mins = new Date().getTime();
+				let targetDate = new Date(exercise.Deadline).getTime();
 
 				if (targetDate < now_in_mins) {
-
-					setTargetDeadline(0)
-					if (exercise.StrictDeadline)
-						setDisableSubmission(true)
-					else
-						setDisableSubmission(false)
-				}
-				else
-					setTargetDeadline(targetDate)
-
+					setTargetDeadline(0);
+					if (exercise.StrictDeadline) setDisableSubmission(true);
+					else setDisableSubmission(false);
+				} else setTargetDeadline(targetDate);
+			} else {
+				setDisableSubmission(false);
+				setTargetDeadline(null);
 			}
-			else {
-				setDisableSubmission(false)
-			}
-
 		}
 	}, [exercise]);
 
 	useEffect(() => {
-
-	}, [])
-
-	useEffect(() => {
-
 		if (exercise === null) {
-			dispatch(fetchExercise({ documentId: document.Id }));
+			dispatch(fetchExercise({ documentId: params.documentId ? params.documentId : '' }));
+			LocalStorageService.clearCodeCache();
 		}
 
-		let tempsource = LocalStorageService.getCodeCache()
-		if (tempsource) {
-			setTempSource({ ...tempsource })
+		let codeCache = LocalStorageService.getCodeCache();
+		if (codeCache) {
+			setTempSource({ ...codeCache });
 		}
-
-	}, [])
+	}, []);
 
 	return (
 		<Fragment>
-			{
-				exercise === undefined ?
-					<LinearLoading />
-					:
-					exercise === null ?
-
-						isCreator ?
-							<Box sx={BoxCreateSx}>
-								<CustomIconButton
-									onClick={() => {
-										setOpenCreateExerciseDialog(true);
-									}}
-									content="Create Exercise"
-									startIcon={<NoteAddIcon />}
-									variant="outlined"
-								/>
-							</Box>
-							:
-							<Typography sx={centerPos} variant="h5">
-								Exercise has not been created!
-							</Typography>
-						:
-						<DocumentTabLayout
-							childrenPosition={isCreator}
-							title={document.Title}
-							left={
-								<CodeEditor
-									deadline={TargetDeadline}
-									source={TempSource ? TempSource.sourceCode : ''}
-									documentId={document.Id}
-									isCreator={isCreator}
-									onGetSampleSourceCode={onGetSampleSourceCode}
-									getSource={getSource}
-									language={TempSource?.programmingLanguageId}
-									resetTempSource={() => { setTempSource({ programmingLanguageId: 1, sourceCode: '' }) }}
-								/>
-							}
-							right={
-								isCreator ?
-									<Stack
-										flexDirection="column"
-										alignItems="flex-start"
-										justifyContent="flex-start"
-										rowGap="2"
-										minHeight="inherit"
-									>
-										<Stack
-											flexDirection="row"
-											alignItems="center"
-											justifyContent="center"
-											rowGap="2"
-											width="100%"
-										>
-											<Box sx={BoxFieldSx}>
-												<TextField
-													fullWidth
-													required
-													label="Runtime limit (ms):"
-													type="number"
-													name="runtimeLimit"
-													value={RuntimeLimit}
+			{exercise === undefined ? (
+				<LinearLoading />
+			) : exercise === null ? (
+				isCreator ? (
+					<Box sx={BoxCreateSx}>
+						<CustomIconButton
+							onClick={() => {
+								setOpenCreateExerciseDialog(true);
+							}}
+							content="Create Exercise"
+							startIcon={<NoteAddIcon />}
+							variant="outlined"
+						/>
+					</Box>
+				) : (
+					<Typography sx={centerPos} variant="h5">
+						Exercise has not been created!
+					</Typography>
+				)
+			) : (
+				<DocumentTabLayout
+					childrenPosition={isCreator}
+					title={document.Title}
+					left={
+						<CodeEditor
+							deadline={TargetDeadline}
+							source={TempSource ? TempSource.sourceCode : ''}
+							documentId={document.Id}
+							isCreator={isCreator}
+							onGetSampleSourceCode={onGetSampleSourceCode}
+							getSource={getSource}
+							language={TempSource?.programmingLanguageId}
+							resetTempSource={() => {
+								setTempSource({ programmingLanguageId: 1, sourceCode: '' });
+							}}
+						/>
+					}
+					right={
+						isCreator ? (
+							<Stack
+								flexDirection="column"
+								alignItems="flex-start"
+								justifyContent="flex-start"
+								rowGap="2"
+								minHeight="inherit"
+							>
+								<Stack
+									flexDirection="row"
+									alignItems="center"
+									justifyContent="center"
+									rowGap="2"
+									width="100%"
+								>
+									<Box sx={BoxFieldSx}>
+										<TextField
+											fullWidth
+											required
+											label="Runtime limit (ms):"
+											type="number"
+											name="runtimeLimit"
+											value={RuntimeLimit}
+											onChange={onChange}
+										/>
+										<TextField
+											fullWidth
+											required
+											label="Memory limit (bytes):"
+											type="number"
+											name="memoryLimit"
+											value={MemoryLimit}
+											onChange={onChange}
+										/>
+									</Box>
+								</Stack>
+								<Stack
+									flexDirection="row"
+									alignItems="center"
+									justifyContent="center"
+									rowGap="2"
+									width="100%"
+								>
+									<Box sx={BoxFieldSx}>
+										<TextField
+											fullWidth
+											required
+											label="Score Weight"
+											type="number"
+											name="scoreWeight"
+											value={ScoreWeight}
+											onChange={onChange}
+										/>
+										<TextField
+											fullWidth
+											required
+											label="Manual Percentage"
+											type="number"
+											name="manualPercentage"
+											value={ManualPercentage}
+											onChange={onChange}
+										/>
+									</Box>
+								</Stack>
+								<Box>
+									<FormGroup sx={FormGroupDeadlineSx}>
+										<FormControlLabel
+											control={
+												<Checkbox
+													name="haveDeadline"
+													checked={DeadlineCheck}
+													value={DeadlineCheck}
 													onChange={onChange}
-												/>
-												<TextField
-													fullWidth
-													required
-													label="Memory limit (bytes):"
-													type="number"
-													name="memoryLimit"
-													value={MemoryLimit}
-													onChange={onChange}
-												/>
-											</Box>
-										</Stack>
-										<Stack
-											flexDirection="row"
-											alignItems="center"
-											justifyContent="center"
-											rowGap="2"
-											width="100%"
-										>
-											<Box sx={BoxFieldSx}>
-												<TextField
-													fullWidth
-													required
-													label="Score Weight"
-													type="number"
-													name="scoreWeight"
-													value={ScoreWeight}
-													onChange={onChange}
-												/>
-												<TextField
-													fullWidth
-													required
-													label="Manual Percentage"
-													type="number"
-													name="manualPercentage"
-													value={ManualPercentage}
-													onChange={onChange}
-												/>
-											</Box>
-										</Stack>
-										<Box>
-											<FormGroup sx={FormGroupDeadlineSx}>
-												<FormControlLabel
-													control={
-														<Checkbox
-															name="haveDeadline"
-															checked={DeadlineCheck}
-															value={DeadlineCheck}
-															onChange={onChange}
-															onClick={() => {
-																setDeadlineCheck(!DeadlineCheck);
-																setStrictDeadlineCheck(false);
-															}}
-														/>
-													}
-													label="Deadline"
-												/>
-												<FormControlLabel
-													disabled={!DeadlineCheck}
-													control={
-														<Checkbox
-															name="strictDeadline"
-															checked={StrictDeadlineCheck && DeadlineCheck}
-															value={StrictDeadlineCheck}
-															onChange={onChange}
-															onClick={() => {
-																setStrictDeadlineCheck(!StrictDeadlineCheck);
-															}}
-														/>
-													}
-													label="Strict Deadline"
-												/>
-												<FormControlLabel
-													disabled={!DeadlineCheck}
-													labelPlacement="start"
-													label="Deadline"
-													sx={{
-														columnGap: 1
+													onClick={() => {
+														setDeadlineCheck(!DeadlineCheck);
+														setStrictDeadlineCheck(false);
 													}}
-													control={
-														<TextField
-															fullWidth
-															label="Deadline"
-															type="datetime-local"
-															name="deadline"
-															onChange={onChange}
-															value={parseToLocalDate(Deadline)}
-														/>
-													}
 												/>
-											</FormGroup>
-										</Box>
-									</Stack>
-									:
-									<Content source={content?.source} title={''} type={content ? content.type : 3} />
-
-							}
-						>
-							{
-								isCreator ?
-									<LoadingButton
-										size="large"
-										fullWidth
-										sx={{ padding: '10px' }}
-										onClick={() => {
-											onUpdate
-												? onUpdate(ExerciseForm, Source, document.Id)
-												: () => {
-													console.log('Update Error');
-												};
-										}}
-										endIcon={<SaveIcon />}
-										loadingPosition="end"
-										variant="contained"
-									>
-										<span>Save</span>
-									</LoadingButton>
-									:
-
-									<LoadingButton
-										size="small"
-										fullWidth
-										sx={{
-											borderRadius: `0 0 ${borderRadius} ${borderRadius}`
-										}}
-										onClick={() => {
-											onSubmit
-												?
-												onSubmit(Source, document.Id)
-
-												: () => {
-													console.log('Submit Error.');
-												};
-
-											let temp = {
-												programmingLanguageId: Source.type,
-												sourceCode: Source.sampleSourceCode
-
 											}
-											LocalStorageService.setCodeCache(temp)
-											setTempSource(temp)
-										}}
-										endIcon={<SendIcon />}
-										loadingPosition="end"
-										variant="contained"
-										disabled={DisableSubmission}
-									>
-										<span>Submit</span>
-									</LoadingButton>
-							}
-						</DocumentTabLayout>
-			}
+											label="Deadline"
+										/>
+										<FormControlLabel
+											disabled={!DeadlineCheck}
+											control={
+												<Checkbox
+													name="strictDeadline"
+													checked={StrictDeadlineCheck && DeadlineCheck}
+													value={StrictDeadlineCheck}
+													onChange={onChange}
+													onClick={() => {
+														setStrictDeadlineCheck(!StrictDeadlineCheck);
+													}}
+												/>
+											}
+											label="Strict Deadline"
+										/>
+										<FormControlLabel
+											disabled={!DeadlineCheck}
+											labelPlacement="start"
+											label="Deadline"
+											sx={{
+												columnGap: 1
+											}}
+											control={
+												<TextField
+													fullWidth
+													label="Deadline"
+													type="datetime-local"
+													name="deadline"
+													onChange={onChange}
+													value={parseToLocalDate(Deadline)}
+												/>
+											}
+										/>
+									</FormGroup>
+								</Box>
+							</Stack>
+						) : (
+							<Content source={content?.source} title={''} type={content ? content.type : 3} />
+						)
+					}
+				>
+					{isCreator ? (
+						<LoadingButton
+							size="large"
+							fullWidth
+							sx={{ padding: '10px' }}
+							onClick={() => {
+								onUpdate
+									? onUpdate(ExerciseForm, Source, document.Id)
+									: () => {
+											console.log('Update Error');
+									  };
+							}}
+							endIcon={<SaveIcon />}
+							loadingPosition="end"
+							variant="contained"
+						>
+							<span>Save</span>
+						</LoadingButton>
+					) : (
+						<LoadingButton
+							size="small"
+							fullWidth
+							sx={{
+								borderRadius: `0 0 ${borderRadius} ${borderRadius}`
+							}}
+							onClick={() => {
+								onSubmit
+									? onSubmit(Source, document.Id)
+									: () => {
+											console.log('Submit Error.');
+									  };
+
+								let temp = {
+									programmingLanguageId: Source.type,
+									sourceCode: Source.sampleSourceCode
+								};
+								LocalStorageService.setCodeCache(temp);
+								setTempSource(temp);
+							}}
+							endIcon={<SendIcon />}
+							loadingPosition="end"
+							variant="contained"
+							disabled={DisableSubmission}
+						>
+							<span>Submit</span>
+						</LoadingButton>
+					)}
+				</DocumentTabLayout>
+			)}
 			<CustomDialog
 				open={OpenCreateExerciseDialog}
 				title="Create Exercise!"
@@ -411,8 +393,8 @@ const Exercise = (props: ExerciseProps) => {
 					onCreate
 						? onCreate(document.Id)
 						: () => {
-							console.log('null action : create Exercise');
-						};
+								console.log('null action : create Exercise');
+						  };
 					setOpenCreateExerciseDialog(false);
 				}}
 			/>

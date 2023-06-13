@@ -1,57 +1,55 @@
-import { DataGrid, GridCallbackDetails, GridRowSelectionModel } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 
 import { NameToField } from '@/utils/convert';
-import { useState } from 'react';
-
-
 
 interface DataGridListItemsProps {
-  rows: Array<any>;
-  columns: Array<string>;
-  onSelected: Function;
+	rows: Array<any>;
+	columns: Array<string>;
+	onSelected: Function;
 }
 
 const DataGridListItems = (props: DataGridListItemsProps) => {
+	const { rows, columns, onSelected } = props;
 
-  const { rows, columns, onSelected } = props
-  const [LocalText, setLocalText] = useState('')
+	const Columns: Array<any> =
+		columns && columns.length > 0
+			? columns.map((item, index) => {
+					return {
+						field: NameToField(item, true),
+						headerName: item,
+						flex: item.toUpperCase().includes('SCORE') ? 0.2 : 1,
+						headerAlign: 'center',
+						align: 'center'
+					};
+			  })
+			: [];
 
-  const Columns: Array<any> = columns && columns.length > 0 ? columns.map((item, index) => {
+	const Rows: Array<any> =
+		rows && rows.length > 0
+			? rows.map((item, index) => {
+					let keyId = Object.keys(item);
 
-    return {
-      field: NameToField(item, true),
-      headerName: item,
-      flex: item.toUpperCase().includes('SCORE') ? 0.2 : 1,
-      headerAlign: 'center',
-      align: 'center',
-    }
-  }) : []
+					if (keyId.includes('id')) return item;
 
-  const Rows: Array<any> = rows && rows.length > 0 ? rows.map((item, index) => {
+					return {
+						...item,
+						id: index
+					};
+			  })
+			: [];
 
-    let keyId = Object.keys(item)
+	return (
+		<Box sx={{ height: '700px', width: '100%' }}>
+			<DataGrid
+				rows={Rows}
+				columns={Columns}
+				onRowClick={(params) => onSelected(params)}
+				disableRowSelectionOnClick
+				slots={{ toolbar: GridToolbar }}
+			/>
+		</Box>
+	);
+};
 
-    if (keyId.includes('id'))
-      return item
-
-    return {
-      ...item,
-      'id': index
-    }
-  }) : []
-
-  return (
-    <Box sx={{ height: '700px', width: '100%' }}>
-      <DataGrid
-
-        rows={Rows}
-        columns={Columns}
-        onRowClick={(params) => onSelected(params)}
-
-      />
-    </Box>
-  )
-}
-
-export default DataGridListItems
+export default DataGridListItems;

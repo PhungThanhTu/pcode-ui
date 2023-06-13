@@ -183,7 +183,7 @@ export default function NavBar() {
 							<MenuItem
 								onClick={() => {
 									returnToLogin();
-									LocalStorageService.clearCodeCache()
+									LocalStorageService.clearCodeCache();
 								}}
 							>
 								<ListItemIcon>

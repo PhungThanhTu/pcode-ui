@@ -39,6 +39,6 @@ export const BoxItemSx = {
 	display: 'flex',
 	transition: 'boxShadow 0.3s ease, transform 0.3s ease',
 	'&:hover': {
-		boxShadow: '0 0 10px rgba(0, 0, 0, 0.4)',
+		boxShadow: '0 0 10px rgba(0, 0, 0, 0.4)'
 	}
 };

@@ -21,7 +21,9 @@ const DocumentSubmissionItem = (props: SubmissionProps) => {
 	return (
 		<Box sx={{ ...BoxItemSx, padding: '10px' }}>
 			<Stack width="100%" flexDirection="row" alignItems="center" justifyContent="space-around" columnGap={1}>
-				<Typography sx={{ flexGrow: 1 }} variant="subtitle1">{item.Id}</Typography>
+				<Typography sx={{ flexGrow: 1 }} variant="subtitle1">
+					{item.Id}
+				</Typography>
 				<Tooltip title="Mark as final submission to validate">
 					<Checkbox
 						name="choice"

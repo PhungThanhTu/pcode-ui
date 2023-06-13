@@ -4,12 +4,12 @@ export const Primary = {
 	dark: '#1565c0'
 };
 export const Error = {
-    main: '#d32f2f',
+	main: '#d32f2f',
 	light: '#ef5350',
 	dark: '#c62828'
-}
+};
 export const Success = {
-    main: '#2e7d32',
+	main: '#2e7d32',
 	light: '#4caf50',
 	dark: '#1b5e20'
-}
+};

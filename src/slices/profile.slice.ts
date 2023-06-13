@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PasswordChangeRequest, UserProfile } from '@/types/auth.type';
 
-export const initialState: any = {
+const initialState: any = {
 	profile: undefined
 };
 

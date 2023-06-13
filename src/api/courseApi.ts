@@ -1,6 +1,13 @@
 import { AxiosResponse } from 'axios';
 import protectedApi from './protectedApi';
-import { Course, CourseScore, CreateCourseRequest, CreateCourseResponse, GetCourseByIdResponse, RenameCourseRequest } from '@/types/course.type';
+import {
+	Course,
+	CourseScore,
+	CreateCourseRequest,
+	CreateCourseResponse,
+	GetCourseByIdResponse,
+	RenameCourseRequest
+} from '@/types/course.type';
 
 const courseApi = {
 	getAllCourses: async () => {
