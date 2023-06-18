@@ -126,6 +126,7 @@ const Compose = (props: EditorProps) => {
 	return (
 		<Box sx={BoxContainerSx}>
 			<Stack flexDirection="column" rowGap={1} height="100%">
+				
 				<Box sx={componentStyle}>
 					<Typography variant="h6">{document.Title}</Typography>
 				</Box>

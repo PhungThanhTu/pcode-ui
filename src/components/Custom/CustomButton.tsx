@@ -41,8 +41,8 @@ export const CustomButton = ({ content, onClick, type, sx }: any) => (
 	</StyledUnstyledButton>
 );
 
-export const CustomIconButton = ({ content, sx, variant, type, onClick, startIcon, color }: any) => (
-	<Button color={color} sx={sx} variant={variant} type={type} onClick={onClick} startIcon={startIcon}>
+export const CustomIconButton = ({ content, sx, variant, type, onClick, startIcon, color ,fullWidth}: any) => (
+	<Button color={color} sx={sx} variant={variant} type={type} onClick={onClick} startIcon={startIcon} fullWidth={fullWidth}>
 		{content}
 	</Button>
 );

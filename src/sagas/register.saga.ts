@@ -5,7 +5,7 @@ import { RegisterRequest } from '../types/register.type';
 import { registerFailed, registerSuccess, requestRegister, resetRegisterState } from '../slices/register.slice';
 
 function* registerSaga(action: PayloadAction<RegisterRequest>) {
-	console.log('saga is register');
+
 	try {
 		yield call(authApi.register, action.payload);
 		yield put(registerSuccess());

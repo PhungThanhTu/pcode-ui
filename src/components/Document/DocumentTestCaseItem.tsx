@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import RemoveCircleOutlinedIcon from '@mui/icons-material/RemoveCircleOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { MouseEvent } from 'react';
 import { CustomOnlyIconButton } from '../Custom/CustomButton';
@@ -36,7 +36,7 @@ const DocumentTestCaseItem = (props: TestCaseItemProps) => {
 					}}
 				>
 					<Tooltip title="Delete">
-						<RemoveCircleOutlinedIcon />
+						<DeleteIcon />
 					</Tooltip>
 				</CustomOnlyIconButton>
 			</Stack>

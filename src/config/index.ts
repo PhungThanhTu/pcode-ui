@@ -13,11 +13,6 @@ export const contentTypeId = {
 	pdf: 1,
 	file: 2
 };
-export const status = {
-	markDown: 0,
-	pdf: 1,
-	file: 2
-};
 
 export const TestResultStatus = {
 	Pending: { status: 0, message: 'Pending' },

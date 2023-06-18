@@ -9,7 +9,6 @@ import { CustomOnlyIconButton } from '../Custom/CustomButton';
 
 const BoxContainerSx = {
 	border: `solid 1px ${borderColor}`,
-	height: '100%',
 	display: 'flex',
 	padding: '1.5rem 2rem',
 	alighItems: 'center',

@@ -6,30 +6,30 @@ import { borderRadius, componentStyle, componentsBoxColor } from '@/style/Variab
 
 const BoxLeftSx = {
 	backgroundColor: `${componentsBoxColor}`,
-	maxHeight: 'inherit',
-	minHeight: 'inherit',
+	height: 'inherit',
 	width: '100%',
 	borderRadius: borderRadius,
-	padding: '5px',
+	// padding: '5px',
 	position: 'relative',
 	flexGrow: 1
 };
 const BoxRightSx = {
 	backgroundColor: `${componentsBoxColor}`,
-	maxHeight: 'inherit',
-	minHeight: 'inherit',
+	height: 'inherit',
 	width: '100%',
 	borderRadius: borderRadius,
-	padding: '5px',
+	// padding: '5px',
 	position: 'relative',
 	flexGrow: 1
 };
 const BoxChildRightSx = {
+	display: 'flex',
 	position: 'absolute',
-	bottom: 10,
+	bottom: 0,
 	left: 0,
 	width: '100%',
-	padding: '10px'
+	// padding: '5px',
+	borderRadius: `0 0 ${borderRadius} ${borderRadius}`
 };
 const BoxChildLeftSx = {
 	display: 'flex',
@@ -37,7 +37,7 @@ const BoxChildLeftSx = {
 	bottom: 0,
 	left: 0,
 	width: '100%',
-	padding: '5px',
+	// padding: '5px',
 	borderRadius: `0 0 ${borderRadius} ${borderRadius}`
 };
 interface PropsWithChildrenOnly {
@@ -50,22 +50,26 @@ interface PropsWithChildrenOnly {
 }
 
 const DocumentTabLayout = (props: PropsWithChildrenOnly) => {
+
 	const { title, right, left, children, content, childrenPosition } = props;
 
+	const TabLayoutHeaderHeight = document.getElementById('TabLayoutHeader')?.offsetHeight;
+	const TabLayoutHeight = document.getElementById('TabLayout')?.offsetHeight;
+
 	return (
-		<Stack flexDirection="column" rowGap={1} minHeight="100%" maxHeight={'inherit'}>
+		<Stack flexDirection="column" rowGap={1}  height='inherit'  id='TabLayout'>
 			{title ? (
-				<Box sx={componentStyle}>
-					<Typography variant="h6">{title} </Typography>
+				<Box sx={componentStyle} id='TabLayoutHeader'>
+					<Typography variant="subtitle1">{title} </Typography>
 				</Box>
 			) : null}
 
 			<Stack
 				flexDirection="row"
-				minHeight="700px"
-				maxHeight="700px"
+				height={`calc(${TabLayoutHeight}px - ${TabLayoutHeaderHeight}px - 9px)`}
+				// top={Number(TabLayoutHeight ? TabLayoutHeight : 0 - (TabLayoutHeaderHeight ? TabLayoutHeaderHeight : 0))}
 				width="100%"
-				columnGap={2}
+				columnGap={1}
 				alignItems={'flex-start'}
 				justifyContent={'center'}
 				position="relative"

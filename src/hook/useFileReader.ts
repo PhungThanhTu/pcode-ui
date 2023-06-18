@@ -19,7 +19,8 @@ export const useImageFileReader = () => {
 	return { B64Value, getImageB64Value };
 };
 
-export const usePDFFileReader = () => {
+export const usePdfReader = () => {
+
 	const [PdfFile, setPdfFile] = useState<any>(null);
 
 	const getFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -31,4 +32,4 @@ export const usePDFFileReader = () => {
 
 	return { PdfFile, getFile };
 };
-// others file reader in future
+

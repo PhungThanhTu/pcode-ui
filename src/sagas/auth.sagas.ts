@@ -7,7 +7,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { UserProfile } from '../types/auth.type';
 
 function* loginSaga(action: PayloadAction<UserCredentials>) {
-	console.log('Saga is login');
+
 	try {
 		yield call(authApi.login, action.payload);
 		const profile: AxiosResponse<UserProfile> = yield call(authApi.getProfile);
@@ -22,12 +22,11 @@ function* loginSaga(action: PayloadAction<UserCredentials>) {
 }
 
 function* logoutSaga() {
-	//console.log('saga is log out');
+
 	try {
 		yield call(authApi.logout);
 		yield put(logoutSuccess());
 	} catch {
-		console.log('logout error');
 		yield put(logoutSuccess());
 	}
 }
@@ -37,7 +36,7 @@ function* fetchProfileSaga() {
 		const profile: AxiosResponse<UserProfile> = yield call(authApi.getProfile);
 		yield put(loginSuccess(profile.data));
 	} catch (error: any) {
-		console.log('saga fetch profile failed');
+
 		yield put(logout());
 	}
 }

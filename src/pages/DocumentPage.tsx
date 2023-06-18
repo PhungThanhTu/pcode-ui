@@ -13,7 +13,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 import { getDocument } from '@/selectors/document.selector';
-import { usePDFFileReader } from '@/hook/useFileReader';
+import { usePdfReader } from '@/hook/useFileReader';
 
 import {
 	createDocumentContent,
@@ -64,7 +64,7 @@ const DocumentPage = () => {
 
 	const [OpenDialog, setOpenDialog] = useState(false);
 
-	const { PdfFile, getFile } = usePDFFileReader();
+	const { PdfFile, getFile } = usePdfReader();
 
 	const SetTabIndex = (index: string) => {
 		dispatch(setDocumentTabIndex(index));
@@ -118,10 +118,10 @@ const DocumentPage = () => {
 				? getApiDateFormat(new Date(ExeriseForm.Deadline).toISOString())
 				: getApiDateFormat(new Date(getToday()).toISOString()),
 			haveDeadline: ExeriseForm.HaveDeadline,
-			manualPercentage: ExeriseForm.ManualPercentage,
-			memoryLimit: ExeriseForm.MemoryLimit,
-			runtimeLimit: ExeriseForm.RuntimeLimit,
-			scoreWeight: ExeriseForm.ScoreWeight,
+			manualPercentage: Number(ExeriseForm.ManualPercentage),
+			memoryLimit: Number(ExeriseForm.MemoryLimit),
+			runtimeLimit: Number(ExeriseForm.RuntimeLimit),
+			scoreWeight: Number(ExeriseForm.ScoreWeight),
 			strictDeadline: ExeriseForm.HaveDeadline
 				? ExeriseForm.StrictDeadline
 					? ExeriseForm.StrictDeadline
@@ -145,7 +145,7 @@ const DocumentPage = () => {
 		let form: CreateTestCaseRequest = {
 			input: Form.input,
 			output: Form.output,
-			scoreWeight: Form.scoreWeight,
+			scoreWeight: Number(Form.scoreWeight),
 			visibility: Form.visibility
 		};
 		dispatch(createTestCase({ body: form, documentId: documentId }));
@@ -185,9 +185,9 @@ const DocumentPage = () => {
 		dispatch(markSubmission(Request));
 	};
 	const onScoreSubmission = (Request: ScoreSubmissionRequest) => {
-		dispatch(scoreSubmissionManage({ Ids: Request.Ids, score: Request.score }));
+		dispatch(scoreSubmissionManage({ Ids: Request.Ids, score: Number(Request.score) }));
 	};
-	const onDeleteSubmission = (Request: SubmissionActionRequest) => {};
+	const onDeleteSubmission = (Request: SubmissionActionRequest) => { };
 
 	//#endregion
 
@@ -257,7 +257,7 @@ const DocumentPage = () => {
 									<Submission
 										isCreator={true}
 										document={document}
-										onSelected={() => {}}
+										onSelected={() => { }}
 										onScore={onScoreSubmission}
 									/>
 								)

@@ -15,6 +15,8 @@ import { watchProfile } from '@/sagas/profile.sagas';
 import { watchLogin } from '../sagas/auth.sagas';
 import { watchCourse } from '@/sagas/course.sagas';
 import { watchDocument } from '@/sagas/document.sagas';
+import { watchConfig } from '@/sagas/config.sagas';
+import configSlice from '@/slices/config.slice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -28,8 +30,10 @@ export const store = configureStore({
 		course: courseReducer,
 		loading: loadingSlice,
 		document: documentSlice,
+		config: configSlice,
 		documentTab: documentTabReducer,
-		courseTab: courseTabReducer
+		courseTab: courseTabReducer,
+
 	},
 	middleware: [sagaMiddleware]
 });
@@ -39,6 +43,7 @@ sagaMiddleware.run(watchRegister);
 sagaMiddleware.run(watchProfile);
 sagaMiddleware.run(watchCourse);
 sagaMiddleware.run(watchDocument);
+sagaMiddleware.run(watchConfig);
 
 export type RootState = ReturnType<typeof store.getState>;
 
