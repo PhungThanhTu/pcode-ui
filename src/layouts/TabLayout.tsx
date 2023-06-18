@@ -15,7 +15,7 @@ const BoxHeaderSx = {
 	WebkitFontSmoothing: 'antialiased',
 	WebkitTapHighlightColor: 'transparent',
 	borderRadius: borderRadius,
-	marginTop: '1.5rem',
+	marginTop: '5px',
 	overflow: 'hidden'
 };
 
@@ -43,9 +43,9 @@ const BoxRightBodySx = {
 
 const TabLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
 	return (
-		<Stack flexDirection="column" display="flex" width="100%" paddingX="7%">
+		<Stack flexDirection="column" display="flex" width="100%" paddingX="5%">
 			<Box sx={BoxHeaderSx}>{props.header}</Box>
-			<Stack flexDirection="row" marginTop="1.5rem">
+			<Stack flexDirection="row" marginTop="15px">
 				{props.leftBody ? (
 					<Fragment>
 						<Box sx={BoxLeftBodySx}>{props.leftBody}</Box>

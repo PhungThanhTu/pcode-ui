@@ -75,8 +75,8 @@ const CoursesPage = () => {
 	}, [B64Value]);
 
 	return (
-		<Stack direction="column" spacing={2}>
-			<Stack direction="row" spacing={2} paddingTop="0.5rem">
+		<Stack direction="column" spacing={2} padding='10px' height='inherit'>
+			<Stack direction="row" spacing={2} >
 				<CustomIconButton
 					startIcon={<CreateIcon />}
 					content="Create a Course"
@@ -98,7 +98,9 @@ const CoursesPage = () => {
 				<Grid
 					width="100% !important"
 					container
-					rowSpacing={2}
+					height='inherit'
+					overflow={'auto'}
+					rowSpacing={0.5}
 					columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }}
 					alignItems="center"
 				>

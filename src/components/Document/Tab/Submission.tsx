@@ -23,6 +23,7 @@ import DataGridListItems from '@/components/DataGridListItems';
 import TextField from '@mui/material/TextField';
 import { fetchAllSubmissions, fetchAllSubmissionsManage } from '@/slices/document.slice';
 import { useParams } from 'react-router-dom';
+import { Tooltip } from '@mui/material';
 
 interface SubmissionProps {
 	document: GetDocumentByIdResponse;
@@ -39,7 +40,7 @@ const Submission = (props: SubmissionProps) => {
 	const dispatch = useDispatch();
 
 	const [SelectedSubmissionManage, setSelectedSubmissionManage] = useState<SubmissionManage>();
-	const [ManualScore, setManualScore] = useState(0);
+	const [ManualScore, setManualScore] = useState<number | string>(0);
 	const [SourceCodeSubmissionManage, setSourceCodeSubmissionManage] = useState('');
 
 	const onSelectSubmissionManage = (params: GridRowParams) => {
@@ -72,8 +73,8 @@ const Submission = (props: SubmissionProps) => {
 							readOnly={true}
 							isCreator={isCreator}
 							documentId={document.Id}
-							onGetSampleSourceCode={() => {}}
-							getSource={() => {}}
+							onGetSampleSourceCode={() => { }}
+							getSource={() => { }}
 						/>
 					) : (
 						<Typography sx={centerPos} variant="subtitle1">
@@ -81,15 +82,15 @@ const Submission = (props: SubmissionProps) => {
 						</Typography>
 					)
 				) : (
-					<Box sx={{ overflow: 'auto', maxHeight: '600px', minHeight: 'inherit' }}>
-						<Typography variant="subtitle1">
+					<Box sx={{ overflowY: 'auto' , height: 'inherit'}}>
+						<Typography variant="subtitle2" sx={{ padding: '6px 8px', display: 'block' }}>
 							Please note that the score displaying is the score provided by automated judging system, not
 							total score of the exercise
 						</Typography>
 						<Stack
-							padding="10%"
-							paddingTop="10%"
-							rowGap={2}
+							padding="5%"
+							rowGap={1}
+							overflow={'auto'}
 							width="100%"
 							alignItems="center"
 							justifyContent="center"
@@ -118,7 +119,7 @@ const Submission = (props: SubmissionProps) => {
 			}
 			right={
 				isCreator ? (
-					<Box sx={{ overflow: 'auto', maxHeight: '600px', minHeight: 'inherit' }}>
+					<Box sx={{ overflowY: 'auto' , height: 'inherit'}}>
 						<Stack rowGap={2} width="100%" alignItems="center" justifyContent="center">
 							{submissionsmanage && submissionsmanage.length > 0 ? (
 								<DataGridListItems
@@ -132,13 +133,12 @@ const Submission = (props: SubmissionProps) => {
 				) : (
 					<Fragment>
 						{submission ? (
-							<Box sx={{ overflow: 'auto', maxHeight: '600px', minHeight: 'inherit' }}>
+							<Box sx={{ overflowY: 'auto' , height: 'inherit'}}>
 								<Typography sx={{ padding: '6px 8px', display: 'block' }}>
 									Selected submission: {submission.Id}
 								</Typography>
 								<Stack
-									padding="10%"
-									paddingTop="10%"
+									padding="5%"
 									rowGap={2}
 									width="100%"
 									alignItems="center"
@@ -161,7 +161,7 @@ const Submission = (props: SubmissionProps) => {
 							</Box>
 						) : (
 							<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
-								Click view icon to see test result of submission.
+								Click eyes icon to view test result of submission.
 							</Typography>
 						)}
 					</Fragment>
@@ -176,7 +176,7 @@ const Submission = (props: SubmissionProps) => {
 							required
 							value={ManualScore}
 							onChange={(e) => {
-								setManualScore(Number(e.target.value));
+								setManualScore(Number(e.target.value) >= 0 ? e.target.value : 0);
 							}}
 							label="Score: "
 							type="number"
@@ -189,31 +189,35 @@ const Submission = (props: SubmissionProps) => {
 								}
 							}}
 						/>
-						<LoadingButton
-							size="small"
-							fullWidth
-							sx={{
-								borderRadius: `0 0 ${borderRadius} 0`
-							}}
-							onClick={() => {
-								onScore
-									? onScore({
+						<Tooltip title='Submit'>
+							<LoadingButton
+								size="large"
+								fullWidth
+								sx={{
+									borderRadius: `0 0 ${borderRadius} 0`,
+									'>span': {
+										margin: 0
+									}
+								}}
+								onClick={() => {
+									onScore
+										? onScore({
 											score: ManualScore,
 											Ids: {
 												documentId: document.Id,
 												submissionId: SelectedSubmissionManage.SubmissionId
 											}
-									  })
-									: () => {
+										})
+										: () => {
 											console.log('Submit Error.');
-									  };
-							}}
-							endIcon={<SendIcon />}
-							loadingPosition="end"
-							variant="contained"
-						>
-							<span>Submit</span>
-						</LoadingButton>
+										};
+								}}
+								endIcon={<SendIcon />}
+								loadingPosition="end"
+								variant="contained"
+							/>
+						</Tooltip>
+
 					</Fragment>
 				) : null
 			) : null}

@@ -1,6 +1,6 @@
 export const borderColor = 'rgb(225,227,230)';
 export const borderRadius = '5px';
-export const componentsBoxColor = '#EEEEEE';
+export const componentsBoxColor = '#FAFAFA';
 
 export const componentStyle = {
 	borderRadius: borderRadius,

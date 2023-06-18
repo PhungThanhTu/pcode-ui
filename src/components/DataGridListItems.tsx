@@ -18,7 +18,7 @@ const DataGridListItems = (props: DataGridListItemsProps) => {
 					return {
 						field: NameToField(item, true),
 						headerName: item,
-						flex: item.toUpperCase().includes('SCORE') ? 0.2 : 1,
+						flex: item.toUpperCase().includes('SCORE') ? 0.23 : 1,
 						headerAlign: 'center',
 						align: 'center'
 					};

@@ -11,15 +11,15 @@ interface PropsWithChildrenOnly {
 }
 const LayoutBoxSx = {
 	width: '100%',
-	padding: '15px',
-	paddingTop: 0
+	paddingTop: 0,
+	minHeight: 'inherit',
+	overflowY: 'hidden',
 };
 const BoxContentSx = {
 	overflowX: 'hidden',
 	overflowY: 'hidden',
-	height: '100%'
+
 };
-const BoxContainerSx = {};
 
 const AppLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
 	const HeaderHeight = document.getElementsByTagName('header')[0];
@@ -33,15 +33,20 @@ const AppLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsW
 					sx={{
 						...BoxContentSx,
 						paddingTop: `${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px`,
-						minHeight: `calc(100vh - ${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px)`
-						// maxHeight: `calc(100vh - ${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px)`
+						// minHeight: `calc(100vh - ${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px)`,
+						maxHeight: `100vh`
 					}}
 				>
-					<Box sx={LayoutBoxSx}>{props.children}</Box>
+					<Box id='AppContentChildren' sx={
+						{
+							...LayoutBoxSx,
+							height: `calc(100vh - ${HeaderHeight ? HeaderHeight.offsetHeight : '55'}px)`
+						}}
+					>{props.children}</Box>
 				</Box>
 				<NotificationSnackbar />
 				<BackdropLoading />
-				<Footer />
+				{/* <Footer /> */}
 			</Box>
 		</React.Fragment>
 	);

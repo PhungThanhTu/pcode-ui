@@ -124,7 +124,7 @@ const ProfilePage = () => {
 		}
 	}, [B64Value]);
 	return (
-		<Grid container spacing={2}>
+		<Grid container spacing={2} padding='10px'>
 			<Grid item xs={6}>
 				<Paper variant="outlined">
 					<Stack spacing={2}>

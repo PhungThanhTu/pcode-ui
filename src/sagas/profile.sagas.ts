@@ -11,11 +11,11 @@ import { setLoading } from '@/slices/loading.slice';
 
 function* fetchProfileSaga() {
 	try {
-		console.log('saga fetching profile');
+
 		const profile: AxiosResponse<UserProfile> = yield call(profileApi.getProfile);
 		yield put(loginSuccess(profile.data));
 	} catch (error: any) {
-		console.log('saga fetch profile failed');
+
 		yield put(logout());
 	}
 }
@@ -27,7 +27,7 @@ function* updateProfileSaga(action: PayloadAction<UserProfile>) {
 			email: action.payload.email,
 			avatar: action.payload.avatar
 		};
-		console.log('saga updating profile');
+
 		yield put(setLoading({ isLoading: true }));
 		yield call(profileApi.updateProfile, body);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('profile', '')));
@@ -35,7 +35,7 @@ function* updateProfileSaga(action: PayloadAction<UserProfile>) {
 		yield put(setLoading({ isLoading: false }));
 	} catch (e) {
 		const error = e as AxiosError;
-		console.log('saga update profile failed');
+
 		yield put(setLoading({ isLoading: false }));
 		if (error.code === '413')
 			yield put(
@@ -48,7 +48,6 @@ function* updateProfileSaga(action: PayloadAction<UserProfile>) {
 }
 function* changePasswordSaga(action: PayloadAction<PasswordChangeRequest>) {
 	try {
-		console.log('saga change password', action.payload);
 		yield put(setLoading({ isLoading: true }));
 		yield call(profileApi.changePassword, action.payload);
 		yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('password', '')));

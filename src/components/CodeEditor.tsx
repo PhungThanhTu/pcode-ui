@@ -9,7 +9,7 @@ import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getSampleSourceCode } from '@/selectors/document.selector';
-import { borderRadius, flexBox } from '@/style/Variables';
+import { flexBox } from '@/style/Variables';
 import { CustomOnlyIconButton } from './Custom/CustomButton';
 import Tooltip from '@mui/material/Tooltip';
 import { LocalStorageService } from '@/services/localStorageService';
@@ -110,8 +110,11 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	}, [source]);
 
 	return (
-		<Stack minHeight="inherit" sx={{ '*': { borderRadius: borderRadius } }}>
-			<Stack flexDirection="row" columnGap={0.5} justifyContent="flex-start">
+		<Stack 
+		height='100%'
+		// sx={{ '*': { borderRadius: borderRadius } }}
+		>
+			<Stack flexDirection="row" justifyContent="flex-start">
 				<Box width="30%" sx={{ flexGrow: 1 }}>
 					<FormControl fullWidth>
 						<Select
@@ -163,12 +166,12 @@ export const CodeEditor = (props: CodeEditorProps) => {
 					) : null
 				) : null}
 			</Stack>
-			<Box sx={{ flex: 1, paddingTop: '5px' }}>
+			<Box sx={{ flex: 1 }}>
 				<Editor
 					className="code"
 					options={{ readOnly: Read || readOnly, theme: Theme }}
 					language={Language === '1' ? 'c' : 'cpp'}
-					height={640}
+		            
 					value={Value}
 					onChange={onValueChange}
 				/>

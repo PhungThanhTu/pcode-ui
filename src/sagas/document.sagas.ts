@@ -119,7 +119,7 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 }
 function* createDocumentSaga(action: PayloadAction<CreateDocumentRequest>) {
 	try {
-		console.log('saga create document');
+		
 		yield put(setLoading({ isLoading: true }));
 
 		const data: AxiosResponse<CreateDocumentResponse> = yield call(documentApi.createDocument, action.payload);

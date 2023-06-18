@@ -106,7 +106,7 @@ export default function NavBar() {
 		<Box>
 			<HideOnScroll>
 				<AppBar>
-					<Toolbar sx={ToolBarSx}>
+					<Toolbar sx={ToolBarSx}   >
 						<Box>
 							<Tooltip title="Menu">
 								<IconButton

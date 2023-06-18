@@ -8,6 +8,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
+
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import { BoxFieldSx } from '@/style/BoxSx';
 import { GetDocumentByIdResponse, GetSingleTestCaseResponse } from '@/types/document.type';
@@ -19,12 +20,19 @@ import DocumentTestCaseItem from '../DocumentTestCaseItem';
 import { LinearLoading } from '@/components/Loading';
 import CustomDialog from '@/components/Custom/CustomDialog';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
-import { centerPos } from '@/style/Variables';
+import { borderRadius, centerPos, componentStyle } from '@/style/Variables';
 import { useParams } from 'react-router-dom';
+import Tooltip from '@mui/material/Tooltip';
 
 const BoxCreateTestCase = {
 	position: 'absolute',
-	left: '10px'
+	top: 0,
+	left: 0,
+	padding: 0,
+	borderRadius: `0 0 0 ${borderRadius}`,
+	width: '100%',
+	boxShadow: '0 2px 6px 0 rgba(0,0,0,.12)',
+	zIndex: 10
 };
 
 interface TestCaseProps {
@@ -48,10 +56,10 @@ const TestCase = (props: TestCaseProps) => {
 		output: '0',
 		scoreWeight: 0,
 		TestOrder: 0,
-		visibility: false
+		visibility: true
 	};
 
-	const [SeletedTestCase, setSeletedTestCase] = useState(1);
+	const [SeletedTestCase, setSeletedTestCase] = useState<number | null>(null);
 	const [TestCaseForm, setTestCaseForm] = useState<GetSingleTestCaseResponse>(InitialTestCaseForm);
 	const [OpenDeleteTestCaseDialog, setOpenDeleteTestCaseDialog] = useState(false);
 	const [Visibility, setVisibility] = useState(TestCaseForm.visibility);
@@ -65,10 +73,10 @@ const TestCase = (props: TestCaseProps) => {
 				[e.target.name]: e.target.checked
 			});
 		} else if (e.target.name === 'scoreWeight') {
-			let value = Number(e.target.value);
+
 			setTestCaseForm({
 				...TestCaseForm,
-				[e.target.name]: value >= 0 ? value : 0
+				[e.target.name]: Number(e.target.value) >= 0 ? e.target.value : 0
 			});
 		} else {
 			setTestCaseForm({
@@ -77,6 +85,7 @@ const TestCase = (props: TestCaseProps) => {
 			});
 		}
 	};
+
 	const onSelected = (order: number) => {
 		setSeletedTestCase(order);
 		let item = FindTestCaseByOrder(order);
@@ -97,9 +106,11 @@ const TestCase = (props: TestCaseProps) => {
 
 	useEffect(() => {
 		if (testCases && testCases.length > 0) {
-			setSeletedTestCase(1);
-			let item = FindTestCaseByOrder(1);
-			setTestCaseForm(item);
+			if (!SeletedTestCase) {
+				setSeletedTestCase(1);
+				let item = FindTestCaseByOrder(1);
+				setTestCaseForm(item);
+			}
 		}
 	}, [testCases]);
 
@@ -133,7 +144,7 @@ const TestCase = (props: TestCaseProps) => {
 								flexDirection="column"
 								alignItems="center"
 								justifyContent="flex-start"
-								rowGap="2"
+								rowGap="1.5"
 								minHeight="inherit"
 							>
 								<Stack
@@ -176,7 +187,7 @@ const TestCase = (props: TestCaseProps) => {
 											onChange={onChange}
 										/>
 									</Box>
-									<FormControlLabel
+									{/* <FormControlLabel
 										control={
 											<Checkbox
 												name="visibility"
@@ -188,18 +199,20 @@ const TestCase = (props: TestCaseProps) => {
 												}}
 											/>
 										}
-										label="Student can yee deadline Input/Output"
-									/>
+										label="Student can view deadline Input/Output"
+									/> */}
 								</Stack>
 							</Stack>
 						</Fragment>
 					}
 					left={
-						<Box sx={{ overflow: 'auto', maxHeight: '600px', minHeight: 'inherit' }}>
-							<Box sx={BoxCreateTestCase}>
+						<Box sx={{ overflowY: 'auto', overflowX: 'hidden', height:'inherit' }}>
+							<Box sx={{ ...componentStyle, ...BoxCreateTestCase }}>
 								<CustomIconButton
 									type="submit"
 									form="testform"
+									sx={{ justifyContent: 'flex-start' }}
+									fullWidth
 									content="New Test Case"
 									startIcon={<AddOutlinedIcon />}
 									onClick={() => {
@@ -208,8 +221,8 @@ const TestCase = (props: TestCaseProps) => {
 								/>
 							</Box>
 							<Stack
-								padding="10%"
-								paddingTop="10%"
+								padding="5%"
+								paddingTop="8%"
 								rowGap={2}
 								width="100%"
 								alignItems="center"
@@ -240,20 +253,25 @@ const TestCase = (props: TestCaseProps) => {
 					}
 				>
 					{
-						<LoadingButton
-							size="large"
-							fullWidth
-							disabled={!(testCases && testCases.length > 0)}
-							sx={{ padding: '10px' }}
-							onClick={() => {
-								onUpdate(document.Id, TestCaseForm.Id, TestCaseForm);
-							}}
-							endIcon={<SaveIcon />}
-							loadingPosition="end"
-							variant="contained"
-						>
-							<span>Save</span>
-						</LoadingButton>
+						<Tooltip title='Save'>
+							<LoadingButton
+								size="large"
+								fullWidth
+								sx={{
+									borderRadius: `0`,
+									'>span': {
+										margin: 0
+									}
+								}}
+								disabled={!(testCases && testCases.length > 0)}
+								onClick={() => {
+									onUpdate(document.Id, TestCaseForm.Id, TestCaseForm);
+								}}
+								endIcon={<SaveIcon />}
+								loadingPosition="end"
+								variant="contained"
+							/>
+						</Tooltip>
 					}
 				</DocumentTabLayout>
 			)}

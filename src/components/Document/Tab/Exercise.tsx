@@ -27,7 +27,7 @@ import { CustomIconButton } from '@/components/Custom/CustomButton';
 import { getNextDay, parseToLocalDate } from '@/utils/convert';
 import { borderRadius, centerPos } from '@/style/Variables';
 import { BoxFieldSx } from '@/style/BoxSx';
-import { Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 import { LocalStorageService } from '@/services/localStorageService';
 import { fetchExercise } from '@/slices/document.slice';
 import { useParams } from 'react-router-dom';
@@ -114,10 +114,10 @@ const Exercise = (props: ExerciseProps) => {
 				[name]: e.target.value
 			});
 		} else {
-			let value = Number(e.target.value);
+
 			setExerciseForm({
 				...ExerciseForm,
-				[name]: value >= 0 ? value : 0
+				[name]: Number(e.target.value) >= 0 ? e.target.value : 0
 			});
 		}
 	};
@@ -334,51 +334,61 @@ const Exercise = (props: ExerciseProps) => {
 					}
 				>
 					{isCreator ? (
-						<LoadingButton
-							size="large"
-							fullWidth
-							sx={{ padding: '10px' }}
-							onClick={() => {
-								onUpdate
-									? onUpdate(ExerciseForm, Source, document.Id)
-									: () => {
+						<Tooltip title='Save'>
+							<LoadingButton
+								size="large"
+								fullWidth
+								sx={{
+									borderRadius: `0 0 0 0`,
+									'>span': {
+										margin: 0
+									}
+								}}
+								onClick={() => {
+									onUpdate
+										? onUpdate(ExerciseForm, Source, document.Id)
+										: () => {
 											console.log('Update Error');
-									  };
-							}}
-							endIcon={<SaveIcon />}
-							loadingPosition="end"
-							variant="contained"
-						>
-							<span>Save</span>
-						</LoadingButton>
-					) : (
-						<LoadingButton
-							size="small"
-							fullWidth
-							sx={{
-								borderRadius: `0 0 ${borderRadius} ${borderRadius}`
-							}}
-							onClick={() => {
-								onSubmit
-									? onSubmit(Source, document.Id)
-									: () => {
-											console.log('Submit Error.');
-									  };
+										};
+								}}
+								endIcon={<SaveIcon />}
 
-								let temp = {
-									programmingLanguageId: Source.type,
-									sourceCode: Source.sampleSourceCode
-								};
-								LocalStorageService.setCodeCache(temp);
-								setTempSource(temp);
-							}}
-							endIcon={<SendIcon />}
-							loadingPosition="end"
-							variant="contained"
-							disabled={DisableSubmission}
-						>
-							<span>Submit</span>
-						</LoadingButton>
+								loadingPosition="end"
+								variant="contained"
+							/>
+						</Tooltip>
+					) : (
+						<Tooltip title='Submit'>
+							<LoadingButton
+								size="large"
+								fullWidth
+								sx={{
+									borderRadius: `0 0 0 0`,
+									'>span': {
+										margin: 0
+									}
+								}}
+								onClick={() => {
+									onSubmit
+										? onSubmit(Source, document.Id)
+										: () => {
+											console.log('Submit Error.');
+										};
+
+									let temp = {
+										programmingLanguageId: Source.type,
+										sourceCode: Source.sampleSourceCode
+									};
+									LocalStorageService.setCodeCache(temp);
+									setTempSource(temp);
+								}}
+								endIcon={<SendIcon />}
+								loadingPosition="end"
+								variant="contained"
+								disabled={DisableSubmission}
+							/>
+						</Tooltip>
+
 					)}
 				</DocumentTabLayout>
 			)}
@@ -393,8 +403,8 @@ const Exercise = (props: ExerciseProps) => {
 					onCreate
 						? onCreate(document.Id)
 						: () => {
-								console.log('null action : create Exercise');
-						  };
+							console.log('null action : create Exercise');
+						};
 					setOpenCreateExerciseDialog(false);
 				}}
 			/>

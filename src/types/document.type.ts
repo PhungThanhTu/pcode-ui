@@ -117,14 +117,14 @@ export interface CreateExerciseRequest {
 
 export interface GetExerciseResponse {
 	Id: string;
-	RuntimeLimit: number;
-	MemoryLimit: number;
-	ScoreWeight: number;
+	RuntimeLimit: number | string;
+	MemoryLimit: number | string;
+	ScoreWeight: number | string;
 	TimeCreated: string;
 	HaveDeadline: boolean;
 	Deadline: string;
 	StrictDeadline: boolean;
-	ManualPercentage: number;
+	ManualPercentage: number | string;
 }
 export interface UpdateExerciseRequest {
 	runtimeLimit: number;
@@ -173,7 +173,7 @@ export interface GetSingleTestCaseResponse {
 	Id: number;
 	input: string;
 	output: string;
-	scoreWeight: number;
+	scoreWeight: number | string;
 	visibility: boolean;
 }
 export interface UpdateTestCaseRequest {
