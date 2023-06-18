@@ -37,9 +37,9 @@ const DocumentTestResultItem = (props: TestResultItemProps) => {
 					</Stack>
 				</AccordionSummary>
 				<AccordionDetails>
-					<Typography>Input: {item.Input}</Typography>
-					<Typography>Expected Output: {item.ExpectedOutput}</Typography>
-					<Typography>Actual Output: {item.Output}</Typography>
+					<Typography variant='subtitle2'><strong>Input:</strong> {item.Input}</Typography>
+					<Typography variant='subtitle2'><strong>Expected Output:</strong> {item.ExpectedOutput}</Typography>
+					<Typography variant='subtitle2'><strong>Actual Output:</strong> {item.Output}</Typography>
 				</AccordionDetails>
 			</Accordion>
 		</Box>

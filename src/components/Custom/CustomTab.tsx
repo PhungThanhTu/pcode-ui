@@ -23,8 +23,7 @@ const BoxCustomTabSx = {
 };
 const BoxCustomTabPanel = {
 	width: '100%',
-	overflow: 'hidden',
-	overflowY:'auto'
+	overflow: 'hidden'
 };
 const CustomTab = (props: CustomTabProps) => {
 	const { listOfTabs, tabIndex, setTabIndex } = props;

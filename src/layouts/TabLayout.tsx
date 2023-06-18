@@ -10,13 +10,12 @@ interface PropsWithChildrenOnly {
 }
 
 const BoxHeaderSx = {
-	height: '100%',
+	
 	width: '100%',
 	WebkitFontSmoothing: 'antialiased',
 	WebkitTapHighlightColor: 'transparent',
 	borderRadius: borderRadius,
 	marginTop: '5px',
-	overflow: 'hidden'
 };
 
 const BoxLeftBodySx = {
@@ -26,26 +25,25 @@ const BoxLeftBodySx = {
 	display: 'flex',
 	flexDirection: 'column',
 	alighItems: 'center',
-	justifyContent: 'center',
+	justifyContent: 'flex-start',
 	rowGap: 2
 };
 
 const BoxRightBodySx = {
-	overflow: 'hidden',
 	margin: '0',
 	padding: '1rem',
 	paddingRight: 0,
 	paddingTop: 0,
 	flexGrow: '1',
-	height: '100%',
+	height: 'inherit',
 	WebkitFontSmoothing: 'antialiased'
 };
 
 const TabLayout: React.FunctionComponent<PropsWithChildrenOnly> = (props: PropsWithChildrenOnly) => {
 	return (
-		<Stack flexDirection="column" display="flex" width="100%" paddingX="5%">
+		<Stack flexDirection="column" display="flex" width="100%" paddingX="5%"  overflow={'auto'} height={'inherit'}>
 			<Box sx={BoxHeaderSx}>{props.header}</Box>
-			<Stack flexDirection="row" marginTop="15px">
+			<Stack flexDirection="row" marginTop="15px"  height={'100%'}>
 				{props.leftBody ? (
 					<Fragment>
 						<Box sx={BoxLeftBodySx}>{props.leftBody}</Box>
