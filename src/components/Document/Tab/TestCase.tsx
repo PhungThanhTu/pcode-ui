@@ -6,7 +6,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import CreateIcon from '@mui/icons-material/Create';
 
 
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
@@ -214,7 +214,7 @@ const TestCase = (props: TestCaseProps) => {
 									sx={{ justifyContent: 'flex-start' }}
 									fullWidth
 									content="New Test Case"
-									startIcon={<AddOutlinedIcon />}
+									startIcon={<CreateIcon />}
 									onClick={() => {
 										onCreate(document.Id, TestCaseForm);
 									}}

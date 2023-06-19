@@ -2,6 +2,7 @@ import { Viewer } from '@react-pdf-viewer/core';
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import type { ToolbarSlot, TransformToolbarSlot } from '@react-pdf-viewer/toolbar';
 
+
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/toolbar/lib/styles/index.css';
 
@@ -41,7 +42,7 @@ const MyPDFViewer = (props: MyPDFViewerProps) => {
 	const { source } = props;
 
 	const MemoViewer = useMemo(
-		() => <Viewer plugins={[toolbarPluginInstance]} fileUrl={URL.createObjectURL(source)} />,
+		() => <Viewer  plugins={[toolbarPluginInstance]} fileUrl={URL.createObjectURL(source)} />,
 		[source]
 	);
 	return (
@@ -50,11 +51,6 @@ const MyPDFViewer = (props: MyPDFViewerProps) => {
 				<Fragment>
 					<Toolbar>{renderDefaultToolbar(transform)}</Toolbar>
 					<Box sx={BoxViewerSx}>
-						{/* <Viewer
-							plugins={[toolbarPluginInstance]}
-							fileUrl={URL.createObjectURL(source)}
-						// defaultScale={SpecialZoomLevel.PageFit}
-						/> */}
 						{MemoViewer}
 					</Box>
 				</Fragment>

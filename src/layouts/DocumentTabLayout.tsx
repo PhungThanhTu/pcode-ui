@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { borderRadius, componentStyle, componentsBoxColor } from '@/style/Variables';
 
 const BoxLeftSx = {
@@ -53,11 +53,23 @@ const DocumentTabLayout = (props: PropsWithChildrenOnly) => {
 
 	const { title, right, left, children, content, childrenPosition } = props;
 
-	const TabLayoutHeaderHeight = document.getElementById('TabLayoutHeader')?.offsetHeight;
-	const TabLayoutHeight = document.getElementById('TabLayout')?.offsetHeight;
+	const [TabLayoutHeaderHeight, setTabLayoutHeaderHeight] = useState(document.getElementById('TabLayoutHeader')?.offsetHeight)
+	const [TabLayoutHeight, setTabLayoutHeight] = useState(document.getElementById('TabLayout')?.offsetHeight)
+
+	// const TabLayoutHeaderHeight = document.getElementById('TabLayoutHeader')?.offsetHeight;
+	// const TabLayoutHeight = document.getElementById('TabLayout')?.offsetHeight;
+
+	useEffect(() => {
+		if (document.getElementById('TabLayoutHeader')?.offsetHeight) {
+			setTabLayoutHeaderHeight(document.getElementById('TabLayoutHeader')?.offsetHeight)
+		}
+		if (document.getElementById('TabLayout')?.offsetHeight) {
+			setTabLayoutHeight(document.getElementById('TabLayout')?.offsetHeight)
+		}
+	}, [TabLayoutHeight, TabLayoutHeaderHeight])
 
 	return (
-		<Stack flexDirection="column" rowGap={1}  height='inherit'  id='TabLayout'>
+		<Stack flexDirection="column" rowGap={1} height='inherit' id='TabLayout'>
 			{title ? (
 				<Box sx={componentStyle} id='TabLayoutHeader'>
 					<Typography variant="subtitle1">{title} </Typography>
@@ -74,25 +86,25 @@ const DocumentTabLayout = (props: PropsWithChildrenOnly) => {
 				justifyContent={'center'}
 				position="relative"
 			>
-				{content ? (
+				{content ?
 					content
-				) : childrenPosition ? (
-					<Fragment>
-						<Box sx={BoxLeftSx}>{left}</Box>
-						<Box sx={BoxRightSx}>
-							{right}
-							<Box sx={BoxChildRightSx}>{children}</Box>
-						</Box>
-					</Fragment>
-				) : (
-					<Fragment>
-						<Box sx={BoxLeftSx}>
-							{left}
-							<Box sx={BoxChildLeftSx}>{children}</Box>
-						</Box>
-						<Box sx={BoxRightSx}>{right}</Box>
-					</Fragment>
-				)}
+					: childrenPosition ?
+						<Fragment>
+							<Box sx={BoxLeftSx}>{left}</Box>
+							<Box sx={BoxRightSx}>
+								{right}
+								<Box sx={BoxChildRightSx}>{children}</Box>
+							</Box>
+						</Fragment>
+						:
+						<Fragment>
+							<Box sx={BoxLeftSx}>
+								{left}
+								<Box sx={BoxChildLeftSx}>{children}</Box>
+							</Box>
+							<Box sx={BoxRightSx}>{right}</Box>
+						</Fragment>
+				}
 			</Stack>
 		</Stack>
 	);
