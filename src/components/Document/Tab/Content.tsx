@@ -9,10 +9,8 @@ import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import { contentTypeId } from '@/config';
 
 const BoxViewSx = {
-	minHeight: '80vh',
-	maxHeight: '100vh',
+	height:' inherit',
 	width: '100%',
-	overflow: 'auto'
 };
 
 export interface PreviewProps {
@@ -41,10 +39,10 @@ const Content = (props: PreviewProps) => {
 				<DocumentTabLayout
 					title={title}
 					content={
-						<Box sx={{ ...BoxViewSx, ...componentStyle }}>
+						<Box sx={{ ...BoxViewSx, ...componentStyle,padding: '5px' }}>
 							<MarkdownPreview
 								source={source}
-								style={{ minHeight: 'inherit', maxHeight: '700px', overflow: 'scroll' }}
+								style={{ height: 'fit-content', overflow: 'auto' }}
 							/>
 						</Box>
 					}

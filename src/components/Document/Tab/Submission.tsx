@@ -184,7 +184,7 @@ const Submission = (props: SubmissionProps) => {
 							size="small"
 							sx={{
 								'.MuiInputBase-root': {
-									borderRadius: `0 0 0 ${borderRadius}`,
+									borderRadius: `0`,
 									backgroundColor: 'white'
 								}
 							}}
@@ -194,7 +194,7 @@ const Submission = (props: SubmissionProps) => {
 								size="large"
 								fullWidth
 								sx={{
-									borderRadius: `0 0 ${borderRadius} 0`,
+									borderRadius: `0`,
 									'>span': {
 										margin: 0
 									}

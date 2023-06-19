@@ -16,20 +16,21 @@ import MarkdownEditor from '@uiw/react-markdown-editor';
 import { cancelButton } from '@/style/ButtonSx';
 import { LinearLoading } from '@/components/Loading';
 import { contentTypeId } from '@/config';
+import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 
 const BoxContainerSx = {
-	height: '100%'
+	height: 'inherit'
 };
 
 const BoxRightSx = {
 	backgroundColor: `${componentsBoxColor}`,
-	height: '100%',
+	height: 'inherit',
 	width: '100%',
 	borderRadius: borderRadius
 };
 const BoxLeftSx = {
 	border: `1px solid ${componentsBoxColor}`,
-	height: '100%',
+	height: 'inherit',
 	width: '100%',
 	textAlign: 'center',
 	borderRadius: borderRadius,
@@ -52,7 +53,7 @@ const MarkdownSx = {
 	overflow: 'hidden',
 	height: '100%',
 	width: '100%',
-	rowGap: 1,
+	rowGap: 0.5,
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center'
@@ -124,47 +125,86 @@ const Compose = (props: EditorProps) => {
 	}, [document, documentContent]);
 
 	return (
-		<Box sx={BoxContainerSx}>
-			<Stack flexDirection="column" rowGap={1} height="100%">
-				
-				<Box sx={componentStyle}>
-					<Typography variant="h6">{document.Title}</Typography>
-				</Box>
-				<Stack
-					flexDirection="row"
-					width="100%"
-					height="100vh"
-					columnGap={1}
-					alignItems={'flex-start'}
-					justifyContent={'center'}
-				>
-					{IsSetUp === undefined ? (
-						<LinearLoading />
-					) : IsSetUp ? (
-						Type === 'PDF' ? (
-							<Fragment>
-								<Box sx={{ ...BoxLeftSx, ...componentStyle }}>
-									{PreviewPdfFile ? (
-										<MyPDFViewer source={PreviewPdfFile} />
-									) : document.Contents.length > 0 ? (
-										<Box sx={BoxPDFViewSx}>
-											{documentContent ? (
-												<MyPDFViewer
-													source={PreviewPdfFile ? PreviewPdfFile : documentContent}
-												/>
-											) : (
-												<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
-													No contents to preview.
-												</Typography>
-											)}
-										</Box>
-									) : (
-										<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
-											No contents to preview.
-										</Typography>
-									)}
-								</Box>
-								<Box sx={{ ...BoxRightSx, ...componentStyle }}>
+
+		// <Box sx={BoxContainerSx}>
+		// 	<Stack flexDirection="column" rowGap={1} height="100%">
+
+		// 		<Box sx={componentStyle}>
+		// 			<Typography variant="subtitle1">{document.Title}</Typography>
+		// 		</Box>
+		// 		<Stack
+		// 			flexDirection="row"
+		// 			width="100%"
+		// 			flex={1}
+		// 			columnGap={1}
+		// 			alignItems={'flex-start'}
+		// 			justifyContent={'center'}
+		// 		>
+
+		// 		</Stack>
+		// 	</Stack>
+		// </Box>
+		<Fragment>
+			{
+				IsSetUp === undefined ?
+					<LinearLoading />
+					: !IsSetUp ?
+						<Box sx={{ ...BoxSetUpSx, ...componentStyle }}>
+							<Typography variant="subtitle1">Decide a type</Typography>
+							<Box sx={{ width: '40%' }}>
+								<FormControl fullWidth>
+									<Select value={Type} onChange={handleChange}>
+										<MenuItem value={'PDF'}>PDF</MenuItem>
+										{/* <MenuItem value={'File'}>File</MenuItem> */}
+										<MenuItem value={'Markdown'}>Markdown</MenuItem>
+									</Select>
+								</FormControl>
+							</Box>
+							<CustomButton
+								content="Set Up Document"
+								onClick={() => {
+									setIsSetUp(true);
+								}}
+							/>
+							<Typography variant="subtitle1" width="40%" textAlign="center">
+								Markdown and PDF can be viewed directly in the broswer, whereas file can only be
+								downloaded
+							</Typography>
+						</Box>
+						:
+
+						<DocumentTabLayout
+							title={
+								document.Title
+							}
+							left={
+								Type === 'PDF' ?
+									<Box sx={{ height: '100%' }}>
+										{PreviewPdfFile ? (
+											<MyPDFViewer source={PreviewPdfFile} />
+										) : document.Contents.length > 0 ? (
+											<Box sx={BoxPDFViewSx}>
+												{documentContent ? (
+													<MyPDFViewer
+														source={PreviewPdfFile ? PreviewPdfFile : documentContent}
+													/>
+												) : (
+													<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
+														No contents to preview.
+													</Typography>
+												)}
+											</Box>
+										) : (
+											<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
+												No contents to preview.
+											</Typography>
+										)}
+									</Box>
+									: null
+							}
+							right={
+
+								<Box>
 									<Stack
 										flexDirection="column"
 										width="100%"
@@ -200,7 +240,7 @@ const Compose = (props: EditorProps) => {
 													isNotDisplay={true}
 													label=""
 													value={''}
-													onChange={() => {}}
+													onChange={() => { }}
 													onCancel={onCancelFileChange}
 													onSave={() => {
 														onCreate(Type, PreviewPdfFile);
@@ -220,60 +260,50 @@ const Compose = (props: EditorProps) => {
 										</Fragment>
 									</Stack>
 								</Box>
-							</Fragment>
-						) : (
-							<Box sx={{ ...MarkdownSx, ...componentStyle }}>
-								<Box sx={{ width: '100%', height: '650px', overflow: 'auto', flex: 1 }}>
-									<MarkdownEditor
-										width="100%"
-										minHeight="650px"
-										maxHeight="650px"
-										visible
-										value={MarkdownValue ? MarkdownValue : ''}
-										onChange={(value, viewUpdate) => {
-											onMarkdownChange(value);
-										}}
-									/>
-								</Box>
-								<Stack flexDirection="row" width="30%" columnGap={1}>
-									<CustomButton sx={cancelButton} content="Reset" onClick={onReset} />
-									<CustomButton
-										sx={{ width: '100%' }}
-										content="Save"
-										onClick={() => {
-											onCreate(Type, MarkdownValue);
-										}}
-									/>
-								</Stack>
-							</Box>
-						)
-					) : (
-						<Box sx={{ ...BoxSetUpSx, ...componentStyle }}>
-							<Typography variant="subtitle1">Decide a type</Typography>
-							<Box sx={{ width: '40%' }}>
-								<FormControl fullWidth>
-									<Select value={Type} onChange={handleChange}>
-										<MenuItem value={'PDF'}>PDF</MenuItem>
-										{/* <MenuItem value={'File'}>File</MenuItem> */}
-										<MenuItem value={'Markdown'}>Markdown</MenuItem>
-									</Select>
-								</FormControl>
-							</Box>
-							<CustomButton
-								content="Set Up Document"
-								onClick={() => {
-									setIsSetUp(true);
-								}}
-							/>
-							<Typography variant="subtitle1" width="40%" textAlign="center">
-								Markdown and PDF can be viewed directly in the broswer, whereas file can only be
-								downloaded
-							</Typography>
-						</Box>
-					)}
-				</Stack>
-			</Stack>
-		</Box>
+
+
+							}
+							content={
+								Type === 'Markdown' ?
+
+									<Box sx={{ ...MarkdownSx, ...componentStyle,padding: 0,borderRadius: 0 }}>
+										<Box sx={{
+											width: '100%',
+											 height: '100%',
+											 overflow:'auto',
+											'.md-editor': {
+												height: '100%'
+											},
+											borderRadius:0
+										}}>
+											<MarkdownEditor
+												width="100%"
+												height='inherit'
+												visible
+												value={MarkdownValue ? MarkdownValue : ''}
+												onChange={(value, viewUpdate) => {
+													onMarkdownChange(value);
+												}}
+											/>
+										</Box>
+										<Stack flexDirection="row" width="30%" height='7%' columnGap={1} paddingBottom={'5px'}>
+											<CustomButton sx={cancelButton} content="Reset" onClick={onReset} />
+											<CustomButton
+												sx={{ width: '100%' }}
+												content="Save"
+												onClick={() => {
+													onCreate(Type, MarkdownValue);
+												}}
+											/>
+										</Stack>
+									</Box>
+
+									: null
+							}
+						>
+						</DocumentTabLayout>
+			}
+		</Fragment>
 	);
 };
 
