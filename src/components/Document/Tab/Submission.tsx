@@ -14,7 +14,7 @@ import {
 import { GetDocumentByIdResponse, SubmissionManage } from '@/types/document.type';
 import { useDispatch, useSelector } from 'react-redux';
 import DocumentSubmissionItem from '../DocumentSubmissionItem';
-import { borderRadius, centerPos } from '@/style/Variables';
+import { centerPos } from '@/style/Variables';
 import { Fragment, useEffect, useState } from 'react';
 import DocumentTestResultItem from '../DocumentTestResultItem';
 import { CircleLoading } from '@/components/Loading';
@@ -57,7 +57,11 @@ const Submission = (props: SubmissionProps) => {
 		if (isCreator) {
 			if (submissionsmanage === null)
 				dispatch(fetchAllSubmissionsManage({ documentId: params.documentId ? params.documentId : '' }));
-		} else dispatch(fetchAllSubmissions({ documentId: params.documentId ? params.documentId : '' }));
+		} else {
+			if (submission === null)
+				dispatch(fetchAllSubmissions({ documentId: params.documentId ? params.documentId : '' }));
+		}
+
 	}, []);
 
 	return (
@@ -82,7 +86,7 @@ const Submission = (props: SubmissionProps) => {
 						</Typography>
 					)
 				) : (
-					<Box sx={{ overflowY: 'auto' , height: 'inherit'}}>
+					<Box sx={{ overflowY: 'auto', height: 'inherit' }}>
 						<Typography variant="subtitle2" sx={{ padding: '6px 8px', display: 'block' }}>
 							Please note that the score displaying is the score provided by automated judging system, not
 							total score of the exercise
@@ -119,7 +123,7 @@ const Submission = (props: SubmissionProps) => {
 			}
 			right={
 				isCreator ? (
-					<Box sx={{ overflowY: 'auto' , height: 'inherit'}}>
+					<Box sx={{ overflowY: 'auto', height: 'inherit' }}>
 						<Stack rowGap={2} width="100%" alignItems="center" justifyContent="center">
 							{submissionsmanage && submissionsmanage.length > 0 ? (
 								<DataGridListItems
@@ -133,7 +137,7 @@ const Submission = (props: SubmissionProps) => {
 				) : (
 					<Fragment>
 						{submission ? (
-							<Box sx={{ overflowY: 'auto' , height: 'inherit'}}>
+							<Box sx={{ overflowY: 'auto', height: 'inherit' }}>
 								<Typography sx={{ padding: '6px 8px', display: 'block' }}>
 									Selected submission: {submission.Id}
 								</Typography>

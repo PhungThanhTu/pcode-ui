@@ -11,6 +11,7 @@ export interface Document {
 	DocumentDescription: string;
 	HasExercise: boolean;
 	IsPublic: boolean;
+	Submission?: Array<GetSingleSubmissionResponse>
 }
 export interface Submission {
 	Id: string;

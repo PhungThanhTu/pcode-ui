@@ -31,6 +31,7 @@ export interface CoursesState {
 export interface CourseState {
 	course?: GetCourseByIdResponse | null;
 	courseScore?: Array<CourseScore> | null;
+	courseDocumentSubmission: number ;
 	loading: boolean;
 }
 

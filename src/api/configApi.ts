@@ -13,6 +13,10 @@ const configApi = {
         const result: AxiosResponse<Array<ContentType>> = await publicApi.get('/public/contentTypes');
         return result;
     },
+    getProgrammingLaguages: async () => {
+        const result: AxiosResponse<Array<ContentType>> = await publicApi.get('/public/programmingLanguage');
+        return result;
+    }
 
 };
 

@@ -1,4 +1,4 @@
-import { put, call, takeLatest, delay } from 'redux-saga/effects';
+import { put, call, takeLatest, delay, takeEvery } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
 import { setSnackbar } from '@/slices/snackbar.slice';
@@ -15,7 +15,10 @@ import {
 	fetchCoursesError,
 	fetchCourseScoreByIdSuccess,
 	fetchCourseScoreByIdError,
-	fetchCourseScoreById
+	fetchCourseScoreById,
+	fetchDocumentSubmission,
+	fetchDocumentSubmissionSuccess,
+	fetchDocumentSubmissionError
 } from '@/slices/course.slice';
 import {
 	Course,
@@ -27,6 +30,8 @@ import {
 } from '@/types/course.type';
 import courseApi from '@/api/courseApi';
 import { setLoading } from '@/slices/loading.slice';
+import { GetSingleSubmissionResponse } from '@/types/document.type';
+import documentApi from '@/api/documentApi';
 
 function* fetchCoursesSaga() {
 	try {
@@ -93,6 +98,23 @@ function* fetchCourseScoreByIdSaga(action: PayloadAction<{ courseId: string }>) 
 		yield put(fetchCourseScoreByIdError());
 	}
 }
+function* fetchDocumentSingleSubmissionSaga(action: PayloadAction<{ documentId: string }>) {
+	try {
+		const submission: AxiosResponse<Array<GetSingleSubmissionResponse>> = yield call(
+			documentApi.getAllSubmissions,
+			action.payload.documentId
+		);
+
+		if (submission.data) {
+			yield put(fetchDocumentSubmissionSuccess({
+				documentId: action.payload.documentId,
+				Submission: submission.data
+			}));
+		}
+	} catch (error: any) {
+		yield put(fetchDocumentSubmissionError())
+	}
+}
 export function* watchCourse() {
 	yield takeLatest(fetchCourses.type, fetchCoursesSaga);
 	yield takeLatest(createCourse.type, createCourseSaga);
@@ -100,4 +122,5 @@ export function* watchCourse() {
 	yield takeLatest(joinCourse.type, joinCourseSaga);
 	yield takeLatest(fetchCourseById.type, fetchCourseByIdSaga);
 	yield takeLatest(fetchCourseScoreById.type, fetchCourseScoreByIdSaga);
+	yield takeEvery(fetchDocumentSubmission.type, fetchDocumentSingleSubmissionSaga);
 }

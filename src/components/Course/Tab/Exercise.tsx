@@ -19,7 +19,7 @@ interface ExerciseProps {
 }
 const Exercise = (props: ExerciseProps) => {
 	const { course, customizeButton, code, createDocumentModal, changePublishDocument, isCreator } = props;
-
+	
 	return (
 		<TabLayout
 			header={

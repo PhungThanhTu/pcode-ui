@@ -9,16 +9,15 @@ import { Document } from '@/types/document.type';
 import { Fragment, MouseEvent } from 'react';
 import { CustomOnlyIconButton } from '../Custom/CustomButton';
 import { BoxItemSx } from '@/style/BoxSx';
-import { Error } from '@/style/Colors';
+import { Error, Success } from '@/style/Colors';
 
 interface DocumentItemProps {
 	document: Document;
 	publishDocument: Function;
 	isCreator: boolean;
-	exerciseStatus?: boolean;
 }
 export const DocumentItem = (props: DocumentItemProps) => {
-	const { document, publishDocument, isCreator, exerciseStatus } = props;
+	const { document, publishDocument, isCreator } = props;
 
 
 	return (
@@ -28,9 +27,20 @@ export const DocumentItem = (props: DocumentItemProps) => {
 				{document.DocumentDescription ? (
 					<Typography variant="subtitle2">{document.DocumentDescription}</Typography>
 				) : undefined}
-				{document.HasExercise && exerciseStatus ? (
+				{document.HasExercise ? (
 					<Fragment>
-						<Typography color={Error.light}>Exercise status: Nothing</Typography>
+						<Box>
+							<Typography sx={{ display: 'inline-block' }} >Exercise: </Typography>
+							&#32;
+							{
+								document.Submission && document.Submission.length > 0 ?
+									<Typography sx={{ display: 'inline-block' }} color={Success.light}>Submited</Typography>
+									:
+									<Typography sx={{ display: 'inline-block' }} color={Error.light}>Not Submit</Typography>
+							}
+						</Box>
+
+
 					</Fragment>
 				) : undefined}
 			</Stack>

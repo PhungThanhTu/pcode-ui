@@ -9,6 +9,8 @@ import {
 	GetCourseByIdResponse,
 	JoinCourse
 } from '@/types/course.type';
+import { GetSingleSubmissionResponse, SubmissionActionRequest } from '@/types/document.type';
+
 
 const initialCoursesState: CoursesState = {
 	courses: undefined,
@@ -17,6 +19,7 @@ const initialCoursesState: CoursesState = {
 const initialCourseState: CourseState = {
 	course: undefined,
 	courseScore: undefined,
+	courseDocumentSubmission: 0,
 	loading: false
 };
 const coursesSlice = createSlice({
@@ -26,9 +29,9 @@ const coursesSlice = createSlice({
 		fetchCourses: (state) => {
 			state.loading = true;
 		},
-		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => {},
-		renameCourse: (state, { payload }: PayloadAction<Course>) => {},
-		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => {},
+		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => { },
+		renameCourse: (state, { payload }: PayloadAction<Course>) => { },
+		joinCourse: (state, { payload }: PayloadAction<JoinCourse>) => { },
 		createCourseSuccess: (state, { payload }: PayloadAction<CreateCourseResponse>) => {
 			let Course: Course = {
 				id: payload.id,
@@ -76,6 +79,21 @@ const courseSlice = createSlice({
 		fetchCourseScoreByIdError: (state) => {
 			state.courseScore = undefined;
 		},
+		fetchDocumentSubmission: (state, { payload }: PayloadAction<{ documentId: string }>) => {
+			state.courseDocumentSubmission += 1
+		},
+		fetchDocumentSubmissionSuccess: (state, { payload }: PayloadAction<{ documentId: string, Submission: Array<GetSingleSubmissionResponse> }>) => {
+			let index = state.course?.documents.findIndex(item => item.Id === payload.documentId)
+			
+			if (index !== -1 && index !== undefined) {
+
+				state.course ? state.course.documents[index].Submission = payload.Submission : null
+				console.log(payload.Submission)
+			}
+		},
+		fetchDocumentSubmissionError: (state) => {
+			state.courseDocumentSubmission -= 1
+		},
 		changePublishDocumentSuccess: (state, { payload }: PayloadAction<{ documentId: string; status: number }>) => {
 			const documentIndex = state.course?.documents.findIndex((item) => item.Id === payload.documentId);
 			if (documentIndex !== -1 && documentIndex !== null && documentIndex !== undefined) {
@@ -84,16 +102,28 @@ const courseSlice = createSlice({
 		}
 	}
 });
-export const { fetchCourses, createCourse, renameCourse, joinCourse, fetchCoursesSuccess, fetchCoursesError } =
+export const {
+	fetchCourses,
+	createCourse,
+	renameCourse,
+	joinCourse,
+	fetchCoursesSuccess,
+	fetchCoursesError,
+
+} =
 	coursesSlice.actions;
 export const {
+
 	fetchCourseById,
 	fetchCourseByIdError,
 	fetchCourseByIdSuccess,
 	changePublishDocumentSuccess,
 	fetchCourseScoreById,
 	fetchCourseScoreByIdError,
-	fetchCourseScoreByIdSuccess
+	fetchCourseScoreByIdSuccess,
+	fetchDocumentSubmission,
+	fetchDocumentSubmissionSuccess,
+	fetchDocumentSubmissionError
 } = courseSlice.actions;
 
 export const coursesReducer = coursesSlice.reducer;

@@ -17,6 +17,9 @@ import { cancelButton } from '@/style/ButtonSx';
 import { LinearLoading } from '@/components/Loading';
 import { contentTypeId } from '@/config';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
+import { getContentTypes } from '@/selectors/config.selector';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchContentTypes } from '@/slices/config.slice';
 
 const BoxContainerSx = {
 	height: 'inherit'
@@ -68,19 +71,23 @@ interface EditorProps {
 }
 
 const Compose = (props: EditorProps) => {
+
 	const { document, documentContent, onChange, onCreate, onReset } = props;
 
 	const NFC = 'No file chosen';
 
+	const dispatch = useDispatch()
+	const contentTypes = useSelector(getContentTypes)
+
 	const [IsSetUp, setIsSetUp] = useState<any>(undefined);
 	const [IsFileUploaded, setIsFileUploaded] = useState(NFC);
 	const [PreviewPdfFile, setPreviewPdfFile] = useState<any>(null);
-	const [Type, setType] = useState('PDF');
+	const [Type, setType] = useState(0);
 	const [MarkdownValue, setMarkdownValue] = useState('');
 	const fileRef = useRef<HTMLInputElement>(null);
 
 	const handleChange = (event: SelectChangeEvent) => {
-		setType(event.target.value as string);
+		setType(Number(event.target.value));
 	};
 
 	const uploadFile = () => {
@@ -109,41 +116,31 @@ const Compose = (props: EditorProps) => {
 			fileRef.current.value = '';
 		}
 	};
-
+	const GetTypeMedata = (type: number) => {
+		return contentTypes ? contentTypes.filter(item => item.Id === type)[0].MetaDescription : ""
+	}
 	useEffect(() => {
 		if (documentContent || document.Contents.length > 0) {
 			setIsSetUp(true);
-			if (document.Contents[0].ContentTypeId === contentTypeId.pdf) setType('PDF');
+			if (document.Contents[0].ContentTypeId === contentTypeId.pdf)
+				setType(1);
 			else {
-				setType('Markdown');
+				setType(0);
 				setMarkdownValue(document.Contents[0].ContentBody);
 			}
 		} else {
 			setIsSetUp(false);
-			setType('PDF');
+			setType(1);
 		}
 	}, [document, documentContent]);
 
+	useEffect(() => {
+		if (contentTypes === null) {
+			dispatch(fetchContentTypes())
+		}
+	}, [])
+
 	return (
-
-		// <Box sx={BoxContainerSx}>
-		// 	<Stack flexDirection="column" rowGap={1} height="100%">
-
-		// 		<Box sx={componentStyle}>
-		// 			<Typography variant="subtitle1">{document.Title}</Typography>
-		// 		</Box>
-		// 		<Stack
-		// 			flexDirection="row"
-		// 			width="100%"
-		// 			flex={1}
-		// 			columnGap={1}
-		// 			alignItems={'flex-start'}
-		// 			justifyContent={'center'}
-		// 		>
-
-		// 		</Stack>
-		// 	</Stack>
-		// </Box>
 		<Fragment>
 			{
 				IsSetUp === undefined ?
@@ -153,10 +150,18 @@ const Compose = (props: EditorProps) => {
 							<Typography variant="subtitle1">Decide a type</Typography>
 							<Box sx={{ width: '40%' }}>
 								<FormControl fullWidth>
-									<Select value={Type} onChange={handleChange}>
-										<MenuItem value={'PDF'}>PDF</MenuItem>
-										{/* <MenuItem value={'File'}>File</MenuItem> */}
-										<MenuItem value={'Markdown'}>Markdown</MenuItem>
+									<Select value={contentTypes && contentTypes.length > 0 ? Type.toString() : ''} onChange={handleChange}>
+										{
+											contentTypes ?
+												contentTypes.length > 0 ?
+													contentTypes.map((item, index) => {
+														return <MenuItem key={index} value={item.Id}>{item.MetaDescription}</MenuItem>
+													})
+													: " "
+												:
+												<MenuItem value={0}>Markdown</MenuItem>
+										}
+
 									</Select>
 								</FormControl>
 							</Box>
@@ -178,7 +183,7 @@ const Compose = (props: EditorProps) => {
 								document.Title
 							}
 							left={
-								Type === 'PDF' ?
+								Type === 1 ?
 									<Box sx={{ height: '100%' }}>
 										{PreviewPdfFile ? (
 											<MyPDFViewer source={PreviewPdfFile} />
@@ -214,7 +219,7 @@ const Compose = (props: EditorProps) => {
 										rowGap={2}
 									>
 										<Fragment>
-											<Typography variant="subtitle1">Type : {Type}</Typography>
+											<Typography variant="subtitle1">Type : {GetTypeMedata(Type)}</Typography>
 											<Stack rowGap={2}>
 												<CustomButton
 													sx={{ width: '100%' }}
@@ -264,22 +269,23 @@ const Compose = (props: EditorProps) => {
 
 							}
 							content={
-								Type === 'Markdown' ?
+								Type === 0 ?
 
-									<Box sx={{ ...MarkdownSx, ...componentStyle,padding: 0,borderRadius: 0 }}>
+									<Box sx={{ ...MarkdownSx, ...componentStyle, padding: 0, borderRadius: 0 }}>
 										<Box sx={{
 											width: '100%',
-											 height: '100%',
-											 overflow:'auto',
+											height: '100%',
+											overflow: 'auto',
 											'.md-editor': {
 												height: '100%'
 											},
-											borderRadius:0
+											borderRadius: 0
 										}}>
 											<MarkdownEditor
 												width="100%"
 												height='inherit'
 												visible
+
 												value={MarkdownValue ? MarkdownValue : ''}
 												onChange={(value, viewUpdate) => {
 													onMarkdownChange(value);
