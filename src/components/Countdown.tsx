@@ -9,7 +9,6 @@ const BoxDatesSx = {
 	alignItems: 'center',
 	fontWeight: 500,
 	fontSize: '1rem',
-	border: '1px solid #ebebeb',
 	borderRadius: '0.25rem',
 	height: '100%',
 	color: '#000'
@@ -42,11 +41,11 @@ const ShowCounter = (props: ShowCounterProps) => {
 		<Box sx={BoxDatesSx}>
 			<DateTimeDisplay value={days} type={'Days'} isDanger={days <= 2} />
 			<p>:</p>
-			<DateTimeDisplay value={hours} type={'Hours'} isDanger={hours <= 12} />
+			<DateTimeDisplay value={hours} type={'Hours'} isDanger={hours <= 12 && days <= 0} />
 			<p>:</p>
-			<DateTimeDisplay value={minutes} type={'Mins'} isDanger={minutes <= 60} />
+			<DateTimeDisplay value={minutes} type={'Mins'} isDanger={minutes <= 60 && hours <= 0 && days <= 0} />
 			<p>:</p>
-			<DateTimeDisplay value={seconds} type={'Seconds'} isDanger={seconds <= 60 && minutes <= 1} />
+			<DateTimeDisplay value={seconds} type={'Seconds'} isDanger={seconds <= 60 && minutes <= 1  && hours <= 0 && days <= 0} />
 		</Box>
 	);
 };

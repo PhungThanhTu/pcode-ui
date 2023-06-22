@@ -7,13 +7,15 @@ import Stack from '@mui/material/Stack';
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getSampleSourceCode } from '@/selectors/document.selector';
 import { flexBox } from '@/style/Variables';
 import { CustomOnlyIconButton } from './Custom/CustomButton';
 import Tooltip from '@mui/material/Tooltip';
 import { LocalStorageService } from '@/services/localStorageService';
 import CountdownTimer from './Countdown';
+import { getProgrammingLanguages } from '@/selectors/config.selector';
+import { fetchProgrammingLanguages } from '@/slices/config.slice';
 
 interface CodeEditorProps {
 	documentId: string;
@@ -46,18 +48,21 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		// Monaco Editor is initialized and ready to use
 	});
 
+	const dispatch = useDispatch()
+	const ProgrammingLaguages = useSelector(getProgrammingLanguages)
 	const SampleSourceCode = useSelector(getSampleSourceCode);
 
-	const [Language, setLanguage] = useState('1');
+	const [Language, setLanguage] = useState(1);
 	const [Theme, setTheme] = useState('vs');
 	const [Value, setValue] = useState('');
 	const [Read, setRead] = useState(false);
 	const [isEditMode, setIsEditMode] = useState(false);
 
 	const onLanguageChange = (event: SelectChangeEvent) => {
-		let type = event.target.value;
-		setLanguage(type as string);
 
+		let type = event.target.value;
+		type = type ? type : '1'
+		setLanguage(Number(type));
 		onGetSampleSourceCode(documentId, Number(type));
 		getSource(Value, Number(type));
 	};
@@ -72,10 +77,9 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		getSource(value, Number(Language));
 	};
 
-	useEffect(() => {
-		if (!readOnly) onGetSampleSourceCode(documentId, Number(Language));
-	}, []);
-
+	const getLanguageName = (type: number) => {
+		return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName : ''
+	}
 	useEffect(() => {
 		if (!source) {
 			if (SampleSourceCode && Object.keys(SampleSourceCode).length > 0) {
@@ -105,14 +109,27 @@ export const CodeEditor = (props: CodeEditorProps) => {
 			}
 		}
 		if (language) {
-			setLanguage(language.toString());
+			setLanguage(language);
 		}
 	}, [source]);
 
+	useEffect(() => {
+		if (ProgrammingLaguages && ProgrammingLaguages.length > 0) {
+			setLanguage(ProgrammingLaguages[0].Id)
+		}
+	}, [ProgrammingLaguages])
+
+	useEffect(() => {
+		if (ProgrammingLaguages === null) {
+			dispatch(fetchProgrammingLanguages())
+		}
+		if (!readOnly) onGetSampleSourceCode(documentId, Number(Language));
+	}, [])
+
 	return (
-		<Stack 
-		height='100%'
-		// sx={{ '*': { borderRadius: borderRadius } }}
+		<Stack
+			height='100%'
+	
 		>
 			<Stack flexDirection="row" justifyContent="flex-start">
 				<Box width="30%" sx={{ flexGrow: 1 }}>
@@ -132,34 +149,44 @@ export const CodeEditor = (props: CodeEditorProps) => {
 				<Box width="20%" sx={{ display: 'flex', flexGrow: 1 }}>
 					<FormControl fullWidth disabled={readOnly || isEditMode}>
 						<Select
-							value={Language}
+							value={ProgrammingLaguages && ProgrammingLaguages.length > 0 ? Language.toString() : ''}
 							onChange={onLanguageChange}
 							sx={{ '.MuiSelect-select': { padding: '10px', paddingLeft: '5%' } }}
 						>
-							<MenuItem value={'1'}>C</MenuItem>
-							<MenuItem value={'2'}>C++</MenuItem>
+							{
+								ProgrammingLaguages ?
+									ProgrammingLaguages.length > 0 ?
+										ProgrammingLaguages.map((item, index) => {
+											return <MenuItem key={index} value={item.Id}>{item.DisplayName}</MenuItem>
+										})
+										: " "
+									: " "
+							}
+
 						</Select>
 					</FormControl>
-					<CustomOnlyIconButton
-						disabled={isCreator}
-						onClick={() => {
-							resetTempSource ? resetTempSource() : null;
-							LocalStorageService.clearCodeCache();
-							setIsEditMode(false);
-							onGetSampleSourceCode(documentId, Number(language));
-						}}
-					>
-						<Tooltip title="Reset for getting Sample Code">
+					<Tooltip title="Reset for getting Sample Code">
+						<CustomOnlyIconButton
+							disabled={isCreator}
+							onClick={() => {
+								resetTempSource ? resetTempSource() : null;
+								LocalStorageService.clearCodeCache();
+								setIsEditMode(false);
+								onGetSampleSourceCode(documentId, Number(Language));
+							}}
+						>
+
 							<RestartAltOutlinedIcon />
-						</Tooltip>
-					</CustomOnlyIconButton>
+
+						</CustomOnlyIconButton>
+					</Tooltip>
 				</Box>
 
 				{!isCreator ? (
 					deadline || deadline === 0 ? (
 						<Box sx={{ flexGrow: 1 }}>
 							<Box sx={flexBox('center', 'center', 'row')}>
-								<Box sx={flexBox('center', 'center', 'row')}>Deadline:</Box>
+								{/* <Box sx={flexBox('center', 'center', 'row')}>Deadline:</Box> */}
 								<CountdownTimer targetDate={deadline} />
 							</Box>
 						</Box>
@@ -170,8 +197,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 				<Editor
 					className="code"
 					options={{ readOnly: Read || readOnly, theme: Theme }}
-					language={Language === '1' ? 'c' : 'cpp'}
-		            
+					language={getLanguageName(Language)}
 					value={Value}
 					onChange={onValueChange}
 				/>

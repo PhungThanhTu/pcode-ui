@@ -25,12 +25,15 @@ import { LinearLoading } from '@/components/Loading';
 import CustomDialog from '@/components/Custom/CustomDialog';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
 import { getNextDay, parseToLocalDate } from '@/utils/convert';
-import { borderRadius, centerPos } from '@/style/Variables';
+import { centerPos } from '@/style/Variables';
 import { BoxFieldSx } from '@/style/BoxSx';
-import { Tooltip, Typography } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Tooltip, Typography } from '@mui/material';
 import { LocalStorageService } from '@/services/localStorageService';
 import { fetchExercise } from '@/slices/document.slice';
 import { useParams } from 'react-router-dom';
+import { getJudgers, getProgrammingLanguages } from '@/selectors/config.selector';
+import { fetchJudgers } from '@/slices/config.slice';
+
 
 const BoxCreateSx = {
 	position: 'absolute',
@@ -45,7 +48,8 @@ const BoxCreateSx = {
 	}
 };
 const FormGroupDeadlineSx = {
-	rowGap: 1
+	rowGap: 1,
+	width: '100%'
 };
 
 interface ExerciseProps {
@@ -61,6 +65,9 @@ interface ExerciseProps {
 const Exercise = (props: ExerciseProps) => {
 	const params = useParams();
 	const dispatch = useDispatch();
+
+	
+	const judgers = useSelector(getJudgers)
 	const exercise = useSelector(getDocumentExercise);
 
 	const InitialUpdateExerciseForm: GetExerciseResponse = {
@@ -88,6 +95,7 @@ const Exercise = (props: ExerciseProps) => {
 	const [TargetDeadline, setTargetDeadline] = useState<number | null>(0);
 	const [DisableSubmission, setDisableSubmission] = useState(true);
 	const [TempSource, setTempSource] = useState<CreateSubmissionRequest>();
+	const [Judger, setJudger] = useState('')
 
 	const {
 		ManualPercentage,
@@ -130,6 +138,11 @@ const Exercise = (props: ExerciseProps) => {
 		});
 	};
 
+
+	const handleChangeJudgers = (event: SelectChangeEvent) => {
+
+	};
+
 	useEffect(() => {
 		if (exercise) {
 			setExerciseForm({ ...exercise });
@@ -143,6 +156,7 @@ const Exercise = (props: ExerciseProps) => {
 					...exercise,
 					Deadline: new Date(nextDay).toISOString()
 				});
+				setDisableSubmission(false);
 			} else if (exercise.HaveDeadline) {
 				let now_in_mins = new Date().getTime();
 				let targetDate = new Date(exercise.Deadline).getTime();
@@ -160,17 +174,24 @@ const Exercise = (props: ExerciseProps) => {
 	}, [exercise]);
 
 	useEffect(() => {
+		if (judgers && judgers.length > 0) {
+			setJudger(judgers[0].Id)
+		}
+	}, [judgers])
+	useEffect(() => {
 		if (exercise === null) {
 			dispatch(fetchExercise({ documentId: params.documentId ? params.documentId : '' }));
 			LocalStorageService.clearCodeCache();
 		}
-
+		if (judgers === null) {
+			dispatch(fetchJudgers())
+		}
 		let codeCache = LocalStorageService.getCodeCache();
 		if (codeCache) {
 			setTempSource({ ...codeCache });
 		}
 	}, []);
-
+	
 	return (
 		<Fragment>
 			{exercise === undefined ? (
@@ -228,6 +249,7 @@ const Exercise = (props: ExerciseProps) => {
 								>
 									<Box sx={BoxFieldSx}>
 										<TextField
+											size='small'
 											fullWidth
 											required
 											label="Runtime limit (ms):"
@@ -275,7 +297,28 @@ const Exercise = (props: ExerciseProps) => {
 										/>
 									</Box>
 								</Stack>
-								<Box>
+								<Box sx={BoxFieldSx}>
+									<FormControl fullWidth>
+										<InputLabel htmlFor='judger'>Judger</InputLabel>
+										<Select id='judger'
+											value={judgers && judgers.length > 0 ? Judger : ''}
+											onChange={handleChangeJudgers}>
+											{
+												judgers ?
+													judgers.length > 0 ?
+														judgers.map((item, index) => {
+															return <MenuItem key={index} value={item.Id}>{item.DisplayName}</MenuItem>
+														})
+														: " "
+													:
+													" "
+											}
+
+										</Select>
+									</FormControl>
+								</Box>
+
+								<Box sx={{ ...BoxFieldSx, alignContent: 'flex-start' }}>
 									<FormGroup sx={FormGroupDeadlineSx}>
 										<FormControlLabel
 											control={
@@ -312,6 +355,7 @@ const Exercise = (props: ExerciseProps) => {
 											labelPlacement="start"
 											label="Deadline"
 											sx={{
+												marginLeft: 0,
 												columnGap: 1
 											}}
 											control={
@@ -346,7 +390,7 @@ const Exercise = (props: ExerciseProps) => {
 								}}
 								onClick={() => {
 									onUpdate
-										? onUpdate(ExerciseForm, Source, document.Id)
+										? onUpdate(ExerciseForm, Source, document.Id, Judger)
 										: () => {
 											console.log('Update Error');
 										};
@@ -401,7 +445,7 @@ const Exercise = (props: ExerciseProps) => {
 				}}
 				onSave={() => {
 					onCreate
-						? onCreate(document.Id)
+						? onCreate(document.Id, Judger)
 						: () => {
 							console.log('null action : create Exercise');
 						};

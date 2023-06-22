@@ -12,9 +12,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfile } from '@/selectors/auth.selector';
 import { getCourse, getCourses } from '@/selectors/course.selector';
-import { fetchCourseById, fetchCourses } from '@/slices/course.slice';
+import { fetchCourseById, fetchCourses, fetchDocumentSubmission } from '@/slices/course.slice';
 import { CreateDocumentRequest, Document } from '@/types/document.type';
-import { changePublishDocument, createDocument } from '@/slices/document.slice';
+import { changePublishDocument, createDocument, fetchSingleSubmission } from '@/slices/document.slice';
 import { GetCourseByIdResponse } from '@/types/course.type';
 import ScoreBoard from '@/components/Course/Tab/ScoreBoard';
 import { getCourseTabIndex, getCourseTabs } from '@/selectors/tab.selector';
@@ -34,7 +34,7 @@ const CoursePage = () => {
 
 	const UserProfile = useSelector(getProfile);
 	const { courses } = useSelector(getCourses);
-	const { course, loading } = useSelector(getCourse);
+	const { course, loading, courseDocumentSubmission } = useSelector(getCourse);
 
 	const tabs = useSelector(getCourseTabs);
 	const tabIndex = useSelector(getCourseTabIndex);
@@ -94,6 +94,13 @@ const CoursePage = () => {
 		dispatch(changePublishDocument({ documentId: documentId, status: status }));
 	};
 
+	const onFetchDocumentSubmission = (course: GetCourseByIdResponse) => {
+
+		course.documents.forEach(item => {
+
+			dispatch(fetchDocumentSubmission({ documentId: item.Id }))
+		})
+	}
 	useEffect(() => {
 		if (!course) {
 			// dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
@@ -110,6 +117,10 @@ const CoursePage = () => {
 				...course,
 				documents: getDocumentsByType(course.documents, true)
 			};
+			if (!isCreator) {
+				if (courseDocumentSubmission < courseExercise.documents.length)
+					onFetchDocumentSubmission(courseExercise);
+			}
 
 			dispatch(
 				setCourseTabs([
@@ -123,16 +134,16 @@ const CoursePage = () => {
 								customizeButton={
 									isCreator
 										? () => {
-												setOpenCourseCustomize(true);
-										  }
+											setOpenCourseCustomize(true);
+										}
 										: null
 								}
 								changePublishDocument={ChangePublishDocument}
 								createDocumentModal={
 									isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
 										? () => {
-												setOpenDocumentCreate(true);
-										  }
+											setOpenDocumentCreate(true);
+										}
 										: null
 								}
 							/>
@@ -148,16 +159,16 @@ const CoursePage = () => {
 								customizeButton={
 									isCreator
 										? () => {
-												setOpenCourseCustomize(true);
-										  }
+											setOpenCourseCustomize(true);
+										}
 										: null
 								}
 								changePublishDocument={ChangePublishDocument}
 								createDocumentModal={
 									isCourseCreator(course.id, UserProfile ? UserProfile.id : '')
 										? () => {
-												setOpenDocumentCreate(true);
-										  }
+											setOpenDocumentCreate(true);
+										}
 										: null
 								}
 							/>
@@ -169,8 +180,14 @@ const CoursePage = () => {
 					}
 				])
 			);
+	
+
 		}
 	}, [course, course?.documents]);
+	
+	useEffect(() => {
+
+	},[course?.documents])
 
 	useLayoutEffect(() => {
 		dispatch(fetchCourses());

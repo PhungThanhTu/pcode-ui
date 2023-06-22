@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ConfigState, ContentType, Judger } from '@/types/config.type';
+import { ConfigState, ContentType, Judger, ProgrammingLanguage } from '@/types/config.type';
 
 const initialState: ConfigState = {
-    judgers: [],
-    programmingLanguages: [],
-    contentTypes: []
+    judgers: null,
+    programmingLanguages: null,
+    contentTypes: null
 };
 
 const configSlice = createSlice({
@@ -18,28 +18,40 @@ const configSlice = createSlice({
         fetchJudgersSuccess: (state, { payload }: PayloadAction<Array<Judger>>) => {
             state.judgers = payload
         },
-        fetchJudgers: () => {
-
+        fetchJudgers: (state) => {
+            state.judgers = undefined
         },
-        fetchContentTypes: () => {
-
+        fetchJudgersError: (state) => {
+            state.judgers = null
         },
-        fetchContentTypesScuccess: (state, { payload }: PayloadAction<Array<ContentType>>) => {
+        fetchContentTypes: (state) => {
+            state.contentTypes = undefined
+        },
+        fetchContentTypesError: (state) => {
+            state.contentTypes = null
+        },
+        fetchContentTypesSuccess: (state, { payload }: PayloadAction<Array<ContentType>>) => {
             state.contentTypes = payload
         },
-        fetchProgrammingLanguages: () => {
-
+        fetchProgrammingLanguages: (state) => {
+            state.programmingLanguages = undefined
         },
-        fetchProgrammingLanguagesScuccess: (state, { payload }: PayloadAction<Array<ContentType>>) => {
-            state.contentTypes = payload
+        fetchProgrammingLanguagesError: (state) => {
+            state.programmingLanguages = null
+        },
+        fetchProgrammingLanguagesSuccess: (state, { payload }: PayloadAction<Array<ProgrammingLanguage>>) => {
+            state.programmingLanguages = payload
         }
     }
 });
 
 export const {
     fetchAllConfigs, fetchAllConfigsSuccess, fetchContentTypes,
-    fetchContentTypesScuccess, fetchJudgers, fetchJudgersSuccess, fetchProgrammingLanguages,
-    fetchProgrammingLanguagesScuccess
+    fetchContentTypesSuccess, fetchJudgers, fetchJudgersSuccess, fetchProgrammingLanguages,
+    fetchProgrammingLanguagesSuccess,
+    fetchContentTypesError,
+    fetchJudgersError,
+    fetchProgrammingLanguagesError
 } = configSlice.actions;
 
 export default configSlice.reducer;

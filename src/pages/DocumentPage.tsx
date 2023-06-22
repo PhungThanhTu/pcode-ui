@@ -44,7 +44,7 @@ import {
 } from '@/types/document.type';
 
 import { Worker } from '@react-pdf-viewer/core';
-import { JudgerId, contentTypeId, createExerciseDefault } from '@/config';
+import { contentTypeId, createExerciseDefault } from '@/config';
 import { getApiDateFormat, getToday } from '@/utils/convert';
 import { LocalStorageService } from '@/services/localStorageService';
 import { setDocumentTabIndex, setDocumentTabs } from '@/slices/tab.slice';
@@ -58,6 +58,7 @@ const DocumentPage = () => {
 	const userProfile = useSelector(getProfile);
 
 	const { document, loading, documentContent } = useSelector(getDocument);
+
 
 	const tabs = useSelector(getDocumentTabs);
 	const tabIndex = useSelector(getDocumentTabIndex);
@@ -77,15 +78,15 @@ const DocumentPage = () => {
 		}
 	};
 
-	const onCreateDocumentContent = (type: string, content: any) => {
-		if (type === 'PDF') {
+	const onCreateDocumentContent = (type: number, content: any) => {
+		if (type === 1) {
 			let CreateDocumentContentForm: CreateDocumentContentRequest = {
 				content: content,
 				contentTypeId: contentTypeId.pdf,
 				documentId: params.documentId ? params.documentId : ''
 			};
 			dispatch(createDocumentContent(CreateDocumentContentForm));
-		} else if (type === 'Markdown') {
+		} else if (type === 0) {
 			let CreateDocumentContentForm: CreateDocumentContentRequest = {
 				content: content,
 				contentTypeId: contentTypeId.markDown,
@@ -103,15 +104,16 @@ const DocumentPage = () => {
 
 	//#region exercise
 
-	const onCreateExercise = (documentId: string) => {
-		let form = createExerciseDefault;
+	const onCreateExercise = (documentId: string, judgerId: string) => {
+		let form = { ...createExerciseDefault, judgerId: judgerId };
 		dispatch(createDocumentExercise({ body: form, documentId: documentId }));
 	};
 
 	const onUpdateExercise = (
 		ExeriseForm: GetExerciseResponse,
 		sourceForm: UpdateSampleSourceCodeRequest,
-		documentId: string
+		documentId: string,
+		judgerId: string
 	) => {
 		let exerciseForm: UpdateExerciseRequest = {
 			deadline: ExeriseForm.HaveDeadline
@@ -127,7 +129,7 @@ const DocumentPage = () => {
 					? ExeriseForm.StrictDeadline
 					: false
 				: false,
-			judgerId: JudgerId
+			judgerId: judgerId
 		};
 
 		dispatch(
@@ -296,6 +298,7 @@ const DocumentPage = () => {
 				}
 			} else {
 				if (document.HasExercise) {
+					
 					dispatch(
 						setDocumentTabs([
 							{
@@ -358,6 +361,7 @@ const DocumentPage = () => {
 
 	useEffect(() => {
 		dispatch(fetchDocumentById({ id: params.documentId ? params.documentId : '' }));
+
 	}, []);
 
 	return loading ? (

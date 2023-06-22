@@ -199,6 +199,7 @@ const documentSlice = createSlice({
 		fetchAllSubmissionsManageError: (state) => {
 			state.documentSubmissionsManage = null;
 		},
+		
 		fetchSingleSubmission: (state, { payload }: PayloadAction<SubmissionActionRequest>) => {
 			state.documentSingleSubmission = undefined;
 		},
@@ -208,6 +209,7 @@ const documentSlice = createSlice({
 		fetchSingleSubmissionError: (state) => {
 			state.documentSingleSubmission = null;
 		},
+	
 		markSubmission: (state, { payload }: PayloadAction<SubmissionActionRequest>) => {},
 		markSubmissionSuccess: (state, { payload }: PayloadAction<SubmissionActionRequest>) => {
 			if (state.documentSubmissions && state.documentSubmissions.length > 0) {

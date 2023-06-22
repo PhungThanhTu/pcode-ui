@@ -1,14 +1,19 @@
 export interface ConfigState {
-    judgers: Array<Judger>;
-    programmingLanguages: Array<any>;
-    contentTypes: Array<ContentType>
+    judgers?: Array<Judger> | null;
+    programmingLanguages?: Array<ProgrammingLanguage> | null;
+    contentTypes?: Array<ContentType> | null;
 }
 export interface Judger {
     Id: string;
     FileName: string;
-    Displayname: string;
+    DisplayName: string;
 }
 export interface ContentType {
     Id: number;
     MetaDescription: string;
+}
+export interface ProgrammingLanguage {
+    Id: number;
+    LanguageName: string;
+    DisplayName: string;
 }
