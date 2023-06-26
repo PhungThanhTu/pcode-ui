@@ -1,3 +1,4 @@
+import JSZip from 'jszip';
 import { ChangeEvent, useState } from 'react';
 
 export const useImageFileReader = () => {
@@ -33,3 +34,33 @@ export const usePdfReader = () => {
 	return { PdfFile, getFile };
 };
 
+export const useFileReader = () => {
+	const [file, setFile] = useState<Blob>()
+
+	const zip = new JSZip();
+
+	const read = async (zipData: Blob) => {
+		try {
+			const result = await zip.loadAsync(zipData);
+			result.generateAsync({ type: "blob" }).then(function (content) {
+				setFile(content)
+			})
+			
+			// // Access individual files in the zip
+			// result.forEach(async (relativePath, zipEntry) => {
+			// 	const fileData = await zipEntry.async('blob');
+				
+			// 	// Perform operations on the file data
+			// 	// For example, save the file using file-saver library
+			// 	// (fileData, zipEntry.name);
+			// });
+
+
+		} catch (error) {
+			console.error('Error reading the zip file:', error);
+		}
+	}
+
+	return { file, read }
+
+};

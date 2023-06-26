@@ -58,7 +58,7 @@ const Submission = (props: SubmissionProps) => {
 			if (submissionsmanage === null)
 				dispatch(fetchAllSubmissionsManage({ documentId: params.documentId ? params.documentId : '' }));
 		} else {
-			if (submission === null)
+			if (submissions === null)
 				dispatch(fetchAllSubmissions({ documentId: params.documentId ? params.documentId : '' }));
 		}
 

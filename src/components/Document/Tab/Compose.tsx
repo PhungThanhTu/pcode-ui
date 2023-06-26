@@ -20,6 +20,7 @@ import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import { getContentTypes } from '@/selectors/config.selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContentTypes } from '@/slices/config.slice';
+import FileViewer from '@/components/FileViewer';
 
 const BoxContainerSx = {
 	height: 'inherit'
@@ -81,7 +82,7 @@ const Compose = (props: EditorProps) => {
 
 	const [IsSetUp, setIsSetUp] = useState<any>(undefined);
 	const [IsFileUploaded, setIsFileUploaded] = useState(NFC);
-	const [PreviewPdfFile, setPreviewPdfFile] = useState<any>(null);
+	const [PreviewFile, setPreviewPdfFile] = useState<any>(null);
 	const [Type, setType] = useState(0);
 	const [MarkdownValue, setMarkdownValue] = useState('');
 	const fileRef = useRef<HTMLInputElement>(null);
@@ -97,10 +98,13 @@ const Compose = (props: EditorProps) => {
 	};
 
 	const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+
 		if (e.target.name === 'file') {
 			if (e.target.files) {
 				setIsFileUploaded(e.target.files[0].name);
+
 				setPreviewPdfFile(e.target.files[0]);
+
 			}
 		}
 	};
@@ -124,9 +128,12 @@ const Compose = (props: EditorProps) => {
 			setIsSetUp(true);
 			if (document.Contents[0].ContentTypeId === contentTypeId.pdf)
 				setType(1);
-			else {
+			else if (document.Contents[0].ContentTypeId === contentTypeId.markDown) {
 				setType(0);
 				setMarkdownValue(document.Contents[0].ContentBody);
+			}
+			else {
+				setType(2);
 			}
 		} else {
 			setIsSetUp(false);
@@ -172,7 +179,7 @@ const Compose = (props: EditorProps) => {
 								}}
 							/>
 							<Typography variant="subtitle1" width="40%" textAlign="center">
-								Markdown and PDF can be viewed directly in the broswer, whereas file can only be
+								Markdown and PDF can be viewed directly in the broswer, whereas file &#40; &#8804; 10MB &#41; can only be
 								downloaded
 							</Typography>
 						</Box>
@@ -185,13 +192,13 @@ const Compose = (props: EditorProps) => {
 							left={
 								Type === 1 ?
 									<Box sx={{ height: '100%' }}>
-										{PreviewPdfFile ? (
-											<MyPDFViewer source={PreviewPdfFile} />
+										{PreviewFile ? (
+											<MyPDFViewer source={PreviewFile} />
 										) : document.Contents.length > 0 ? (
 											<Box sx={BoxPDFViewSx}>
 												{documentContent ? (
 													<MyPDFViewer
-														source={PreviewPdfFile ? PreviewPdfFile : documentContent}
+														source={PreviewFile ? PreviewFile : documentContent}
 													/>
 												) : (
 													<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
@@ -205,7 +212,19 @@ const Compose = (props: EditorProps) => {
 											</Typography>
 										)}
 									</Box>
-									: null
+									:
+
+									Type === 2 ?
+										PreviewFile ?
+											<FileViewer source={PreviewFile} />
+											:
+											documentContent ?
+												<FileViewer source={PreviewFile ? PreviewFile : documentContent} />
+												:
+												<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
+													No files to download.
+												</Typography>
+										: null
 							}
 							right={
 
@@ -248,7 +267,7 @@ const Compose = (props: EditorProps) => {
 													onChange={() => { }}
 													onCancel={onCancelFileChange}
 													onSave={() => {
-														onCreate(Type, PreviewPdfFile);
+														onCreate(Type, PreviewFile);
 														setIsFileUploaded(NFC);
 														if (fileRef.current) {
 															fileRef.current.value = '';
@@ -259,7 +278,7 @@ const Compose = (props: EditorProps) => {
 											</Box>
 
 											<Typography variant="subtitle1" width="40%" textAlign="center">
-												Markdown and PDF can be viewed directly in the broswer, whereas file can
+												Markdown and PDF can be viewed directly in the broswer, whereas file  &#40; &#8804; 10MB &#41; can
 												only be downloaded
 											</Typography>
 										</Fragment>
