@@ -114,3 +114,18 @@ export const TestResultStatusToMessage = (status: number) => {
 
 	return result ? result.message : 'No Status';
 };
+
+export const toSize = (bytes: number) => {
+
+	const kilobyte = 1024;
+	const megabyte = kilobyte * 1024;
+
+	if (bytes < kilobyte) {
+		return bytes + ' bytes';
+	} else if (bytes < megabyte) {
+		return (bytes / kilobyte).toFixed(2) + ' KB';
+	} else {
+		return (bytes / megabyte).toFixed(2) + ' MB';
+	}
+
+}

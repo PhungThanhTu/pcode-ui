@@ -7,9 +7,10 @@ import { BoxNotFoundSx } from '@/style/BoxSx';
 import { centerPos, componentStyle } from '@/style/Variables';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import { contentTypeId } from '@/config';
+import FileViewer from '@/components/FileViewer';
 
 const BoxViewSx = {
-	height:' inherit',
+	height: ' inherit',
 	width: '100%',
 };
 
@@ -34,12 +35,12 @@ const Content = (props: PreviewProps) => {
 					}
 				/>
 			);
-		else
+		else if (type === contentTypeId.markDown)
 			return (
 				<DocumentTabLayout
 					title={title}
 					content={
-						<Box sx={{ ...BoxViewSx, ...componentStyle,padding: '5px' }}>
+						<Box sx={{ ...BoxViewSx, ...componentStyle, padding: '5px' }}>
 							<MarkdownPreview
 								source={source}
 								style={{ height: 'fit-content', overflow: 'auto' }}
@@ -48,6 +49,18 @@ const Content = (props: PreviewProps) => {
 					}
 				/>
 			);
+		else {
+			return (
+				<DocumentTabLayout
+					title={title}
+					content={
+						<Box sx={{ ...BoxViewSx, ...componentStyle, padding: '5px' }}>
+							<FileViewer  source={source}/>
+						</Box>
+					}
+				/>
+			)
+		}
 	} else {
 		return (
 			<Box sx={BoxNotFoundSx}>

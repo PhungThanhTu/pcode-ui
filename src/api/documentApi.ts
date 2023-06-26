@@ -35,7 +35,8 @@ const documentApi = {
 	createDocumentContent: async (request: CreateDocumentContentRequest) => {
 		if (request.contentTypeId === contentTypeId.pdf) {
 			let body = new FormData();
-			body.append('file', request.content);
+			body.append('file', request.content,request.content.name);
+			body.append('fileType', request.content.type);
 			body.append('contentTypeId', contentTypeId.pdf.toString());
 
 			const result: AxiosResponse<any> = await protectedApi.post(
@@ -44,12 +45,24 @@ const documentApi = {
 				{ headers: { 'Content-Type': 'multipart/form-data' } }
 			);
 			return result;
-		} else {
+		} else if (request.contentTypeId === contentTypeId.markDown) {
 			let body = {
 				content: request.content,
 				contentTypeId: contentTypeId.markDown
 			};
 			const result: AxiosResponse<any> = await protectedApi.post(`/document/${request.documentId}/content`, body);
+			return result;
+		}
+		else {
+			let body = new FormData();
+			body.append('file', request.content,request.content.name);
+			body.append('contentTypeId', contentTypeId.file.toString());
+			body.append('fileType', request.content.type);
+			const result: AxiosResponse<any> = await protectedApi.post(
+				`/document/${request.documentId}/content`,
+				body,
+				{ headers: { 'Content-Type': 'multipart/form-data' } }
+			);
 			return result;
 		}
 	},

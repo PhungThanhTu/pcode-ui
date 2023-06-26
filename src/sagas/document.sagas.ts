@@ -1,7 +1,7 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import documentApi from '@/api/documentApi';
-import { AxiosResponse } from 'axios';
+import {  AxiosResponse } from 'axios';
 import {
 	CreateDocumentContentRequest,
 	CreateDocumentContentResponse,
@@ -92,8 +92,9 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 						documentApi.getMedia,
 						document.data.Contents[0].ContentBody
 					);
+					
 
-					let content = new Blob([file.data], { type: 'application/pdf' });
+					let content = new Blob([file.data], { type: document.data.Contents[0].ContentTypeId == contentTypeId.pdf ? 'application/pdf' : 'application/zip'});
 					yield put(fetchDocumentByIdWithContentSuccess({ documentContent: content }));
 				} else {
 					yield put(
@@ -137,7 +138,7 @@ function* createDocumentSaga(action: PayloadAction<CreateDocumentRequest>) {
 }
 function* changePublishDocumentSaga(action: PayloadAction<{ documentId: string; status: number }>) {
 	try {
-		console.log('saga publish/unpublish document ');
+		
 		yield put(setLoading({ isLoading: true }));
 		const data: AxiosResponse<any> = yield call(
 			documentApi.changePublishDocument,

@@ -94,6 +94,14 @@ const DocumentPage = () => {
 			};
 			dispatch(createDocumentContent(CreateDocumentContentForm));
 		}
+		else if (type === 2) {
+			let CreateDocumentContentForm: CreateDocumentContentRequest = {
+				content: content,
+				contentTypeId: contentTypeId.file,
+				documentId: params.documentId ? params.documentId : ''
+			};
+			dispatch(createDocumentContent(CreateDocumentContentForm));
+		}
 	};
 
 	const onResetDocumentContent = () => {
@@ -298,7 +306,7 @@ const DocumentPage = () => {
 				}
 			} else {
 				if (document.HasExercise) {
-					
+
 					dispatch(
 						setDocumentTabs([
 							{
