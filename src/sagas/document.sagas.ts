@@ -1,7 +1,7 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import documentApi from '@/api/documentApi';
-import {  AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import {
 	CreateDocumentContentRequest,
 	CreateDocumentContentResponse,
@@ -39,6 +39,7 @@ import {
 	deleteSubmissionSuccess,
 	deleteTestCase,
 	deleteTestCaseSuccess,
+	downloadDocumentContent,
 	fetchAllSubmissions,
 	fetchAllSubmissionsError,
 	fetchAllSubmissionsManage,
@@ -92,9 +93,9 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 						documentApi.getMedia,
 						document.data.Contents[0].ContentBody
 					);
-					
 
-					let content = new Blob([file.data], { type: document.data.Contents[0].ContentTypeId == contentTypeId.pdf ? 'application/pdf' : 'application/zip'});
+
+					let content = new Blob([file.data], { type: document.data.Contents[0].ContentTypeId == contentTypeId.pdf ? 'application/pdf' : 'application/octed-stream' });
 					yield put(fetchDocumentByIdWithContentSuccess({ documentContent: content }));
 				} else {
 					yield put(
@@ -120,7 +121,7 @@ function* fetchDocumentByIdSaga(action: PayloadAction<{ id: string }>) {
 }
 function* createDocumentSaga(action: PayloadAction<CreateDocumentRequest>) {
 	try {
-		
+
 		yield put(setLoading({ isLoading: true }));
 
 		const data: AxiosResponse<CreateDocumentResponse> = yield call(documentApi.createDocument, action.payload);
@@ -138,7 +139,7 @@ function* createDocumentSaga(action: PayloadAction<CreateDocumentRequest>) {
 }
 function* changePublishDocumentSaga(action: PayloadAction<{ documentId: string; status: number }>) {
 	try {
-		
+
 		yield put(setLoading({ isLoading: true }));
 		const data: AxiosResponse<any> = yield call(
 			documentApi.changePublishDocument,
@@ -204,6 +205,19 @@ function* resetDocumentContentSaga(action: PayloadAction<{ documentId: string }>
 		yield put(setSnackbar(notificationMessage.ERROR('Reset document content failed, please try again!.')));
 	}
 }
+function* downloadDocumentContentSaga(action: PayloadAction<{ contentId: string, documentId: string }>) {
+	try {
+		yield put(setLoading({ isLoading: true }));
+		const data: AxiosResponse<any> = yield call(documentApi.getMediaDownload, action.payload.documentId, action.payload.contentId);
+		if (data) {
+			yield put(setLoading({ isLoading: false }));
+		}
+	} catch (error: any) {
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.ERROR('Download document content file failed, please try again!.')));
+	}
+}
+
 //#endregion
 
 //#region document exercise
@@ -256,7 +270,7 @@ function* updateDocumentExerciseSaga(
 
 		if (data) {
 			try {
-				console.log('saga update document exercise source');
+
 				const data2: AxiosResponse<any> = yield call(
 					documentApi.updateSampleSourceCode,
 					action.payload.documentId,
@@ -268,7 +282,7 @@ function* updateDocumentExerciseSaga(
 					yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('document exercise', '')));
 				}
 			} catch (error: any) {
-				console.log('saga update document exercise source  failed.');
+
 				yield put(setLoading({ isLoading: false }));
 				yield put(
 					setSnackbar(
@@ -279,14 +293,14 @@ function* updateDocumentExerciseSaga(
 		}
 		yield put(fetchExercise({ documentId: action.payload.documentId }));
 	} catch (error: any) {
-		console.log('saga update document exercise failed.');
+
 		yield put(setLoading({ isLoading: false }));
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('document exercise failed!', ' Please try again!')));
 	}
 }
 function* fetchSampleSourceCodeSaga(action: PayloadAction<{ documentId: string; type: number }>) {
 	try {
-		console.log('saga fetching sample source code');
+
 		const source: AxiosResponse<GetSampleSourceCodeResponse> = yield call(
 			documentApi.getSampleSourceCode,
 			action.payload.documentId,
@@ -502,7 +516,7 @@ function* scoreSubmissionManageSaga(action: PayloadAction<ScoreSubmissionRequest
 		}
 	} catch (error: any) {
 		yield put(setLoading({ isLoading: false }));
-		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('submission', '')));
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('submission', 'Please try again!')));
 	}
 }
 //#endregion
@@ -528,4 +542,6 @@ export function* watchDocument() {
 	yield takeLatest(deleteSubmission.type, deleteSubmissionSaga);
 	yield takeLatest(markSubmission.type, markSubmissionSaga);
 	yield takeLatest(scoreSubmissionManage.type, scoreSubmissionManageSaga);
+	yield takeLatest(downloadDocumentContent.type, downloadDocumentContentSaga);
+
 }

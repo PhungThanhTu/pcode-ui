@@ -2,6 +2,7 @@ export interface ConfigState {
     judgers?: Array<Judger> | null;
     programmingLanguages?: Array<ProgrammingLanguage> | null;
     contentTypes?: Array<ContentType> | null;
+    history: string | null;
 }
 export interface Judger {
     Id: string;

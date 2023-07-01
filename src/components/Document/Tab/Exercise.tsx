@@ -18,7 +18,7 @@ import {
 	UpdateSampleSourceCodeRequest
 } from '@/types/document.type';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
-import Content, { PreviewProps } from './Content';
+import Content, { ContentProps } from './Content';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDocumentExercise } from '@/selectors/document.selector';
 import { LinearLoading } from '@/components/Loading';
@@ -58,7 +58,7 @@ interface ExerciseProps {
 	onSubmit?: Function;
 	onGetSampleSourceCode: Function;
 	isCreator: boolean;
-	content?: PreviewProps;
+	content?: ContentProps;
 	document: GetDocumentByIdResponse;
 }
 
@@ -373,7 +373,7 @@ const Exercise = (props: ExerciseProps) => {
 								</Box>
 							</Stack>
 						) : (
-							<Content source={content?.source} title={''} type={content ? content.type : 3} />
+							<Content source={content?.source} title={''} type={content ? content.type : 3} contentBody={document.Contents.length > 0 ? document.Contents[0].ContentBody : ""}/>
 						)
 					}
 				>

@@ -11,7 +11,7 @@ import {
 	getDocumentSubmissionsManage,
 	getDocumentSubssions
 } from '@/selectors/document.selector';
-import { GetDocumentByIdResponse, SubmissionManage } from '@/types/document.type';
+import { GetDocumentByIdResponse, SubmissionManage, Submission, GetSingleSubmissionResponse } from '@/types/document.type';
 import { useDispatch, useSelector } from 'react-redux';
 import DocumentSubmissionItem from '../DocumentSubmissionItem';
 import { centerPos } from '@/style/Variables';
@@ -21,7 +21,7 @@ import { CircleLoading } from '@/components/Loading';
 import { CodeEditor } from '@/components/CodeEditor';
 import DataGridListItems from '@/components/DataGridListItems';
 import TextField from '@mui/material/TextField';
-import { fetchAllSubmissions, fetchAllSubmissionsManage } from '@/slices/document.slice';
+import { fetchAllSubmissions, fetchAllSubmissionsManage, fetchSingleSubmission } from '@/slices/document.slice';
 import { useParams } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 
@@ -33,15 +33,18 @@ interface SubmissionProps {
 	onScore?: Function;
 }
 
-const Submission = (props: SubmissionProps) => {
+const Submissions = (props: SubmissionProps) => {
 	const { document, onMark, onSelected, onScore, isCreator } = props;
 
 	const params = useParams();
 	const dispatch = useDispatch();
 
 	const [SelectedSubmissionManage, setSelectedSubmissionManage] = useState<SubmissionManage>();
+	const [SelectedSubmission, setSelectedSubmission] = useState<GetSingleSubmissionResponse>();
 	const [ManualScore, setManualScore] = useState<number | string>(0);
 	const [SourceCodeSubmissionManage, setSourceCodeSubmissionManage] = useState('');
+	const [count, setCount] = useState(0)
+
 
 	const onSelectSubmissionManage = (params: GridRowParams) => {
 		setSelectedSubmissionManage(params.row);
@@ -63,6 +66,34 @@ const Submission = (props: SubmissionProps) => {
 		}
 
 	}, []);
+
+	useEffect(() => {
+
+		let interval: any
+		if (submission && !(submission.testResults.length > 0)) {
+			if (submission.Id === SelectedSubmission?.Id) {
+				const fetch = () => {
+					dispatch(fetchSingleSubmission({ documentId: params.documentId ? params.documentId : '', submissionId: submission ? submission.Id : '' }))
+				}
+				interval = setTimeout(fetch, 5000);
+				setCount(count + 1)
+				if (count > 10)
+					clearTimeout(interval);
+			}
+		}
+		else {
+			clearTimeout(interval);
+		}
+	}, [submission?.testResults]);
+
+	useEffect(() => {
+
+		if (submission) {
+			if (submission.Id === SelectedSubmission?.Id) {
+				setSelectedSubmission(submission)
+			}
+		}
+	}, [submission]);
 
 	return (
 		<DocumentTabLayout
@@ -88,8 +119,8 @@ const Submission = (props: SubmissionProps) => {
 				) : (
 					<Box sx={{ overflowY: 'auto', height: 'inherit' }}>
 						<Typography variant="subtitle2" sx={{ padding: '6px 8px', display: 'block' }}>
-							Please note that the score displaying is the score provided by automated judging system, not
-							total score of the exercise
+							Please note that the score displaying is provided by automated judgement system, not
+							completed score of the exercise
 						</Typography>
 						<Stack
 							padding="5%"
@@ -107,6 +138,13 @@ const Submission = (props: SubmissionProps) => {
 											item={item}
 											onSelected={() => {
 												onSelected({ documentId: document.Id, submissionId: item.Id });
+												setSelectedSubmission({
+													...item,
+													ManualScore: 0,
+													Score: 0,
+													testResults: []
+												})
+												setCount(0)
 											}}
 											onMark={() => {
 												if (onMark) onMark({ documentId: document.Id, submissionId: item.Id });
@@ -139,7 +177,7 @@ const Submission = (props: SubmissionProps) => {
 						{submission ? (
 							<Box sx={{ overflowY: 'auto', height: 'inherit' }}>
 								<Typography sx={{ padding: '6px 8px', display: 'block' }}>
-									Selected submission: {submission.Id}
+									Selected submission: {SelectedSubmission ? SelectedSubmission?.Id : 'No seleteted submission'}
 								</Typography>
 								<Stack
 									padding="5%"
@@ -148,8 +186,8 @@ const Submission = (props: SubmissionProps) => {
 									alignItems="center"
 									justifyContent="center"
 								>
-									{submission && submission.testResults.length > 0 ? (
-										submission.testResults.map((item, index) => {
+									{SelectedSubmission && SelectedSubmission.testResults.length > 0 ? (
+										SelectedSubmission.testResults.map((item, index) => {
 											return <DocumentTestResultItem key={index} index={index + 1} item={item} />;
 										})
 									) : (
@@ -229,4 +267,4 @@ const Submission = (props: SubmissionProps) => {
 	);
 };
 
-export default Submission;
+export default Submissions;

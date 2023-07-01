@@ -10,19 +10,24 @@ import courseApi from '@/api/courseApi';
 import { useState, useEffect, Fragment } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { Course } from '@/types/course.type';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CircleLoading } from '@/components/Loading';
 import { joinCourse } from '@/slices/course.slice';
+import { LocalStorageService } from '@/services/localStorageService';
+import { getHistory } from '@/selectors/config.selector';
+import { setHistory } from '@/slices/config.slice';
 
 const CourseDialog = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const history = useSelector(getHistory);
 
 	const { code } = useParams();
 
 	const [Open, setOpen] = useState(true);
 	const [Course, setCourse] = useState<Course>();
 	const [Loading, setLoading] = useState(true);
+
 
 	const handleClose = () => {
 		setOpen(false);
@@ -42,7 +47,10 @@ const CourseDialog = () => {
 
 	useEffect(() => {
 		//get course info here
+		if (history)
+			dispatch(setHistory({ url: "" }))
 		if (code) {
+
 			const fetchCourse = async (code: string) => {
 				try {
 					const course = await courseApi.getCourseByCode(code);

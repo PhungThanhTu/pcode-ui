@@ -216,10 +216,10 @@ const Compose = (props: EditorProps) => {
 
 									Type === 2 ?
 										PreviewFile ?
-											<FileViewer source={PreviewFile} />
+											<FileViewer source={PreviewFile} contentBody={document.Contents.length >0 ? document.Contents[0].ContentBody : ""} />
 											:
 											documentContent ?
-												<FileViewer source={PreviewFile ? PreviewFile : documentContent} />
+												<FileViewer source={PreviewFile ? PreviewFile : documentContent} contentBody={document.Contents.length >0 ? document.Contents[0].ContentBody : ""} />
 												:
 												<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
 													No files to download.

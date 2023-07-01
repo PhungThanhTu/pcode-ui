@@ -4,7 +4,8 @@ import { ConfigState, ContentType, Judger, ProgrammingLanguage } from '@/types/c
 const initialState: ConfigState = {
     judgers: null,
     programmingLanguages: null,
-    contentTypes: null
+    contentTypes: null,
+    history: null
 };
 
 const configSlice = createSlice({
@@ -41,6 +42,9 @@ const configSlice = createSlice({
         },
         fetchProgrammingLanguagesSuccess: (state, { payload }: PayloadAction<Array<ProgrammingLanguage>>) => {
             state.programmingLanguages = payload
+        },
+        setHistory(state, { payload }: PayloadAction<{ url: string }>) {
+            state.history = payload.url
         }
     }
 });
@@ -51,7 +55,8 @@ export const {
     fetchProgrammingLanguagesSuccess,
     fetchContentTypesError,
     fetchJudgersError,
-    fetchProgrammingLanguagesError
+    fetchProgrammingLanguagesError,
+    setHistory
 } = configSlice.actions;
 
 export default configSlice.reducer;

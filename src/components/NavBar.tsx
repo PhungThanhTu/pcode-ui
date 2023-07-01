@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../slices/auth.slice';
 import { getAuth } from '@/selectors/auth.selector';
 import { LocalStorageService } from '@/services/localStorageService';
+import { setHistory } from '@/slices/config.slice';
 
 function HideOnScroll(props: any) {
 	const { children, window } = props;
@@ -100,6 +101,8 @@ export default function NavBar() {
 
 	const returnToLogin = () => {
 		dispatch(logout());
+		LocalStorageService.clearCodeCache();
+		dispatch(setHistory({ url: '' }))
 	};
 
 	return (
@@ -183,7 +186,7 @@ export default function NavBar() {
 							<MenuItem
 								onClick={() => {
 									returnToLogin();
-									LocalStorageService.clearCodeCache();
+
 								}}
 							>
 								<ListItemIcon>
