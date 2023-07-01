@@ -27,7 +27,7 @@ export const DocumentItem = (props: DocumentItemProps) => {
 				{document.DocumentDescription ? (
 					<Typography variant="subtitle2">{document.DocumentDescription}</Typography>
 				) : undefined}
-				{document.HasExercise ? (
+				{document.HasExercise && !isCreator ? (
 					<Fragment>
 						<Box>
 							<Typography sx={{ display: 'inline-block' }} >Exercise: </Typography>

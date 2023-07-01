@@ -129,7 +129,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	return (
 		<Stack
 			height='100%'
-	
+
 		>
 			<Stack flexDirection="row" justifyContent="flex-start">
 				<Box width="30%" sx={{ flexGrow: 1 }}>
@@ -165,21 +165,22 @@ export const CodeEditor = (props: CodeEditorProps) => {
 
 						</Select>
 					</FormControl>
-					<Tooltip title="Reset for getting Sample Code">
-						<CustomOnlyIconButton
-							disabled={isCreator}
-							onClick={() => {
-								resetTempSource ? resetTempSource() : null;
-								LocalStorageService.clearCodeCache();
-								setIsEditMode(false);
-								onGetSampleSourceCode(documentId, Number(Language));
-							}}
-						>
-
-							<RestartAltOutlinedIcon />
-
-						</CustomOnlyIconButton>
+					<Tooltip title="Reset for getting Sample Code" >
+						<span>
+							<CustomOnlyIconButton
+								disabled={isCreator}
+								onClick={() => {
+									resetTempSource ? resetTempSource() : null;
+									LocalStorageService.clearCodeCache();
+									setIsEditMode(false);
+									onGetSampleSourceCode(documentId, Number(Language));
+								}}
+							>
+								<RestartAltOutlinedIcon />
+							</CustomOnlyIconButton>
+						</span>
 					</Tooltip>
+
 				</Box>
 
 				{!isCreator ? (

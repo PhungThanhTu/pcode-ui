@@ -14,14 +14,15 @@ const BoxViewSx = {
 	width: '100%',
 };
 
-export interface PreviewProps {
+export interface ContentProps {
 	source: any;
 	type: number;
 	title?: string;
+	contentBody: string;
 }
 
-const Content = (props: PreviewProps) => {
-	const { source, type, title } = props;
+const Content = (props: ContentProps) => {
+	const { source, type, title,contentBody } = props;
 
 	if (source) {
 		if (type === contentTypeId.pdf)
@@ -55,7 +56,7 @@ const Content = (props: PreviewProps) => {
 					title={title}
 					content={
 						<Box sx={{ ...BoxViewSx, ...componentStyle, padding: '5px' }}>
-							<FileViewer  source={source}/>
+							<FileViewer  source={source} contentBody={contentBody}/>
 						</Box>
 					}
 				/>

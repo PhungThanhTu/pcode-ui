@@ -3,7 +3,7 @@ import NotFound from '@/components/NotFound';
 import Compose from '@/components/Document/Tab/Compose';
 import Content from '@/components/Document/Tab/Content';
 import Exercise from '@/components/Document/Tab/Exercise';
-import Submission from '@/components/Document/Tab/Submission';
+import Submissions from '@/components/Document/Tab/Submission';
 import TestCase from '@/components/Document/Tab/TestCase';
 import CustomDialog from '@/components/Custom/CustomDialog';
 import { LinearLoading } from '@/components/Loading';
@@ -231,6 +231,7 @@ const DocumentPage = () => {
 										title={document.Title}
 										source={documentContent}
 										type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
+										contentBody={document.Contents.length > 0 ? document.Contents[0].ContentBody : ""}
 									/>
 								)
 							},
@@ -242,7 +243,8 @@ const DocumentPage = () => {
 										document={document}
 										content={{
 											source: documentContent,
-											type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3
+											type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3,
+											contentBody: document.Contents.length > 0 ? document.Contents[0].ContentBody : ""
 										}}
 										onCreate={onCreateExercise}
 										onUpdate={onUpdateExercise}
@@ -264,7 +266,7 @@ const DocumentPage = () => {
 							{
 								title: 'Submission',
 								element: (
-									<Submission
+									<Submissions
 										isCreator={true}
 										document={document}
 										onSelected={() => { }}
@@ -298,6 +300,7 @@ const DocumentPage = () => {
 										title={document.Title}
 										source={documentContent}
 										type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
+										contentBody={document.Contents.length > 0 ? document.Contents[0].ContentBody : ""}
 									/>
 								)
 							}
@@ -315,7 +318,8 @@ const DocumentPage = () => {
 									<Exercise
 										content={{
 											source: documentContent,
-											type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3
+											type: document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3,
+											contentBody: document.Contents.length > 0 ? document.Contents[0].ContentBody : ""
 										}}
 										document={document}
 										isCreator={false}
@@ -331,13 +335,14 @@ const DocumentPage = () => {
 										title={document.Title}
 										source={documentContent}
 										type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
+										contentBody={document.Contents.length > 0 ? document.Contents[0].ContentBody : ""}
 									/>
 								)
 							},
 							{
 								title: 'Submission',
 								element: (
-									<Submission
+									<Submissions
 										isCreator={false}
 										document={document}
 										onMark={onMarkSubmission}
@@ -357,6 +362,7 @@ const DocumentPage = () => {
 										title={document.Title}
 										source={documentContent}
 										type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
+										contentBody={document.Contents.length > 0 ? document.Contents[0].ContentBody : ""}
 									/>
 								)
 							}
