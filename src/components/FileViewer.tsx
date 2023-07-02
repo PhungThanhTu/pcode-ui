@@ -3,7 +3,6 @@ import { centerPos } from '@/style/Variables';
 import { toSize } from '@/utils/convert';
 import FolderZipIcon from '@mui/icons-material/FolderZip';
 import { Box, Typography } from '@mui/material';
-import { saveAs } from 'file-saver';
 
 const baseUrl = import.meta.env.VITE_BACKEND_ENDPOINT;
 
@@ -22,7 +21,7 @@ const FileViewer = (props: FileViewerProps) => {
 
     return (
         <Box sx={{ ...centerPos, top: '20%', cursor: 'pointer' }} onClick={onClick}>
-            <a href={`${baseUrl}media/${contentBody}`} target='_blank' >
+            <a href={`${baseUrl}/media/${contentBody}`} target='_blank' >
                 <FolderZipIcon sx={{ fontSize: '15rem' }} />
             </a>
 
