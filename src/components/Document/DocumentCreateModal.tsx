@@ -28,7 +28,7 @@ const DocumentCreateModal = (props: DocumentCreateModalProps) => {
 		<Modal open={open}>
 			<Box sx={BoxModalSx}>
 				<Typography variant="h5" component="h2">
-					Create course
+					Create document
 				</Typography>
 				<Stack direction="column" spacing={2} height="100%" alignItems="center" justifyContent="center">
 					<Box component="form" onSubmit={() => onCreate(createDocumentValues)}>
