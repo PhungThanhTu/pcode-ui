@@ -66,7 +66,7 @@ const Exercise = (props: ExerciseProps) => {
 	const params = useParams();
 	const dispatch = useDispatch();
 
-	
+
 	const judgers = useSelector(getJudgers)
 	const exercise = useSelector(getDocumentExercise);
 
@@ -144,6 +144,7 @@ const Exercise = (props: ExerciseProps) => {
 	};
 
 	useEffect(() => {
+
 		if (exercise) {
 			setExerciseForm({ ...exercise });
 			setDeadlineCheck(exercise.HaveDeadline ? exercise.HaveDeadline : false);
@@ -165,8 +166,12 @@ const Exercise = (props: ExerciseProps) => {
 					setTargetDeadline(0);
 					if (exercise.StrictDeadline) setDisableSubmission(true);
 					else setDisableSubmission(false);
-				} else setTargetDeadline(targetDate);
+				} else {
+					setTargetDeadline(targetDate)
+					setDisableSubmission(false)
+				};
 			} else {
+
 				setDisableSubmission(false);
 				setTargetDeadline(null);
 			}
@@ -178,6 +183,7 @@ const Exercise = (props: ExerciseProps) => {
 			setJudger(judgers[0].Id)
 		}
 	}, [judgers])
+
 	useEffect(() => {
 		if (exercise === null) {
 			dispatch(fetchExercise({ documentId: params.documentId ? params.documentId : '' }));
@@ -191,7 +197,7 @@ const Exercise = (props: ExerciseProps) => {
 			setTempSource({ ...codeCache });
 		}
 	}, []);
-	
+
 	return (
 		<Fragment>
 			{exercise === undefined ? (
@@ -373,7 +379,7 @@ const Exercise = (props: ExerciseProps) => {
 								</Box>
 							</Stack>
 						) : (
-							<Content source={content?.source} title={''} type={content ? content.type : 3} contentBody={document.Contents.length > 0 ? document.Contents[0].ContentBody : ""}/>
+							<Content source={content?.source} title={''} type={content ? content.type : 3} contentBody={document.Contents.length > 0 ? document.Contents[0].ContentBody : ""} />
 						)
 					}
 				>
@@ -403,34 +409,36 @@ const Exercise = (props: ExerciseProps) => {
 						</Tooltip>
 					) : (
 						<Tooltip title='Submit'>
-							<LoadingButton
-								size="large"
-								fullWidth
-								sx={{
-									borderRadius: `0 0 0 0`,
-									'>span': {
-										margin: 0
-									}
-								}}
-								onClick={() => {
-									onSubmit
-										? onSubmit(Source, document.Id)
-										: () => {
-											console.log('Submit Error.');
-										};
+							<Fragment>
+								<LoadingButton
+									size="large"
+									fullWidth
+									sx={{
+										borderRadius: `0 0 0 0`,
+										'>span': {
+											margin: 0
+										}
+									}}
+									onClick={() => {
+										onSubmit
+											? onSubmit(Source, document.Id)
+											: () => {
+												console.log('Submit Error.');
+											};
 
-									let temp = {
-										programmingLanguageId: Source.type,
-										sourceCode: Source.sampleSourceCode
-									};
-									LocalStorageService.setCodeCache(temp);
-									setTempSource(temp);
-								}}
-								endIcon={<SendIcon />}
-								loadingPosition="end"
-								variant="contained"
-								disabled={DisableSubmission}
-							/>
+										let temp = {
+											programmingLanguageId: Source.type,
+											sourceCode: Source.sampleSourceCode
+										};
+										LocalStorageService.setCodeCache(temp);
+										setTempSource(temp);
+									}}
+									endIcon={<SendIcon />}
+									loadingPosition="end"
+									variant="contained"
+									disabled={DisableSubmission}
+								/>
+							</Fragment>
 						</Tooltip>
 
 					)}
