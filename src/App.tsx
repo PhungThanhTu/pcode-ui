@@ -30,7 +30,7 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route element={<ProtectedRoute />}>
-					<Route index path="/" element={<Navigate to={history ? history : "/course"} />} />
+					<Route index path="/" element={<Navigate to={history ? history.length > 0 ? `/${history}` : "/course" : "/course"} />} />
 					<Route path="/course" element={<CoursesPage />} />
 					<Route path="/course/:id" element={<CoursePage />} />
 					<Route path="/invitation/:code" element={<CourseDialog />} />
