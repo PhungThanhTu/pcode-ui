@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { GetDocumentByIdResponse } from '@/types/document.type';
@@ -216,10 +217,10 @@ const Compose = (props: EditorProps) => {
 
 									Type === 2 ?
 										PreviewFile ?
-											<FileViewer source={PreviewFile} contentBody={document.Contents.length >0 ? document.Contents[0].ContentBody : ""} />
+											<FileViewer source={PreviewFile} contentBody={document.Contents.length > 0 ? document.Contents[0].ContentBody : ""} />
 											:
 											documentContent ?
-												<FileViewer source={PreviewFile ? PreviewFile : documentContent} contentBody={document.Contents.length >0 ? document.Contents[0].ContentBody : ""} />
+												<FileViewer source={PreviewFile ? PreviewFile : documentContent} contentBody={document.Contents.length > 0 ? document.Contents[0].ContentBody : ""} />
 												:
 												<Typography sx={{ ...centerPos, top: '35%' }} variant="h6">
 													No files to download.
@@ -289,8 +290,7 @@ const Compose = (props: EditorProps) => {
 							}
 							content={
 								Type === 0 ?
-
-									<Box sx={{ ...MarkdownSx, ...componentStyle, padding: 0, borderRadius: 0 }}>
+									<Box sx={{ ...MarkdownSx, ...componentStyle, padding: 0 }}>
 										<Box sx={{
 											width: '100%',
 											height: '100%',
@@ -303,23 +303,34 @@ const Compose = (props: EditorProps) => {
 											<MarkdownEditor
 												width="100%"
 												height='inherit'
-												visible
-
+												visible												
 												value={MarkdownValue ? MarkdownValue : ''}
 												onChange={(value, viewUpdate) => {
 													onMarkdownChange(value);
 												}}
 											/>
 										</Box>
-										<Stack flexDirection="row" width="30%" height='7%' columnGap={1} paddingBottom={'5px'}>
-											<CustomButton sx={cancelButton} content="Reset" onClick={onReset} />
-											<CustomButton
-												sx={{ width: '100%' }}
-												content="Save"
+										<Stack flexDirection="row" width="30%" columnGap={1} padding={'4px'} >
+											<Button sx={cancelButton}
+												onClick={() => { onReset() }}
+												variant='contained'
+												fullWidth
+												size='small'
+											>
+												Reset
+
+											</Button>
+											<Button
+												size='small'
+											
+												variant='contained'
+												fullWidth
 												onClick={() => {
 													onCreate(Type, MarkdownValue);
 												}}
-											/>
+											>
+												Save
+											</Button>
 										</Stack>
 									</Box>
 

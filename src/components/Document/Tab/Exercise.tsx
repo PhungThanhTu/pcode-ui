@@ -8,6 +8,7 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import SendIcon from '@mui/icons-material/Send';
+import Switch from '@mui/material/Switch';
 
 import { CodeEditor } from '@/components/CodeEditor';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
@@ -265,6 +266,7 @@ const Exercise = (props: ExerciseProps) => {
 											onChange={onChange}
 										/>
 										<TextField
+											size='small'
 											fullWidth
 											required
 											label="Memory limit (bytes):"
@@ -284,6 +286,7 @@ const Exercise = (props: ExerciseProps) => {
 								>
 									<Box sx={BoxFieldSx}>
 										<TextField
+											size='small'
 											fullWidth
 											required
 											label="Score Weight"
@@ -293,6 +296,7 @@ const Exercise = (props: ExerciseProps) => {
 											onChange={onChange}
 										/>
 										<TextField
+											size='small'
 											fullWidth
 											required
 											label="Manual Percentage"
@@ -304,10 +308,16 @@ const Exercise = (props: ExerciseProps) => {
 									</Box>
 								</Stack>
 								<Box sx={BoxFieldSx}>
-									<FormControl fullWidth>
-										<InputLabel htmlFor='judger'>Judger</InputLabel>
-										<Select id='judger'
-											value={judgers && judgers.length > 0 ? Judger : ''}
+									<FormControl
+										fullWidth
+										size='small'
+									>
+										<InputLabel id="judger-select">Judger</InputLabel>
+										<Select
+											labelId="judger-select"
+											label="Judger"
+											id='judger'
+											value={judgers && judgers.length > 0 ? Judger : ""}
 											onChange={handleChangeJudgers}>
 											{
 												judgers ?
@@ -323,12 +333,12 @@ const Exercise = (props: ExerciseProps) => {
 										</Select>
 									</FormControl>
 								</Box>
-
 								<Box sx={{ ...BoxFieldSx, alignContent: 'flex-start' }}>
-									<FormGroup sx={FormGroupDeadlineSx}>
+									<FormGroup sx={FormGroupDeadlineSx}  >
 										<FormControlLabel
 											control={
-												<Checkbox
+												<Switch
+													size='small'
 													name="haveDeadline"
 													checked={DeadlineCheck}
 													value={DeadlineCheck}
@@ -344,7 +354,8 @@ const Exercise = (props: ExerciseProps) => {
 										<FormControlLabel
 											disabled={!DeadlineCheck}
 											control={
-												<Checkbox
+												<Switch
+													size='small'
 													name="strictDeadline"
 													checked={StrictDeadlineCheck && DeadlineCheck}
 													value={StrictDeadlineCheck}
@@ -366,6 +377,7 @@ const Exercise = (props: ExerciseProps) => {
 											}}
 											control={
 												<TextField
+													size='small'
 													fullWidth
 													label="Deadline"
 													type="datetime-local"
@@ -409,7 +421,7 @@ const Exercise = (props: ExerciseProps) => {
 						</Tooltip>
 					) : (
 						<Tooltip title='Submit'>
-							<Fragment>
+							<div style={{ width: '100%' }}>
 								<LoadingButton
 									size="large"
 									fullWidth
@@ -423,7 +435,6 @@ const Exercise = (props: ExerciseProps) => {
 										onSubmit
 											? onSubmit(Source, document.Id)
 											: () => {
-												console.log('Submit Error.');
 											};
 
 										let temp = {
@@ -438,7 +449,7 @@ const Exercise = (props: ExerciseProps) => {
 									variant="contained"
 									disabled={DisableSubmission}
 								/>
-							</Fragment>
+							</div>
 						</Tooltip>
 
 					)}

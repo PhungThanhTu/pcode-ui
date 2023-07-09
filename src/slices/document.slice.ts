@@ -178,7 +178,9 @@ const documentSlice = createSlice({
 		createSubmissionSuccess: (
 			state,
 			{ payload }: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>
-		) => { },
+		) => { 
+			
+		},
 		fetchAllSubmissions: (state, { payload }: PayloadAction<{ documentId: string }>) => {
 			state.documentSubmissions = undefined;
 		},

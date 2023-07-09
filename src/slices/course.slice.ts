@@ -13,12 +13,12 @@ import { GetSingleSubmissionResponse, SubmissionActionRequest } from '@/types/do
 
 
 const initialCoursesState: CoursesState = {
-	courses: undefined,
+	courses: null,
 	loading: false
 };
 const initialCourseState: CourseState = {
-	course: undefined,
-	courseScore: undefined,
+	course: null,
+	courseScore: null,
 	courseDocumentSubmission: 0,
 	loading: false
 };
@@ -27,6 +27,7 @@ const coursesSlice = createSlice({
 	initialState: initialCoursesState,
 	reducers: {
 		fetchCourses: (state) => {
+			state.courses = undefined
 			state.loading = true;
 		},
 		createCourse: (state, { payload }: PayloadAction<CreateCourseRequest>) => { },
@@ -61,6 +62,7 @@ const courseSlice = createSlice({
 	reducers: {
 		fetchCourseById: (state, { payload }: PayloadAction<{ id: string }>) => {
 			state.loading = true;
+			state.course = undefined;
 		},
 		fetchCourseByIdSuccess: (state, { payload }: PayloadAction<GetCourseByIdResponse>) => {
 			state.course = payload;
@@ -84,11 +86,10 @@ const courseSlice = createSlice({
 		},
 		fetchDocumentSubmissionSuccess: (state, { payload }: PayloadAction<{ documentId: string, Submission: Array<GetSingleSubmissionResponse> }>) => {
 			let index = state.course?.documents.findIndex(item => item.Id === payload.documentId)
-			
+
 			if (index !== -1 && index !== undefined) {
 
 				state.course ? state.course.documents[index].Submission = payload.Submission : null
-				console.log(payload.Submission)
 			}
 		},
 		fetchDocumentSubmissionError: (state) => {

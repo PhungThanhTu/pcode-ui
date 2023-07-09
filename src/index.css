@@ -37,6 +37,18 @@ html {
 	display: none;
 }
 
+.MuiIconButton-root {
+	margin: 0 !important;
+}
+
+.MuiFormControlLabel-root {
+	margin: 0 !important;
+}
+
+.MuiOutlinedInput-root {
+	height: 100%
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

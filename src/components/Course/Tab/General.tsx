@@ -2,7 +2,7 @@ import CreateIcon from '@mui/icons-material/Create';
 
 import TabLayout from '@/layouts/TabLayout';
 import CourseTabHeader from '../CourseHeader';
-import ListItems from '../../ListItems';
+import ListLinkedItems from '../../ListLinkedItems';
 import CourseCodeBox from '../CourseCodeBox';
 
 import { GetCourseByIdResponse } from '@/types/course.type';
@@ -45,7 +45,7 @@ const General = (props: GeneralProps) => {
 				) : null
 			}
 			rightBody={
-				<ListItems
+				<ListLinkedItems
 					isCreator={isCreator}
 					list={course ? course.documents : []}
 					publishDocument={changePublishDocument}

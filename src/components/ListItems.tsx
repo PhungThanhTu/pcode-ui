@@ -1,60 +1,149 @@
-import Link from '@mui/material/Link';
-import Stack from '@mui/material/Stack';
+import ListSubheader from '@mui/material/ListSubheader';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import StarBorder from '@mui/icons-material/StarBorder';
 
-import { DocumentItem } from './Document/DocumentItem';
-import { useLocation, Link as RouterLink } from 'react-router-dom';
-
+import { useState, MouseEvent, useEffect } from 'react';
+import { borderRadius } from '@/style/Variables';
 
 interface ListItemsProps {
-	list: Array<any>;
-	publishDocument?: Function | null;
-	isCreator?: boolean;
+    subheader?: string;
+    list: Array<ItemProps>;
 }
-const LinkItemSx = {
-	display: 'block',
-	width: '100%'
-};
+interface ItemProps {
+    actions: Array<ItemActions>;
+    title: string;
+    collapse?: JSX.Element;
+    content?: any;
+    click?: Function;
+}
+interface ItemActions {
+    title: string;
+    action: Function;
+    icon: JSX.Element;
+    color: any;
+    type: string;
+}
 const ListItems = (props: ListItemsProps) => {
 
-	const { pathname } = useLocation();
-	const { list, publishDocument, isCreator } = props;
+    const { subheader, list } = props
+    const [open, setOpen] = useState(true);
+    const [openItem, setOpenItem] = useState(-1);
 
-	return (
-		<Stack flexDirection="column" rowGap={2} alignItems="center" justifyContent="center" width="100%">
+    const handleClick = (index: number, extra: Function | null) => {
 
-			{list ?
-				list.push.length > 0 ?
+        if (extra) {
+            extra()
+            setOpenItem(index)
+            setOpen(false)
+        }
+        else {
+            if (openItem !== index) {
+                setOpenItem(index)
+            } else {
+                setOpenItem(-1)
+            }
+        }
+    };
 
-					list.map((item, index) => {
-						return (
-							<Link
-								key={index}
-								component={RouterLink}
-								to={`${pathname}/${item.Id}`}
-								underline="none"
-								color="inherit"
-								sx={LinkItemSx}
-							>
-								<DocumentItem
-									isCreator={isCreator ? isCreator : false}
-									document={item}
-									publishDocument={
-										publishDocument
-											? publishDocument
-											: () => {
-												console.log('Null Publish');
-											}
-									}
-								/>
-							</Link>
-						);
-					})
-					: "No items "
-				: null
+    useEffect(() => {
 
-			}
-		</Stack>
-	);
-};
+        if (openItem != -1) {
+            setOpen(true)
+        }
+    }, [openItem])
 
-export default ListItems;
+    return (
+        <List
+            sx={{ width: '100%' }}
+            subheader={
+                subheader ?
+                    <ListSubheader component="div" sx={{ lineHeight: 'normal', padding: '16px', bgcolor: "inherit", zIndex: 10 }} >
+                        {subheader}
+                    </ListSubheader>
+                    : null
+            }
+        >
+            {
+                list.map((item, index) => {
+                    return (
+                        <ListItem sx={{ flexDirection: 'column' }} key={index}>
+                            <ListItemButton
+                                sx={{ width: '100%', padding: '8px', bgcolor: "#fff", borderRadius: index === openItem && open ? `${borderRadius} ${borderRadius} 0 0` : borderRadius }}
+                                onClick={() => { item.click ? handleClick(index, item.click) : handleClick(index, null) }}
+                                selected={index === openItem}
+                            >
+                                <ListItemText primary={item.title} />
+                                {
+                                    item.actions.map((itemAction, index) =>
+                                        itemAction.type === "icon" ?
+                                            <Tooltip title={itemAction.title} key={index}>
+                                                <IconButton
+                                                    color={itemAction.color}
+                                                    edge="end"
+                                                    onClick={(e: MouseEvent) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        itemAction.action();
+                                                    }}>
+                                                    {itemAction.icon}
+                                                </IconButton>
+                                            </Tooltip>
+                                            :
+                                            <Tooltip title={itemAction.title} key={index}>
+                                                {
+                                                    itemAction.icon
+                                                }
+                                            </Tooltip>
+                                    )
+                                }
+                                {
+                                    item.collapse ?
+                                        open && index === openItem ? <ExpandLess /> : <ExpandMore />
+                                        : null
+                                }
+                            </ListItemButton>
+                            {
+                                item.collapse ?
+                                    <Collapse
+
+                                        in={index === openItem}
+                                        timeout="auto"
+                                        unmountOnExit
+                                        sx={{
+                                            paddingTop: '10px',
+                                            bgcolor: "#fff", width: '100%',
+                                            height: '100% !important',
+                                            '> *': {
+                                                height: '100%'
+                                            }
+                                        }}
+                                    >                                
+                                        {
+                                            item.collapse
+                                        }
+                                    </Collapse>
+                                    :
+                                    null
+                            }
+
+                        </ListItem>
+                    )
+                })
+            }
+
+
+
+        </List>
+    )
+}
+
+export default ListItems
