@@ -178,14 +178,13 @@ const documentSlice = createSlice({
 		createSubmissionSuccess: (
 			state,
 			{ payload }: PayloadAction<{ documentId: string; body: CreateSubmissionRequest }>
-		) => { 
-			
-		},
+		) => { },
 		fetchAllSubmissions: (state, { payload }: PayloadAction<{ documentId: string }>) => {
 			state.documentSubmissions = undefined;
 		},
 		fetchAllSubmissionsSuccess: (state, { payload }: PayloadAction<Array<Submission>>) => {
 			state.documentSubmissions = payload;
+			state.documentSubmissions.sort((a, b) => a.TimeCreated > b.TimeCreated ? 1 : -1)
 			state.documentSubmissionsManage = null;
 		},
 		fetchAllSubmissionsError: (state) => {
@@ -248,7 +247,7 @@ const documentSlice = createSlice({
 				}
 			}
 		},
-		downloadDocumentContent: (state, { payload }: PayloadAction<{ contentId: string,documentId: string }>) => {
+		downloadDocumentContent: (state, { payload }: PayloadAction<{ contentId: string, documentId: string }>) => {
 
 		}
 	}

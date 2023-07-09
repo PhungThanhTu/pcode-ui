@@ -79,14 +79,14 @@ const CoursesPage = () => {
 			<Stack direction="row" spacing={2} >
 				<CustomIconButton
 					startIcon={<CreateIcon />}
-					content="Create a Course"
+					content="Create Course"
 					onClick={() => {
 						setOpenCreateCourse(true);
 					}}
 				/>
 				<CustomIconButton
 					startIcon={<SchoolIcon />}
-					content="Join a Course"
+					content="Join Course"
 					onClick={() => {
 						setOpenJoinCourse(true);
 					}}
