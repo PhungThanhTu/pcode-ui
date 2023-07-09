@@ -1,4 +1,4 @@
-import { put, call, takeLatest, delay } from 'redux-saga/effects';
+import { put, call, takeLatest, delay, takeEvery } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import documentApi from '@/api/documentApi';
 import { AxiosResponse } from 'axios';
@@ -428,7 +428,7 @@ function* fetchAllSubmissionsManageSaga(action: PayloadAction<{ documentId: stri
 		yield put(fetchAllSubmissionsManageError());
 	}
 }
-function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionRequest>) {
+function* fetchSingleSubmissionSaga(action: PayloadAction<SubmissionActionRequest>) {
 	try {
 
 		let maxRequests = 20
@@ -444,7 +444,7 @@ function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionReque
 			} else {
 				if (maxRequests === 1) {
 					yield put(fetchSingleSubmissionError());
-					yield put(setSnackbar(notificationMessage.ERROR('Submission has not been judeged yet!')));
+					yield put(setSnackbar(notificationMessage.ERROR('Failed to get Submission Result! Please try again')));
 					break;
 				}
 			}
@@ -475,6 +475,7 @@ function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body:
 					submissionId: submission.data.id.toString()
 				})
 			);
+			yield delay(1000)
 			yield put(fetchAllSubmissions({ documentId: action.payload.documentId }));
 		
 		}
@@ -553,7 +554,7 @@ export function* watchDocument() {
 	yield takeLatest(deleteTestCase.type, deleteTestCaseSaga);
 	yield takeLatest(fetchAllSubmissions.type, fetchAllSubmissionsSaga);
 	yield takeLatest(fetchAllSubmissionsManage.type, fetchAllSubmissionsManageSaga);
-	yield takeLatest(fetchSingleSubmission.type, fetchSingleSubmissionsSaga);
+	yield takeLatest(fetchSingleSubmission.type, fetchSingleSubmissionSaga);
 	yield takeLatest(createSubmission.type, createSubmissionSaga);
 	yield takeLatest(deleteSubmission.type, deleteSubmissionSaga);
 	yield takeLatest(markSubmission.type, markSubmissionSaga);

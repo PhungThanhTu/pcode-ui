@@ -56,6 +56,35 @@ export const parseToLocalDate = (date_UTC: string) => {
 	}
 	return getNextDay();
 };
+export const parseToLocalDateTime = (date_UTC: string) => {
+	if (date_UTC) {
+		// const dateTime = new Date(date_UTC);
+
+		// const year = dateTime.getUTCFullYear();
+		// const month = ('0' + (dateTime.getUTCMonth() + 1)).slice(-2);
+		// const day = ('0' + dateTime.getUTCDate()).slice(-2);
+		// const hours = ('0' + dateTime.getUTCHours()).slice(-2);
+		// const minutes = ('0' + dateTime.getUTCMinutes()).slice(-2);
+		// const seconds = ('0' + dateTime.getUTCSeconds()).slice(-2);
+
+		// const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+		// return formattedDateTime
+
+		var date = new Date(date_UTC);
+		var dd = String(date.getDate()).padStart(2, '0');
+		var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+		var yyyy = date.getFullYear();
+
+		var hh = String(date.getHours()).padStart(2, '0');
+		var mn = String(date.getMinutes()).padStart(2, '0');
+		var ss = String(date.getSeconds()).padStart(2, '0');
+
+		return yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + mn + ':' + ss ;
+	}
+	return getNextDay();
+};
+
 export const parseToISOSDate = (date_local: Date) => {
 	var date = new Date(date_local);
 	// var now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(),
