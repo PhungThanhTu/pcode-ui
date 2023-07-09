@@ -62,6 +62,7 @@ const ProfilePage = () => {
 
 	const pictureRef = useRef<HTMLInputElement>(null);
 	const avatarRef = useRef<HTMLDivElement>(null);
+	const contactRef = useRef<HTMLFormElement>(null);
 	const [ProfileForm, setProfileForm] = useState({ ...profile });
 	const [OpenPasswordChange, setOpenPasswordChange] = useState(false);
 	const [IsAvatarChange, setIsAvatarChange] = useState(false);
@@ -95,15 +96,21 @@ const ProfilePage = () => {
 			setIsAvatarChange(false);
 		}
 	};
-	const UpdateProfile = () => {
-		let payload = {
-			username: ProfileForm.username ? ProfileForm.username : '',
-			fullName: ProfileForm.fullName ? ProfileForm.fullName : '',
-			email: ProfileForm.email ? ProfileForm.email : '',
-			avatar: ProfileForm.avatar ? ProfileForm.avatar : '',
-			id: ProfileForm.id ? ProfileForm.id : ''
+	const UpdateProfile = (name: keyof UserProfile) => {
+		let tmp = contactRef.current
+		if (tmp)
+			tmp.reportValidity()
+		let origin = {
+			username: profile ? profile.username : '',
+			fullName: profile ? profile.fullName : '',
+			email: profile ? profile.email : '',
+			avatar: profile ? profile.avatar : '',
+			id: profile ? profile.id : ''
 		};
-
+		let payload = {
+			...origin,
+			[name]: ProfileForm[name]
+		}
 		dispatch(updateProfile(payload));
 		setIsAvatarChange(false);
 	};
@@ -168,7 +175,7 @@ const ProfilePage = () => {
 										isNotDisplay={true}
 										label="Avatar"
 										value={avatar}
-										onChange={() => {}}
+										onChange={() => { }}
 										onCancel={onCancel}
 										onSave={UpdateProfile}
 										isAvatarChange={IsAvatarChange}
@@ -192,7 +199,7 @@ const ProfilePage = () => {
 			<Grid item xs={6}>
 				<Grid container spacing={2}>
 					<Grid item xs={12}>
-						<Paper variant="outlined">
+						<Paper variant="outlined" component="form" ref={contactRef}>
 							<Stack spacing={2}>
 								<Item>
 									<Tyography variant="h5">Contact info</Tyography>

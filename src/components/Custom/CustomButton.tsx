@@ -5,6 +5,7 @@ import { SxProps } from '@mui/material';
 
 import ButtonUnstyled, { buttonUnstyledClasses } from '@mui/base/ButtonUnstyled';
 import { Primary } from '@/style/Colors';
+import { FormEvent } from 'react';
 
 export const StyledUnstyledButton = styled(ButtonUnstyled)`
 	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
@@ -41,7 +42,7 @@ export const CustomButton = ({ content, onClick, type, sx }: any) => (
 	</StyledUnstyledButton>
 );
 
-export const CustomIconButton = ({ content, sx, variant, type, onClick, startIcon, color ,fullWidth}: any) => (
+export const CustomIconButton = ({ content, sx, variant, type, onClick, startIcon, color, fullWidth }: any) => (
 	<Button color={color} sx={sx} variant={variant} type={type} onClick={onClick} startIcon={startIcon} fullWidth={fullWidth}>
 		{content}
 	</Button>
@@ -52,16 +53,22 @@ interface CustomOnlyIconButtonProps {
 	children: any;
 	variant?: any;
 	color?: any;
-	onClick: Function;
+	onClick?: Function;
 	form?: string;
 	disabled?: boolean;
+	submit?: boolean;
+	onSubmit?: any;
 }
 export const CustomOnlyIconButton = (props: CustomOnlyIconButtonProps) => (
 	<IconButton
+		onSubmit={props.onSubmit ? props.onSubmit : null}
+		type={props.submit ? "submit" : "button"}
 		color={props.color}
 		sx={props.sx}
 		onClick={(e) => {
-			props.onClick(e);
+			props.onClick ?
+				props.onClick(e) :
+				null
 		}}
 		form={props.form}
 		disabled={props.disabled}

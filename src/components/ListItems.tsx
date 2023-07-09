@@ -66,7 +66,7 @@ const ListItems = (props: ListItemsProps) => {
             sx={{ width: '100%' }}
             subheader={
                 subheader ?
-                    <ListSubheader component="div" sx={{ lineHeight: 'normal', padding: '16px', bgcolor: "inherit", zIndex: 10 }} >
+                    <ListSubheader component="div" sx={{ lineHeight: 'normal', padding: '16px', bgcolor: "inherit", position: 'relative' }} >
                         {subheader}
                     </ListSubheader>
                     : null
@@ -126,7 +126,7 @@ const ListItems = (props: ListItemsProps) => {
                                                 height: '100%'
                                             }
                                         }}
-                                    >                                
+                                    >
                                         {
                                             item.collapse
                                         }
