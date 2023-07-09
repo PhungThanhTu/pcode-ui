@@ -4,9 +4,12 @@ import TabLayout from '@/layouts/TabLayout';
 import { getCourseScore } from '@/selectors/course.selector';
 import { fetchCourseScoreById } from '@/slices/course.slice';
 import { centerPos } from '@/style/Variables';
-import { Box, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { CourseScore, CourseScoreDetail } from '@/types/course.type';
+import { Box, Button, Typography } from '@mui/material';
+
+import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import CourseScoreDetailModal from '../CourseScoreDetailModal';
 
 interface ScoreBoardProps {
 	courseId: string;
@@ -17,32 +20,65 @@ const ScoreBoard = (props: ScoreBoardProps) => {
 	const dispatch = useDispatch();
 
 	const courseScore = useSelector(getCourseScore);
+	const [openCourseScoreDetailModal, setOpenCourseScoreDetailModal] = useState(false);
+	const [scoreDetailList, setScoreDetailList] = useState<Array<CourseScoreDetail>>([]);
+
+	const renderList = (courseScore: Array<CourseScore>) => {
+
+		let result = courseScore.map((item) => {
+			return {
+				...item,
+				'Details': <Button
+					variant="contained"
+					size="small"
+					onClick={() => {
+						setOpenCourseScoreDetailModal(true)
+						setScoreDetailList(item.Details)
+					}}
+				>
+					View
+				</Button>
+			}
+		})
+		return result
+	}
 
 	useEffect(() => {
 		dispatch(fetchCourseScoreById({ courseId: courseId }));
 	}, []);
 
 	return (
-		<TabLayout
-			header={<></>}
-			rightBody={
-				courseScore && courseScore.length > 0 ? (
-					<DataGridListItems
-						columns={['Username', 'Full Name', 'Email', 'Score']}
-						rows={courseScore}
-						onSelected={() => {}}
-					/>
-				) : courseScore === null ? (
-					<Box sx={centerPos}>
-						<CircleLoading />
-					</Box>
-				) : (
-					<Typography sx={centerPos} variant="h5">
-						No records.
-					</Typography>
-				)
-			}
-		/>
+		<Fragment>
+			<TabLayout
+				header={<></>}
+				rightBody={
+					courseScore && courseScore.length > 0 ?
+						<DataGridListItems
+							columns={['Username', 'Full Name', 'Email', 'Score', "Details"]}
+							rows={renderList(courseScore)}
+							onSelected={() => { }}
+						/>
+						: courseScore === null ?
+							<Box sx={centerPos}>
+								<CircleLoading />
+							</Box>
+							:
+							<Typography sx={centerPos} variant="h5">
+								No records.
+							</Typography>
+
+				}
+			/>
+			<CourseScoreDetailModal
+				open={openCourseScoreDetailModal}
+				onCancel={() => {
+					setOpenCourseScoreDetailModal(false)
+					setScoreDetailList([])
+				}}
+				list={scoreDetailList}
+			/>
+		</Fragment>
+
 	);
 };
 

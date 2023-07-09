@@ -14,6 +14,7 @@ interface CourseJoinModalProps {
 	onCancel: Function;
 }
 const CourseJoinModal = (props: CourseJoinModalProps) => {
+	
 	const { open, onJoin, onCancel } = props;
 
 	const [Code, setCode] = useState('');

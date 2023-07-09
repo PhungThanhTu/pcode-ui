@@ -4,6 +4,9 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import { GridRowParams } from '@mui/x-data-grid/models/params/gridRowParams';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import {
@@ -13,9 +16,8 @@ import {
 } from '@/selectors/document.selector';
 import { GetDocumentByIdResponse, SubmissionManage, Submission, GetSingleSubmissionResponse } from '@/types/document.type';
 import { useDispatch, useSelector } from 'react-redux';
-import DocumentSubmissionItem from '../DocumentSubmissionItem';
 import { centerPos } from '@/style/Variables';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState, MouseEvent } from 'react';
 import DocumentTestResultItem from '../DocumentTestResultItem';
 import { CircleLoading } from '@/components/Loading';
 import { CodeEditor } from '@/components/CodeEditor';
@@ -23,7 +25,10 @@ import DataGridListItems from '@/components/DataGridListItems';
 import TextField from '@mui/material/TextField';
 import { fetchAllSubmissions, fetchAllSubmissionsManage, fetchSingleSubmission } from '@/slices/document.slice';
 import { useParams } from 'react-router-dom';
-import { Tooltip } from '@mui/material';
+import { Checkbox, Tooltip } from '@mui/material';
+import ListItems from '@/components/ListItems';
+import { parseToLocalDate } from '@/utils/convert';
+import CodeView from '@/components/CodeView';
 
 interface SubmissionProps {
 	document: GetDocumentByIdResponse;
@@ -67,33 +72,34 @@ const Submissions = (props: SubmissionProps) => {
 
 	}, []);
 
-	useEffect(() => {
+	// useEffect(() => {
 
-		let interval: any
-		if (submission && !(submission.testResults.length > 0)) {
-			if (submission.Id === SelectedSubmission?.Id) {
-				const fetch = () => {
-					dispatch(fetchSingleSubmission({ documentId: params.documentId ? params.documentId : '', submissionId: submission ? submission.Id : '' }))
-				}
-				interval = setTimeout(fetch, 5000);
-				setCount(count + 1)
-				if (count > 10)
-					clearTimeout(interval);
-			}
-		}
-		else {
-			clearTimeout(interval);
-		}
-	}, [submission?.testResults]);
+	// 	let interval: any
+	// 	if (submission && !(submission.testResults.length > 0)) {
+	// 		if (submission.Id === SelectedSubmission?.Id) {
+	// 			const fetch = () => {
+	// 				dispatch(fetchSingleSubmission({ documentId: params.documentId ? params.documentId : '', submissionId: submission ? submission.Id : '' }))
+	// 			}
+	// 			interval = setTimeout(fetch, 5000);
+	// 			setCount(count + 1)
+	// 			if (count > 10)
+	// 				clearTimeout(interval);
+	// 		}
+	// 	}
+	// 	else {
+	// 		clearTimeout(interval);
+	// 	}
 
-	useEffect(() => {
+	// }, [submission?.testResults]);
 
-		if (submission) {
-			if (submission.Id === SelectedSubmission?.Id) {
-				setSelectedSubmission(submission)
-			}
-		}
-	}, [submission]);
+	// useEffect(() => {
+
+	// 	if (submission) {
+	// 		if (submission.Id === SelectedSubmission?.Id) {
+	// 			setSelectedSubmission(submission)
+	// 		}
+	// 	}
+	// }, [submission]);
 
 	return (
 		<DocumentTabLayout
@@ -118,55 +124,74 @@ const Submissions = (props: SubmissionProps) => {
 					)
 				) : (
 					<Box sx={{ overflowY: 'auto', height: 'inherit' }}>
-						<Typography variant="subtitle2" sx={{ padding: '6px 8px', display: 'block' }}>
-							Please note that the score displaying is provided by automated judgement system, not
-							completed score of the exercise
-						</Typography>
-						<Stack
-							padding="5%"
-							rowGap={1}
-							overflow={'auto'}
-							width="100%"
-							alignItems="center"
-							justifyContent="center"
-						>
-							{submissions && submissions.length > 0 ? (
-								submissions.map((item, index) => {
-									return (
-										<DocumentSubmissionItem
-											key={index}
-											item={item}
-											onSelected={() => {
-												onSelected({ documentId: document.Id, submissionId: item.Id });
-												setSelectedSubmission({
-													...item,
-													ManualScore: 0,
-													Score: 0,
-													testResults: []
-												})
-												setCount(0)
-											}}
-											onMark={() => {
-												if (onMark) onMark({ documentId: document.Id, submissionId: item.Id });
-											}}
-										/>
-									);
-								})
-							) : (
-								<></>
-							)}
-						</Stack>
+						<ListItems
+							subheader='Please be awared that this score is provided by automatic judgement system! Not the final score of the exercise'
+							list={
+								submissions && submissions.length > 0 ?
+									submissions.map((item, index) => {
+										return {
+											actions: [
+
+												{
+													action: () => {
+														if (onMark) onMark({ documentId: document.Id, submissionId: item.Id });
+													},
+													title: "Mark as final submission for judgement",
+													color: "primary",
+													icon: <Checkbox
+														name="choice"
+														icon={<BookmarkBorderIcon />}
+														checkedIcon={<BookmarkIcon />}
+														checked={item.Choice}
+														onClick={(e: MouseEvent) => {
+															e.preventDefault();
+															e.stopPropagation();
+															if (onMark) onMark({ documentId: document.Id, submissionId: item.Id });
+														}}
+													/>,
+													type: "html"
+												},
+												{
+													action: () => {
+														onSelected({ documentId: document.Id, submissionId: item.Id });
+														setSelectedSubmission({
+															...item,
+															ManualScore: 0,
+															Score: 0,
+															testResults: []
+														})
+														setCount(0)
+													},
+													title: "View Result",
+													color: "primary",
+													icon: <VisibilityOutlinedIcon />,
+													type: "icon"
+												}
+											],
+											collapse: <CodeView
+												source={item.SourceCode}
+												language={item.ProgrammingLanguageId}
+											/>,
+											title: parseToLocalDate(item.TimeCreated),
+											content: item
+										}
+									})
+									: []
+							}
+
+						/>
+
 					</Box>
 				)
 			}
 			right={
 				isCreator ? (
 					<Box sx={{ overflowY: 'auto', height: 'inherit' }}>
-						<Stack rowGap={2} width="100%" alignItems="center" justifyContent="center">
+						<Stack rowGap={2} width="100%" height="100%" alignItems="center" justifyContent="center">
 							{submissionsmanage && submissionsmanage.length > 0 ? (
 								<DataGridListItems
 									rows={submissionsmanage}
-									columns={['Full Name', 'Automatec Score', 'Manual Score', 'Submission Id']}
+									columns={['Full Name', 'Automatec Score', 'Manual Score']}
 									onSelected={onSelectSubmissionManage}
 								/>
 							) : null}
@@ -176,9 +201,10 @@ const Submissions = (props: SubmissionProps) => {
 					<Fragment>
 						{submission ? (
 							<Box sx={{ overflowY: 'auto', height: 'inherit' }}>
-								<Typography sx={{ padding: '6px 8px', display: 'block' }}>
+								{/* <Typography sx={{ padding: '6px 8px', display: 'block' }}>
 									Selected submission: {SelectedSubmission ? SelectedSubmission?.Id : 'No seleteted submission'}
-								</Typography>
+								</Typography> */}
+
 								<Stack
 									padding="5%"
 									rowGap={2}
@@ -186,8 +212,8 @@ const Submissions = (props: SubmissionProps) => {
 									alignItems="center"
 									justifyContent="center"
 								>
-									{SelectedSubmission && SelectedSubmission.testResults.length > 0 ? (
-										SelectedSubmission.testResults.map((item, index) => {
+									{submission && submission.testResults.length > 0 ? (
+										submission.testResults.map((item, index) => {
 											return <DocumentTestResultItem key={index} index={index + 1} item={item} />;
 										})
 									) : (

@@ -7,12 +7,13 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import CreateIcon from '@mui/icons-material/Create';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import { BoxFieldSx } from '@/style/BoxSx';
 import { GetDocumentByIdResponse, GetSingleTestCaseResponse } from '@/types/document.type';
-import { ChangeEvent, Fragment, useEffect, useState } from 'react';
+import { ChangeEvent, Fragment, useEffect, useState, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllTestCases, fetchExercise } from '@/slices/document.slice';
 import { getDocumentExercise, getDocumentTestCases } from '@/selectors/document.selector';
@@ -23,6 +24,7 @@ import { CustomIconButton } from '@/components/Custom/CustomButton';
 import { borderRadius, centerPos, componentStyle } from '@/style/Variables';
 import { useParams } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
+import ListItems from '@/components/ListItems';
 
 const BoxCreateTestCase = {
 	position: 'absolute',
@@ -206,7 +208,7 @@ const TestCase = (props: TestCaseProps) => {
 						</Fragment>
 					}
 					left={
-						<Box sx={{ overflowY: 'auto', overflowX: 'hidden', height:'inherit' }}>
+						<Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: 'inherit', zIndex: 100 }}>
 							<Box sx={{ ...componentStyle, ...BoxCreateTestCase }}>
 								<CustomIconButton
 									type="submit"
@@ -220,7 +222,40 @@ const TestCase = (props: TestCaseProps) => {
 									}}
 								/>
 							</Box>
-							<Stack
+							<Box
+								sx={{
+									marginTop: "5%"
+								}}
+							>
+								<ListItems
+									list={
+										testCases && testCases.length > 0 ?
+											testCases.map((item, index) => {
+												return {
+													actions: [
+														{
+															action: () => {
+																setOpenDeleteTestCaseDialog(true);
+																onSelected(item.TestOrder);
+															},
+															title: "Delete",
+
+															color: "error",
+															icon: <DeleteIcon />,
+															type: "icon"
+														}
+													],
+													title: `Test case ${item.TestOrder}`,
+													click: () => { onSelected(item.TestOrder) }
+												}
+											})
+											: []
+									}
+
+								/>
+							</Box>
+
+							{/* <Stack
 								padding="5%"
 								paddingTop="8%"
 								rowGap={2}
@@ -248,7 +283,7 @@ const TestCase = (props: TestCaseProps) => {
 								) : (
 									<></>
 								)}
-							</Stack>
+							</Stack> */}
 						</Box>
 					}
 				>

@@ -1,4 +1,4 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
+import { put, call, takeLatest, delay } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import documentApi from '@/api/documentApi';
 import { AxiosResponse } from 'axios';
@@ -430,13 +430,28 @@ function* fetchAllSubmissionsManageSaga(action: PayloadAction<{ documentId: stri
 }
 function* fetchSingleSubmissionsSaga(action: PayloadAction<SubmissionActionRequest>) {
 	try {
-		const submission: AxiosResponse<GetSingleSubmissionResponse> = yield call(
-			documentApi.getSingleSubmission,
-			action.payload
-		);
-		if (submission.data) {
-			yield put(fetchSingleSubmissionSuccess(submission.data));
+
+		let maxRequests = 20
+		while (maxRequests > 0) {
+			yield delay(500)
+			const submission: AxiosResponse<GetSingleSubmissionResponse> = yield call(
+				documentApi.getSingleSubmission,
+				action.payload
+			);
+			if (submission.data.testResults.length > 0) {
+				yield put(fetchSingleSubmissionSuccess(submission.data));
+				break;
+			} else {
+				if (maxRequests === 1) {
+					yield put(fetchSingleSubmissionError());
+					yield put(setSnackbar(notificationMessage.ERROR('Submission has not been judeged yet!')));
+					break;
+				}
+			}
+			maxRequests--;
 		}
+
+
 	} catch (error: any) {
 		yield put(fetchSingleSubmissionError());
 	}
@@ -454,13 +469,14 @@ function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body:
 		if (submission.data) {
 			yield put(setLoading({ isLoading: false }));
 			yield put(setSnackbar(notificationMessage.CREATE_SUCCESS('submission')));
-			yield put(fetchAllSubmissions({ documentId: action.payload.documentId }));
 			yield put(
 				markSubmission({
 					documentId: action.payload.documentId,
 					submissionId: submission.data.id.toString()
 				})
 			);
+			yield put(fetchAllSubmissions({ documentId: action.payload.documentId }));
+		
 		}
 	} catch (error: any) {
 		yield put(setLoading({ isLoading: false }));

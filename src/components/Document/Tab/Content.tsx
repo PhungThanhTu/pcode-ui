@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import MyPDFViewer from '@/components/MyPDFViewer';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { BoxNotFoundSx } from '@/style/BoxSx';
-import { centerPos, componentStyle } from '@/style/Variables';
+import { borderRadius, centerPos, componentStyle } from '@/style/Variables';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import { contentTypeId } from '@/config';
 import FileViewer from '@/components/FileViewer';
@@ -22,7 +22,7 @@ export interface ContentProps {
 }
 
 const Content = (props: ContentProps) => {
-	const { source, type, title,contentBody } = props;
+	const { source, type, title, contentBody } = props;
 
 	if (source) {
 		if (type === contentTypeId.pdf)
@@ -43,8 +43,9 @@ const Content = (props: ContentProps) => {
 					content={
 						<Box sx={{ ...BoxViewSx, ...componentStyle, padding: '5px' }}>
 							<MarkdownPreview
+								
 								source={source}
-								style={{ height: 'fit-content', overflow: 'auto' }}
+								style={{ height: '100%', overflow: 'auto', borderRadius: borderRadius }}
 							/>
 						</Box>
 					}
@@ -56,7 +57,7 @@ const Content = (props: ContentProps) => {
 					title={title}
 					content={
 						<Box sx={{ ...BoxViewSx, ...componentStyle, padding: '5px' }}>
-							<FileViewer  source={source} contentBody={contentBody}/>
+							<FileViewer source={source} contentBody={contentBody} />
 						</Box>
 					}
 				/>

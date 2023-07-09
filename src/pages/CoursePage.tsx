@@ -180,18 +180,17 @@ const CoursePage = () => {
 					}
 				])
 			);
-	
+
 
 		}
-	}, [course, course?.documents]);
-	
-	useEffect(() => {
-
-	},[course?.documents])
+	}, [course, course?.documents,]);
 
 	useLayoutEffect(() => {
-		dispatch(fetchCourses());
-		dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
+		console.log(course)
+		if (course === null) {
+			dispatch(fetchCourses());
+			dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
+		}
 	}, []);
 
 	return loading ? (

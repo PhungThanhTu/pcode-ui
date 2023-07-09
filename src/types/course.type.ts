@@ -18,6 +18,14 @@ export interface CourseScore {
 	FullName: string;
 	Email: string;
 	Score: number;
+	Details: Array<any>;
+}
+export interface CourseScoreDetail {
+	Id: string;
+	Score: number;
+	ScoreWeight: number;
+	Title: string;
+	UserId: string;
 }
 
 export interface JoinCourse {
@@ -31,7 +39,7 @@ export interface CoursesState {
 export interface CourseState {
 	course?: GetCourseByIdResponse | null;
 	courseScore?: Array<CourseScore> | null;
-	courseDocumentSubmission: number ;
+	courseDocumentSubmission: number;
 	loading: boolean;
 }
 

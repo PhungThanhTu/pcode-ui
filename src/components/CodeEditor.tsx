@@ -1,4 +1,4 @@
-import Editor, { loader } from '@monaco-editor/react';
+
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -6,6 +6,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 
+import Editor, { loader } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSampleSourceCode } from '@/selectors/document.selector';
@@ -129,7 +130,6 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	return (
 		<Stack
 			height='100%'
-
 		>
 			<Stack flexDirection="row" justifyContent="flex-start">
 				<Box width="30%" sx={{ flexGrow: 1 }}>
@@ -147,8 +147,9 @@ export const CodeEditor = (props: CodeEditorProps) => {
 					</FormControl>
 				</Box>
 				<Box width="20%" sx={{ display: 'flex', flexGrow: 1 }}>
-					<FormControl fullWidth disabled={readOnly || isEditMode}>
+					<FormControl fullWidth disabled={readOnly || isEditMode} >
 						<Select
+							
 							value={ProgrammingLaguages && ProgrammingLaguages.length > 0 ? Language.toString() : ''}
 							onChange={onLanguageChange}
 							sx={{ '.MuiSelect-select': { padding: '10px', paddingLeft: '5%' } }}
@@ -196,7 +197,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 			</Stack>
 			<Box sx={{ flex: 1 }}>
 				<Editor
-					className="code"
+		
 					options={{ readOnly: Read || readOnly, theme: Theme }}
 					language={getLanguageName(Language)}
 					value={Value}
