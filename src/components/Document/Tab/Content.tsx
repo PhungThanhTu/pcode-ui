@@ -41,11 +41,11 @@ const Content = (props: ContentProps) => {
 				<DocumentTabLayout
 					title={title}
 					content={
-						<Box sx={{ ...BoxViewSx, ...componentStyle, padding: '5px' }}>
+						<Box sx={{ ...BoxViewSx, ...componentStyle, paddingBottom: 0 }}>
 							<MarkdownPreview
-								
+
 								source={source}
-								style={{ height: '100%', overflow: 'auto', borderRadius: borderRadius }}
+								style={{ height: '100%', overflow: 'auto', borderRadius: borderRadius, borderBottomLeftRadius: 0 }}
 							/>
 						</Box>
 					}
@@ -67,7 +67,7 @@ const Content = (props: ContentProps) => {
 		return (
 			<Box sx={BoxNotFoundSx}>
 				<Typography sx={{ ...centerPos, width: 'fit-content' }} variant="h5">
-					No pdf/markdown to view.
+					No pdf/markdown/file to view.
 				</Typography>
 			</Box>
 		);

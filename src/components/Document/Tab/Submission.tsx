@@ -48,7 +48,7 @@ const Submissions = (props: SubmissionProps) => {
 	const [SelectedSubmission, setSelectedSubmission] = useState<GetSingleSubmissionResponse>();
 	const [ManualScore, setManualScore] = useState<number | string>(0);
 	const [SourceCodeSubmissionManage, setSourceCodeSubmissionManage] = useState('');
-	const [count, setCount] = useState(0)
+
 
 
 	const onSelectSubmissionManage = (params: GridRowParams) => {
@@ -71,35 +71,6 @@ const Submissions = (props: SubmissionProps) => {
 		}
 
 	}, []);
-
-	// useEffect(() => {
-
-	// 	let interval: any
-	// 	if (submission && !(submission.testResults.length > 0)) {
-	// 		if (submission.Id === SelectedSubmission?.Id) {
-	// 			const fetch = () => {
-	// 				dispatch(fetchSingleSubmission({ documentId: params.documentId ? params.documentId : '', submissionId: submission ? submission.Id : '' }))
-	// 			}
-	// 			interval = setTimeout(fetch, 5000);
-	// 			setCount(count + 1)
-	// 			if (count > 10)
-	// 				clearTimeout(interval);
-	// 		}
-	// 	}
-	// 	else {
-	// 		clearTimeout(interval);
-	// 	}
-
-	// }, [submission?.testResults]);
-
-	// useEffect(() => {
-
-	// 	if (submission) {
-	// 		if (submission.Id === SelectedSubmission?.Id) {
-	// 			setSelectedSubmission(submission)
-	// 		}
-	// 	}
-	// }, [submission]);
 
 	return (
 		<DocumentTabLayout
@@ -160,7 +131,7 @@ const Submissions = (props: SubmissionProps) => {
 															Score: 0,
 															testResults: []
 														})
-														setCount(0)
+
 													},
 													title: "View Result",
 													color: "primary",
