@@ -23,11 +23,11 @@ import { CircleLoading } from '@/components/Loading';
 import { CodeEditor } from '@/components/CodeEditor';
 import DataGridListItems from '@/components/DataGridListItems';
 import TextField from '@mui/material/TextField';
-import { fetchAllSubmissions, fetchAllSubmissionsManage, fetchSingleSubmission } from '@/slices/document.slice';
+import { fetchAllSubmissions, fetchAllSubmissionsManage } from '@/slices/document.slice';
 import { useParams } from 'react-router-dom';
 import { Checkbox, Tooltip } from '@mui/material';
 import ListItems from '@/components/ListItems';
-import { parseToLocalDate } from '@/utils/convert';
+import { parseToLocalDate, parseToLocalDateTime } from '@/utils/convert';
 import CodeView from '@/components/CodeView';
 
 interface SubmissionProps {
@@ -172,7 +172,7 @@ const Submissions = (props: SubmissionProps) => {
 												source={item.SourceCode}
 												language={item.ProgrammingLanguageId}
 											/>,
-											title: parseToLocalDate(item.TimeCreated),
+											title: parseToLocalDateTime(item.TimeCreated),
 											content: item
 										}
 									})
