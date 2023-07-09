@@ -6,9 +6,10 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import styled from '@mui/material/styles/styled';
 
-import { useEffect, useState, Fragment } from 'react';
+import { useEffect, useState, Fragment, useRef } from 'react';
 import { LabelToProperty } from '@/utils/convert';
 import { Tooltip } from '@mui/material';
+
 
 export const CustomEditIcon = styled(EditIcon)(({ theme }) => ({
 	color: theme.palette.primary.main,
@@ -38,12 +39,15 @@ export const CustomEditInput = (props: CustomEditInputProps) => {
 	const [isEdit, setIsEdit] = useState(false);
 
 	const { label, value, onChange, onSave, onCancel, isNotDisplay, isAvatarChange } = props;
+	const inputRef = useRef<HTMLInputElement>(null)
 	const name = LabelToProperty(props.label);
 
 	const RenderFields = () => {
 		if (isEdit) {
 			return !isNotDisplay ? (
 				<TextField
+					ref={inputRef}
+					required
 					name={name}
 					fullWidth
 					variant="standard"
@@ -63,10 +67,14 @@ export const CustomEditInput = (props: CustomEditInputProps) => {
 				<Fragment>
 					<Tooltip title="Save">
 						<CustomSaveIcon
+
 							onClick={() => {
-								onSave();
-								setIsEdit(false);
+
+								onSave(name);
+								setIsEdit(false)
+
 							}}
+
 						/>
 					</Tooltip>
 					<Tooltip title="Cancel">

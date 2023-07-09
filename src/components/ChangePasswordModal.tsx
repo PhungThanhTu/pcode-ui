@@ -7,7 +7,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 
-import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, ReactElement, useEffect, useState } from 'react';
 import { BoxModalSx } from '@/style/BoxSx';
 
 interface ChangePasswordModalProps {
@@ -39,27 +39,28 @@ const ChangePasswordModal = ({ open, onSave, onClose }: ChangePasswordModalProps
 		});
 	};
 	const validation = () => {
-		if (newPassword === '' || password === '' || reNewPassword === '') {
+		if (newPassword !== reNewPassword) {
 			setAlert(
 				<Alert severity="error">
 					<AlertTitle>Error</AlertTitle>
-					Missing field — <strong>please fill all fields!</strong>
+					Re-New password differs to New password — <strong>check it out!</strong>
 				</Alert>
 			);
 			return false;
-		} else if (newPassword !== reNewPassword) {
+		} else if (password === newPassword) {
 			setAlert(
 				<Alert severity="error">
 					<AlertTitle>Error</AlertTitle>
-					Re-New password differ to New password — <strong>check it out!</strong>
+					New password can not be the same with Current password — <strong>check it out!</strong>
 				</Alert>
 			);
-			return false;
+			return false
 		}
 		return true;
 	};
 
-	const handleSavePassword = () => {
+	const handleSavePassword = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
 		const check = validation();
 		if (check) {
 			onSave(passwordForm);
@@ -70,15 +71,15 @@ const ChangePasswordModal = ({ open, onSave, onClose }: ChangePasswordModalProps
 	useEffect(() => {
 		let timer = setTimeout(() => {
 			setAlert(undefined);
-		}, 2000);
+		}, 4000);
 		return () => {
 			clearTimeout(timer);
 		};
 	}, [alert]);
 
 	return (
-		<Modal onClose={() => onClose()} open={open}>
-			<Box sx={BoxModalSx}>
+		<Modal onClose={() => onClose()} open={open} sx={{ width: '50%', margin: 'auto' }}>
+			<Box component="form" sx={BoxModalSx} onSubmit={handleSavePassword}>
 				<Typography variant="h5" component="h2">
 					Change your password
 				</Typography>
@@ -90,6 +91,7 @@ const ChangePasswordModal = ({ open, onSave, onClose }: ChangePasswordModalProps
 						fullWidth
 						variant="standard"
 						onChange={onChange}
+						required
 					/>
 					<TextField
 						name="newPassword"
@@ -98,6 +100,7 @@ const ChangePasswordModal = ({ open, onSave, onClose }: ChangePasswordModalProps
 						fullWidth
 						variant="standard"
 						onChange={onChange}
+						required
 					/>
 					<TextField
 						name="reNewPassword"
@@ -105,6 +108,7 @@ const ChangePasswordModal = ({ open, onSave, onClose }: ChangePasswordModalProps
 						type="password"
 						fullWidth
 						variant="standard"
+						required
 						onChange={onChange}
 					/>
 					{alert}
@@ -117,7 +121,7 @@ const ChangePasswordModal = ({ open, onSave, onClose }: ChangePasswordModalProps
 						justifyContent="flex-end"
 						paddingTop="25px"
 					>
-						<Button variant="contained" onClick={() => handleSavePassword()}>
+						<Button variant="contained" type='submit'>
 							Save
 						</Button>
 						<Button onClick={() => onClose()}>Cancel</Button>

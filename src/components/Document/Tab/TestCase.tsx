@@ -56,7 +56,7 @@ const TestCase = (props: TestCaseProps) => {
 		Id: 1,
 		input: '0 0',
 		output: '0',
-		scoreWeight: 0,
+		scoreWeight: 1,
 		TestOrder: 0,
 		visibility: true
 	};
@@ -78,7 +78,7 @@ const TestCase = (props: TestCaseProps) => {
 
 			setTestCaseForm({
 				...TestCaseForm,
-				[e.target.name]: Number(e.target.value) >= 0 ? e.target.value : 0
+				[e.target.name]: e.target.value ? Number(e.target.value) > 0 ? Number(e.target.value) : 1 : e.target.value
 			});
 		} else {
 			setTestCaseForm({
@@ -139,9 +139,7 @@ const TestCase = (props: TestCaseProps) => {
 					childrenPosition={true}
 					right={
 						<Fragment>
-							<Typography sx={{ padding: '6px 8px', display: 'block' }}>
-								Selected test case: {testCases.length > 0 ? SeletedTestCase : 'No test cases'}
-							</Typography>
+
 							<Stack
 								flexDirection="column"
 								alignItems="center"
@@ -255,35 +253,6 @@ const TestCase = (props: TestCaseProps) => {
 								/>
 							</Box>
 
-							{/* <Stack
-								padding="5%"
-								paddingTop="8%"
-								rowGap={2}
-								width="100%"
-								alignItems="center"
-								justifyContent="center"
-							>
-								{testCases && testCases.length > 0 ? (
-									testCases.map((item, index) => {
-										return (
-											<DocumentTestCaseItem
-												key={index}
-												item={item}
-												index={item.TestOrder}
-												onSelected={() => {
-													onSelected(item.TestOrder);
-												}}
-												onDeleted={() => {
-													setOpenDeleteTestCaseDialog(true);
-													onSelected(item.TestOrder);
-												}}
-											/>
-										);
-									})
-								) : (
-									<></>
-								)}
-							</Stack> */}
 						</Box>
 					}
 				>
