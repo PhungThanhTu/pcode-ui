@@ -32,7 +32,7 @@ const refreshToken = async (error: AxiosError, logout: Function) => {
 	const storedRefreshToken = TokenService.getRefreshToken();
 	const storedAccessToken = TokenService.getToken();
 	if (!storedRefreshToken || !storedAccessToken) {
-		console.log('refresh failed');
+		
 		return Promise.reject(error);
 	}
 	try {
