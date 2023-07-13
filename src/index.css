@@ -63,24 +63,24 @@ input[type='number'] {
 
 /* unvisited link */
 a:link {
-	text-decoration: none;
-	color: inherit;
+	/* text-decoration: none; */
+	/* color: inherit; */
 }
 
 /* visited link */
 a:visited {
-	text-decoration: none;
-	color: inherit;
+	/* text-decoration: none;
+	color: inherit; */
 }
 
 /* mouse over link */
 a:hover {
-	text-decoration: none;
-	color: inherit;
+	/* text-decoration: none; */
+	/* color: inherit; */
 }
 
 /* selected link */
 a:active {
-	text-decoration: none;
-	color: inherit;
+	/* text-decoration: none; */
+	/* color: inherit; */
 }

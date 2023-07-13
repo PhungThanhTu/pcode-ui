@@ -16,7 +16,7 @@ const authSlice = createSlice({
 		fetchProfile: () => {},
 		login: (state, { payload }: PayloadAction<UserCredentials>) => {
 			state.loading = true;
-			console.log('Is login');
+			
 		},
 		loginSuccess: (state, { payload }: PayloadAction<UserProfile>) => {
 			state.loading = false;

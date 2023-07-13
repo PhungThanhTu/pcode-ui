@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Divider, Link, TextField, Typography } from '@mui/material';
+import { Alert, Box, CircularProgress, Divider, Link, TextField, Typography } from '@mui/material';
 import AuthFormLayout from '../layouts/AuthFormLayout';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,7 +46,7 @@ export const LoginForm = () => {
 		<AuthFormLayout>
 			<Box component="form" sx={{ width: '100%', padding: '20px' }}>
 				<Box sx={{ paddingBottom: '20px' }}>
-					<Typography variant="h4"> Sign in</Typography>
+					<Typography variant="h4" textAlign="center"> Sign in</Typography>
 				</Box>
 				<Box sx={{ paddingBottom: '10px', paddingTop: '10px', width: 1, display: 'grid' }}>
 					<TextField label="Username" aria-label="username" onChange={onUsernameChange} type="text" />
@@ -55,9 +55,9 @@ export const LoginForm = () => {
 					<TextField label="Password" aria-label="password" onChange={onPasswordChange} type="password" />
 				</Box>
 				{error ? (
-					<Typography variant="h4" fontSize={14} color="red">
+					<Alert severity='error'>
 						{error}
-					</Typography>
+					</Alert>
 				) : (
 					<Divider variant="middle" style={{ width: '95%' }} />
 				)}
@@ -80,10 +80,16 @@ export const LoginForm = () => {
 					paddingTop: '25px'
 				}}
 			>
-				<Typography fontSize={16}>Don't have account</Typography>
-				<Link component={RouterLink} to="/register" underline="none" variant="h4" fontSize={16}>
-					Create one
-				</Link>
+				<Box>
+					<Typography fontSize={16} display="inline-block" marginRight="5px">Don't have account? </Typography>
+					<Link component={RouterLink} to="/register" underline="always" variant="h4" fontSize={16}>
+						Create one
+					</Link>
+				</Box>
+
+				{/* <Link component={RouterLink} to="/reset" underline="always" variant="h4" fontSize={16}>
+					Forgot your password?
+				</Link> */}
 			</Box>
 		</AuthFormLayout>
 	);

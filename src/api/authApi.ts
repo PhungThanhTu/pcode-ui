@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { RegisterRequest } from '../types/register.type';
-import { AuthenticationTokens, UserCredentials, UserProfile } from '../types/auth.type';
+import { AuthenticationTokens, ResetPasswordRequest, UserCredentials, UserProfile } from '../types/auth.type';
 import { TokenService } from '../services/tokenService';
 import protectedApi from './protectedApi';
 import publicApi from './publicApi';
@@ -30,6 +30,10 @@ const authApi = {
 	},
 	getProfile: async () => {
 		const result: AxiosResponse<UserProfile> = await protectedApi.get('/profile');
+		return result;
+	},
+	resetPassword: async (request: ResetPasswordRequest) => {
+		const result: AxiosResponse<any> = await publicApi.post(`/auth/resetPassword/${request.token}`, { password: request.password });
 		return result;
 	}
 };

@@ -12,6 +12,7 @@ import CourseDialog from './components/Course/CourseJoinDialog';
 import CoursePage from './pages/CoursePage';
 import DocumentPage from './pages/DocumentPage';
 import { getHistory } from './selectors/config.selector';
+import { ResetPage } from './pages/ResetPage';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
 				</Route>
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
+				<Route path="/reset/:token?" element={<ResetPage />} />
 				<Route path="*" element={<InDevelopmentPage />} />
 			</Routes>
 		</BrowserRouter>

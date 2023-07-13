@@ -10,10 +10,12 @@ export default defineConfig({
     hmr: {
       overlay: false
     }
+  
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     }
-  }
+  },
+
 })
