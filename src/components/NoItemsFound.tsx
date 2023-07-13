@@ -11,7 +11,7 @@ const NoItemsFound = (props: NoItemsFoundProps) => {
 
     return (
         <Box>
-
+            <SearchOffIcon />
         </Box>
     )
 }

@@ -1,4 +1,4 @@
-import { Box, Divider, Link, TextField, Typography, CircularProgress, Stack } from '@mui/material';
+import { Box, Divider, Link, TextField, Typography, CircularProgress, Stack, Alert } from '@mui/material';
 
 import AuthFormLayout from '../layouts/AuthFormLayout';
 
@@ -212,7 +212,7 @@ export const RegisterForm = () => {
 				}}
 			>
 				<Box sx={{ marginBottom: '20px' }}>
-					<Typography variant="h4">Create an account</Typography>
+					<Typography variant="h4">SIGN UP</Typography>
 				</Box>
 				<Box sx={BoxFieldSx}>
 					<TextField
@@ -270,13 +270,13 @@ export const RegisterForm = () => {
 					/>
 				</Box>
 				{metaRegister.status === 'error' ? (
-					<Typography variant="h4" fontSize={14} color="red">
+					<Alert severity='error'>
 						{metaRegister.message}
-					</Typography>
+					</Alert>
 				) : metaRegister.status === 'success' ? (
-					<Typography variant="h4" fontSize={14} color={`${Primary['main']}`}>
+					<Alert severity='success'>
 						{metaRegister.message}
-					</Typography>
+					</Alert>
 				) : (
 					<Divider variant="middle" style={{ width: '95%' }} />
 				)}
@@ -290,10 +290,13 @@ export const RegisterForm = () => {
 						<CustomButton type="submit" content="Create account" />
 					)}
 				</Box>
-				<Typography fontSize={16}>Already have an account</Typography>
-				<Link component={RouterLink} to="/login" underline="none" variant="h4" fontSize={16}>
-					Login
-				</Link>
+				<Box sx={{}}>
+					<Typography fontSize={16} display="inline-block" marginRight="5px">Already have an account! </Typography>
+					<Link component={RouterLink} to="/login" underline="none" variant="h4" fontSize={16} >
+						Login
+					</Link>
+				</Box>
+
 			</Box>
 		</AuthFormLayout>
 	);

@@ -17,6 +17,8 @@ import { watchCourse } from '@/sagas/course.sagas';
 import { watchDocument } from '@/sagas/document.sagas';
 import { watchConfig } from '@/sagas/config.sagas';
 import configSlice from '@/slices/config.slice';
+import resetSlice from '@/slices/reset.slice';
+import { watchReset } from '@/sagas/reset.sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -33,6 +35,7 @@ export const store = configureStore({
 		config: configSlice,
 		documentTab: documentTabReducer,
 		courseTab: courseTabReducer,
+		reset: resetSlice
 
 	},
 	middleware: [sagaMiddleware]
@@ -44,6 +47,8 @@ sagaMiddleware.run(watchProfile);
 sagaMiddleware.run(watchCourse);
 sagaMiddleware.run(watchDocument);
 sagaMiddleware.run(watchConfig);
+sagaMiddleware.run(watchReset);
+
 
 export type RootState = ReturnType<typeof store.getState>;
 

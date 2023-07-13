@@ -9,6 +9,11 @@ export interface AuthState {
 	error?: string;
 	profile?: UserProfile | null;
 }
+export interface ResetState {
+	loading: boolean;
+	error?: string;
+	success: boolean;
+}
 
 export interface UserCredentials {
 	username: string;
@@ -26,4 +31,9 @@ export interface UserProfile {
 export interface PasswordChangeRequest {
 	password: string;
 	newPassword: string;
+}
+
+export interface ResetPasswordRequest {
+	password: string;
+	token: string;
 }
