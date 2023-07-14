@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack';
 
 import { DocumentItem } from './Document/DocumentItem';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
+import NoItemsFound from './NoItemsFound';
 
 
 interface ListItemsProps {
@@ -20,10 +21,10 @@ const ListLinkedItems = (props: ListItemsProps) => {
 	const { list, publishDocument, isCreator } = props;
 
 	return (
-		<Stack flexDirection="column" rowGap={2} alignItems="center" justifyContent="center" width="100%">
+		<Stack flexDirection="column" height="100%" rowGap={2} alignItems="center" justifyContent="flex-start" width="100%">
 
 			{list ?
-				list.push.length > 0 ?
+				list.length > 0 ?
 
 					list.map((item, index) => {
 						return (
@@ -49,7 +50,7 @@ const ListLinkedItems = (props: ListItemsProps) => {
 							</Link>
 						);
 					})
-					: "No items "
+					: <NoItemsFound  msg={"No documents found!"}/>
 				: null
 
 			}
