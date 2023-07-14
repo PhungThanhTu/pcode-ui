@@ -17,6 +17,7 @@ import { useImageFileReader } from '@/hook/useFileReader';
 import { useNavigate } from 'react-router';
 import { LinearLoading } from '@/components/Loading';
 import { ValidInvitationCode } from '@/utils/regex';
+import NoItemsFound from '@/components/NoItemsFound';
 
 const CoursesPage = () => {
 	let dispatch = useDispatch();
@@ -104,13 +105,15 @@ const CoursesPage = () => {
 					columnSpacing={{ xs: 1, sm: 1, md: 2, lg: 2 }}
 					alignItems="center"
 				>
-					{courses?.map((item, index) => {
+					{courses && courses.length > 0 ? courses.map((item, index) => {
 						return (
 							<Grid key={index} item width="100%" xs={12} sm={6} md={4} lg={3}>
 								<CourseCard course={item} onDirect={onCourseDirect} />
 							</Grid>
 						);
-					})}
+					})
+						: <NoItemsFound msg='No courses found' />
+					}
 				</Grid>
 			)}
 			<CourseCreateModal

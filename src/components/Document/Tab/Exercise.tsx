@@ -197,8 +197,9 @@ const Exercise = (props: ExerciseProps) => {
 		if (codeCache) {
 			setTempSource({ ...codeCache });
 		}
+		console.log("hello2",codeCache)
 	}, []);
-
+	console.log("hello3",TempSource)
 	return (
 		<Fragment>
 			{exercise === undefined ? (
@@ -228,11 +229,12 @@ const Exercise = (props: ExerciseProps) => {
 						<CodeEditor
 							deadline={TargetDeadline}
 							source={TempSource ? TempSource.sourceCode : ''}
+							language={TempSource ? TempSource.programmingLanguageId : 1}
 							documentId={document.Id}
 							isCreator={isCreator}
 							onGetSampleSourceCode={onGetSampleSourceCode}
 							getSource={getSource}
-							language={TempSource?.programmingLanguageId}
+
 							resetTempSource={() => {
 								setTempSource({ programmingLanguageId: 1, sourceCode: '' });
 							}}

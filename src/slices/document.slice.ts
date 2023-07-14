@@ -247,6 +247,8 @@ const documentSlice = createSlice({
 				}
 			}
 		},
+
+		reGradeSubmission: (state, { payload }: PayloadAction<SubmissionActionRequest>) => { },
 		downloadDocumentContent: (state, { payload }: PayloadAction<{ contentId: string, documentId: string }>) => {
 
 		}
@@ -303,6 +305,7 @@ export const {
 	markSubmissionSuccess,
 	scoreSubmissionManage,
 	scoreSubmissionManageSuccess,
-	downloadDocumentContent
+	downloadDocumentContent,
+	reGradeSubmission
 } = documentSlice.actions;
 export default documentSlice.reducer;

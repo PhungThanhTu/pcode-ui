@@ -35,7 +35,7 @@ const documentApi = {
 	createDocumentContent: async (request: CreateDocumentContentRequest) => {
 		if (request.contentTypeId === contentTypeId.pdf) {
 			let body = new FormData();
-			body.append('file', request.content,request.content.name);
+			body.append('file', request.content, request.content.name);
 			body.append('fileType', request.content.type);
 			body.append('contentTypeId', contentTypeId.pdf.toString());
 
@@ -55,7 +55,7 @@ const documentApi = {
 		}
 		else {
 			let body = new FormData();
-			body.append('file', request.content,request.content.name);
+			body.append('file', request.content, request.content.name);
 			body.append('contentTypeId', contentTypeId.file.toString());
 			body.append('fileType', request.content.type);
 			const result: AxiosResponse<any> = await protectedApi.post(
@@ -86,7 +86,7 @@ const documentApi = {
 		const result: AxiosResponse<any> = await protectedApi.get(`/media/${id}`, { responseType: 'blob' });
 		return result;
 	},
-	getMediaDownload: async (documentId: string,contentId : string) => {
+	getMediaDownload: async (documentId: string, contentId: string) => {
 		const result: AxiosResponse<any> = await protectedApi.get(`/document/${documentId}/content`);
 		return result;
 	},
@@ -199,6 +199,12 @@ const documentApi = {
 	deleteSubmission: async (request: SubmissionActionRequest) => {
 		const result: AxiosResponse<any> = await protectedApi.delete(
 			`/document/${request.documentId}/submission/${request.documentId}`
+		);
+		return result;
+	},
+	reGradeAllSubmissions: async (request: SubmissionActionRequest) => {
+		const result: AxiosResponse<any> = await protectedApi.post(
+			`/document/${request.documentId}/submission/regrade`
 		);
 		return result;
 	}

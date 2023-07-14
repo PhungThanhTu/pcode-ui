@@ -7,14 +7,15 @@ import { GridRowParams } from '@mui/x-data-grid/models/params/gridRowParams';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-
+import GradingIcon from '@mui/icons-material/Grading';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import {
 	getDocumentSingleSubssion,
 	getDocumentSubmissionsManage,
 	getDocumentSubssions
 } from '@/selectors/document.selector';
-import { GetDocumentByIdResponse, SubmissionManage, Submission, GetSingleSubmissionResponse } from '@/types/document.type';
+
+import { GetDocumentByIdResponse, SubmissionManage, GetSingleSubmissionResponse } from '@/types/document.type';
 import { useDispatch, useSelector } from 'react-redux';
 import { centerPos } from '@/style/Variables';
 import { Fragment, useEffect, useState, MouseEvent } from 'react';
@@ -23,12 +24,15 @@ import { CircleLoading } from '@/components/Loading';
 import { CodeEditor } from '@/components/CodeEditor';
 import DataGridListItems from '@/components/DataGridListItems';
 import TextField from '@mui/material/TextField';
-import { fetchAllSubmissions, fetchAllSubmissionsManage } from '@/slices/document.slice';
+import { fetchAllSubmissions, fetchAllSubmissionsManage, reGradeSubmission } from '@/slices/document.slice';
 import { useParams } from 'react-router-dom';
 import { Checkbox, Tooltip } from '@mui/material';
 import ListItems from '@/components/ListItems';
 import { parseToLocalDate, parseToLocalDateTime } from '@/utils/convert';
 import CodeView from '@/components/CodeView';
+import { CustomIconButton } from '@/components/Custom/CustomButton';
+import { Primary } from '@/style/Colors';
+import CustomDialog from '@/components/Custom/CustomDialog';
 
 interface SubmissionProps {
 	document: GetDocumentByIdResponse;
@@ -48,7 +52,7 @@ const Submissions = (props: SubmissionProps) => {
 	const [SelectedSubmission, setSelectedSubmission] = useState<GetSingleSubmissionResponse>();
 	const [ManualScore, setManualScore] = useState<number | string>(0);
 	const [SourceCodeSubmissionManage, setSourceCodeSubmissionManage] = useState('');
-
+	const [OpenDialog, setOpenDialog] = useState(false);
 
 
 	const onSelectSubmissionManage = (params: GridRowParams) => {
@@ -164,9 +168,27 @@ const Submissions = (props: SubmissionProps) => {
 									rows={submissionsmanage}
 									columns={['Full Name', 'Automatec Score', 'Manual Score']}
 									onSelected={onSelectSubmissionManage}
+									gridTools={[
+										<CustomIconButton
+											startIcon={<GradingIcon />}
+											onClick={() => { setOpenDialog(true) }}
+											variant="primary"
+											color={Primary.main}
+											sx={{ color: `${Primary.main} !important`, paddingLeft: '8px' }}
+											content="Re-Judge"
+										/>
+									]}
 								/>
 							) : null}
 						</Stack>
+						<CustomDialog
+							content='Do you want to re-juidge all submissions?'
+							open={OpenDialog}
+							onSave={() => { dispatch(reGradeSubmission({ documentId: params.documentId ? params.documentId : '', submissionId: '' })); setOpenDialog(false) }}
+							onCancel={() => { setOpenDialog(false) }}
+							title='Submissions Judgement'
+
+						/>
 					</Box>
 				) : (
 					<Fragment>

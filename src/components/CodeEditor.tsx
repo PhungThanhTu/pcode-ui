@@ -30,6 +30,7 @@ interface CodeEditorProps {
 	deadline?: number | null;
 }
 export const CodeEditor = (props: CodeEditorProps) => {
+
 	const {
 		documentId,
 		onGetSampleSourceCode,
@@ -62,7 +63,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	const onLanguageChange = (event: SelectChangeEvent) => {
 
 		let type = event.target.value;
-		type = type ? type : '1'
+
 		setLanguage(Number(type));
 		onGetSampleSourceCode(documentId, Number(type));
 		getSource(Value, Number(type));
@@ -81,8 +82,10 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	const getLanguageName = (type: number) => {
 		return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName : ''
 	}
+		
 	useEffect(() => {
 		if (!source) {
+			console.log("ehllo",source,language)
 			if (SampleSourceCode && Object.keys(SampleSourceCode).length > 0) {
 				setRead(false);
 				setValue(SampleSourceCode.sourceCode);
@@ -112,13 +115,14 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		if (language) {
 			setLanguage(language);
 		}
-	}, [source]);
+	}, [source, language]);
 
-	useEffect(() => {
-		if (ProgrammingLaguages && ProgrammingLaguages.length > 0) {
-			setLanguage(ProgrammingLaguages[0].Id)
-		}
-	}, [ProgrammingLaguages])
+	// useEffect(() => {
+	// 	if (ProgrammingLaguages && ProgrammingLaguages.length > 0) {
+
+	// 		setLanguage(ProgrammingLaguages[0].Id)
+	// 	}
+	// }, [ProgrammingLaguages])
 
 	useEffect(() => {
 		if (ProgrammingLaguages === null) {
@@ -126,6 +130,8 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		}
 		if (!readOnly) onGetSampleSourceCode(documentId, Number(Language));
 	}, [])
+
+
 
 	return (
 		<Stack
@@ -149,7 +155,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 				<Box width="20%" sx={{ display: 'flex', flexGrow: 1 }}>
 					<FormControl fullWidth disabled={readOnly || isEditMode} >
 						<Select
-							
+
 							value={ProgrammingLaguages && ProgrammingLaguages.length > 0 ? Language.toString() : ''}
 							onChange={onLanguageChange}
 							sx={{ '.MuiSelect-select': { padding: '10px', paddingLeft: '5%' } }}
@@ -158,7 +164,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 								ProgrammingLaguages ?
 									ProgrammingLaguages.length > 0 ?
 										ProgrammingLaguages.map((item, index) => {
-											return <MenuItem key={index} value={item.Id}>{item.DisplayName}</MenuItem>
+											return <MenuItem key={index} value={item.Id} >{item.DisplayName}</MenuItem>
 										})
 										: " "
 									: " "
@@ -171,7 +177,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 							<CustomOnlyIconButton
 								disabled={isCreator}
 								onClick={() => {
-									resetTempSource ? resetTempSource() : null;
+									resetTempSource ?  resetTempSource() : null;
 									LocalStorageService.clearCodeCache();
 									setIsEditMode(false);
 									onGetSampleSourceCode(documentId, Number(Language));
@@ -197,7 +203,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 			</Stack>
 			<Box sx={{ flex: 1 }}>
 				<Editor
-		
+
 					options={{ readOnly: Read || readOnly, theme: Theme }}
 					language={getLanguageName(Language)}
 					value={Value}

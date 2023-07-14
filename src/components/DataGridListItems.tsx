@@ -1,18 +1,30 @@
 import { DataGrid, GridRenderCellParams, GridToolbar, GridValueFormatterParams } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
+import {
+
+	GridToolbarContainer,
+	GridToolbarColumnsButton,
+	GridToolbarFilterButton,
+	GridToolbarExport,
+	GridToolbarDensitySelector,
+} from '@mui/x-data-grid';
 
 import { NameToField } from '@/utils/convert';
+import GradingIcon from '@mui/icons-material/Grading';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
+import { Fragment, JSXElementConstructor } from 'react';
+import { CustomIconButton } from './Custom/CustomButton';
 
 interface DataGridListItemsProps {
 	rows: Array<any>;
 	columns: Array<string>;
 	onSelected: Function;
+	gridTools?: Array<JSX.Element>;
 }
 
 const DataGridListItems = (props: DataGridListItemsProps) => {
-	const { rows, columns, onSelected } = props;
+	const { rows, columns, onSelected, gridTools } = props;
 
 	const Columns: Array<any> =
 		columns && columns.length > 0
@@ -52,16 +64,37 @@ const DataGridListItems = (props: DataGridListItemsProps) => {
 			})
 			: [];
 
+
 	return (
-		<Box sx={{ height: '100%', width: '100%' }}>
+		<Box sx={{
+			height: '100%', width: '100%', '.MuiDataGrid-root': {
+				borderLeft: 'unset',
+				borderRight: 'unset',
+				borderTop: 'unset !important',
+			},
+			'.MuiDataGrid-main': {
+				borderTop: '1px solid rgba(224, 224, 224, 1)',
+
+
+			},
+			'.MuiDataGrid-toolbarContainer': {
+				borderTop: 'unset !important',
+			}
+		}}>
+			{
+				gridTools && gridTools.length > 0 ?
+					gridTools.map((item,index) => <Fragment key={index}>{item}</Fragment>) : null
+			}
 			<DataGrid
+
 				rows={Rows}
 				columns={Columns}
 				onRowClick={(params) => onSelected(params)}
 				disableRowSelectionOnClick
 				slots={{ toolbar: GridToolbar }}
+
 			/>
-		</Box>
+		</Box >
 	);
 };
 
