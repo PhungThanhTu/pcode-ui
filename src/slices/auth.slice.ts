@@ -16,6 +16,7 @@ const authSlice = createSlice({
 		fetchProfile: () => {},
 		login: (state, { payload }: PayloadAction<UserCredentials>) => {
 			state.loading = true;
+			state.error= undefined;
 			
 		},
 		loginSuccess: (state, { payload }: PayloadAction<UserProfile>) => {

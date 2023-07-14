@@ -65,6 +65,7 @@ import {
 	fetchSingleSubmissionSuccess,
 	markSubmission,
 	markSubmissionSuccess,
+	reGradeSubmission,
 	resetDocumentContent,
 	resetDocumentContentSuccess,
 	scoreSubmissionManage,
@@ -536,6 +537,26 @@ function* scoreSubmissionManageSaga(action: PayloadAction<ScoreSubmissionRequest
 		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('submission', 'Please try again!')));
 	}
 }
+function* reGradeubmissionsSaga(action: PayloadAction<SubmissionActionRequest>) {
+	try {
+		yield put(setLoading({ isLoading: true }));
+		const response: AxiosResponse<any> = yield call(
+			documentApi.reGradeAllSubmissions,
+			action.payload
+		);
+
+		if (response.data) {
+			yield put(setLoading({ isLoading: false }));
+			yield put(
+				setSnackbar(notificationMessage.UPDATE_SUCCESS('submissions', 'All submissions marked have been judged again!'))
+			);
+			
+		}
+	} catch (error: any) {
+		yield put(setLoading({ isLoading: false }));
+		yield put(setSnackbar(notificationMessage.UPDATE_FAIL('submissions', 'Please try again!')));
+	}
+}
 //#endregion
 
 export function* watchDocument() {
@@ -559,6 +580,7 @@ export function* watchDocument() {
 	yield takeLatest(deleteSubmission.type, deleteSubmissionSaga);
 	yield takeLatest(markSubmission.type, markSubmissionSaga);
 	yield takeLatest(scoreSubmissionManage.type, scoreSubmissionManageSaga);
+	yield takeLatest(reGradeSubmission.type, reGradeubmissionsSaga);
 	yield takeLatest(downloadDocumentContent.type, downloadDocumentContentSaga);
 
 }
