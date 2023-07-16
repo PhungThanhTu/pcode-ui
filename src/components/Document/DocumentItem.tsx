@@ -10,6 +10,7 @@ import { Fragment, MouseEvent } from 'react';
 import { CustomOnlyIconButton } from '../Custom/CustomButton';
 import { BoxItemSx } from '@/style/BoxSx';
 import { Error, Success } from '@/style/Colors';
+import { LinearLoading } from '../Loading';
 
 interface DocumentItemProps {
 	document: Document;
@@ -33,10 +34,14 @@ export const DocumentItem = (props: DocumentItemProps) => {
 							<Typography sx={{ display: 'inline-block' }} >Exercise: </Typography>
 							&#32;
 							{
-								document.Submission && document.Submission.length > 0 ?
-									<Typography sx={{ display: 'inline-block' }} color={Success.light}>Submited</Typography>
+								document.Submission ?
+									document.Submission.length > 0 ?
+										<Typography sx={{ display: 'inline-block' }} color={Success.light}>Submited</Typography>
+										:
+										<Typography sx={{ display: 'inline-block' }} color={Error.light}>Not Submit</Typography>
 									:
-									<Typography sx={{ display: 'inline-block' }} color={Error.light}>Not Submit</Typography>
+									<LinearLoading />
+
 							}
 						</Box>
 

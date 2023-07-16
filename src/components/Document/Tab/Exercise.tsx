@@ -193,13 +193,19 @@ const Exercise = (props: ExerciseProps) => {
 		if (judgers === null) {
 			dispatch(fetchJudgers())
 		}
+
 		let codeCache = LocalStorageService.getCodeCache();
+		
 		if (codeCache) {
 			setTempSource({ ...codeCache });
+			SetSource({
+				sampleSourceCode: codeCache.sourceCode,
+				type: codeCache.programmingLanguageId,
+			})
 		}
-		console.log("hello2",codeCache)
+		
 	}, []);
-	console.log("hello3",TempSource)
+	
 	return (
 		<Fragment>
 			{exercise === undefined ? (
@@ -235,8 +241,8 @@ const Exercise = (props: ExerciseProps) => {
 							onGetSampleSourceCode={onGetSampleSourceCode}
 							getSource={getSource}
 
-							resetTempSource={() => {
-								setTempSource({ programmingLanguageId: 1, sourceCode: '' });
+							resetTempSource={(id: number) => {
+								setTempSource({ programmingLanguageId: id, sourceCode: '' });
 							}}
 						/>
 					}

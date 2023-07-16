@@ -121,6 +121,9 @@ const documentSlice = createSlice({
 				SourceBody: UpdateSampleSourceCodeRequest;
 			}>
 		) => { },
+		updateDocumentExerciseSuccess :(state, {payload} : PayloadAction) =>{
+
+		},
 		fetchAllTestCases: (state, { payload }: PayloadAction<{ documentId: string }>) => {
 			state.documentTestCases = undefined;
 		},
