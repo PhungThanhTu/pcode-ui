@@ -35,7 +35,7 @@ const CodeView = (props: CodeViewProps) => {
     };
 
     const getLanguageName = (type: number) => {
-        return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName : ''
+        return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName.toLowerCase() : ''
     }
     const getLanguageDisplayName = (type: number) => {
         return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0].DisplayName.toUpperCase() : ''
@@ -80,7 +80,7 @@ const CodeView = (props: CodeViewProps) => {
             </Stack>
             <Box sx={{ flex: 1 }}>
                 <Editor
-                    height="400px"
+             
                     options={{ readOnly: true, theme: Theme }}
                     language={getLanguageName(language)}
                     value={source}

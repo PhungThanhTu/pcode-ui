@@ -121,7 +121,7 @@ const ListItems = (props: ListItemsProps) => {
                                         sx={{
                                             paddingTop: '10px',
                                             bgcolor: "#fff", width: '100%',
-                                            height: '100% !important',
+                                            height: '400px !important',
                                             '> *': {
                                                 height: '100%'
                                             }

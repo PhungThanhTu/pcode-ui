@@ -183,14 +183,13 @@ const CoursePage = () => {
 
 
 		}
-	}, [course, course?.documents,]);
+	}, [course, course?.documents]);
 
 	useLayoutEffect(() => {
-		console.log(course)
-		if (course === null) {
+		if (courses === null)
 			dispatch(fetchCourses());
-			dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
-		}
+		dispatch(fetchCourseById({ id: params.id ? params.id : '' }));
+
 	}, []);
 
 	return loading ? (

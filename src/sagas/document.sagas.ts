@@ -281,6 +281,7 @@ function* updateDocumentExerciseSaga(
 				if (data2) {
 					yield put(setLoading({ isLoading: false }));
 					yield put(setSnackbar(notificationMessage.UPDATE_SUCCESS('document exercise', '')));
+					yield put(fetchSampleSourceCodeSuccess({ programmingLanguageId: action.payload.SourceBody.type.toString(), sourceCode: action.payload.SourceBody.sampleSourceCode }))
 				}
 			} catch (error: any) {
 
@@ -478,7 +479,7 @@ function* createSubmissionSaga(action: PayloadAction<{ documentId: string; body:
 			);
 			yield delay(1000)
 			yield put(fetchAllSubmissions({ documentId: action.payload.documentId }));
-		
+
 		}
 	} catch (error: any) {
 		yield put(setLoading({ isLoading: false }));
@@ -550,7 +551,7 @@ function* reGradeubmissionsSaga(action: PayloadAction<SubmissionActionRequest>) 
 			yield put(
 				setSnackbar(notificationMessage.UPDATE_SUCCESS('submissions', 'All submissions marked have been judged again!'))
 			);
-			
+
 		}
 	} catch (error: any) {
 		yield put(setLoading({ isLoading: false }));

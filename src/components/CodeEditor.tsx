@@ -23,9 +23,8 @@ interface CodeEditorProps {
 	onGetSampleSourceCode: Function;
 	isCreator?: boolean;
 	getSource: Function;
-	source?: string;
-	readOnly?: boolean;
-	language?: number;
+	source: string;
+	language: number;
 	resetTempSource?: Function;
 	deadline?: number | null;
 }
@@ -35,7 +34,6 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		documentId,
 		onGetSampleSourceCode,
 		getSource,
-		readOnly,
 		source,
 		isCreator,
 		language,
@@ -54,18 +52,18 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	const ProgrammingLaguages = useSelector(getProgrammingLanguages)
 	const SampleSourceCode = useSelector(getSampleSourceCode);
 
-	const [Language, setLanguage] = useState(1);
+	const [Language, setLanguage] = useState(language);
 	const [Theme, setTheme] = useState('vs');
-	const [Value, setValue] = useState('');
-	const [Read, setRead] = useState(false);
-	const [isEditMode, setIsEditMode] = useState(false);
+	const [Value, setValue] = useState(source);
+
 
 	const onLanguageChange = (event: SelectChangeEvent) => {
 
 		let type = event.target.value;
 
 		setLanguage(Number(type));
-		onGetSampleSourceCode(documentId, Number(type));
+		if (!source)
+			onGetSampleSourceCode(documentId, Number(type));
 		getSource(Value, Number(type));
 	};
 
@@ -82,35 +80,27 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	const getLanguageName = (type: number) => {
 		return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName : ''
 	}
-		
+
 	useEffect(() => {
 		if (!source) {
-			console.log("ehllo",source,language)
+			console.log("ehllo", language, SampleSourceCode)
 			if (SampleSourceCode && Object.keys(SampleSourceCode).length > 0) {
-				setRead(false);
+				console.log("herez")
 				setValue(SampleSourceCode.sourceCode);
 				getSource(SampleSourceCode.sourceCode, SampleSourceCode.programmingLanguageId);
 			} else if (SampleSourceCode === undefined) {
 				setValue(loading);
-				setRead(true);
+
 			} else if (SampleSourceCode === null) {
 				setValue(initial);
-				getSource(initial, Language);
-				setRead(false);
 			}
 		}
-	}, [SampleSourceCode, isEditMode]);
+	}, [SampleSourceCode]);
 
+	console.log("ello2", language)
 	useEffect(() => {
 		if (source) {
 			setValue(source);
-			if (isCreator) {
-				setIsEditMode(true);
-				setRead(true);
-			} else {
-				setRead(false);
-				setIsEditMode(false);
-			}
 		}
 		if (language) {
 			setLanguage(language);
@@ -124,11 +114,13 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	// 	}
 	// }, [ProgrammingLaguages])
 
+
 	useEffect(() => {
 		if (ProgrammingLaguages === null) {
 			dispatch(fetchProgrammingLanguages())
 		}
-		if (!readOnly) onGetSampleSourceCode(documentId, Number(Language));
+		if (SampleSourceCode === null)
+			onGetSampleSourceCode(documentId, Number(Language));
 	}, [])
 
 
@@ -153,7 +145,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 					</FormControl>
 				</Box>
 				<Box width="20%" sx={{ display: 'flex', flexGrow: 1 }}>
-					<FormControl fullWidth disabled={readOnly || isEditMode} >
+					<FormControl fullWidth  >
 						<Select
 
 							value={ProgrammingLaguages && ProgrammingLaguages.length > 0 ? Language.toString() : ''}
@@ -177,9 +169,8 @@ export const CodeEditor = (props: CodeEditorProps) => {
 							<CustomOnlyIconButton
 								disabled={isCreator}
 								onClick={() => {
-									resetTempSource ?  resetTempSource() : null;
+									resetTempSource ? resetTempSource(Language) : null;
 									LocalStorageService.clearCodeCache();
-									setIsEditMode(false);
 									onGetSampleSourceCode(documentId, Number(Language));
 								}}
 							>
@@ -204,7 +195,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 			<Box sx={{ flex: 1 }}>
 				<Editor
 
-					options={{ readOnly: Read || readOnly, theme: Theme }}
+					options={{ theme: Theme }}
 					language={getLanguageName(Language)}
 					value={Value}
 					onChange={onValueChange}

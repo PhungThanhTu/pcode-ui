@@ -63,6 +63,7 @@ const courseSlice = createSlice({
 		fetchCourseById: (state, { payload }: PayloadAction<{ id: string }>) => {
 			state.loading = true;
 			state.course = undefined;
+			state.courseDocumentSubmission = 0;
 		},
 		fetchCourseByIdSuccess: (state, { payload }: PayloadAction<GetCourseByIdResponse>) => {
 			state.course = payload;
@@ -93,7 +94,7 @@ const courseSlice = createSlice({
 			}
 		},
 		fetchDocumentSubmissionError: (state) => {
-			state.courseDocumentSubmission -= 1
+			
 		},
 		changePublishDocumentSuccess: (state, { payload }: PayloadAction<{ documentId: string; status: number }>) => {
 			const documentIndex = state.course?.documents.findIndex((item) => item.Id === payload.documentId);

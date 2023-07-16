@@ -21,14 +21,13 @@ import { centerPos } from '@/style/Variables';
 import { Fragment, useEffect, useState, MouseEvent } from 'react';
 import DocumentTestResultItem from '../DocumentTestResultItem';
 import { CircleLoading } from '@/components/Loading';
-import { CodeEditor } from '@/components/CodeEditor';
 import DataGridListItems from '@/components/DataGridListItems';
 import TextField from '@mui/material/TextField';
 import { fetchAllSubmissions, fetchAllSubmissionsManage, reGradeSubmission } from '@/slices/document.slice';
 import { useParams } from 'react-router-dom';
 import { Checkbox, Tooltip } from '@mui/material';
 import ListItems from '@/components/ListItems';
-import { parseToLocalDate, parseToLocalDateTime } from '@/utils/convert';
+import { parseToLocalDateTime } from '@/utils/convert';
 import CodeView from '@/components/CodeView';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
 import { Primary } from '@/style/Colors';
@@ -51,14 +50,12 @@ const Submissions = (props: SubmissionProps) => {
 	const [SelectedSubmissionManage, setSelectedSubmissionManage] = useState<SubmissionManage>();
 	const [SelectedSubmission, setSelectedSubmission] = useState<GetSingleSubmissionResponse>();
 	const [ManualScore, setManualScore] = useState<number | string>(0);
-	const [SourceCodeSubmissionManage, setSourceCodeSubmissionManage] = useState('');
 	const [OpenDialog, setOpenDialog] = useState(false);
 
 
 	const onSelectSubmissionManage = (params: GridRowParams) => {
 		setSelectedSubmissionManage(params.row);
 		setManualScore(params.row.ManualScore ? params.row.ManualScore : 0);
-		setSourceCodeSubmissionManage(params.row.SourceCode ? params.row.SourceCode : ' ');
 	};
 
 	const submissions = useSelector(getDocumentSubssions);
@@ -83,18 +80,14 @@ const Submissions = (props: SubmissionProps) => {
 			left={
 				isCreator ? (
 					submissionsmanage && submissionsmanage.length > 0 && SelectedSubmissionManage ? (
-						<CodeEditor
+
+						<CodeView
+							source={SelectedSubmissionManage.SourceCode}
 							language={SelectedSubmissionManage.ProgrammingLanguageId}
-							source={SourceCodeSubmissionManage}
-							readOnly={true}
-							isCreator={isCreator}
-							documentId={document.Id}
-							onGetSampleSourceCode={() => { }}
-							getSource={() => { }}
 						/>
 					) : (
 						<Typography sx={centerPos} variant="subtitle1">
-							Choose one submission for manually scoring.
+							Select one submission for editing score.
 						</Typography>
 					)
 				) : (
