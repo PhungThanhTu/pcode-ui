@@ -10,6 +10,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CourseScoreDetailModal from '../CourseScoreDetailModal';
+import NoItemsFound from '@/components/NoItemsFound';
 
 interface ScoreBoardProps {
 	courseId: string;
@@ -63,9 +64,7 @@ const ScoreBoard = (props: ScoreBoardProps) => {
 								<CircleLoading />
 							</Box>
 							:
-							<Typography sx={centerPos} variant="h5">
-								No records.
-							</Typography>
+							<NoItemsFound  msg='No records found.'/>
 
 				}
 			/>

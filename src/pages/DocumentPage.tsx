@@ -49,6 +49,7 @@ import { getApiDateFormat, getToday } from '@/utils/convert';
 import { LocalStorageService } from '@/services/localStorageService';
 import { setDocumentTabIndex, setDocumentTabs } from '@/slices/tab.slice';
 import { getDocumentTabIndex, getDocumentTabs } from '@/selectors/tab.selector';
+import NonTestCase from '@/components/Document/Tab/NonTestCase';
 
 const DocumentPage = () => {
 	const params = useParams();
@@ -336,6 +337,17 @@ const DocumentPage = () => {
 										source={documentContent}
 										type={document.Contents.length > 0 ? document.Contents[0].ContentTypeId : 3}
 										contentBody={document.Contents.length > 0 ? document.Contents[0].ContentBody : ""}
+									/>
+								)
+							},
+							{
+								title: 'TestCases',
+								element: (
+									<NonTestCase
+										document={document}
+										onCreate={onCreateTestCase}
+										onUpdate={onUpdateTestCase}
+										onDelete={onDeleteTestCase}
 									/>
 								)
 							},
