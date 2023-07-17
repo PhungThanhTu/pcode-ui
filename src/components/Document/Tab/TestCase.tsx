@@ -3,6 +3,9 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
@@ -13,11 +16,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DocumentTabLayout from '@/layouts/DocumentTabLayout';
 import { BoxFieldSx } from '@/style/BoxSx';
 import { GetDocumentByIdResponse, GetSingleTestCaseResponse } from '@/types/document.type';
-import { ChangeEvent, Fragment, useEffect, useState, MouseEvent } from 'react';
+import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllTestCases, fetchExercise } from '@/slices/document.slice';
 import { getDocumentExercise, getDocumentTestCases } from '@/selectors/document.selector';
-import DocumentTestCaseItem from '../DocumentTestCaseItem';
 import { LinearLoading } from '@/components/Loading';
 import CustomDialog from '@/components/Custom/CustomDialog';
 import { CustomIconButton } from '@/components/Custom/CustomButton';
@@ -127,67 +129,73 @@ const TestCase = (props: TestCaseProps) => {
 
 	return (
 		<Fragment>
-			{testCases === undefined ? (
-				<LinearLoading />
-			) : exercise === null || testCases === null ? (
-				<Typography sx={centerPos} variant="h5">
-					Cannot create Test Cases without Exercises!
-				</Typography>
-			) : (
-				<DocumentTabLayout
-					title={document.Title}
-					childrenPosition={true}
-					right={
-						<Fragment>
+			{
+				exercise === undefined ? (
+					<LinearLoading />
+				) : exercise === null ?
+					(
+						<Typography sx={centerPos} variant="h5">
+							Cannot create Test Cases without Exercises!
+						</Typography>
+					) :
+					testCases === undefined ?
+						<LinearLoading />
+						:
+						(
+							<DocumentTabLayout
+								title={document.Title}
+								childrenPosition={true}
+								right={
+									<Fragment>
 
-							<Stack
-								flexDirection="column"
-								alignItems="center"
-								justifyContent="flex-start"
-								rowGap="1.5"
-								minHeight="inherit"
-							>
-								<Stack
-									flexDirection="column"
-									alignItems="flex-start"
-									justifyContent="center"
-									rowGap="2"
-									width="100%"
-								>
-									<Box component="form" sx={BoxFieldSx}>
-										<TextField
-											fullWidth
-											required
-											label="Input:"
-											multiline
-											value={input}
-											maxRows={4}
-											minRows={4}
-											name="input"
-											onChange={onChange}
-										/>
-										<TextField
-											fullWidth
-											required
-											label="Output:"
-											multiline
-											value={output}
-											maxRows={4}
-											minRows={4}
-											name="output"
-											onChange={onChange}
-										/>
-										<TextField
-											fullWidth
-											required
-											value={scoreWeight}
-											label="Score Weight:"
-											type="number"
-											name="scoreWeight"
-											onChange={onChange}
-										/>
-									</Box>
-									{/* <FormControlLabel
+										<Stack
+											flexDirection="column"
+											alignItems="center"
+											justifyContent="flex-start"
+											rowGap="1.5"
+											minHeight="inherit"
+										>
+											<Stack
+												flexDirection="column"
+												alignItems="flex-start"
+												justifyContent="center"
+												rowGap="2"
+												width="100%"
+											>
+												<Box component="form" sx={BoxFieldSx}>
+													<TextField
+														fullWidth
+														required
+														label="Input:"
+														multiline
+														value={input}
+														maxRows={4}
+														minRows={4}
+														name="input"
+														onChange={onChange}
+													/>
+													<TextField
+														fullWidth
+														required
+														label="Output:"
+														multiline
+														value={output}
+														maxRows={4}
+														minRows={4}
+														name="output"
+														onChange={onChange}
+													/>
+													<TextField
+														fullWidth
+														required
+														value={scoreWeight}
+														label="Score Weight:"
+														type="number"
+														name="scoreWeight"
+														onChange={onChange}
+													/>
+												</Box>
+												{/* <FormControlLabel
 										control={
 											<Checkbox
 												name="visibility"
@@ -201,84 +209,111 @@ const TestCase = (props: TestCaseProps) => {
 										}
 										label="Student can view deadline Input/Output"
 									/> */}
-								</Stack>
-							</Stack>
-						</Fragment>
-					}
-					left={
-						<Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: 'inherit', zIndex: 100 }}>
-							<Box sx={{ ...componentStyle, ...BoxCreateTestCase }}>
-								<CustomIconButton
-									type="submit"
-									form="testform"
-									sx={{ justifyContent: 'flex-start' }}
-									fullWidth
-									content="New Test Case"
-									startIcon={<CreateIcon />}
-									onClick={() => {
-										onCreate(document.Id, TestCaseForm);
-									}}
-								/>
-							</Box>
-							<Box
-								sx={{
-									marginTop: "5%"
-								}}
-							>
-								<ListItems
-									list={
-										testCases && testCases.length > 0 ?
-											testCases.map((item, index) => {
-												return {
-													actions: [
-														{
-															action: () => {
-																setOpenDeleteTestCaseDialog(true);
-																onSelected(item.TestOrder);
-															},
-															title: "Delete",
+											</Stack>
+										</Stack>
+									</Fragment>
+								}
+								left={
+									<Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: 'inherit', zIndex: 100 }}>
+										{/* <Box sx={{ ...componentStyle, ...BoxCreateTestCase }}>
+											<CustomIconButton
+												type="submit"
+												form="testform"
+												sx={{ justifyContent: 'flex-start' }}
+												fullWidth
+												content="New Test Case"
+												startIcon={<CreateIcon />}
+												onClick={() => {
+													onCreate(document.Id, TestCaseForm);
+												}}
+											/>
+										</Box> */}
+										<Box sx={{ position: 'absolute', mt: 2, ml: 2, height: 150, zIndex: 50 }}>
+											<SpeedDial
+												ariaLabel="SpeedDial playground example"
 
-															color: "error",
-															icon: <DeleteIcon />,
-															type: "icon"
-														}
-													],
-													title: `Test case ${item.TestOrder}`,
-													click: () => { onSelected(item.TestOrder) }
+												icon={<SpeedDialIcon />}
+												direction='right'
+
+											>
+
+												<SpeedDialAction
+													key={"1"}
+													icon={<CreateIcon />}
+													tooltipTitle={"Create test case"}
+													onClick={() => {
+														onCreate(document.Id, TestCaseForm);
+													}}
+												/>
+												<SpeedDialAction
+													key={"2"}
+													icon={<SaveIcon />}
+													tooltipTitle={"Save selected test case"}
+													onClick={() => {
+														onUpdate(document.Id, TestCaseForm.Id, TestCaseForm);
+													}}
+												/>
+											</SpeedDial>
+										</Box>
+										<Box
+											sx={{
+												marginTop: "10%"
+											}}
+										>
+											<ListItems
+												list={
+													testCases && testCases.length > 0 ?
+														testCases.map((item, index) => {
+															return {
+																actions: [
+																	{
+																		action: () => {
+																			setOpenDeleteTestCaseDialog(true);
+																			onSelected(item.TestOrder);
+																		},
+																		title: "Delete",
+
+																		color: "error",
+																		icon: <DeleteIcon />,
+																		type: "icon"
+																	}
+																],
+																title: `Test case ${item.TestOrder}`,
+																click: () => { onSelected(item.TestOrder) }
+															}
+														})
+														: []
 												}
-											})
-											: []
-									}
 
-								/>
-							</Box>
+											/>
+										</Box>
 
-						</Box>
-					}
-				>
-					{
-						<Tooltip title='Save'>
-							<LoadingButton
-								size="large"
-								fullWidth
-								sx={{
-									borderRadius: `0`,
-									'>span': {
-										margin: 0
-									}
-								}}
-								disabled={!(testCases && testCases.length > 0)}
-								onClick={() => {
-									onUpdate(document.Id, TestCaseForm.Id, TestCaseForm);
-								}}
-								endIcon={<SaveIcon />}
-								loadingPosition="end"
-								variant="contained"
-							/>
-						</Tooltip>
-					}
-				</DocumentTabLayout>
-			)}
+									</Box>
+								}
+							>
+								{/* {
+									<Tooltip title='Save'>
+										<LoadingButton
+											size="large"
+											fullWidth
+											sx={{
+												borderRadius: `0`,
+												'>span': {
+													margin: 0
+												}
+											}}
+											disabled={!(testCases && testCases.length > 0)}
+											onClick={() => {
+												onUpdate(document.Id, TestCaseForm.Id, TestCaseForm);
+											}}
+											endIcon={<SaveIcon />}
+											loadingPosition="end"
+											variant="contained"
+										/>
+									</Tooltip>
+								} */}
+							</DocumentTabLayout>
+						)}
 			<CustomDialog
 				onCancel={() => setOpenDeleteTestCaseDialog(false)}
 				onSave={() => {

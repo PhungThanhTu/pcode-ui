@@ -176,7 +176,7 @@ const CoursePage = () => {
 					},
 					{
 						title: 'Score Board',
-						element: <ScoreBoard courseId={course.id} />
+						element: <ScoreBoard courseId={ params.id ? params.id : ''} />
 					}
 				])
 			);
