@@ -215,7 +215,7 @@ const TestCase = (props: TestCaseProps) => {
 								}
 								left={
 									<Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: 'inherit', zIndex: 100 }}>
-										{/* <Box sx={{ ...componentStyle, ...BoxCreateTestCase }}>
+										<Box sx={{ ...componentStyle, ...BoxCreateTestCase }}>
 											<CustomIconButton
 												type="submit"
 												form="testform"
@@ -227,8 +227,8 @@ const TestCase = (props: TestCaseProps) => {
 													onCreate(document.Id, TestCaseForm);
 												}}
 											/>
-										</Box> */}
-										<Box sx={{ position: 'absolute', mt: 2, ml: 2, height: 150, zIndex: 50 }}>
+										</Box>
+										{/* <Box sx={{ position: 'absolute', mt: 2, ml: 2, height: 150, zIndex: 50 }}>
 											<SpeedDial
 												ariaLabel="SpeedDial playground example"
 
@@ -254,7 +254,7 @@ const TestCase = (props: TestCaseProps) => {
 													}}
 												/>
 											</SpeedDial>
-										</Box>
+										</Box> */}
 										<Box
 											sx={{
 												marginTop: "10%"
@@ -291,7 +291,7 @@ const TestCase = (props: TestCaseProps) => {
 									</Box>
 								}
 							>
-								{/* {
+								{
 									<Tooltip title='Save'>
 										<LoadingButton
 											size="large"
@@ -311,7 +311,7 @@ const TestCase = (props: TestCaseProps) => {
 											variant="contained"
 										/>
 									</Tooltip>
-								} */}
+								}
 							</DocumentTabLayout>
 						)}
 			<CustomDialog
