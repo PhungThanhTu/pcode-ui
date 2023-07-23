@@ -1,20 +1,11 @@
 import { DataGrid, GridRenderCellParams, GridToolbar, GridValueFormatterParams, GridValueGetterParams } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import {
 
-	GridToolbarContainer,
-	GridToolbarColumnsButton,
-	GridToolbarFilterButton,
-	GridToolbarExport,
-	GridToolbarDensitySelector,
-} from '@mui/x-data-grid';
 
 import { NameToField } from '@/utils/convert';
-import GradingIcon from '@mui/icons-material/Grading';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
+
 import { Fragment, JSXElementConstructor } from 'react';
-import { CustomIconButton } from './Custom/CustomButton';
+
 
 interface DataGridListItemsProps {
 	rows: Array<any>;
@@ -22,6 +13,8 @@ interface DataGridListItemsProps {
 	onSelected: Function;
 	gridTools?: Array<JSX.Element>;
 }
+
+
 
 const DataGridListItems = (props: DataGridListItemsProps) => {
 	const { rows, columns, onSelected, gridTools } = props;
@@ -42,10 +35,10 @@ const DataGridListItems = (props: DataGridListItemsProps) => {
 						}
 
 						return params.field.toUpperCase().includes('SCORE') ?
-							(Math.round((params.value ) * 100) / 100)
+							(Math.round((params.value) * 100) / 100)
 							: params.value;
 					},
-					
+
 					headerAlign: 'center',
 					align: 'center'
 				};
@@ -94,6 +87,7 @@ const DataGridListItems = (props: DataGridListItemsProps) => {
 				onRowClick={(params) => onSelected(params)}
 				disableRowSelectionOnClick
 				slots={{ toolbar: GridToolbar }}
+				
 
 			/>
 		</Box >
