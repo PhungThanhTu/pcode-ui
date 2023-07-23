@@ -1,4 +1,4 @@
-import { DataGrid, GridRenderCellParams, GridToolbar, GridValueFormatterParams } from '@mui/x-data-grid';
+import { DataGrid, GridRenderCellParams, GridToolbar, GridValueFormatterParams, GridValueGetterParams } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import {
 
@@ -33,17 +33,19 @@ const DataGridListItems = (props: DataGridListItemsProps) => {
 					field: NameToField(item, true),
 					headerName: item,
 					flex: item.toUpperCase().includes('SCORE') ? 0.23 : 1,
-					valueFormatter: (params: GridValueFormatterParams<number>) => {
+					renderCell: (params: GridRenderCellParams) => {
+						return params.value
+					},
+					valueGetter: (params: GridValueGetterParams) => {
 						if (params.value == null) {
 							return '';
 						}
 
-						return params.field.toUpperCase().includes('SCORE') ? Math.round((params.value + Number.EPSILON) * 100) / 100
+						return params.field.toUpperCase().includes('SCORE') ?
+							(Math.round((params.value ) * 100) / 100)
 							: params.value;
 					},
-					renderCell: (params: GridRenderCellParams) => {
-						return params.value
-					},
+					
 					headerAlign: 'center',
 					align: 'center'
 				};
@@ -83,7 +85,7 @@ const DataGridListItems = (props: DataGridListItemsProps) => {
 		}}>
 			{
 				gridTools && gridTools.length > 0 ?
-					gridTools.map((item,index) => <Fragment key={index}>{item}</Fragment>) : null
+					gridTools.map((item, index) => <Fragment key={index}>{item}</Fragment>) : null
 			}
 			<DataGrid
 
