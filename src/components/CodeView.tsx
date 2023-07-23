@@ -35,7 +35,7 @@ const CodeView = (props: CodeViewProps) => {
     };
 
     const getLanguageName = (type: number) => {
-        return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName.toLowerCase() : ''
+        return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0] ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName.toLowerCase() : 'c' : 'c'
     }
     const getLanguageDisplayName = (type: number) => {
         return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0] ?  ProgrammingLaguages.filter(item => item.Id === type)[0].DisplayName.toUpperCase() : 'C' : 'C'
