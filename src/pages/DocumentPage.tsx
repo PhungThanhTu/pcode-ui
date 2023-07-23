@@ -340,17 +340,17 @@ const DocumentPage = () => {
 									/>
 								)
 							},
-							{
-								title: 'TestCases',
-								element: (
-									<NonTestCase
-										document={document}
-										onCreate={onCreateTestCase}
-										onUpdate={onUpdateTestCase}
-										onDelete={onDeleteTestCase}
-									/>
-								)
-							},
+							// {
+							// 	title: 'TestCases',
+							// 	element: (
+							// 		<NonTestCase
+							// 			document={document}
+							// 			onCreate={onCreateTestCase}
+							// 			onUpdate={onUpdateTestCase}
+							// 			onDelete={onDeleteTestCase}
+							// 		/>
+							// 	)
+							// },
 							{
 								title: 'Submission',
 								element: (
