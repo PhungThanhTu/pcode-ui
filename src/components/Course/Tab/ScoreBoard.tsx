@@ -58,6 +58,7 @@ const ScoreBoard = (props: ScoreBoardProps) => {
 							columns={['Username', 'Full Name', 'Email', 'Score', "Details"]}
 							rows={renderList(courseScore)}
 							onSelected={() => { }}
+							title={'List Scores'}
 						/>
 						: courseScore === null ?
 							<Box sx={centerPos}>

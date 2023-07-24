@@ -9,7 +9,7 @@ import { Fragment } from 'react';
 
 
 interface DataGridListItemsProps {
-	title? :string;
+	title?: string;
 	rows: Array<any>;
 	columns: Array<string>;
 	onSelected: Function;
@@ -18,7 +18,7 @@ interface DataGridListItemsProps {
 
 
 const DataGridListItems = (props: DataGridListItemsProps) => {
-	const { rows, columns, onSelected, gridTools ,title} = props;
+	const { rows, columns, onSelected, gridTools, title } = props;
 
 	const Columns: Array<any> =
 		columns && columns.length > 0
@@ -63,7 +63,7 @@ const DataGridListItems = (props: DataGridListItemsProps) => {
 	const csvOptions: GridCsvExportOptions = {
 		utf8WithBom: true,
 		includeHeaders: true,
-		fileName: 'ScoreBoard'
+		fileName: title ? title : 'List'
 	}
 
 	return (
