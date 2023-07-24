@@ -1,13 +1,15 @@
 import { DataGrid, GridRenderCellParams, GridToolbar, GridValueFormatterParams, GridValueGetterParams } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-
+import { GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+import { GridCsvExportOptions } from '@mui/x-data-grid';
 
 import { NameToField } from '@/utils/convert';
 
-import { Fragment, JSXElementConstructor } from 'react';
+import { Fragment } from 'react';
 
 
 interface DataGridListItemsProps {
+	title? :string;
 	rows: Array<any>;
 	columns: Array<string>;
 	onSelected: Function;
@@ -15,9 +17,8 @@ interface DataGridListItemsProps {
 }
 
 
-
 const DataGridListItems = (props: DataGridListItemsProps) => {
-	const { rows, columns, onSelected, gridTools } = props;
+	const { rows, columns, onSelected, gridTools ,title} = props;
 
 	const Columns: Array<any> =
 		columns && columns.length > 0
@@ -59,6 +60,11 @@ const DataGridListItems = (props: DataGridListItemsProps) => {
 			})
 			: [];
 
+	const csvOptions: GridCsvExportOptions = {
+		utf8WithBom: true,
+		includeHeaders: true,
+		fileName: 'ScoreBoard'
+	}
 
 	return (
 		<Box sx={{
@@ -87,11 +93,11 @@ const DataGridListItems = (props: DataGridListItemsProps) => {
 				onRowClick={(params) => onSelected(params)}
 				disableRowSelectionOnClick
 				slots={{ toolbar: GridToolbar }}
-				
-
+				slotProps={{ toolbar: { csvOptions } }}
 			/>
 		</Box >
 	);
 };
 
 export default DataGridListItems;
+

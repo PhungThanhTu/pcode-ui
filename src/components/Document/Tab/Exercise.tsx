@@ -139,6 +139,12 @@ const Exercise = (props: ExerciseProps) => {
 			sampleSourceCode: source,
 			type: type
 		});
+		if (TempSource) {
+			setTempSource({
+				programmingLanguageId: type,
+				sourceCode: source
+			})
+		}
 	};
 
 
@@ -211,8 +217,25 @@ const Exercise = (props: ExerciseProps) => {
 				type: codeCache.programmingLanguageId,
 			})
 		}
-
+		else {
+			setTempSource(undefined);
+			SetSource({
+				sampleSourceCode: '',
+				type: 1,
+			})
+			onGetSampleSourceCode(params.documentId ? params.documentId : '', 1)
+		}
 	}, []);
+
+	// useEffect(() => {
+	// 	if (TempSource) {
+	// 		SetSource({
+	// 			sampleSourceCode: TempSource.sourceCode,
+	// 			type: TempSource.programmingLanguageId,
+	// 		})
+	// 	}
+
+	// }, [TempSource])
 
 	return (
 		<Fragment>
@@ -250,7 +273,7 @@ const Exercise = (props: ExerciseProps) => {
 							getSource={getSource}
 
 							resetTempSource={(id: number) => {
-								setTempSource({ programmingLanguageId: id, sourceCode: '' });
+								setTempSource(undefined);
 							}}
 						/>
 					}
@@ -450,7 +473,7 @@ const Exercise = (props: ExerciseProps) => {
 									}}
 									onClick={() => {
 										onSubmit
-											? onSubmit(Source, document.Id)
+											? onSubmit(TempSource ? { sampleSourcecode: TempSource.sourceCode, type: TempSource.programmingLanguageId } : Source, document.Id)
 											: () => {
 											};
 

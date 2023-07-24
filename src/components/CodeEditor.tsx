@@ -62,6 +62,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		let type = event.target.value;
 
 		setLanguage(Number(type));
+
 		if (!source)
 			onGetSampleSourceCode(documentId, Number(type));
 		getSource(Value, Number(type));
@@ -78,27 +79,28 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	};
 
 	const getLanguageName = (type: number) => {
-		return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName : ''
+		return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0] ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName : 'c' : 'c'
 	}
 
-	
 
 	useEffect(() => {
-		if (source) {
-			setValue(source);
+
+		if (ProgrammingLaguages === null) {
+			dispatch(fetchProgrammingLanguages())
 		}
-		if (language) {
-	
-			setLanguage(language);
-		}
-	}, [source, language]);
+		// if (SampleSourceCode === null)
+		// 	onGetSampleSourceCode(documentId, Number(language));
+
+	}, [])
+
+
 
 	useEffect(() => {
-		
-		if (!source) {
-		
-			if (SampleSourceCode && Object.keys(SampleSourceCode).length > 0) {
-				console.log(SampleSourceCode.programmingLanguageId)
+
+		if (!(source.length > 0)) {
+
+			if (SampleSourceCode) {
+
 				getSource(SampleSourceCode.sourceCode, SampleSourceCode.programmingLanguageId);
 				setValue(SampleSourceCode.sourceCode);
 				setLanguage(Number(SampleSourceCode.programmingLanguageId))
@@ -110,7 +112,17 @@ export const CodeEditor = (props: CodeEditorProps) => {
 				setValue(initial);
 			}
 		}
-	}, [SampleSourceCode]);
+		else {
+
+			setValue(source);
+			
+			if (language) {
+				setLanguage(language);
+
+			}
+			getSource(source,language);
+		}
+	}, [source, language, SampleSourceCode]);
 
 	// useEffect(() => {
 	// 	if (ProgrammingLaguages && ProgrammingLaguages.length > 0) {
@@ -118,16 +130,6 @@ export const CodeEditor = (props: CodeEditorProps) => {
 	// 		setLanguage(ProgrammingLaguages[0].Id)
 	// 	}
 	// }, [ProgrammingLaguages])
-
-
-	useEffect(() => {
-		if (ProgrammingLaguages === null) {
-			dispatch(fetchProgrammingLanguages())
-		}
-		if (SampleSourceCode === null)
-			onGetSampleSourceCode(documentId, Number(Language));
-	}, [])
-
 
 
 	return (
