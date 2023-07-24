@@ -87,6 +87,7 @@ export const CodeEditor = (props: CodeEditorProps) => {
 			if (SampleSourceCode && Object.keys(SampleSourceCode).length > 0) {
 				
 				setValue(SampleSourceCode.sourceCode);
+				setLanguage(Number(SampleSourceCode.programmingLanguageId))
 				getSource(SampleSourceCode.sourceCode, SampleSourceCode.programmingLanguageId);
 			} else if (SampleSourceCode === undefined) {
 				setValue(loading);

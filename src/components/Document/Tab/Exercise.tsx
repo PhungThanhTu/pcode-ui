@@ -3,7 +3,6 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
@@ -32,7 +31,7 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Tooltip, 
 import { LocalStorageService } from '@/services/localStorageService';
 import { fetchExercise } from '@/slices/document.slice';
 import { useParams } from 'react-router-dom';
-import { getJudgers, getProgrammingLanguages } from '@/selectors/config.selector';
+import { getJudgers } from '@/selectors/config.selector';
 import { fetchJudgers } from '@/slices/config.slice';
 
 
