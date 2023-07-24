@@ -126,6 +126,7 @@ export interface GetExerciseResponse {
 	Deadline: string;
 	StrictDeadline: boolean;
 	ManualPercentage: number | string;
+	JudgerId: string;
 }
 export interface UpdateExerciseRequest {
 	runtimeLimit: number;

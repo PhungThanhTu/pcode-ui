@@ -80,7 +80,8 @@ const Exercise = (props: ExerciseProps) => {
 		Deadline: '',
 		HaveDeadline: true,
 		StrictDeadline: false,
-		TimeCreated: ''
+		TimeCreated: '',
+		JudgerId: ''
 	};
 	const InitialSourceForm: UpdateSampleSourceCodeRequest = {
 		sampleSourceCode: '',
@@ -106,7 +107,8 @@ const Exercise = (props: ExerciseProps) => {
 		Deadline,
 		HaveDeadline,
 		StrictDeadline,
-		TimeCreated
+		TimeCreated,
+		JudgerId
 	} = ExerciseForm;
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -140,8 +142,14 @@ const Exercise = (props: ExerciseProps) => {
 	};
 
 
-	const handleChangeJudgers = (event: SelectChangeEvent) => {
-
+	const handleChangeJudgers = (e: SelectChangeEvent) => {
+		let name = e.target.name.charAt(0).toUpperCase() + e.target.name.slice(1);
+		console.log(name)
+		setJudger(e.target.value as string)
+		setExerciseForm({
+			...ExerciseForm,
+			[name]: e.target.value
+		});
 	};
 
 	useEffect(() => {
@@ -195,7 +203,7 @@ const Exercise = (props: ExerciseProps) => {
 		}
 
 		let codeCache = LocalStorageService.getCodeCache();
-		
+
 		if (codeCache) {
 			setTempSource({ ...codeCache });
 			SetSource({
@@ -203,9 +211,9 @@ const Exercise = (props: ExerciseProps) => {
 				type: codeCache.programmingLanguageId,
 			})
 		}
-		
+
 	}, []);
-	
+
 	return (
 		<Fragment>
 			{exercise === undefined ? (
@@ -307,7 +315,7 @@ const Exercise = (props: ExerciseProps) => {
 											size='small'
 											fullWidth
 											required
-											label="Manual Percentage"
+											label="Manual Rate"
 											type="number"
 											name="manualPercentage"
 											value={ManualPercentage}
@@ -324,8 +332,9 @@ const Exercise = (props: ExerciseProps) => {
 										<Select
 											labelId="judger-select"
 											label="Judger"
+											name="judgerId"
 											id='judger'
-											value={judgers && judgers.length > 0 ? Judger : ""}
+											value={judgers && judgers.length > 0 ? JudgerId : ""}
 											onChange={handleChangeJudgers}>
 											{
 												judgers ?
@@ -416,7 +425,7 @@ const Exercise = (props: ExerciseProps) => {
 								}}
 								onClick={() => {
 									onUpdate
-										? onUpdate(ExerciseForm, Source, document.Id, Judger)
+										? onUpdate(ExerciseForm, Source, document.Id, JudgerId)
 										: () => {
 											console.log('Update Error');
 										};

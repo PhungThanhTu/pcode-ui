@@ -23,6 +23,8 @@ const CodeView = (props: CodeViewProps) => {
     const { source, language } = props
     const dispatch = useDispatch()
     const ProgrammingLaguages = useSelector(getProgrammingLanguages)
+    const [Source, setSource] = useState('')
+    const [Language, setLanguage] = useState(0)
     const [Theme, setTheme] = useState('vs');
 
     loader.init().then((monaco) => {
@@ -35,12 +37,12 @@ const CodeView = (props: CodeViewProps) => {
     };
 
     const getLanguageName = (type: number) => {
-        console.log(type,ProgrammingLaguages)
+
         return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0] ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName.toLowerCase() : 'c' : 'c'
     }
     const getLanguageDisplayName = (type: number) => {
-        console.log(type,ProgrammingLaguages)
-        return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0] ?  ProgrammingLaguages.filter(item => item.Id === type)[0].DisplayName.toUpperCase() : 'C' : 'C'
+
+        return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0] ? ProgrammingLaguages.filter(item => item.Id === type)[0].DisplayName.toUpperCase() : 'C' : 'C'
     }
 
 
@@ -49,6 +51,16 @@ const CodeView = (props: CodeViewProps) => {
             dispatch(fetchProgrammingLanguages())
         }
     }, [])
+
+    useEffect(() => {
+        if (source) {
+            setSource(source)
+        }
+        if (language) {
+            setLanguage(language)
+        }
+    }, [source, language])
+
     return (
         <Stack
             height='100%'
@@ -74,7 +86,7 @@ const CodeView = (props: CodeViewProps) => {
                             sx={{ height: '100%' }}
                             disabled
                             variant="outlined"
-                            defaultValue={getLanguageDisplayName(language)}
+                            value={getLanguageDisplayName(Language)}
                             size='small'
                         />
                     </FormControl>
@@ -82,10 +94,10 @@ const CodeView = (props: CodeViewProps) => {
             </Stack>
             <Box sx={{ flex: 1 }}>
                 <Editor
-             
+
                     options={{ readOnly: true, theme: Theme }}
-                    language={getLanguageName(language)}
-                    value={source}
+                    language={getLanguageName(Language)}
+                    value={Source}
                 />
             </Box>
         </Stack>
