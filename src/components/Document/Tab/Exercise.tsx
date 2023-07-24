@@ -33,6 +33,7 @@ import { fetchExercise } from '@/slices/document.slice';
 import { useParams } from 'react-router-dom';
 import { getJudgers } from '@/selectors/config.selector';
 import { fetchJudgers } from '@/slices/config.slice';
+import { SourceCode } from 'eslint';
 
 
 const BoxCreateSx = {
@@ -142,8 +143,8 @@ const Exercise = (props: ExerciseProps) => {
 
 
 	const handleChangeJudgers = (e: SelectChangeEvent) => {
+
 		let name = e.target.name.charAt(0).toUpperCase() + e.target.name.slice(1);
-		console.log(name)
 		setJudger(e.target.value as string)
 		setExerciseForm({
 			...ExerciseForm,
@@ -241,7 +242,7 @@ const Exercise = (props: ExerciseProps) => {
 					left={
 						<CodeEditor
 							deadline={TargetDeadline}
-							source={TempSource ? TempSource.sourceCode : ''}
+							source={TempSource ? TempSource.sourceCode : ""}
 							language={TempSource ? TempSource.programmingLanguageId : 1}
 							documentId={document.Id}
 							isCreator={isCreator}
