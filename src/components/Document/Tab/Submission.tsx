@@ -64,11 +64,11 @@ const Submissions = (props: SubmissionProps) => {
 
 	useEffect(() => {
 		if (isCreator) {
-			if (submissionsmanage === null)
-				dispatch(fetchAllSubmissionsManage({ documentId: params.documentId ? params.documentId : '' }));
+
+			dispatch(fetchAllSubmissionsManage({ documentId: params.documentId ? params.documentId : '' }));
 		} else {
-			if (submissions === null)
-				dispatch(fetchAllSubmissions({ documentId: params.documentId ? params.documentId : '' }));
+
+			dispatch(fetchAllSubmissions({ documentId: params.documentId ? params.documentId : '' }));
 		}
 
 	}, []);
