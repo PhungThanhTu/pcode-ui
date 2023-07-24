@@ -81,14 +81,28 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		return ProgrammingLaguages && ProgrammingLaguages.length > 0 ? ProgrammingLaguages.filter(item => item.Id === type)[0].LanguageName : ''
 	}
 
+	
+
 	useEffect(() => {
+		if (source) {
+			setValue(source);
+		}
+		if (language) {
+	
+			setLanguage(language);
+		}
+	}, [source, language]);
+
+	useEffect(() => {
+		
 		if (!source) {
 		
 			if (SampleSourceCode && Object.keys(SampleSourceCode).length > 0) {
-				
+				console.log(SampleSourceCode.programmingLanguageId)
+				getSource(SampleSourceCode.sourceCode, SampleSourceCode.programmingLanguageId);
 				setValue(SampleSourceCode.sourceCode);
 				setLanguage(Number(SampleSourceCode.programmingLanguageId))
-				getSource(SampleSourceCode.sourceCode, SampleSourceCode.programmingLanguageId);
+
 			} else if (SampleSourceCode === undefined) {
 				setValue(loading);
 
@@ -97,15 +111,6 @@ export const CodeEditor = (props: CodeEditorProps) => {
 			}
 		}
 	}, [SampleSourceCode]);
-
-	useEffect(() => {
-		if (source) {
-			setValue(source);
-		}
-		if (language) {
-			setLanguage(language);
-		}
-	}, [source, language]);
 
 	// useEffect(() => {
 	// 	if (ProgrammingLaguages && ProgrammingLaguages.length > 0) {

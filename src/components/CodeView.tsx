@@ -24,7 +24,7 @@ const CodeView = (props: CodeViewProps) => {
     const dispatch = useDispatch()
     const ProgrammingLaguages = useSelector(getProgrammingLanguages)
     const [Source, setSource] = useState('')
-    const [Language, setLanguage] = useState(0)
+    const [Language, setLanguage] = useState(1)
     const [Theme, setTheme] = useState('vs');
 
     loader.init().then((monaco) => {
