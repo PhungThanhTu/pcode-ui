@@ -83,9 +83,9 @@ export const CodeEditor = (props: CodeEditorProps) => {
 
 	useEffect(() => {
 		if (!source) {
-			console.log("ehllo", language, SampleSourceCode)
+		
 			if (SampleSourceCode && Object.keys(SampleSourceCode).length > 0) {
-				console.log("herez")
+				
 				setValue(SampleSourceCode.sourceCode);
 				getSource(SampleSourceCode.sourceCode, SampleSourceCode.programmingLanguageId);
 			} else if (SampleSourceCode === undefined) {
@@ -97,7 +97,6 @@ export const CodeEditor = (props: CodeEditorProps) => {
 		}
 	}, [SampleSourceCode]);
 
-	console.log("ello2", language)
 	useEffect(() => {
 		if (source) {
 			setValue(source);
